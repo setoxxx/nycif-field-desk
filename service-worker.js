@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-field-desk-v06safe-01';
+const CACHE_NAME = 'nycif-field-desk-v061-weekstrip-fix';
 
 const APP_SHELL = [
   './',
@@ -6,6 +6,7 @@ const APP_SHELL = [
   './style.css',
   './fielddesk-v02.css',
   './weekstrip-v06-safe.css',
+  './weekstrip-v06-fix.js',
   './app-v06-safe.js',
   './app-v03.js',
   './stats-v05-safe.js',
