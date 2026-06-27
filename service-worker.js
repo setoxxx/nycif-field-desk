@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-field-desk-hotfix-053';
+const CACHE_NAME = 'nycif-field-desk-fulltoday-01';
 
 const APP_SHELL = [
   './',
