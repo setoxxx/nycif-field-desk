@@ -181,3 +181,52 @@
   .date-chips { top: calc(env(safe-area-inset-top, 0px) + 56px); }
   .date-chips button { font-size: 10px; padding: 7px 8px; }
 }
+
+/* v0.4 field plan overlay */
+.plan-v04 {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.plan-v04 button,
+.plan-panel-v04 button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: rgba(17, 24, 39, .08);
+  color: #111827;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.plan-v04 button.active {
+  background: #d40000;
+  color: #fff;
+}
+.plan-panel-v04 {
+  margin: 0 0 10px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(212, 0, 0, .08);
+  border: 1px solid rgba(212, 0, 0, .16);
+}
+.plan-panel-v04 strong {
+  display: block;
+}
+.plan-panel-v04 span,
+.plan-panel-v04 p,
+.plan-panel-v04 li {
+  font-size: 12px;
+  color: #374151;
+}
+.plan-panel-v04 ol {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+.route-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 7px;
+}
+
