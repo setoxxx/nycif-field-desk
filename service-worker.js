@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-field-desk-fulltoday-01';
+const CACHE_NAME = 'nycif-field-desk-v05safe-01';
 
 const APP_SHELL = [
   './',
@@ -6,6 +6,7 @@ const APP_SHELL = [
   './style.css',
   './fielddesk-v02.css',
   './app-v03.js',
+  './stats-v05-safe.js',
   './manifest.json',
   './icons/icon-192.svg',
   './icons/icon-512.svg'
