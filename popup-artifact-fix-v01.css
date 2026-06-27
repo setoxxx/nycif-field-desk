@@ -1,0 +1,65 @@
+/* NYCIF popup artifact fix v01
+   Removes the dark Leaflet wrapper/blob behind assignment cards while preserving the card and pointer. */
+
+.leaflet-popup {
+  margin-bottom: 22px !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+.leaflet-popup-tip-container {
+  width: 28px !important;
+  height: 14px !important;
+  margin-left: -14px !important;
+  overflow: hidden !important;
+}
+
+.leaflet-popup-tip {
+  background: #fff !important;
+  border: 0 !important;
+  box-shadow: 0 7px 16px rgba(0, 0, 0, .16) !important;
+}
+
+.popup-card {
+  display: block !important;
+  background: #fff !important;
+  border: 1px solid rgba(17, 24, 39, .10) !important;
+  border-radius: 18px !important;
+  padding: 13px !important;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, .24) !important;
+  overflow: hidden !important;
+}
+
+.popup-card::after {
+  content: none !important;
+}
+
+.leaflet-popup-close-button {
+  z-index: 4 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .18) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .popup-card {
+    background: #fff !important;
+    color: #111827 !important;
+  }
+
+  .leaflet-popup-tip {
+    background: #fff !important;
+  }
+}
