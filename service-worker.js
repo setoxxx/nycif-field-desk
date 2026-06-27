@@ -1,10 +1,5 @@
-const CACHE_NAME = 'nycif-v072-today-local-date';
-const APP_SHELL = ['./','./index.html','./style.css','./fielddesk-v02.css','./weekstrip-v06-safe.css','./date-normalizer-v072-safe.js','./app-v06-safe.js','./stats-v05-safe.js','./manifest.json','./icons/icon-192.svg','./icons/icon-512.svg'];
-self.addEventListener('install', event => { event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL))); self.skipWaiting(); });
-self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))); self.clients.claim(); });
-self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
-  if (url.origin === location.origin || url.hostname === 'raw.githubusercontent.com') {
-    event.respondWith(fetch(event.request).then(response => { const copy = response.clone(); caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)); return response; }).catch(() => caches.match(event.request)));
-  }
-});
+const CACHE_NAME='nycif-v08-data-window';
+const APP_SHELL=['./','./index.html','./style.css','./fielddesk-v02.css','./weekstrip-v06-safe.css','./data-window-v08-safe.css','./boot-today-v073-safe.js','./date-normalizer-v073-safe.js','./app-v06-safe.js','./stats-v05-safe.js','./data-window-v08-safe.js','./manifest.json','./icons/icon-192.svg','./icons/icon-512.svg'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)));self.skipWaiting();});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))));self.clients.claim();});
+self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(u.origin===location.origin||u.hostname==='raw.githubusercontent.com'){e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE_NAME).then(c=>c.put(e.request,copy));return r;}).catch(()=>caches.match(e.request)));}});
