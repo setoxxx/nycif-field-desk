@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://{s}.tile.openstreetmap.org">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="./style.css?v=hotfix-053">
-  <link rel="stylesheet" href="./fielddesk-v02.css?v=hotfix-053">
+  <link rel="stylesheet" href="./fielddesk-v02.css?v=fulltoday-01">
 </head>
 <body>
   <main id="app" class="app">
@@ -46,6 +46,9 @@
 
         <button id="loadAllBtn" class="load-all" type="button">
           Load all events
+        </button>
+        <button id="fullTodayBtn" class="load-all full-today-test" type="button">
+          Full Today Test
         </button>
 
         <label class="check major"><input type="checkbox" id="majorOnly"> <span>⭐ Major/field picks only</span></label>
@@ -114,5 +117,25 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="./app-v03.js?v=hotfix-053" type="module"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const fullToday = document.getElementById('fullTodayBtn');
+      const status = document.getElementById('status');
+      if (!fullToday) return;
+      fullToday.addEventListener('click', () => {
+        if (status) status.textContent = 'Full Today Test: loading full feed and enabling all categories...';
+        document.querySelector('[data-date-mode="today"]')?.click();
+        document.querySelectorAll('[data-cat]').forEach(input => { if (!input.checked) input.click(); });
+        ['majorOnly','photoOnly','nypdOnly'].forEach(id => {
+          const input = document.getElementById(id);
+          if (input && input.checked) input.click();
+        });
+        document.getElementById('loadAllBtn')?.click();
+        setTimeout(() => {
+          if (status) status.textContent += ' Full Today Test active. Map remains capped for phone safety.';
+        }, 2200);
+      });
+    });
+  </script>
 </body>
 </html>
