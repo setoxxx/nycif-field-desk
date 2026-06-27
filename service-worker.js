@@ -1,10 +1,13 @@
-const CACHE_NAME = 'nycif-field-desk-v0.2.0';
+const CACHE_NAME = 'nycif-field-desk-v0.3.0';
 
 const APP_SHELL = [
   './',
   './index.html',
   './style.css',
+  './fielddesk-v02.css',
+  './fielddesk-v03.css',
   './app.js',
+  './app-v03.js',
   './manifest.json',
   './icons/icon-192.svg',
   './icons/icon-512.svg'
