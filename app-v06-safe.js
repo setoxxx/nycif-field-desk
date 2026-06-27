@@ -1,4 +1,4 @@
-const VERSION = '0.6-staged-01';
+const VERSION = '0.6-staged-02';
 const NYC_CENTER = [40.7128, -74.0060];
 const STORAGE_KEY = 'nycif-field-desk-state-v06-safe';
 
@@ -153,7 +153,7 @@ function makeEvent(row, index) {
   if (row.staged_feed && !event.assignment_feed) event.assignment_feed = 'staged';
   event.photoPick = isPhotoPick(event);
   event.priority = priority(event);
-  event.marker = makeMarker(event);
+  event.marker = null;
   return event;
 }
 
@@ -190,6 +190,11 @@ function makeMarker(event) {
   marker.on('click tap', ev => { if (ev?.originalEvent) { L.DomEvent.preventDefault(ev.originalEvent); L.DomEvent.stop(ev.originalEvent); } marker.setPopupContent(popupHtml(event)); marker.openPopup(); });
   marker.on('popupopen', ev => { const el = ev?.popup?.getElement?.(); if (!el) return; L.DomEvent.disableClickPropagation(el); L.DomEvent.disableScrollPropagation(el); });
   return marker;
+}
+
+function ensureMarker(event) {
+  if (!event.marker) event.marker = makeMarker(event);
+  return event.marker;
 }
 
 function isExactDateMode(value) { return /^\d{4}-\d{2}-\d{2}$/.test(value); }
@@ -234,13 +239,13 @@ function render() {
   markers.clearLayers();
   const visible = state.events.filter(eventMatches).sort(sortEvents);
   const draw = visible.slice(0, state.maxMarkers);
-  draw.forEach(event => markers.addLayer(event.marker));
+  draw.forEach(event => markers.addLayer(ensureMarker(event)));
   const photoCount = visible.filter(e => e.photoPick).length;
   const nypdCount = visible.filter(isNypd).length;
   const nearMode = state.userLocation && state.sort === 'near';
   els.listMeta.textContent = `${draw.length < visible.length ? `${draw.length} shown of ${visible.length}` : `${visible.length} visible`} assignments · ${photoCount} photo picks · ${nypdCount} NYPD${nearMode ? ' · sorted near you' : ''}`;
   els.eventList.innerHTML = visible.slice(0, 60).map(event => { const distance = distanceLabel(event); return `<button type="button" class="event-item" data-id="${esc(event.id)}"><span class="item-top"><span class="item-source">${esc(event.category.emoji)} ${esc(event.category.label)}</span><span class="item-tags">${distance ? `<span class="item-tag near">${esc(distance)}</span>` : ''}<span class="item-tag priority-${photoPriority(event).toLowerCase().replaceAll(' ', '-')}">${esc(photoPriority(event))}</span>${event.assignment_feed === 'staged' ? '<span class="item-tag">STAGED</span>' : ''}${event.photoPick ? '<span class="item-tag">📸</span>' : ''}${isNypd(event) ? '<span class="item-tag danger">NYPD</span>' : ''}</span></span><strong>${esc(event.title)}</strong><span>${esc(timeLabel(event.start))}</span><small>${esc([event.borough, event.location, crowdLabel(event)].filter(Boolean).join(' • '))}</small><span class="quick-actions"><a href="${esc(appleMapsUrl(event))}" target="_blank" rel="noopener">Directions</a><button type="button" data-copy-id="${esc(event.id)}">Copy</button></span></button>`; }).join('') || '<div class="empty">No assignments match this view.</div>';
-  els.eventList.querySelectorAll('[data-id]').forEach(button => button.addEventListener('click', ev => { if (ev.target.closest('a,button[data-copy-id]')) return; const event = state.events.find(e => e.id === button.dataset.id); if (!event) return; map.flyTo([event.lat, event.lng], Math.max(map.getZoom(), 15), { duration: 0.55 }); setTimeout(() => { event.marker.setPopupContent(popupHtml(event)); event.marker.openPopup(); }, 420); setDesk(false); }));
+  els.eventList.querySelectorAll('[data-id]').forEach(button => button.addEventListener('click', ev => { if (ev.target.closest('a,button[data-copy-id]')) return; const event = state.events.find(e => e.id === button.dataset.id); if (!event) return; map.flyTo([event.lat, event.lng], Math.max(map.getZoom(), 15), { duration: 0.55 }); setTimeout(() => { const marker = ensureMarker(event); marker.setPopupContent(popupHtml(event)); marker.openPopup(); if (!markers.hasLayer(marker)) markers.addLayer(marker); }, 420); setDesk(false); }));
   els.eventList.querySelectorAll('[data-copy-id]').forEach(button => button.addEventListener('click', ev => { ev.stopPropagation(); const event = state.events.find(e => e.id === button.dataset.copyId); if (event) copyAssignment(event); }));
   updateChrome(visible);
   return visible;
@@ -250,15 +255,17 @@ async function loadFeed(kind) {
   const url = FEEDS[kind];
   const label = kind === 'major' ? 'major field assignments' : kind === 'full' ? 'full event database' : 'staged deduped feed';
   status(`Loading ${label}…`);
-  const response = await fetch(`${url}?cache=${Date.now()}`, { headers: { Accept: 'application/json' } });
+  const response = await fetch(`${url}?cache=${Date.now()}`, { headers: { Accept: 'application/json' }, cache: 'no-store' });
   if (!response.ok) throw new Error(`${kind} feed HTTP ${response.status}`);
   const json = await response.json();
   const rows = Array.isArray(json) ? json : (json.events || []);
   const events = rows.map(makeEvent).filter(Boolean);
   if (kind === 'major') {
+    state.maxMarkers = 650;
     state.events = events;
     state.feed = 'major';
   } else if (kind === 'staged') {
+    state.maxMarkers = 250;
     state.events = events;
     state.feed = 'staged';
     state.stagedLoaded = true;
@@ -268,6 +275,7 @@ async function loadFeed(kind) {
       els.stagedFeedBtn.disabled = true;
     }
   } else {
+    state.maxMarkers = 650;
     const existing = new Map(state.events.map(e => [e.id, e]));
     events.forEach(event => existing.set(event.id, event));
     state.events = [...existing.values()];
@@ -275,7 +283,8 @@ async function loadFeed(kind) {
     state.fullLoaded = true;
   }
   const visible = render();
-  if (visible.length) map.fitBounds(visible.slice(0, 200).map(e => [e.lat, e.lng]), { padding: [44, 44], maxZoom: 12 });
+  if (visible.length && kind !== 'staged') map.fitBounds(visible.slice(0, 200).map(e => [e.lat, e.lng]), { padding: [44, 44], maxZoom: 12 });
+  if (visible.length && kind === 'staged') status(`${visible.length} assignments · Staged deduped feed loaded · first ${Math.min(visible.length, state.maxMarkers)} markers drawn · v${VERSION}`);
   setTimeout(() => map.invalidateSize(), 120);
 }
 
