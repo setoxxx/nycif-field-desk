@@ -14,19 +14,34 @@
   <link rel="preconnect" href="https://raw.githubusercontent.com">
   <link rel="preconnect" href="https://{s}.tile.openstreetmap.org">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=0.2.0">
 </head>
 <body>
   <main id="app" class="app">
     <section class="map-shell" aria-label="NYC In Focus Field Desk">
       <div id="map" class="map" role="application" aria-label="NYC events assignment map"></div>
 
+      <div class="brand-card" aria-label="NYC In Focus Field Desk status">
+        <div class="brand-mark">NYCIF</div>
+        <div>
+          <strong>Field Desk</strong>
+          <span id="brandCount">Loading live assignments…</span>
+        </div>
+      </div>
+
+      <div id="dateChips" class="date-chips" aria-label="Date filters">
+        <button type="button" data-date-mode="today" class="active">Today</button>
+        <button type="button" data-date-mode="tomorrow">Tomorrow</button>
+        <button type="button" data-date-mode="weekend">Weekend</button>
+        <button type="button" data-date-mode="all">All</button>
+      </div>
+
       <button id="layersBtn" class="pill layers-pill" type="button" aria-expanded="false" aria-controls="layersPanel">
         <span>☰</span><b>Layers</b>
       </button>
 
       <aside id="layersPanel" class="layers-panel" aria-label="Assignment filters" hidden>
-        <p class="panel-label">Default: major assignments</p>
+        <p class="panel-label">Default: today + major assignments</p>
 
         <button id="loadAllBtn" class="load-all" type="button">
           Load all events
@@ -53,6 +68,10 @@
         🗽
       </button>
 
+      <button id="nearMeBtn" class="near-me-btn" type="button" aria-label="Sort assignments near me" title="Near me">
+        Near Me
+      </button>
+
       <button id="deskBtn" class="desk-btn" type="button" aria-expanded="false" aria-controls="deskDrawer">
         Assignment Desk
       </button>
@@ -77,6 +96,7 @@
           <span>Sort</span>
           <select id="sortSelect">
             <option value="priority">Priority</option>
+            <option value="near">Near me</option>
             <option value="time">Time</option>
             <option value="borough">Borough</option>
             <option value="type">Type</option>
@@ -91,25 +111,7 @@
     </section>
   </main>
 
-  <template id="popupTemplate">
-    <article class="popup-card">
-      <div class="popup-source"></div>
-      <div class="popup-category"></div>
-      <h2></h2>
-      <div class="popup-priority" hidden>High-priority field item</div>
-      <dl>
-        <div><dt>Time</dt><dd class="popup-time"></dd></div>
-        <div class="popup-borough-row"><dt>Borough</dt><dd class="popup-borough"></dd></div>
-        <div class="popup-location-row"><dt>Location</dt><dd class="popup-location"></dd></div>
-        <div class="popup-crowd-row"><dt>Assignment read</dt><dd class="popup-crowd"></dd></div>
-      </dl>
-      <div class="popup-photo" hidden></div>
-      <div class="popup-nypd" hidden></div>
-      <a class="popup-link" target="_blank" rel="noopener" hidden>Source</a>
-    </article>
-  </template>
-
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="./app.js" type="module"></script>
+  <script src="./app.js?v=0.2.0" type="module"></script>
 </body>
 </html>
