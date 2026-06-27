@@ -1,10 +1,11 @@
-const VERSION = '0.6-safe';
+const VERSION = '0.6-staged-01';
 const NYC_CENTER = [40.7128, -74.0060];
 const STORAGE_KEY = 'nycif-field-desk-state-v06-safe';
 
 const FEEDS = {
   major: 'https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json',
-  full: 'https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_all_radar_map_events.json'
+  full: 'https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_all_radar_map_events.json',
+  staged: 'https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/data/nycif_staged_live_events.json'
 };
 
 const BOROUGHS = ['All', 'Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'];
@@ -14,6 +15,7 @@ const state = {
   feed: 'major',
   events: [],
   fullLoaded: false,
+  stagedLoaded: false,
   search: '',
   borough: 'all',
   sort: 'priority',
@@ -38,6 +40,7 @@ const els = {
   deskDrawer: document.getElementById('deskDrawer'),
   closeDeskBtn: document.getElementById('closeDeskBtn'),
   loadAllBtn: document.getElementById('loadAllBtn'),
+  stagedFeedBtn: null,
   majorOnly: document.getElementById('majorOnly'),
   photoOnly: document.getElementById('photoOnly'),
   nypdOnly: document.getElementById('nypdOnly'),
@@ -92,6 +95,12 @@ function appleMapsUrl(event) { return `https://maps.apple.com/?daddr=${event.lat
 function googleMapsUrl(event) { return `https://www.google.com/maps/dir/?api=1&destination=${event.lat},${event.lng}&travelmode=driving`; }
 
 function category(row) {
+  const preset = String(row.category || '').toLowerCase();
+  if (preset === 'sports') return { key: 'sports', emoji: '🏟️', label: 'Sports / World Cup' };
+  if (preset === 'parade') return { key: 'parade', emoji: '📣', label: 'Parade / civic' };
+  if (preset === 'market') return { key: 'market', emoji: '🛍️', label: 'Market / street fair' };
+  if (preset === 'arts') return { key: 'arts', emoji: '🎭', label: 'Arts / production' };
+  if (preset === 'parks') return { key: 'parks', emoji: '🌳', label: 'Parks / family' };
   const text = normalize([row.title, row.event_type, row.type, row.location, row.display_location, row.lane, row.nypd_notice, row.verification_status, row.icon].join(' '));
   const icon = row.icon || '';
   if (icon === '🌈' || /pride/.test(text)) return { key: 'parade', emoji: '🌈', label: 'Pride / parade' };
@@ -141,6 +150,7 @@ function makeEvent(row, index) {
   const title = row.title || row.name || 'Untitled event';
   const location = row.display_location || row.location || row.address || '';
   const event = { ...row, id: String(row.id || `event-${index}`), title, location, borough: row.borough || '', type: row.event_type || row.type || '', lat, lng, start, dateKey: dateKey(start) || (row.date || row.start_date_time || '').slice(0, 10), category: cat, searchText: normalize([title, location, row.borough, row.event_type, row.type, row.lane, row.nypd_notice, row.verification_status, row.source_file, row.major_reason, row.crowd_level].join(' ')) };
+  if (row.staged_feed && !event.assignment_feed) event.assignment_feed = 'staged';
   event.photoPick = isPhotoPick(event);
   event.priority = priority(event);
   event.marker = makeMarker(event);
@@ -158,8 +168,15 @@ async function copyAssignment(event) {
   catch { window.prompt('Copy assignment:', text); status('Copy box opened.'); }
 }
 
+function feedLabel() {
+  if (state.feed === 'major') return 'Fast major feed';
+  if (state.feed === 'full') return 'Full feed';
+  if (state.feed === 'staged') return 'Staged deduped feed';
+  return 'Live feed';
+}
+
 function popupHtml(event) {
-  const source = isNypd(event) ? 'NYPD Field Intel' : (event.assignment_feed === 'major' ? 'Major Assignment Feed' : 'NYCIF Live Feed');
+  const source = isNypd(event) ? 'NYPD Field Intel' : (event.assignment_feed === 'staged' ? 'Staged Deduped Feed' : event.assignment_feed === 'major' ? 'Major Assignment Feed' : 'NYCIF Live Feed');
   const crowd = crowdLabel(event);
   const nypd = event.nypd_notice || '';
   const sourceUrl = event.source_url || event.url || event.event_url || '';
@@ -177,7 +194,7 @@ function makeMarker(event) {
 
 function isExactDateMode(value) { return /^\d{4}-\d{2}-\d{2}$/.test(value); }
 function dateMatches(event) { if (state.dateMode === 'all') return true; if (!event.dateKey) return false; if (state.dateMode === 'today') return event.dateKey === todayKey(); if (state.dateMode === 'tomorrow') return event.dateKey === tomorrowKey(); if (state.dateMode === 'weekend') return isWeekendDate(event.start); if (isExactDateMode(state.dateMode)) return event.dateKey === state.dateMode; return true; }
-function eventMatches(event) { if (!dateMatches(event)) return false; if (!state.categories[event.category.key]) return false; if (state.majorOnly && !(event.assignment_feed === 'major' || event.field_default || event.photoPick || isNypd(event))) return false; if (state.photoOnly && !event.photoPick) return false; if (state.nypdOnly && !isNypd(event)) return false; if (state.borough !== 'all' && event.borough !== state.borough) return false; if (state.search && !event.searchText.includes(state.search)) return false; return true; }
+function eventMatches(event) { if (!dateMatches(event)) return false; if (!state.categories[event.category.key]) return false; if (state.majorOnly && !(event.assignment_feed === 'major' || event.assignment_feed === 'staged' || event.field_default || event.photoPick || isNypd(event))) return false; if (state.photoOnly && !event.photoPick) return false; if (state.nypdOnly && !isNypd(event)) return false; if (state.borough !== 'all' && event.borough !== state.borough) return false; if (state.search && !event.searchText.includes(state.search)) return false; return true; }
 
 function sortEvents(a, b) {
   if (state.sort === 'near') { const da = milesBetween(state.userLocation, a) ?? 999999; const db = milesBetween(state.userLocation, b) ?? 999999; return da - db || b.priority - a.priority; }
@@ -210,7 +227,7 @@ function updateChrome(visible) {
   const photoCount = visible.filter(e => e.photoPick).length;
   const nearNote = state.userLocation && state.sort === 'near' ? ' · near me' : '';
   if (els.brandCount) els.brandCount.textContent = `${visible.length} live${nypdCount ? ` · ${nypdCount} NYPD` : ''}${photoCount ? ` · ${photoCount} photo` : ''}`;
-  status(`${visible.length} assignment${visible.length === 1 ? '' : 's'} · ${state.feed === 'major' ? 'Fast major feed' : 'Full feed'}${nearNote} · v${VERSION}`);
+  status(`${visible.length} assignment${visible.length === 1 ? '' : 's'} · ${feedLabel()}${nearNote} · v${VERSION}`);
 }
 
 function render() {
@@ -222,7 +239,7 @@ function render() {
   const nypdCount = visible.filter(isNypd).length;
   const nearMode = state.userLocation && state.sort === 'near';
   els.listMeta.textContent = `${draw.length < visible.length ? `${draw.length} shown of ${visible.length}` : `${visible.length} visible`} assignments · ${photoCount} photo picks · ${nypdCount} NYPD${nearMode ? ' · sorted near you' : ''}`;
-  els.eventList.innerHTML = visible.slice(0, 60).map(event => { const distance = distanceLabel(event); return `<button type="button" class="event-item" data-id="${esc(event.id)}"><span class="item-top"><span class="item-source">${esc(event.category.emoji)} ${esc(event.category.label)}</span><span class="item-tags">${distance ? `<span class="item-tag near">${esc(distance)}</span>` : ''}<span class="item-tag priority-${photoPriority(event).toLowerCase().replaceAll(' ', '-')}">${esc(photoPriority(event))}</span>${event.photoPick ? '<span class="item-tag">📸</span>' : ''}${isNypd(event) ? '<span class="item-tag danger">NYPD</span>' : ''}</span></span><strong>${esc(event.title)}</strong><span>${esc(timeLabel(event.start))}</span><small>${esc([event.borough, event.location, crowdLabel(event)].filter(Boolean).join(' • '))}</small><span class="quick-actions"><a href="${esc(appleMapsUrl(event))}" target="_blank" rel="noopener">Directions</a><button type="button" data-copy-id="${esc(event.id)}">Copy</button></span></button>`; }).join('') || '<div class="empty">No assignments match this view.</div>';
+  els.eventList.innerHTML = visible.slice(0, 60).map(event => { const distance = distanceLabel(event); return `<button type="button" class="event-item" data-id="${esc(event.id)}"><span class="item-top"><span class="item-source">${esc(event.category.emoji)} ${esc(event.category.label)}</span><span class="item-tags">${distance ? `<span class="item-tag near">${esc(distance)}</span>` : ''}<span class="item-tag priority-${photoPriority(event).toLowerCase().replaceAll(' ', '-')}">${esc(photoPriority(event))}</span>${event.assignment_feed === 'staged' ? '<span class="item-tag">STAGED</span>' : ''}${event.photoPick ? '<span class="item-tag">📸</span>' : ''}${isNypd(event) ? '<span class="item-tag danger">NYPD</span>' : ''}</span></span><strong>${esc(event.title)}</strong><span>${esc(timeLabel(event.start))}</span><small>${esc([event.borough, event.location, crowdLabel(event)].filter(Boolean).join(' • '))}</small><span class="quick-actions"><a href="${esc(appleMapsUrl(event))}" target="_blank" rel="noopener">Directions</a><button type="button" data-copy-id="${esc(event.id)}">Copy</button></span></button>`; }).join('') || '<div class="empty">No assignments match this view.</div>';
   els.eventList.querySelectorAll('[data-id]').forEach(button => button.addEventListener('click', ev => { if (ev.target.closest('a,button[data-copy-id]')) return; const event = state.events.find(e => e.id === button.dataset.id); if (!event) return; map.flyTo([event.lat, event.lng], Math.max(map.getZoom(), 15), { duration: 0.55 }); setTimeout(() => { event.marker.setPopupContent(popupHtml(event)); event.marker.openPopup(); }, 420); setDesk(false); }));
   els.eventList.querySelectorAll('[data-copy-id]').forEach(button => button.addEventListener('click', ev => { ev.stopPropagation(); const event = state.events.find(e => e.id === button.dataset.copyId); if (event) copyAssignment(event); }));
   updateChrome(visible);
@@ -231,13 +248,32 @@ function render() {
 
 async function loadFeed(kind) {
   const url = FEEDS[kind];
-  status(`Loading ${kind === 'major' ? 'major field assignments' : 'full event database'}…`);
+  const label = kind === 'major' ? 'major field assignments' : kind === 'full' ? 'full event database' : 'staged deduped feed';
+  status(`Loading ${label}…`);
   const response = await fetch(`${url}?cache=${Date.now()}`, { headers: { Accept: 'application/json' } });
   if (!response.ok) throw new Error(`${kind} feed HTTP ${response.status}`);
   const json = await response.json();
   const rows = Array.isArray(json) ? json : (json.events || []);
   const events = rows.map(makeEvent).filter(Boolean);
-  if (kind === 'major') { state.events = events; state.feed = 'major'; } else { const existing = new Map(state.events.map(e => [e.id, e])); events.forEach(event => existing.set(event.id, event)); state.events = [...existing.values()]; state.feed = 'full'; state.fullLoaded = true; }
+  if (kind === 'major') {
+    state.events = events;
+    state.feed = 'major';
+  } else if (kind === 'staged') {
+    state.events = events;
+    state.feed = 'staged';
+    state.stagedLoaded = true;
+    state.fullLoaded = false;
+    if (els.stagedFeedBtn) {
+      els.stagedFeedBtn.textContent = 'Staged feed loaded';
+      els.stagedFeedBtn.disabled = true;
+    }
+  } else {
+    const existing = new Map(state.events.map(e => [e.id, e]));
+    events.forEach(event => existing.set(event.id, event));
+    state.events = [...existing.values()];
+    state.feed = 'full';
+    state.fullLoaded = true;
+  }
   const visible = render();
   if (visible.length) map.fitBounds(visible.slice(0, 200).map(e => [e.lat, e.lng]), { padding: [44, 44], maxZoom: 12 });
   setTimeout(() => map.invalidateSize(), 120);
@@ -284,13 +320,26 @@ function locateUser(options = {}) {
   navigator.geolocation.getCurrentPosition(pos => { const { latitude, longitude, accuracy } = pos.coords; setUserLocation(latitude, longitude, accuracy); if (options.sortNear) { state.sort = 'near'; els.sortSelect.value = 'near'; savePrefs(); } map.flyTo([latitude, longitude], Math.max(map.getZoom(), 14), { duration: 0.6 }); userMarker.openPopup(); render(); status(options.sortNear ? 'Sorted assignments near you.' : 'Location updated.'); }, err => status(`Location failed: ${err.message}`), { enableHighAccuracy: true, timeout: 12000, maximumAge: 15000 });
 }
 
+function ensureStagedButton() {
+  if (!els.layersPanel || document.getElementById('loadStagedBtn')) return;
+  const button = document.createElement('button');
+  button.id = 'loadStagedBtn';
+  button.className = 'load-all staged-feed-test';
+  button.type = 'button';
+  button.textContent = 'Load staged feed';
+  els.loadAllBtn.insertAdjacentElement('afterend', button);
+  els.stagedFeedBtn = button;
+}
+
 function bindUi() {
+  ensureStagedButton();
   els.layersBtn.addEventListener('click', () => setLayers(els.layersPanel.hidden));
   els.deskBtn.addEventListener('click', () => setDesk(els.deskDrawer.hidden));
   els.closeDeskBtn.addEventListener('click', () => setDesk(false));
   els.locateBtn.addEventListener('click', () => locateUser());
   els.nearMeBtn.addEventListener('click', () => locateUser({ sortNear: true }));
   els.loadAllBtn.addEventListener('click', async () => { if (state.fullLoaded) { status('Full feed already loaded.'); return; } els.loadAllBtn.disabled = true; els.loadAllBtn.textContent = 'Loading all events…'; try { await loadFeed('full'); els.loadAllBtn.textContent = 'All events loaded'; } catch (error) { els.loadAllBtn.disabled = false; els.loadAllBtn.textContent = 'Load all events'; status(`Full feed failed: ${error.message}`); } });
+  if (els.stagedFeedBtn) els.stagedFeedBtn.addEventListener('click', async () => { if (state.stagedLoaded) { status('Staged feed already loaded.'); return; } els.stagedFeedBtn.disabled = true; els.stagedFeedBtn.textContent = 'Loading staged feed…'; try { await loadFeed('staged'); } catch (error) { els.stagedFeedBtn.disabled = false; els.stagedFeedBtn.textContent = 'Load staged feed'; status(`Staged feed failed: ${error.message}`); } });
   els.majorOnly.addEventListener('change', () => { state.majorOnly = els.majorOnly.checked; savePrefs(); render(); });
   els.photoOnly.addEventListener('change', () => { state.photoOnly = els.photoOnly.checked; savePrefs(); render(); });
   els.nypdOnly.addEventListener('change', () => { state.nypdOnly = els.nypdOnly.checked; savePrefs(); render(); });
