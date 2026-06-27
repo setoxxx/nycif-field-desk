@@ -101,6 +101,79 @@
 
 .item-tag.near { background: rgba(17, 24, 39, .08); color: #111827 !important; }
 
+/* NYCIF Field Desk v0.3 workflow controls, merged into loaded stylesheet */
+.field-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.field-action,
+.quick-actions a,
+.quick-actions button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 8px;
+  background: #111827;
+  color: #fff !important;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.field-action:first-child,
+.quick-actions a { background: #d40000; }
+
+.photo-priority,
+.item-tag[class*="priority-"] {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 1000;
+  letter-spacing: .02em;
+}
+
+.photo-priority {
+  margin: 0 5px 6px 0;
+  padding: 4px 7px;
+  text-transform: uppercase;
+  background: rgba(17, 24, 39, .08);
+  color: #111827;
+}
+
+.photo-priority[class*="must"],
+.item-tag[class*="must"] {
+  background: #d40000 !important;
+  color: #fff !important;
+}
+
+.photo-priority[class*="good"],
+.item-tag[class*="good"] {
+  background: rgba(212, 0, 0, .12) !important;
+  color: #d40000 !important;
+}
+
+.quick-actions {
+  display: flex !important;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.quick-actions a,
+.quick-actions button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding-inline: 10px;
+}
+
 @media (max-width: 720px) {
   .brand-card { max-width: calc(100vw - 106px); }
   .brand-card strong { font-size: 12px; }
