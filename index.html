@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#05070b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NYCIF Desk">
+  <title>NYCIF Field Desk</title>
+
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icons/icon-192.svg">
+  <link rel="preconnect" href="https://raw.githubusercontent.com">
+  <link rel="preconnect" href="https://{s}.tile.openstreetmap.org">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main id="app" class="app">
+    <section class="map-shell" aria-label="NYC In Focus Field Desk">
+      <div id="map" class="map" role="application" aria-label="NYC events assignment map"></div>
+
+      <button id="layersBtn" class="pill layers-pill" type="button" aria-expanded="false" aria-controls="layersPanel">
+        <span>☰</span><b>Layers</b>
+      </button>
+
+      <aside id="layersPanel" class="layers-panel" aria-label="Assignment filters" hidden>
+        <p class="panel-label">Default: major assignments</p>
+
+        <button id="loadAllBtn" class="load-all" type="button">
+          Load all events
+        </button>
+
+        <label class="check major"><input type="checkbox" id="majorOnly"> <span>⭐ Major/field picks only</span></label>
+
+        <hr>
+
+        <label class="check"><input type="checkbox" data-cat="sports" checked> <span>🏟️ World Cup / sports</span></label>
+        <label class="check"><input type="checkbox" data-cat="parade" checked> <span>📣 Parades / civic / Pride</span></label>
+        <label class="check"><input type="checkbox" data-cat="market" checked> <span>🛍️ Street fairs / pop-ups</span></label>
+        <label class="check"><input type="checkbox" data-cat="arts" checked> <span>🎭 Arts / production</span></label>
+        <label class="check"><input type="checkbox" data-cat="parks"> <span>🌳 Parks / family</span></label>
+        <label class="check"><input type="checkbox" data-cat="general"> <span>📍 General</span></label>
+
+        <hr>
+
+        <label class="check"><input type="checkbox" id="photoOnly"> <span>📸 Photo picks only</span></label>
+        <label class="check"><input type="checkbox" id="nypdOnly"> <span>🚨 NYPD intel only</span></label>
+      </aside>
+
+      <button id="locateBtn" class="locate-btn" type="button" aria-label="Show my location" title="Show my location">
+        🗽
+      </button>
+
+      <button id="deskBtn" class="desk-btn" type="button" aria-expanded="false" aria-controls="deskDrawer">
+        Assignment Desk
+      </button>
+
+      <aside id="deskDrawer" class="desk-drawer" aria-label="Assignment desk" hidden>
+        <header class="desk-header">
+          <div>
+            <p>NYC In Focus</p>
+            <h1>Field Desk</h1>
+          </div>
+          <button id="closeDeskBtn" class="close-btn" type="button" aria-label="Close assignment desk">×</button>
+        </header>
+
+        <label class="search">
+          <span class="sr-only">Search assignments</span>
+          <input id="searchInput" type="search" placeholder="Search title, location, borough, type" autocomplete="off">
+        </label>
+
+        <div class="boroughs" id="boroughs"></div>
+
+        <label class="sort">
+          <span>Sort</span>
+          <select id="sortSelect">
+            <option value="priority">Priority</option>
+            <option value="time">Time</option>
+            <option value="borough">Borough</option>
+            <option value="type">Type</option>
+          </select>
+        </label>
+
+        <div id="listMeta" class="list-meta">Loading assignments...</div>
+        <div id="eventList" class="event-list"></div>
+      </aside>
+
+      <div id="status" class="status">Loading major field assignments…</div>
+    </section>
+  </main>
+
+  <template id="popupTemplate">
+    <article class="popup-card">
+      <div class="popup-source"></div>
+      <div class="popup-category"></div>
+      <h2></h2>
+      <div class="popup-priority" hidden>High-priority field item</div>
+      <dl>
+        <div><dt>Time</dt><dd class="popup-time"></dd></div>
+        <div class="popup-borough-row"><dt>Borough</dt><dd class="popup-borough"></dd></div>
+        <div class="popup-location-row"><dt>Location</dt><dd class="popup-location"></dd></div>
+        <div class="popup-crowd-row"><dt>Assignment read</dt><dd class="popup-crowd"></dd></div>
+      </dl>
+      <div class="popup-photo" hidden></div>
+      <div class="popup-nypd" hidden></div>
+      <a class="popup-link" target="_blank" rel="noopener" hidden>Source</a>
+    </article>
+  </template>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="./app.js" type="module"></script>
+</body>
+</html>
