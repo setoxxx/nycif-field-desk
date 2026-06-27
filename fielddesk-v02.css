@@ -1,0 +1,110 @@
+/* NYCIF Field Desk v0.2 controls */
+.brand-card {
+  position: absolute;
+  z-index: 790;
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: min(330px, calc(100vw - 98px));
+  min-height: 42px;
+  padding: 7px 12px;
+  border-radius: 16px;
+  background: rgba(5, 7, 11, .86);
+  color: #fff;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .32);
+  backdrop-filter: blur(14px);
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 28px;
+  border-radius: 10px;
+  background: #d40000;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 1000;
+  letter-spacing: .04em;
+}
+
+.brand-card strong { display: block; font-size: 13px; line-height: 1; }
+.brand-card span {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, .78);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.date-chips {
+  position: absolute;
+  z-index: 755;
+  top: calc(env(safe-area-inset-top, 0px) + 58px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  max-width: calc(100vw - 18px);
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(5, 7, 11, .78);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .25);
+  backdrop-filter: blur(12px);
+}
+
+.date-chips button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: transparent;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.date-chips button.active { background: #fff; color: #111827; }
+
+.near-me-btn {
+  position: absolute;
+  z-index: 760;
+  top: calc(env(safe-area-inset-top, 0px) + 148px);
+  right: calc(env(safe-area-inset-right, 0px) + 8px);
+  min-height: 32px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 11px;
+  background: rgba(5, 7, 11, .86);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .3);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+}
+
+.item-tags {
+  display: flex !important;
+  gap: 4px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.item-tag.near { background: rgba(17, 24, 39, .08); color: #111827 !important; }
+
+@media (max-width: 720px) {
+  .brand-card { max-width: calc(100vw - 106px); }
+  .brand-card strong { font-size: 12px; }
+  .brand-card span { max-width: 155px; }
+  .date-chips { top: calc(env(safe-area-inset-top, 0px) + 56px); }
+  .date-chips button { font-size: 10px; padding: 7px 8px; }
+}
