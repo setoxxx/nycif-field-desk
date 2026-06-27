@@ -1,0 +1,201 @@
+/* NYCIF Feed Status Panel v01 */
+#feedStatusToggleV01 {
+  position: absolute;
+  z-index: 770;
+  right: calc(env(safe-area-inset-right, 0px) + 8px);
+  top: calc(env(safe-area-inset-top, 0px) + 228px);
+  min-height: 32px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 12px;
+  background: rgba(5, 7, 11, .88);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 1000;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .3);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+}
+
+#feedStatusToggleV01.has-new {
+  background: #d40000;
+}
+
+#feedStatusPanelV01 {
+  position: absolute;
+  z-index: 930;
+  right: calc(env(safe-area-inset-right, 0px) + 8px);
+  top: calc(env(safe-area-inset-top, 0px) + 266px);
+  width: min(365px, calc(100vw - 18px));
+  max-height: 62dvh;
+  overflow: auto;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .98);
+  color: #111827;
+  box-shadow: 0 18px 55px rgba(0, 0, 0, .36);
+  backdrop-filter: blur(14px);
+}
+
+#feedStatusPanelV01[hidden] {
+  display: none !important;
+}
+
+.feed-status-header-v01 {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.feed-status-header-v01 p {
+  margin: 0;
+  color: #d40000;
+  font-size: 11px;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+
+.feed-status-header-v01 h2 {
+  margin: 2px 0 0;
+  font-size: 19px;
+  line-height: 1.08;
+}
+
+#feedStatusCloseV01,
+#feedStatusRefreshV01 {
+  border: 0;
+  border-radius: 999px;
+  background: #111827;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+#feedStatusCloseV01 {
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+}
+
+#feedStatusRefreshV01 {
+  min-height: 30px;
+  padding: 0 11px;
+  margin-top: 9px;
+  background: #d40000;
+}
+
+.feed-status-grid-v01 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.feed-status-metric-v01 {
+  border: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 14px;
+  padding: 8px;
+  background: rgba(17, 24, 39, .04);
+}
+
+.feed-status-metric-v01 strong {
+  display: block;
+  color: #111827;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.feed-status-metric-v01 span {
+  display: block;
+  margin-top: 3px;
+  color: #4b5563;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.feed-status-section-v01 {
+  margin-top: 11px;
+}
+
+.feed-status-section-v01 h3 {
+  margin: 0 0 6px;
+  color: #111827;
+  font-size: 13px;
+  line-height: 1.1;
+}
+
+.feed-status-list-v01 {
+  display: grid;
+  gap: 7px;
+}
+
+.feed-status-event-v01 {
+  border: 1px solid rgba(17, 24, 39, .10);
+  border-radius: 13px;
+  padding: 8px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, .05);
+}
+
+.feed-status-event-v01 strong {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 12px;
+  line-height: 1.18;
+}
+
+.feed-status-event-v01 span,
+.feed-status-event-v01 small {
+  display: block;
+  color: #4b5563;
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.feed-status-badge-v01 {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 5px;
+  border-radius: 999px;
+  padding: 3px 7px;
+  background: rgba(212, 0, 0, .10);
+  color: #d40000;
+  font-size: 10px;
+  font-weight: 1000;
+}
+
+.feed-status-note-v01 {
+  margin: 8px 0 0;
+  color: #4b5563;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.feed-status-error-v01 {
+  border-radius: 13px;
+  padding: 10px;
+  background: rgba(212, 0, 0, .08);
+  color: #991b1b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@media (max-width: 700px) {
+  #feedStatusToggleV01 {
+    top: calc(env(safe-area-inset-top, 0px) + 228px);
+  }
+
+  #feedStatusPanelV01 {
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-height: 58dvh;
+  }
+}
