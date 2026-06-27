@@ -1,4 +1,4 @@
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 const NYC_CENTER = [40.7128, -74.0060];
 
 const FEEDS = {
@@ -15,6 +15,8 @@ const state = {
   search: '',
   borough: 'all',
   sort: 'priority',
+  dateMode: 'today',
+  userLocation: null,
   categories: {
     sports: true,
     parade: true,
@@ -32,9 +34,11 @@ const state = {
 const els = {
   map: document.getElementById('map'),
   status: document.getElementById('status'),
+  brandCount: document.getElementById('brandCount'),
   layersBtn: document.getElementById('layersBtn'),
   layersPanel: document.getElementById('layersPanel'),
   locateBtn: document.getElementById('locateBtn'),
+  nearMeBtn: document.getElementById('nearMeBtn'),
   deskBtn: document.getElementById('deskBtn'),
   deskDrawer: document.getElementById('deskDrawer'),
   closeDeskBtn: document.getElementById('closeDeskBtn'),
@@ -44,10 +48,10 @@ const els = {
   nypdOnly: document.getElementById('nypdOnly'),
   searchInput: document.getElementById('searchInput'),
   sortSelect: document.getElementById('sortSelect'),
+  dateChips: document.getElementById('dateChips'),
   boroughs: document.getElementById('boroughs'),
   listMeta: document.getElementById('listMeta'),
-  eventList: document.getElementById('eventList'),
-  popupTemplate: document.getElementById('popupTemplate')
+  eventList: document.getElementById('eventList')
 };
 
 const map = L.map(els.map, {
@@ -84,6 +88,30 @@ function parseDate(value) {
   return Number.isFinite(t) ? new Date(t) : null;
 }
 
+function dateKey(date) {
+  if (!date) return '';
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function todayKey() {
+  return dateKey(new Date());
+}
+
+function tomorrowKey() {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return dateKey(d);
+}
+
+function isWeekendDate(date) {
+  if (!date) return false;
+  const day = date.getDay();
+  return day === 0 || day === 6;
+}
+
 function timeLabel(date) {
   if (!date) return 'Time not listed';
   return date.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
@@ -93,6 +121,25 @@ function isNYCoord(lat, lng) {
   return Number.isFinite(lat) && Number.isFinite(lng)
     && lat >= 40.4774 && lat <= 40.9176
     && lng >= -74.2591 && lng <= -73.7004;
+}
+
+function milesBetween(a, b) {
+  if (!a || !b) return null;
+  const R = 3958.8;
+  const toRad = deg => deg * Math.PI / 180;
+  const dLat = toRad(b.lat - a.lat);
+  const dLng = toRad(b.lng - a.lng);
+  const lat1 = toRad(a.lat);
+  const lat2 = toRad(b.lat);
+  const x = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+
+function distanceLabel(event) {
+  if (!state.userLocation) return '';
+  const miles = milesBetween(state.userLocation, event);
+  if (!Number.isFinite(miles)) return '';
+  return miles < 0.1 ? 'nearby' : `${miles.toFixed(miles < 10 ? 1 : 0)} mi`;
 }
 
 function category(row) {
@@ -164,7 +211,7 @@ function makeEvent(row, index) {
     lat,
     lng,
     start,
-    dateKey: (row.date || row.start_date_time || '').slice(0, 10),
+    dateKey: dateKey(start) || (row.date || row.start_date_time || '').slice(0, 10),
     category: cat,
     searchText: normalize([
       title, location, row.borough, row.event_type, row.type, row.lane,
@@ -185,6 +232,7 @@ function popupHtml(event) {
   const crowd = crowdLabel(event);
   const nypd = event.nypd_notice || '';
   const sourceUrl = event.source_url || event.url || event.event_url || '';
+  const distance = distanceLabel(event);
 
   return `
     <article class="popup-card">
@@ -194,6 +242,7 @@ function popupHtml(event) {
       ${isNypd(event) ? '<div class="popup-priority">High-priority field item</div>' : ''}
       <dl>
         <div><dt>Time</dt><dd>${esc(timeLabel(event.start))}</dd></div>
+        ${distance ? `<div><dt>Distance</dt><dd>${esc(distance)}</dd></div>` : ''}
         ${event.borough ? `<div><dt>Borough</dt><dd>${esc(event.borough)}</dd></div>` : ''}
         ${event.location ? `<div><dt>Location</dt><dd>${esc(event.location)}</dd></div>` : ''}
         ${crowd ? `<div><dt>Assignment read</dt><dd>${esc(crowd)}</dd></div>` : ''}
@@ -242,6 +291,7 @@ function makeMarker(event) {
       L.DomEvent.preventDefault(ev.originalEvent);
       L.DomEvent.stop(ev.originalEvent);
     }
+    marker.setPopupContent(popupHtml(event));
     marker.openPopup();
   });
 
@@ -255,7 +305,17 @@ function makeMarker(event) {
   return marker;
 }
 
+function dateMatches(event) {
+  if (state.dateMode === 'all') return true;
+  if (!event.dateKey) return false;
+  if (state.dateMode === 'today') return event.dateKey === todayKey();
+  if (state.dateMode === 'tomorrow') return event.dateKey === tomorrowKey();
+  if (state.dateMode === 'weekend') return isWeekendDate(event.start);
+  return true;
+}
+
 function eventMatches(event) {
+  if (!dateMatches(event)) return false;
   if (!state.categories[event.category.key]) return false;
   if (state.majorOnly && !(event.assignment_feed === 'major' || event.field_default || event.photoPick || isNypd(event))) return false;
   if (state.photoOnly && !event.photoPick) return false;
@@ -266,10 +326,25 @@ function eventMatches(event) {
 }
 
 function sortEvents(a, b) {
+  if (state.sort === 'near') {
+    const da = milesBetween(state.userLocation, a) ?? 999999;
+    const db = milesBetween(state.userLocation, b) ?? 999999;
+    return da - db || b.priority - a.priority;
+  }
   if (state.sort === 'borough') return (a.borough || 'zz').localeCompare(b.borough || 'zz') || b.priority - a.priority;
   if (state.sort === 'type') return (a.type || 'zz').localeCompare(b.type || 'zz') || b.priority - a.priority;
   if (state.sort === 'time') return (a.start?.getTime() || 9999999999999) - (b.start?.getTime() || 9999999999999);
   return b.priority - a.priority || ((a.start?.getTime() || 9999999999999) - (b.start?.getTime() || 9999999999999));
+}
+
+function updateChrome(visible) {
+  const nypdCount = visible.filter(isNypd).length;
+  const photoCount = visible.filter(e => e.photoPick).length;
+  const nearNote = state.userLocation && state.sort === 'near' ? ' · near me' : '';
+  if (els.brandCount) {
+    els.brandCount.textContent = `${visible.length} live${nypdCount ? ` · ${nypdCount} NYPD` : ''}${photoCount ? ` · ${photoCount} photo` : ''}`;
+  }
+  status(`${visible.length} assignment${visible.length === 1 ? '' : 's'} · ${state.feed === 'major' ? 'Fast major feed' : 'Full feed'}${nearNote} · v${VERSION}`);
 }
 
 function render() {
@@ -281,33 +356,43 @@ function render() {
   draw.forEach(event => markers.addLayer(event.marker));
 
   const photoCount = visible.filter(e => e.photoPick).length;
-  els.listMeta.textContent = `${draw.length < visible.length ? `${draw.length} shown of ${visible.length}` : `${visible.length} visible`} assignments · ${photoCount} photo picks`;
+  const nypdCount = visible.filter(isNypd).length;
+  const nearMode = state.userLocation && state.sort === 'near';
+  els.listMeta.textContent = `${draw.length < visible.length ? `${draw.length} shown of ${visible.length}` : `${visible.length} visible`} assignments · ${photoCount} photo picks · ${nypdCount} NYPD${nearMode ? ' · sorted near you' : ''}`;
 
-  els.eventList.innerHTML = visible.slice(0, 50).map(event => `
-    <button type="button" class="event-item" data-id="${esc(event.id)}">
-      <span class="item-top">
-        <span class="item-source">${esc(event.category.emoji)} ${esc(event.category.label)}</span>
-        ${event.photoPick ? '<span class="item-tag">📸</span>' : ''}
-        ${isNypd(event) ? '<span class="item-tag danger">NYPD</span>' : ''}
-      </span>
-      <strong>${esc(event.title)}</strong>
-      <span>${esc(timeLabel(event.start))}</span>
-      <small>${esc([event.borough, event.location, crowdLabel(event)].filter(Boolean).join(' • '))}</small>
-    </button>
-  `).join('') || '<div class="empty">No assignments match this view.</div>';
+  els.eventList.innerHTML = visible.slice(0, 60).map(event => {
+    const distance = distanceLabel(event);
+    return `
+      <button type="button" class="event-item" data-id="${esc(event.id)}">
+        <span class="item-top">
+          <span class="item-source">${esc(event.category.emoji)} ${esc(event.category.label)}</span>
+          <span class="item-tags">
+            ${distance ? `<span class="item-tag near">${esc(distance)}</span>` : ''}
+            ${event.photoPick ? '<span class="item-tag">📸</span>' : ''}
+            ${isNypd(event) ? '<span class="item-tag danger">NYPD</span>' : ''}
+          </span>
+        </span>
+        <strong>${esc(event.title)}</strong>
+        <span>${esc(timeLabel(event.start))}</span>
+        <small>${esc([event.borough, event.location, crowdLabel(event)].filter(Boolean).join(' • '))}</small>
+      </button>
+    `;
+  }).join('') || '<div class="empty">No assignments match this view.</div>';
 
   els.eventList.querySelectorAll('[data-id]').forEach(button => {
     button.addEventListener('click', () => {
       const event = state.events.find(e => e.id === button.dataset.id);
       if (!event) return;
       map.flyTo([event.lat, event.lng], Math.max(map.getZoom(), 15), { duration: 0.55 });
-      setTimeout(() => event.marker.openPopup(), 420);
+      setTimeout(() => {
+        event.marker.setPopupContent(popupHtml(event));
+        event.marker.openPopup();
+      }, 420);
       setDesk(false);
     });
   });
 
-  status(`${visible.length} assignment${visible.length === 1 ? '' : 's'} · ${state.feed === 'major' ? 'Fast major feed' : 'Full feed'} · Tap a marker for details`);
-
+  updateChrome(visible);
   return visible;
 }
 
@@ -368,7 +453,52 @@ function buildBoroughs() {
   });
 }
 
-function locateUser() {
+function buildDateChips() {
+  if (!els.dateChips) return;
+  els.dateChips.querySelectorAll('[data-date-mode]').forEach(button => {
+    button.classList.toggle('active', button.dataset.dateMode === state.dateMode);
+  });
+  els.dateChips.addEventListener('click', ev => {
+    const button = ev.target.closest('[data-date-mode]');
+    if (!button) return;
+    state.dateMode = button.dataset.dateMode;
+    els.dateChips.querySelectorAll('[data-date-mode]').forEach(b => b.classList.toggle('active', b === button));
+    render();
+  });
+}
+
+function setUserLocation(latitude, longitude, accuracy) {
+  const here = [latitude, longitude];
+  state.userLocation = { lat: latitude, lng: longitude };
+
+  if (userMarker) {
+    userMarker.setLatLng(here);
+  } else {
+    const icon = L.divIcon({
+      className: 'user-location-shell',
+      html: '<span class="user-location">🗽</span>',
+      iconSize: [36, 44],
+      iconAnchor: [18, 42],
+      popupAnchor: [0, -38]
+    });
+    userMarker = L.marker(here, { icon, zIndexOffset: 4000 }).addTo(map).bindPopup(`<strong>You are here</strong><br>Accuracy: ${Math.round(accuracy || 0)} meters`);
+  }
+
+  if (userAccuracy) {
+    userAccuracy.setLatLng(here);
+    userAccuracy.setRadius(accuracy || 0);
+  } else {
+    userAccuracy = L.circle(here, {
+      radius: accuracy || 0,
+      color: '#d40000',
+      weight: 2,
+      fillColor: '#d40000',
+      fillOpacity: 0.08
+    }).addTo(map);
+  }
+}
+
+function locateUser(options = {}) {
   if (!navigator.geolocation) {
     status('Location is not available in this browser.');
     return;
@@ -378,37 +508,17 @@ function locateUser() {
 
   navigator.geolocation.getCurrentPosition(pos => {
     const { latitude, longitude, accuracy } = pos.coords;
-    const here = [latitude, longitude];
+    setUserLocation(latitude, longitude, accuracy);
 
-    if (userMarker) {
-      userMarker.setLatLng(here);
-    } else {
-      const icon = L.divIcon({
-        className: 'user-location-shell',
-        html: '<span class="user-location">🗽</span>',
-        iconSize: [36, 44],
-        iconAnchor: [18, 42],
-        popupAnchor: [0, -38]
-      });
-      userMarker = L.marker(here, { icon, zIndexOffset: 4000 }).addTo(map).bindPopup(`<strong>You are here</strong><br>Accuracy: ${Math.round(accuracy || 0)} meters`);
+    if (options.sortNear) {
+      state.sort = 'near';
+      els.sortSelect.value = 'near';
     }
 
-    if (userAccuracy) {
-      userAccuracy.setLatLng(here);
-      userAccuracy.setRadius(accuracy || 0);
-    } else {
-      userAccuracy = L.circle(here, {
-        radius: accuracy || 0,
-        color: '#d40000',
-        weight: 2,
-        fillColor: '#d40000',
-        fillOpacity: 0.08
-      }).addTo(map);
-    }
-
-    map.flyTo(here, Math.max(map.getZoom(), 14), { duration: 0.6 });
+    map.flyTo([latitude, longitude], Math.max(map.getZoom(), 14), { duration: 0.6 });
     userMarker.openPopup();
-    status('Location updated.');
+    render();
+    status(options.sortNear ? 'Sorted assignments near you.' : 'Location updated.');
   }, err => {
     status(`Location failed: ${err.message}`);
   }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 15000 });
@@ -418,7 +528,8 @@ function bindUi() {
   els.layersBtn.addEventListener('click', () => setLayers(els.layersPanel.hidden));
   els.deskBtn.addEventListener('click', () => setDesk(els.deskDrawer.hidden));
   els.closeDeskBtn.addEventListener('click', () => setDesk(false));
-  els.locateBtn.addEventListener('click', locateUser);
+  els.locateBtn.addEventListener('click', () => locateUser());
+  els.nearMeBtn.addEventListener('click', () => locateUser({ sortNear: true }));
 
   els.loadAllBtn.addEventListener('click', async () => {
     if (state.fullLoaded) {
@@ -461,6 +572,10 @@ function bindUi() {
   });
   els.sortSelect.addEventListener('change', () => {
     state.sort = els.sortSelect.value;
+    if (state.sort === 'near' && !state.userLocation) {
+      locateUser({ sortNear: true });
+      return;
+    }
     render();
   });
 
@@ -472,6 +587,7 @@ function bindUi() {
 async function boot() {
   bindUi();
   buildBoroughs();
+  buildDateChips();
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js').catch(() => {});
