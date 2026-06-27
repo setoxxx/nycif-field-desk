@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-field-desk-v0.1.0';
+const CACHE_NAME = 'nycif-field-desk-v0.2.0';
 
 const APP_SHELL = [
   './',
@@ -27,15 +27,19 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // App shell: cache first.
   if (url.origin === location.origin) {
     event.respondWith(
-      caches.match(event.request).then(cached => cached || fetch(event.request))
+      fetch(event.request)
+        .then(response => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
     );
     return;
   }
 
-  // Feeds: network first, cached fallback.
   if (url.hostname === 'raw.githubusercontent.com') {
     event.respondWith(
       fetch(event.request)
