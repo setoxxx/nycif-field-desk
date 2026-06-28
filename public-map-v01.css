@@ -41,6 +41,10 @@ body.public-map-page #testMapLayerToggleV01 {
   display: none !important;
 }
 
+body.public-map-page .leaflet-control-zoom {
+  display: none !important;
+}
+
 body.public-map-page .status {
   max-width: 720px;
 }
