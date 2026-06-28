@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = 'popup-autoclose-fix-v04-mobile-pan-close';
+  const VERSION = 'popup-autoclose-fix-v05-hide-close-button';
   let lastPopup = null;
   let lock = false;
 
@@ -58,7 +58,7 @@
       .popup-card h2 {
         font-size: 18px !important;
         line-height: 1.12 !important;
-        margin-right: 18px !important;
+        margin-right: 0 !important;
       }
       .popup-card dl {
         display: grid !important;
@@ -93,19 +93,7 @@
         z-index: 3 !important;
       }
       .leaflet-popup-close-button {
-        top: 6px !important;
-        right: 6px !important;
-        z-index: 9 !important;
-        width: 30px !important;
-        height: 30px !important;
-        border-radius: 999px !important;
-        background: #111827 !important;
-        color: #fff !important;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, .18) !important;
-        display: grid !important;
-        place-items: center !important;
-        font-size: 20px !important;
-        line-height: 1 !important;
+        display: none !important;
       }
       @media (max-width: 700px) {
         .leaflet-popup-content {
@@ -197,5 +185,5 @@
 
   const observer = new MutationObserver(keepOnlyNewest);
   observer.observe(document.body, { childList: true, subtree: true });
-  window.NYCIF_POPUP_AUTOCLOSE_FIX = { version: VERSION, active: true, artifactCss: true, longContentFix: true, mobilePanClose: true };
+  window.NYCIF_POPUP_AUTOCLOSE_FIX = { version: VERSION, active: true, artifactCss: true, longContentFix: true, mobilePanClose: true, closeButtonHidden: true };
 })();
