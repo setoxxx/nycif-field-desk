@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = 'popup-autoclose-fix-v03-long-content';
+  const VERSION = 'popup-autoclose-fix-v04-mobile-pan-close';
   let lastPopup = null;
   let lock = false;
 
@@ -134,6 +134,12 @@
     else el?.remove?.();
   }
 
+  function closeActivePopup() {
+    if (!lastPopup) return;
+    closePopup(lastPopup);
+    lastPopup = null;
+  }
+
   function keepOnlyNewest() {
     if (lock) return;
     lock = true;
@@ -152,13 +158,20 @@
     });
   }
 
+  function isInsidePopupOrMarker(event) {
+    return !!event.target?.closest?.('.leaflet-popup, .popup-card, .leaflet-marker-icon, .marker-shell, .marker, .field-action');
+  }
+
   function closeIfMapBackgroundClick(event) {
     if (!lastPopup) return;
-    if (event.target?.closest?.('.leaflet-popup, .leaflet-marker-icon, .marker-shell, .marker, .field-action')) return;
-    if (event.target?.closest?.('.leaflet-container')) {
-      closePopup(lastPopup);
-      lastPopup = null;
-    }
+    if (isInsidePopupOrMarker(event)) return;
+    if (event.target?.closest?.('.leaflet-container')) closeActivePopup();
+  }
+
+  function closeIfMapPanGesture(event) {
+    if (!lastPopup) return;
+    if (isInsidePopupOrMarker(event)) return;
+    if (event.target?.closest?.('.leaflet-container')) closeActivePopup();
   }
 
   injectPopupArtifactCss();
@@ -174,15 +187,15 @@
   }, true);
 
   document.addEventListener('click', closeIfMapBackgroundClick, false);
+  document.addEventListener('pointerdown', closeIfMapPanGesture, true);
+  document.addEventListener('touchmove', closeIfMapPanGesture, true);
+  document.addEventListener('wheel', closeIfMapPanGesture, true);
 
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && lastPopup) {
-      closePopup(lastPopup);
-      lastPopup = null;
-    }
+    if (event.key === 'Escape') closeActivePopup();
   });
 
   const observer = new MutationObserver(keepOnlyNewest);
   observer.observe(document.body, { childList: true, subtree: true });
-  window.NYCIF_POPUP_AUTOCLOSE_FIX = { version: VERSION, active: true, artifactCss: true, longContentFix: true };
+  window.NYCIF_POPUP_AUTOCLOSE_FIX = { version: VERSION, active: true, artifactCss: true, longContentFix: true, mobilePanClose: true };
 })();
