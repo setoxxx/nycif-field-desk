@@ -13,11 +13,52 @@ body.public-map-page .panel-label {
 
 body.public-map-page .panel-label::after {
   content: "Choose what to show";
+  font-size: 9.5px;
+}
+
+body.public-map-page .pill.layers-pill {
+  min-height: 31px;
+  padding: 0 10px;
+  gap: 6px;
+  font-size: 11px;
+  border-width: 1px;
+}
+
+body.public-map-page .pill.layers-pill span {
+  width: 18px;
+  height: 18px;
   font-size: 11px;
 }
 
+body.public-map-page .layers-panel {
+  width: min(208px, calc(100vw - 18px));
+  padding: 8px;
+  border-radius: 14px;
+  max-height: 52dvh;
+}
+
+body.public-map-page .layers-panel .check {
+  min-height: 26px;
+  padding: 3px 4px;
+  gap: 7px;
+  border-radius: 9px;
+  font-size: 10px;
+}
+
+body.public-map-page .layers-panel .check input {
+  width: 14px;
+  height: 14px;
+}
+
+body.public-map-page .layers-panel hr {
+  margin: 6px 0;
+}
+
 body.public-map-page #loadAllBtn {
+  min-height: 29px;
+  border-radius: 10px;
   background: #111827;
+  font-size: 10px;
 }
 
 body.public-map-page #loadAllBtn::before {
