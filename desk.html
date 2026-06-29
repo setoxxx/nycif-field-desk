@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="./staged-map-mode-v01.css?v=01">
   <link rel="stylesheet" href="./feed-status-panel-v01.css?v=01">
 </head>
-<body>
+<body class="admin-map-page">
   <main id="app" class="app">
     <section class="map-shell" aria-label="NYC In Focus Field Desk">
       <div id="map" class="map" role="application" aria-label="NYC events assignment map"></div>
@@ -34,11 +34,12 @@
       <div id="dateChips" class="date-chips" aria-label="Date filters"><button type="button" data-date-mode="today" class="active">Today</button><button type="button" data-date-mode="tomorrow">Tomorrow</button><button type="button" data-date-mode="weekend">Weekend</button><button type="button" data-date-mode="all">All</button></div>
       <button id="layersBtn" class="pill layers-pill" type="button" aria-expanded="false" aria-controls="layersPanel"><span>☰</span><b>Layers</b></button>
       <aside id="layersPanel" class="layers-panel" aria-label="Assignment filters" hidden>
-        <p class="panel-label">Default: today + major assignments</p>
+        <p class="panel-label">Admin/testing: staged feed, deltas and QA controls</p>
         <button id="loadAllBtn" class="load-all" type="button">Load all events</button>
         <button id="fullTodayBtn" class="load-all full-today-test" type="button">Full Today Test</button>
         <button id="fullDataBtn" class="load-all full-data-test" type="button">Full Data Test</button>
-        <label class="check major"><input type="checkbox" id="majorOnly"> <span>⭐ Major/field picks only</span></label><hr>
+        <label class="check major"><input type="checkbox" id="majorOnly"> <span>⭐ Major/field picks only</span></label>
+        <label class="check major"><input type="checkbox" id="newOnly"> <span id="newOnlyText">🆕 Newly added only</span></label><hr>
         <label class="check"><input type="checkbox" data-cat="sports" checked> <span>🏟️ World Cup / sports</span></label>
         <label class="check"><input type="checkbox" data-cat="parade" checked> <span>📣 Parades / civic / Pride</span></label>
         <label class="check"><input type="checkbox" data-cat="market" checked> <span>🛍️ Street fairs / pop-ups</span></label>
@@ -63,8 +64,8 @@
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="./boot-today-v073-safe.js?v=01"></script><script src="./date-normalizer-v073-safe.js?v=01"></script><script src="./app-v06-safe.js?v=staged-live-02" type="module"></script>
-  <script src="./popup-autoclose-fix-v01.js?v=popup-artifact-01"></script><script src="./staged-status-clarity-v01.js?v=01"></script><script src="./show-all-staged-v01.js?v=01"></script><script src="./stats-v05-safe.js?v=01"></script><script src="./data-window-v08-safe.js?v=01"></script><script src="./truth-panel-v09-safe.js?v=01"></script><script src="./live-test-v011-safe.js?v=01"></script><script src="./test-feed-panel-v01.js?v=01"></script><script src="./test-map-layer-v01.js?v=01"></script><script src="./staged-feed-mode-v01.js?v=01"></script><script src="./staged-marker-layer-v01.js?v=01"></script><script src="./feed-status-panel-v01.js?v=01"></script>
+  <script src="./boot-today-v073-safe.js?v=01"></script><script src="./date-normalizer-v073-safe.js?v=01"></script><script src="./app-v06-safe.js?v=admin-newly-added-01" type="module"></script>
+  <script src="./popup-autoclose-fix-v01.js?v=long-popup-03"></script><script src="./staged-status-clarity-v01.js?v=01"></script><script src="./show-all-staged-v01.js?v=01"></script><script src="./stats-v05-safe.js?v=01"></script><script src="./data-window-v08-safe.js?v=01"></script><script src="./truth-panel-v09-safe.js?v=01"></script><script src="./live-test-v011-safe.js?v=01"></script><script src="./test-feed-panel-v01.js?v=01"></script><script src="./test-map-layer-v01.js?v=01"></script><script src="./staged-feed-mode-v01.js?v=01"></script><script src="./staged-marker-layer-v01.js?v=01"></script><script src="./feed-status-panel-v01.js?v=01"></script>
   <script>window.addEventListener('DOMContentLoaded',()=>{const fullToday=document.getElementById('fullTodayBtn');const fullData=document.getElementById('fullDataBtn');const status=document.getElementById('status');const enableAllCats=()=>document.querySelectorAll('[data-cat]').forEach(input=>{if(!input.checked)input.click();});const clearNarrow=()=>['majorOnly','photoOnly','nypdOnly'].forEach(id=>{const input=document.getElementById(id);if(input&&input.checked)input.click();});const loadAll=()=>document.getElementById('loadAllBtn')?.click();if(fullToday){fullToday.addEventListener('click',()=>{if(status)status.textContent='Full Today Test: loading full feed and enabling all categories...';document.querySelector('[data-date-mode="today"]')?.click();enableAllCats();clearNarrow();loadAll();setTimeout(()=>{if(status)status.textContent+=' Full Today Test active. Map remains capped for phone safety.';},2200);});}if(fullData){fullData.addEventListener('click',()=>{if(status)status.textContent='Full Data Test: loading complete feed, all dates, all categories...';document.querySelector('[data-date-mode="all"]')?.click();enableAllCats();clearNarrow();loadAll();setTimeout(()=>{if(status)status.textContent+=' Full Data Test active. Use Stats to see what is drawn and what is capped.';},2600);});}});</script>
 </body>
 </html>
