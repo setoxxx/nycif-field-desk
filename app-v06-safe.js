@@ -1,4 +1,4 @@
-const VERSION = '0.6-staged-02';
+const VERSION = '0.6-staged-03-new-admin-filter';
 const NYC_CENTER = [40.7128, -74.0060];
 const STORAGE_KEY = 'nycif-field-desk-state-v06-safe';
 
@@ -7,6 +7,7 @@ const FEEDS = {
   full: 'https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_all_radar_map_events.json',
   staged: 'https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/data/nycif_staged_live_events.json'
 };
+const DELTA_REPORT_URL = 'https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/data/live_delta_report.json';
 
 const BOROUGHS = ['All', 'Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'];
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -25,6 +26,10 @@ const state = {
   majorOnly: false,
   photoOnly: false,
   nypdOnly: false,
+  newOnly: false,
+  newlyAddedKeys: new Set(),
+  deltaAddedCount: 0,
+  deltaGeneratedAt: null,
   maxMarkers: 650
 };
 
@@ -44,6 +49,8 @@ const els = {
   majorOnly: document.getElementById('majorOnly'),
   photoOnly: document.getElementById('photoOnly'),
   nypdOnly: document.getElementById('nypdOnly'),
+  newOnly: document.getElementById('newOnly'),
+  newOnlyText: document.getElementById('newOnlyText'),
   searchInput: document.getElementById('searchInput'),
   sortSelect: document.getElementById('sortSelect'),
   dateChips: document.getElementById('dateChips'),
@@ -141,6 +148,16 @@ function photoPriority(event) {
   return 'Optional';
 }
 
+function deltaKey(row) {
+  const direct = String(row.id || row.source_event_id || '').trim();
+  if (direct) return direct;
+  return [row.title, row.borough, row.display_location || row.location, row.date, row.start_date_time].map(value => String(value || '').trim().toLowerCase()).join('|');
+}
+
+function isNewlyAdded(event) {
+  return state.newlyAddedKeys.has(deltaKey(event)) || state.newlyAddedKeys.has(String(event.id || '').trim()) || state.newlyAddedKeys.has(String(event.source_event_id || '').trim());
+}
+
 function makeEvent(row, index) {
   const lat = Number.parseFloat(row.lat);
   const lng = Number.parseFloat(row.lng);
@@ -153,6 +170,7 @@ function makeEvent(row, index) {
   if (row.staged_feed && !event.assignment_feed) event.assignment_feed = 'staged';
   event.photoPick = isPhotoPick(event);
   event.priority = priority(event);
+  event.newlyAdded = isNewlyAdded(event);
   event.marker = null;
   return event;
 }
@@ -181,11 +199,11 @@ function popupHtml(event) {
   const nypd = event.nypd_notice || '';
   const sourceUrl = event.source_url || event.url || event.event_url || '';
   const distance = distanceLabel(event);
-  return `<article class="popup-card"><div class="popup-source ${isNypd(event) ? 'is-nypd' : ''}">${esc(source)}</div><div class="popup-category"><span>${esc(event.category.emoji)}</span> ${esc(event.category.label)}</div><div class="photo-priority ${photoPriority(event).toLowerCase().replaceAll(' ', '-')}">${esc(photoPriority(event))}</div><h2>${esc(event.title)}</h2>${isNypd(event) ? '<div class="popup-priority">High-priority field item</div>' : ''}<dl><div><dt>Time</dt><dd>${esc(timeLabel(event.start))}</dd></div>${distance ? `<div><dt>Distance</dt><dd>${esc(distance)}</dd></div>` : ''}${event.borough ? `<div><dt>Borough</dt><dd>${esc(event.borough)}</dd></div>` : ''}${event.location ? `<div><dt>Location</dt><dd>${esc(event.location)}</dd></div>` : ''}${crowd ? `<div><dt>Assignment read</dt><dd>${esc(crowd)}</dd></div>` : ''}</dl>${event.photoPick ? '<div class="popup-photo">📸 Camera-friendly assignment</div>' : ''}${nypd ? `<div class="popup-nypd"><b>NYPD Field Intel:</b> ${esc(nypd)}</div>` : ''}<div class="field-actions"><a class="field-action" target="_blank" rel="noopener" href="${esc(appleMapsUrl(event))}">Apple Maps</a><a class="field-action" target="_blank" rel="noopener" href="${esc(googleMapsUrl(event))}">Google Maps</a><button class="field-action" type="button" data-copy-id="${esc(event.id)}">Copy</button></div>${sourceUrl ? `<a class="popup-link" target="_blank" rel="noopener" href="${esc(sourceUrl)}">Source</a>` : ''}</article>`;
+  return `<article class="popup-card"><div class="popup-source ${isNypd(event) ? 'is-nypd' : ''}">${esc(source)}${event.newlyAdded ? ' · NEW' : ''}</div><div class="popup-category"><span>${esc(event.category.emoji)}</span> ${esc(event.category.label)}</div><div class="photo-priority ${photoPriority(event).toLowerCase().replaceAll(' ', '-')}">${esc(photoPriority(event))}</div><h2>${esc(event.title)}</h2>${isNypd(event) ? '<div class="popup-priority">High-priority field item</div>' : ''}<dl><div><dt>Time</dt><dd>${esc(timeLabel(event.start))}</dd></div>${distance ? `<div><dt>Distance</dt><dd>${esc(distance)}</dd></div>` : ''}${event.borough ? `<div><dt>Borough</dt><dd>${esc(event.borough)}</dd></div>` : ''}${event.location ? `<div><dt>Location</dt><dd>${esc(event.location)}</dd></div>` : ''}${crowd ? `<div><dt>Assignment read</dt><dd>${esc(crowd)}</dd></div>` : ''}</dl>${event.photoPick ? '<div class="popup-photo">📸 Camera-friendly assignment</div>' : ''}${nypd ? `<div class="popup-nypd"><b>NYPD Field Intel:</b> ${esc(nypd)}</div>` : ''}<div class="field-actions"><a class="field-action" target="_blank" rel="noopener" href="${esc(appleMapsUrl(event))}">Apple Maps</a><a class="field-action" target="_blank" rel="noopener" href="${esc(googleMapsUrl(event))}">Google Maps</a><button class="field-action" type="button" data-copy-id="${esc(event.id)}">Copy</button></div>${sourceUrl ? `<a class="popup-link" target="_blank" rel="noopener" href="${esc(sourceUrl)}">Source</a>` : ''}</article>`;
 }
 
 function makeMarker(event) {
-  const classes = ['marker', `marker--${event.category.key}`, event.photoPick ? 'marker--photo' : '', isNypd(event) ? 'marker--nypd' : '', event.crowd_level ? `marker--${event.crowd_level}` : ''].filter(Boolean).join(' ');
+  const classes = ['marker', `marker--${event.category.key}`, event.photoPick ? 'marker--photo' : '', isNypd(event) ? 'marker--nypd' : '', event.newlyAdded ? 'marker--new' : '', event.crowd_level ? `marker--${event.crowd_level}` : ''].filter(Boolean).join(' ');
   const marker = L.marker([event.lat, event.lng], { icon: L.divIcon({ className: 'marker-shell', html: `<span class="${classes}"><span class="emoji">${event.category.emoji}</span></span>`, iconSize: [38, 38], iconAnchor: [19, 19], popupAnchor: [0, -24] }), title: event.title, alt: event.title, riseOnHover: true, bubblingMouseEvents: false }).bindPopup(popupHtml(event), { maxWidth: 330, minWidth: 240, autoPan: true, keepInView: true, closeButton: true, autoClose: false, closeOnClick: false, closeOnEscapeKey: false });
   marker.on('click tap', ev => { if (ev?.originalEvent) { L.DomEvent.preventDefault(ev.originalEvent); L.DomEvent.stop(ev.originalEvent); } marker.setPopupContent(popupHtml(event)); marker.openPopup(); });
   marker.on('popupopen', ev => { const el = ev?.popup?.getElement?.(); if (!el) return; L.DomEvent.disableClickPropagation(el); L.DomEvent.disableScrollPropagation(el); });
@@ -199,9 +217,10 @@ function ensureMarker(event) {
 
 function isExactDateMode(value) { return /^\d{4}-\d{2}-\d{2}$/.test(value); }
 function dateMatches(event) { if (state.dateMode === 'all') return true; if (!event.dateKey) return false; if (state.dateMode === 'today') return event.dateKey === todayKey(); if (state.dateMode === 'tomorrow') return event.dateKey === tomorrowKey(); if (state.dateMode === 'weekend') return isWeekendDate(event.start); if (isExactDateMode(state.dateMode)) return event.dateKey === state.dateMode; return true; }
-function eventMatches(event) { if (!dateMatches(event)) return false; if (!state.categories[event.category.key]) return false; if (state.majorOnly && !(event.assignment_feed === 'major' || event.assignment_feed === 'staged' || event.field_default || event.photoPick || isNypd(event))) return false; if (state.photoOnly && !event.photoPick) return false; if (state.nypdOnly && !isNypd(event)) return false; if (state.borough !== 'all' && event.borough !== state.borough) return false; if (state.search && !event.searchText.includes(state.search)) return false; return true; }
+function eventMatches(event) { if (!dateMatches(event)) return false; if (!state.categories[event.category.key]) return false; if (state.majorOnly && !(event.assignment_feed === 'major' || event.assignment_feed === 'staged' || event.field_default || event.photoPick || isNypd(event))) return false; if (state.photoOnly && !event.photoPick) return false; if (state.nypdOnly && !isNypd(event)) return false; if (state.newOnly && !event.newlyAdded) return false; if (state.borough !== 'all' && event.borough !== state.borough) return false; if (state.search && !event.searchText.includes(state.search)) return false; return true; }
 
 function sortEvents(a, b) {
+  if (state.newOnly) return Number(b.newlyAdded) - Number(a.newlyAdded) || ((a.start?.getTime() || 9999999999999) - (b.start?.getTime() || 9999999999999));
   if (state.sort === 'near') { const da = milesBetween(state.userLocation, a) ?? 999999; const db = milesBetween(state.userLocation, b) ?? 999999; return da - db || b.priority - a.priority; }
   if (state.sort === 'borough') return (a.borough || 'zz').localeCompare(b.borough || 'zz') || b.priority - a.priority;
   if (state.sort === 'type') return (a.type || 'zz').localeCompare(b.type || 'zz') || b.priority - a.priority;
@@ -210,7 +229,7 @@ function sortEvents(a, b) {
 }
 
 function savePrefs() {
-  const prefs = { borough: state.borough, sort: state.sort === 'near' && !state.userLocation ? 'priority' : state.sort, dateMode: state.dateMode, categories: state.categories, majorOnly: state.majorOnly, photoOnly: state.photoOnly, nypdOnly: state.nypdOnly };
+  const prefs = { borough: state.borough, sort: state.sort === 'near' && !state.userLocation ? 'priority' : state.sort, dateMode: state.dateMode, categories: state.categories, majorOnly: state.majorOnly, photoOnly: state.photoOnly, nypdOnly: state.nypdOnly, newOnly: state.newOnly };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
 }
 
@@ -224,15 +243,17 @@ function loadPrefs() {
     state.majorOnly = !!prefs.majorOnly;
     state.photoOnly = !!prefs.photoOnly;
     state.nypdOnly = !!prefs.nypdOnly;
+    state.newOnly = !!prefs.newOnly;
   } catch {}
 }
 
 function updateChrome(visible) {
   const nypdCount = visible.filter(isNypd).length;
   const photoCount = visible.filter(e => e.photoPick).length;
+  const newCount = visible.filter(e => e.newlyAdded).length;
   const nearNote = state.userLocation && state.sort === 'near' ? ' · near me' : '';
-  if (els.brandCount) els.brandCount.textContent = `${visible.length} live${nypdCount ? ` · ${nypdCount} NYPD` : ''}${photoCount ? ` · ${photoCount} photo` : ''}`;
-  status(`${visible.length} assignment${visible.length === 1 ? '' : 's'} · ${feedLabel()}${nearNote} · v${VERSION}`);
+  if (els.brandCount) els.brandCount.textContent = `${visible.length} live${newCount ? ` · ${newCount} new` : ''}${nypdCount ? ` · ${nypdCount} NYPD` : ''}${photoCount ? ` · ${photoCount} photo` : ''}`;
+  status(`${visible.length} assignment${visible.length === 1 ? '' : 's'} · ${feedLabel()}${state.newOnly ? ' · newly added only' : ''}${nearNote} · v${VERSION}`);
 }
 
 function render() {
@@ -242,13 +263,40 @@ function render() {
   draw.forEach(event => markers.addLayer(ensureMarker(event)));
   const photoCount = visible.filter(e => e.photoPick).length;
   const nypdCount = visible.filter(isNypd).length;
+  const newCount = visible.filter(e => e.newlyAdded).length;
   const nearMode = state.userLocation && state.sort === 'near';
-  els.listMeta.textContent = `${draw.length < visible.length ? `${draw.length} shown of ${visible.length}` : `${visible.length} visible`} assignments · ${photoCount} photo picks · ${nypdCount} NYPD${nearMode ? ' · sorted near you' : ''}`;
-  els.eventList.innerHTML = visible.slice(0, 60).map(event => { const distance = distanceLabel(event); return `<button type="button" class="event-item" data-id="${esc(event.id)}"><span class="item-top"><span class="item-source">${esc(event.category.emoji)} ${esc(event.category.label)}</span><span class="item-tags">${distance ? `<span class="item-tag near">${esc(distance)}</span>` : ''}<span class="item-tag priority-${photoPriority(event).toLowerCase().replaceAll(' ', '-')}">${esc(photoPriority(event))}</span>${event.assignment_feed === 'staged' ? '<span class="item-tag">STAGED</span>' : ''}${event.photoPick ? '<span class="item-tag">📸</span>' : ''}${isNypd(event) ? '<span class="item-tag danger">NYPD</span>' : ''}</span></span><strong>${esc(event.title)}</strong><span>${esc(timeLabel(event.start))}</span><small>${esc([event.borough, event.location, crowdLabel(event)].filter(Boolean).join(' • '))}</small><span class="quick-actions"><a href="${esc(appleMapsUrl(event))}" target="_blank" rel="noopener">Directions</a><button type="button" data-copy-id="${esc(event.id)}">Copy</button></span></button>`; }).join('') || '<div class="empty">No assignments match this view.</div>';
+  els.listMeta.textContent = `${draw.length < visible.length ? `${draw.length} shown of ${visible.length}` : `${visible.length} visible`} assignments · ${newCount} newly added · ${photoCount} photo picks · ${nypdCount} NYPD${nearMode ? ' · sorted near you' : ''}`;
+  els.eventList.innerHTML = visible.slice(0, 60).map(event => { const distance = distanceLabel(event); return `<button type="button" class="event-item" data-id="${esc(event.id)}"><span class="item-top"><span class="item-source">${esc(event.category.emoji)} ${esc(event.category.label)}</span><span class="item-tags">${event.newlyAdded ? '<span class="item-tag danger">NEW</span>' : ''}${distance ? `<span class="item-tag near">${esc(distance)}</span>` : ''}<span class="item-tag priority-${photoPriority(event).toLowerCase().replaceAll(' ', '-')}">${esc(photoPriority(event))}</span>${event.assignment_feed === 'staged' ? '<span class="item-tag">STAGED</span>' : ''}${event.photoPick ? '<span class="item-tag">📸</span>' : ''}${isNypd(event) ? '<span class="item-tag danger">NYPD</span>' : ''}</span></span><strong>${esc(event.title)}</strong><span>${esc(timeLabel(event.start))}</span><small>${esc([event.borough, event.location, crowdLabel(event)].filter(Boolean).join(' • '))}</small><span class="quick-actions"><a href="${esc(appleMapsUrl(event))}" target="_blank" rel="noopener">Directions</a><button type="button" data-copy-id="${esc(event.id)}">Copy</button></span></button>`; }).join('') || '<div class="empty">No assignments match this view.</div>';
   els.eventList.querySelectorAll('[data-id]').forEach(button => button.addEventListener('click', ev => { if (ev.target.closest('a,button[data-copy-id]')) return; const event = state.events.find(e => e.id === button.dataset.id); if (!event) return; map.flyTo([event.lat, event.lng], Math.max(map.getZoom(), 15), { duration: 0.55 }); setTimeout(() => { const marker = ensureMarker(event); marker.setPopupContent(popupHtml(event)); marker.openPopup(); if (!markers.hasLayer(marker)) markers.addLayer(marker); }, 420); setDesk(false); }));
   els.eventList.querySelectorAll('[data-copy-id]').forEach(button => button.addEventListener('click', ev => { ev.stopPropagation(); const event = state.events.find(e => e.id === button.dataset.copyId); if (event) copyAssignment(event); }));
   updateChrome(visible);
   return visible;
+}
+
+async function loadDeltaReport() {
+  if (!els.newOnly && !document.body.classList.contains('admin-map-page')) return;
+  try {
+    const response = await fetch(`${DELTA_REPORT_URL}?cache=${Date.now()}`, { headers: { Accept: 'application/json' }, cache: 'no-store' });
+    if (!response.ok) throw new Error(`delta HTTP ${response.status}`);
+    const report = await response.json();
+    const added = Array.isArray(report.added_events) ? report.added_events : [];
+    const keys = new Set();
+    added.forEach(row => {
+      [row.id, row.source_event_id, deltaKey(row)].forEach(value => {
+        const key = String(value || '').trim();
+        if (key) keys.add(key);
+      });
+    });
+    state.newlyAddedKeys = keys;
+    state.deltaAddedCount = Number(report.added_count ?? added.length) || added.length;
+    state.deltaGeneratedAt = report.generated_at_utc || null;
+    if (els.newOnlyText) els.newOnlyText.textContent = `🆕 Newly added only (${state.deltaAddedCount.toLocaleString()})`;
+  } catch (error) {
+    state.newlyAddedKeys = new Set();
+    state.deltaAddedCount = 0;
+    if (els.newOnlyText) els.newOnlyText.textContent = '🆕 Newly added only (delta unavailable)';
+    console.warn('NYCIF delta report unavailable', error);
+  }
 }
 
 async function loadFeed(kind) {
@@ -292,6 +340,7 @@ function syncUiFromState() {
   els.majorOnly.checked = state.majorOnly;
   els.photoOnly.checked = state.photoOnly;
   els.nypdOnly.checked = state.nypdOnly;
+  if (els.newOnly) els.newOnly.checked = state.newOnly;
   els.sortSelect.value = state.sort;
   document.querySelectorAll('[data-cat]').forEach(input => { input.checked = !!state.categories[input.dataset.cat]; });
 }
@@ -352,6 +401,7 @@ function bindUi() {
   els.majorOnly.addEventListener('change', () => { state.majorOnly = els.majorOnly.checked; savePrefs(); render(); });
   els.photoOnly.addEventListener('change', () => { state.photoOnly = els.photoOnly.checked; savePrefs(); render(); });
   els.nypdOnly.addEventListener('change', () => { state.nypdOnly = els.nypdOnly.checked; savePrefs(); render(); });
+  if (els.newOnly) els.newOnly.addEventListener('change', async () => { state.newOnly = els.newOnly.checked; savePrefs(); if (state.newOnly && !state.stagedLoaded) { if (els.stagedFeedBtn) els.stagedFeedBtn.click(); else await loadFeed('staged'); } else render(); });
   document.querySelectorAll('[data-cat]').forEach(input => input.addEventListener('change', () => { state.categories[input.dataset.cat] = input.checked; savePrefs(); render(); }));
   els.searchInput.addEventListener('input', () => { state.search = normalize(els.searchInput.value); render(); });
   els.sortSelect.addEventListener('change', () => { state.sort = els.sortSelect.value; savePrefs(); if (state.sort === 'near' && !state.userLocation) locateUser({ sortNear: true }); else render(); });
@@ -361,6 +411,7 @@ function bindUi() {
 
 async function boot() {
   loadPrefs();
+  await loadDeltaReport();
   syncUiFromState();
   bindUi();
   buildBoroughs();
