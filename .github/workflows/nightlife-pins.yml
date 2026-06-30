@@ -1,0 +1,36 @@
+name: NYCIF Nightlife Pin Pipeline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 10 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  build-nightlife-pins:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build nightlife pins
+        run: node tools/pin-pipeline/build-nightlife-pins.mjs
+
+      - name: Commit generated nightlife data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/nycif_nightlife_spots.json data/nycif_nightlife_spots_needs_review.json data/reports/nightlife_pin_report.json
+          if git diff --cached --quiet; then
+            echo "No nightlife pin changes to commit."
+          else
+            git commit -m "Refresh nightlife pin data"
+            git push
+          fi
