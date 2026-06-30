@@ -162,39 +162,44 @@
     style.id = 'nycif-calendar-split-styles';
     style.textContent = `
       .calendar-split-pill {
-        display: inline-grid;
-        grid-template-columns: 1fr 1fr;
+        display: inline-flex;
         align-items: center;
-        overflow: hidden;
-        min-width: 156px;
-        min-height: 32px;
-        border-radius: 999px;
-        border: 1px solid rgba(0,122,255,.24);
-        background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(236,245,255,.94));
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 4px 10px rgba(0,122,255,.12);
+        justify-content: center;
+        gap: 7px;
+        min-height: 38px;
+        padding: 5px;
+        border-radius: 16px;
+        border: 1px solid rgba(17, 24, 39, .10);
+        background: #ffffff;
+        box-shadow: 0 4px 14px rgba(0,0,0,.08);
         vertical-align: middle;
       }
       .calendar-split-segment {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
+        gap: 6px;
         min-height: 32px;
-        padding: 6px 9px;
+        padding: 7px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(17, 24, 39, .08);
+        background: #f5f5f7;
+        color: #111827 !important;
         text-decoration: none;
-        font-size: 12px;
-        font-weight: 750;
+        font-size: 12.5px;
+        font-weight: 800;
         line-height: 1;
         white-space: nowrap;
-        color: #0a2540;
-        transition: background .15s ease, opacity .15s ease;
+        transition: background .15s ease, border-color .15s ease, transform .15s ease;
       }
-      .calendar-split-segment:hover {
-        background: rgba(0,122,255,.075);
+      .calendar-split-segment:hover,
+      .calendar-split-segment:active {
+        background: #eceef2;
+        border-color: rgba(17, 24, 39, .14);
       }
       .calendar-split-segment:focus-visible {
         outline: 2px solid rgba(0,122,255,.9);
-        outline-offset: -3px;
+        outline-offset: 2px;
       }
       .calendar-split-icon {
         position: relative;
@@ -204,12 +209,12 @@
         width: 18px;
         height: 18px;
         border-radius: 5px;
-        background: #fff;
-        border: 1px solid rgba(0,122,255,.22);
+        background: #ffffff;
+        border: 1px solid rgba(17, 24, 39, .12);
         box-shadow: 0 1px 2px rgba(0,0,0,.08);
-        color: #007aff;
+        color: #0a84ff;
         font-size: 10px;
-        font-weight: 900;
+        font-weight: 950;
         flex: 0 0 auto;
       }
       .calendar-split-icon::before {
@@ -226,9 +231,7 @@
         position: relative;
         z-index: 1;
         margin-top: 4px;
-      }
-      .calendar-google {
-        border-right: 1px solid rgba(0,122,255,.16);
+        color: inherit;
       }
       .calendar-google .calendar-split-icon {
         color: #1a73e8;
@@ -237,31 +240,20 @@
         color: #007aff;
       }
       .event-item .quick-actions .calendar-split-pill {
-        flex: 1 1 156px;
-      }
-      @media (prefers-color-scheme: dark) {
-        .calendar-split-pill {
-          border-color: rgba(10,132,255,.35);
-          background: linear-gradient(180deg, rgba(54,61,72,.95), rgba(30,38,50,.94));
-          box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 4px 10px rgba(0,0,0,.22);
-        }
-        .calendar-split-segment {
-          color: #f5f7fb;
-        }
-        .calendar-split-segment:hover {
-          background: rgba(10,132,255,.13);
-        }
-        .calendar-google {
-          border-right-color: rgba(255,255,255,.14);
-        }
+        flex: 1 1 190px;
+        max-width: 240px;
       }
       @media (max-width: 640px) {
         .calendar-split-pill {
-          min-width: 164px;
-          min-height: 36px;
+          gap: 6px;
+          min-height: 40px;
+          width: 100%;
+          max-width: none;
         }
         .calendar-split-segment {
-          min-height: 36px;
+          flex: 1 1 0;
+          min-height: 34px;
+          padding: 8px 9px;
           font-size: 12.5px;
         }
       }
