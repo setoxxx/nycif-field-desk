@@ -164,14 +164,16 @@
       .calendar-split-pill {
         display: inline-grid;
         grid-template-columns: 1fr 1fr;
-        align-items: stretch;
+        align-items: center;
         overflow: hidden;
-        min-width: 178px;
-        min-height: 38px;
+        min-width: 166px;
+        min-height: 34px;
         border-radius: 999px;
-        border: 1px solid rgba(255,255,255,.18);
-        background: rgba(255,255,255,.06);
-        box-shadow: 0 8px 20px rgba(0,0,0,.18);
+        border: 1px solid rgba(0,0,0,.12);
+        background: rgba(246,246,247,.92);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 5px 14px rgba(0,0,0,.12);
+        backdrop-filter: blur(14px) saturate(1.2);
+        -webkit-backdrop-filter: blur(14px) saturate(1.2);
         vertical-align: middle;
       }
       .calendar-split-segment {
@@ -179,63 +181,73 @@
         align-items: center;
         justify-content: center;
         gap: 6px;
-        min-height: 38px;
-        padding: 9px 12px;
+        min-height: 34px;
+        padding: 7px 11px;
         text-decoration: none;
-        font-size: 13px;
-        font-weight: 800;
+        font-size: 12.5px;
+        font-weight: 700;
         line-height: 1;
         white-space: nowrap;
-        transition: opacity .15s ease, filter .15s ease;
+        color: #111;
+        transition: background .15s ease, opacity .15s ease;
       }
       .calendar-split-segment:hover {
-        opacity: .96;
-        filter: saturate(1.08);
+        background: rgba(0,0,0,.045);
       }
       .calendar-split-segment:focus-visible {
-        outline: 2px solid #fff;
+        outline: 2px solid rgba(0,122,255,.9);
         outline-offset: -3px;
       }
       .calendar-split-icon {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 20px;
-        height: 20px;
-        border-radius: 999px;
-        font-size: 13px;
-        font-weight: 900;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: 800;
         flex: 0 0 auto;
       }
       .calendar-android {
-        background: #e9f7ef;
-        color: #143a24;
-        border-right: 1px solid rgba(20,58,36,.15);
+        border-right: 1px solid rgba(0,0,0,.1);
       }
       .calendar-android .calendar-split-icon {
-        background: #3ddc84;
-        color: #0b2616;
-      }
-      .calendar-apple {
-        background: #111;
+        background: linear-gradient(135deg, #34a853, #3ddc84);
         color: #fff;
       }
       .calendar-apple .calendar-split-icon {
-        background: rgba(255,255,255,.14);
+        background: #111;
         color: #fff;
-        font-size: 16px;
+        font-size: 14px;
       }
       .popup-card .field-actions .calendar-split-pill {
-        flex: 1 1 178px;
+        flex: 0 0 auto;
+      }
+      @media (prefers-color-scheme: dark) {
+        .calendar-split-pill {
+          border-color: rgba(255,255,255,.16);
+          background: rgba(32,32,34,.88);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 5px 14px rgba(0,0,0,.22);
+        }
+        .calendar-split-segment {
+          color: #fff;
+        }
+        .calendar-split-segment:hover {
+          background: rgba(255,255,255,.08);
+        }
+        .calendar-android {
+          border-right-color: rgba(255,255,255,.14);
+        }
       }
       @media (max-width: 640px) {
         .calendar-split-pill {
-          min-width: 190px;
-          min-height: 42px;
+          min-width: 180px;
+          min-height: 38px;
         }
         .calendar-split-segment {
-          min-height: 42px;
-          font-size: 14px;
+          min-height: 38px;
+          font-size: 13px;
         }
       }
     `;
@@ -253,7 +265,7 @@
     android.target = '_blank';
     android.rel = 'noopener';
     android.setAttribute('aria-label', `Add ${fallback.title || 'event'} to Google Calendar from ${SOURCE_LABEL}`);
-    android.innerHTML = '<span class="calendar-split-icon" aria-hidden="true">🤖</span><span>Android</span>';
+    android.innerHTML = '<span class="calendar-split-icon" aria-hidden="true">G</span><span>Google</span>';
     android.addEventListener('click', () => {
       const status = document.getElementById('status');
       if (status) status.textContent = `Opening Google Calendar with ${SOURCE_LABEL} in the subject.`;
