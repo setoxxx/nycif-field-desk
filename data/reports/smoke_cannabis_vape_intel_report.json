@@ -1,25 +1,88 @@
 {
   "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
-  "source_rows": 50000,
-  "lookback_days": 180,
-  "since_date": "2026-01-01",
-  "matched_rows": 165,
-  "mapped_total": 130,
-  "needs_review": 0,
-  "rejected": 49835,
-  "duplicate_count": 35,
+  "source_rows": 300000,
+  "fetch_limit": 50000,
+  "max_rows": 300000,
+  "lookback_days": 365,
+  "since_date": "2025-06-30",
+  "matched_rows": 1912,
+  "mapped_total": 1892,
+  "needs_review": 20,
+  "rejected": 298088,
+  "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 72,
-    "cannabis_related_complaint": 46,
-    "smoke_shop_complaint": 12
+    "vape_complaint": 654,
+    "cannabis_related_complaint": 1237,
+    "public_smoking_complaint": 1
   },
-  "top_review_reasons": [],
-  "top_rejection_reasons": [
+  "match_bucket_counts": {
+    "vape_electronic_cigarette": 654,
+    "cannabis_marijuana_weed": 1237,
+    "public_secondhand_smoking": 1
+  },
+  "complaint_type_counts": {
+    "Smoking or Vaping": 609,
+    "Cannabis Retailer": 306,
+    "Obstruction": 530,
+    "Maintenance or Facility": 379,
+    "Consumer Complaint": 45,
+    "Noise - Street/Sidewalk": 7,
+    "Blocked Driveway": 1,
+    "Noise - Commercial": 1,
+    "Street Condition": 4,
+    "Noise - Residential": 2,
+    "Illegal Parking": 1,
+    "Derelict Vehicles": 1,
+    "General Construction/Plumbing": 1,
+    "Street Light Condition": 1,
+    "Overgrown Tree/Branches": 1,
+    "Water System": 1,
+    "Building/Use": 1,
+    "Missed Collection": 1
+  },
+  "descriptor_counts": {
+    "Allowed in Smoke Free Area": 604,
+    "Sales to Minors Under 21": 131,
+    "Weeds or Grass": 529,
+    "Too Close to a School": 13,
+    "Grass/Weeds": 379,
+    "Unlicensed": 98,
+    "Product Concerns": 12,
+    "Ashtray in Smoke-Free Area": 3,
+    "Suspicious Activity": 43,
+    "Smoking, Cigar, or Vape Store": 12,
+    "Loud Music/Party": 7,
+    "Trash or Recycling": 1,
+    "E-Cigarette Sales": 33,
+    "No Access": 1,
+    "Too Close to a House of Worship": 9,
+    "Loud Television": 1,
+    "Line/Marking - After Repaving": 3,
+    "Sign Inadequate": 1,
+    "Detached Trailer": 1,
+    "Derelict Vehicles": 1,
+    "Rough, Pitted or Cracked Roads": 1,
+    "Smoking Ban - Smoking on Construction Site": 1,
+    "Street Light Out": 1,
+    "Hitting Power Lines": 1,
+    "Hydrant Leaking (WC1)": 1,
+    "Workplace Policy Not Provided or Inadequate": 1,
+    "No Certificate Of Occupancy/Illegal/Contrary To CO": 1,
+    "Loud Talking": 2,
+    "Trash": 1
+  },
+  "top_review_reasons": [
     {
-      "reason": "no_smoke_or_vape_match",
-      "count": 49835
+      "reason": "needs_geocode",
+      "count": 20
     }
   ],
-  "generated_at": "2026-06-30T15:37:14.842Z",
-  "data_note": "311 complaint records are public complaint intel, not proof of illegal activity."
+  "top_rejection_reasons": [
+    {
+      "reason": "no_smoke_vape_cannabis_match",
+      "count": 298088
+    }
+  ],
+  "generated_at": "2026-06-30T21:49:03.220Z",
+  "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }

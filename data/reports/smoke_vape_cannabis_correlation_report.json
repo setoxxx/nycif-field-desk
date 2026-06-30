@@ -1,0 +1,318 @@
+{
+  "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
+  "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
+  "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
+  "source_complaints": 1892,
+  "usable_complaints": 1892,
+  "source_dispensaries": 0,
+  "source_retailers": 4882,
+  "correlation_locations": 4882,
+  "output_locations": 179,
+  "low_signal_excluded": 4703,
+  "radius_feet": [
+    100,
+    250,
+    500
+  ],
+  "windows_days": [
+    30,
+    90,
+    180,
+    365
+  ],
+  "min_signal_score": 3,
+  "location_kind_counts": {
+    "licensed_smoke_vape_retailer": 179
+  },
+  "borough_counts": {
+    "Brooklyn": 49,
+    "Bronx": 36,
+    "Manhattan": 61,
+    "Queens": 31,
+    "Staten Island": 2
+  },
+  "signal_tier_counts": {
+    "very_high": 2,
+    "high": 18,
+    "moderate": 159
+  },
+  "top_locations_sample": [
+    {
+      "title": "215 FINEST DELI & GRILL CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "215 4 AVENUE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 51,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 5,
+      "last_complaint_date": "2026-06-24"
+    },
+    {
+      "title": "UNION DELI GROCERY 1 INC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "226 4TH AVE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 51,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 5,
+      "last_complaint_date": "2026-06-24"
+    },
+    {
+      "title": "BOSTON ROAD CANDY INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1737 BOSTON RD, BRONX, 10460",
+      "borough": "Bronx",
+      "signal_score": 46,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 9,
+      "last_complaint_date": "2026-06-25"
+    },
+    {
+      "title": "BOSTON ROAD CANDY INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1737 BOSTON RD, BRONX, 10460",
+      "borough": "Bronx",
+      "signal_score": 46,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 9,
+      "last_complaint_date": "2026-06-25"
+    },
+    {
+      "title": "FRESH FOOD FARM",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1310 2ND AVE, NEW YORK, 10065",
+      "borough": "Manhattan",
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "FRESH FOOD FARM",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1310 2ND AVE, NEW YORK, 10065",
+      "borough": "Manhattan",
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "LINCOLN DELI AND SMOKE SHOP CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "41 LINCOLN RD, BROOKLYN, 11225",
+      "borough": "Brooklyn",
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-25"
+    },
+    {
+      "title": "SHAKTI PETROLEUM CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "15409 UNION TPKE, FLUSHING, 11367",
+      "borough": "Queens",
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-19"
+    },
+    {
+      "title": "SHAKTI PETROLEUM CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "15409 UNION TPKE, FLUSHING, 11367",
+      "borough": "Queens",
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-19"
+    },
+    {
+      "title": "5Th AVENUE CANDY & GROCERY INC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "439 5TH AVE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "DELI & SMOKE SHOP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "439 5TH AVE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "9TH AVENUE GOURMET INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "781 9TH AVE, NEW YORK, 10019",
+      "borough": "Manhattan",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-03"
+    },
+    {
+      "title": "BURKE CANDY & CONVENIENCE CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "702 BURKE AVE, BRONX, 10467",
+      "borough": "Bronx",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-23"
+    },
+    {
+      "title": "CHELSEA FINE FOODS",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "300 8TH AVE, NEW YORK, 10001",
+      "borough": "Manhattan",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-16"
+    },
+    {
+      "title": "FOOD VALLEY DELI & GROCERY",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "9601 LIBERTY AVENUE, OZONE PARK, 11417",
+      "borough": "Queens",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-03"
+    },
+    {
+      "title": "GARDENIA DELI",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "404 8 AVENUE, NEW YORK, 10001",
+      "borough": "Manhattan",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-12"
+    },
+    {
+      "title": "GARDENIA DELI",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "404 8 AVENUE, NEW YORK, 10001",
+      "borough": "Manhattan",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-12"
+    },
+    {
+      "title": "SMOKE SCENE N VAPE CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "786 9 AVENUE, NEW YORK, 10019",
+      "borough": "Manhattan",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-03"
+    },
+    {
+      "title": "SMOKE SCENE N VAPE CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "786 9 AVENUE, NEW YORK, 10019",
+      "borough": "Manhattan",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-03"
+    },
+    {
+      "title": "SPEEDWAY LLC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1885 ATLANTIC AVE, BROOKLYN, 11233",
+      "borough": "Brooklyn",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-18"
+    },
+    {
+      "title": "BLACK OLIVE GOURMET INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1318 JEROME AVE, BRONX, 10452",
+      "borough": "Bronx",
+      "signal_score": 15,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 5,
+      "last_complaint_date": "2026-06-13"
+    },
+    {
+      "title": "BROWNSVILLE DELI & GROCERY INC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "784 SARATOGA AVE, BROOKLYN, 11212",
+      "borough": "Brooklyn",
+      "signal_score": 13,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-24"
+    },
+    {
+      "title": "CIGAR VAPE INC I",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "452 5 AVENUE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 13,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "CIGAR VAPE INC I",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "452 5 AVENUE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 13,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "FIVE STARS DELI GROCERY",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "10413 JAMAICA AVE, JAMAICA, 11418",
+      "borough": "Queens",
+      "signal_score": 13,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-22"
+    }
+  ],
+  "generated_at": "2026-06-30T21:49:03.473Z",
+  "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+}
