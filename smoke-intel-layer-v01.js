@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = 'public-complaint-intel-layer-v01';
+  const VERSION = 'public-complaint-intel-layer-v02';
   const DATA_URL = './data/nycif_smoke_cannabis_vape_intel.json';
   const REPORT_URL = './data/reports/smoke_cannabis_vape_intel_report.json';
 
@@ -10,7 +10,9 @@
     report: null,
     loaded: false,
     loading: false,
-    enabled: false
+    enabled: false,
+    fitDone: false,
+    mapPolls: 0
   };
 
   function clean(value) {
@@ -52,17 +54,18 @@
     const style = document.createElement('style');
     style.id = 'nycif-public-intel-layer-styles';
     style.textContent = `
+      .public-intel-marker-shell { z-index: 760 !important; }
       .public-intel-marker {
         display: grid;
         place-items: center;
-        width: 30px;
-        height: 30px;
+        width: 32px;
+        height: 32px;
         border-radius: 999px;
         background: #14532d;
         color: #fff;
-        border: 2px solid rgba(255,255,255,.92);
-        box-shadow: 0 8px 22px rgba(0,0,0,.28);
-        font-size: 15px;
+        border: 2px solid rgba(255,255,255,.94);
+        box-shadow: 0 8px 22px rgba(0,0,0,.30);
+        font-size: 16px;
       }
       .public-intel-popup {
         min-width: 220px;
@@ -116,7 +119,7 @@
   function addFilterControl(attempt = 0) {
     const panel = document.getElementById('layersPanel');
     if (!panel) {
-      if (attempt < 40) window.setTimeout(() => addFilterControl(attempt + 1), 250);
+      if (attempt < 80) window.setTimeout(() => addFilterControl(attempt + 1), 250);
       return;
     }
     if (document.getElementById('publicIntelToggle')) return;
@@ -140,9 +143,9 @@
   function captureMap() {
     if (window.NYCIF_LEAFLET_MAP) {
       state.map = window.NYCIF_LEAFLET_MAP;
-      return;
+      return true;
     }
-    if (!window.L || !L.map || L.map.NYCIF_PUBLIC_INTEL_WRAPPED) return;
+    if (!window.L || !L.map || L.map.NYCIF_PUBLIC_INTEL_WRAPPED) return false;
     const original = L.map.bind(L);
     function wrappedMap(...args) {
       const map = original(...args);
@@ -153,6 +156,21 @@
     }
     wrappedMap.NYCIF_PUBLIC_INTEL_WRAPPED = true;
     L.map = wrappedMap;
+    return false;
+  }
+
+  function waitForMap(callback) {
+    if (captureMap() && state.map) {
+      callback();
+      return;
+    }
+    state.mapPolls += 1;
+    if (state.mapPolls <= 120) {
+      status('Public complaint intel waiting for map...');
+      window.setTimeout(() => waitForMap(callback), 250);
+      return;
+    }
+    status('Public complaint intel could not find the map. Refresh the preview page.');
   }
 
   async function loadJson(url, fallback) {
@@ -188,8 +206,19 @@
   }
 
   function markerFor(spot) {
-    const icon = L.divIcon({ className: 'public-intel-marker-shell', html: `<div class="public-intel-marker" title="${esc(spot.title)}">${esc(spot.icon)}</div>`, iconSize: [30, 30], iconAnchor: [15, 15], popupAnchor: [0, -15] });
-    return L.marker([spot.lat, spot.lng], { icon, title: spot.title }).bindPopup(popupHtml(spot));
+    const icon = L.divIcon({ className: 'public-intel-marker-shell', html: `<div class="public-intel-marker" title="${esc(spot.title)}">${esc(spot.icon)}</div>`, iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -16] });
+    return L.marker([spot.lat, spot.lng], { icon, title: spot.title, zIndexOffset: 800 }).bindPopup(popupHtml(spot));
+  }
+
+  function fitPins() {
+    if (!state.map || !state.spots.length || state.fitDone) return;
+    try {
+      const bounds = L.latLngBounds(state.spots.map(spot => [spot.lat, spot.lng]));
+      state.map.fitBounds(bounds, { padding: [72, 72], maxZoom: 13 });
+      state.fitDone = true;
+    } catch (error) {
+      console.warn('[NYCIF public intel] fit failed', error);
+    }
   }
 
   function drawLayer() {
@@ -198,20 +227,23 @@
     state.layer.clearLayers();
     state.spots.forEach(spot => state.layer.addLayer(markerFor(spot)));
     state.layer.addTo(state.map);
+    if (state.spots.length) {
+      status(`Public complaint intel showing ${state.spots.length.toLocaleString()} mapped pins.`);
+      fitPins();
+    }
   }
 
   async function enableLayer() {
-    captureMap();
-    if (!state.map) {
-      status('Public complaint intel waiting for map...');
-      window.setTimeout(enableLayer, 300);
-      return;
-    }
-    await fetchRows();
-    drawLayer();
+    state.enabled = true;
+    waitForMap(async () => {
+      await fetchRows();
+      drawLayer();
+    });
   }
 
   function disableLayer() {
+    state.enabled = false;
+    state.fitDone = false;
     if (state.layer) state.layer.remove();
     status('Public complaint intel hidden.');
   }
