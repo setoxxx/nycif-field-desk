@@ -1,0 +1,656 @@
+{
+  "source_file": "data/nycif_nightlife_noise_correlation.json",
+  "output_feed_file": "data/nycif_active_nightlife_feed.json",
+  "output_digest_file": "data/nycif_active_nightlife_digest.json",
+  "source_records": 7009,
+  "feed_records": 149,
+  "max_feed_items": 500,
+  "excluded_records": 6860,
+  "bucket_counts": {
+    "hot_now": 100,
+    "rising": 100,
+    "late_night_pressure": 100,
+    "weekend_pressure": 100,
+    "watchlist": 100,
+    "group_one_watchlist": 100,
+    "needs_editor_review": 100
+  },
+  "borough_counts": [
+    {
+      "value": "Manhattan",
+      "count": 86
+    },
+    {
+      "value": "Brooklyn",
+      "count": 40
+    },
+    {
+      "value": "Queens",
+      "count": 15
+    },
+    {
+      "value": "Bronx",
+      "count": 8
+    }
+  ],
+  "subtype_counts": [
+    {
+      "value": "Bars / taverns",
+      "count": 99
+    },
+    {
+      "value": "Restaurants with nightlife potential",
+      "count": 48
+    },
+    {
+      "value": "Beer / wine gathering spots",
+      "count": 1
+    },
+    {
+      "value": "Hotel / event spaces",
+      "count": 1
+    }
+  ],
+  "tier_counts": [
+    {
+      "value": "very_high",
+      "count": 149
+    }
+  ],
+  "top_feed_sample": [
+    {
+      "id": "nightlife-1314270",
+      "title": "SPICY EMPIRE SKEWER HOT POT",
+      "address": "147-10 45TH AVE, FLUSHING",
+      "borough": "Queens",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 2837,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 3065,
+      "last_complaint_date": "2026-06-28",
+      "days_since_last_complaint": 2,
+      "complaints_30d_100ft": 288,
+      "complaints_90d_100ft": 289,
+      "complaints_365d_100ft": 289,
+      "late_night_complaints_365d": 91,
+      "weekend_complaints_365d": 150,
+      "top_noise_descriptors": [
+        "Banging/Pounding",
+        "Loud Music/Party",
+        "Loud Talking"
+      ]
+    },
+    {
+      "id": "nightlife-1293277",
+      "title": "BLUE MOUNTAIN HEIGHTS LLC",
+      "address": "499 W 158TH ST, STORE 1,2, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 2256,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 2485,
+      "last_complaint_date": "2026-06-29",
+      "days_since_last_complaint": 1,
+      "complaints_30d_100ft": 90,
+      "complaints_90d_100ft": 239,
+      "complaints_365d_100ft": 390,
+      "late_night_complaints_365d": 335,
+      "weekend_complaints_365d": 364,
+      "top_noise_descriptors": [
+        "Loud Talking",
+        "Loud Music/Party",
+        "Banging/Pounding",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1193952",
+      "title": "MAD DOG & BEANS",
+      "address": "83 PEARL ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Bars / taverns",
+      "trend_score": 1880,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 2117,
+      "last_complaint_date": "2026-06-27",
+      "days_since_last_complaint": 3,
+      "complaints_30d_100ft": 96,
+      "complaints_90d_100ft": 216,
+      "complaints_365d_100ft": 280,
+      "late_night_complaints_365d": 277,
+      "weekend_complaints_365d": 187,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Banging/Pounding"
+      ]
+    },
+    {
+      "id": "nightlife-1255517",
+      "title": "THE GROWLER BITES AND BREWS",
+      "address": "55 STONE ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1863,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 2090,
+      "last_complaint_date": "2026-06-27",
+      "days_since_last_complaint": 3,
+      "complaints_30d_100ft": 95,
+      "complaints_90d_100ft": 211,
+      "complaints_365d_100ft": 275,
+      "late_night_complaints_365d": 286,
+      "weekend_complaints_365d": 194,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Banging/Pounding",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1302914",
+      "title": "REVOLUTION TACO & TEQUILA",
+      "address": "53 STONE ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1851,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 2078,
+      "last_complaint_date": "2026-06-27",
+      "days_since_last_complaint": 3,
+      "complaints_30d_100ft": 95,
+      "complaints_90d_100ft": 210,
+      "complaints_365d_100ft": 276,
+      "late_night_complaints_365d": 280,
+      "weekend_complaints_365d": 190,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Banging/Pounding"
+      ]
+    },
+    {
+      "id": "nightlife-1269142",
+      "title": "THE CAULDRON",
+      "address": "19 S WILLIAM ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1848,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 2075,
+      "last_complaint_date": "2026-06-27",
+      "days_since_last_complaint": 3,
+      "complaints_30d_100ft": 95,
+      "complaints_90d_100ft": 210,
+      "complaints_365d_100ft": 275,
+      "late_night_complaints_365d": 279,
+      "weekend_complaints_365d": 189,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Banging/Pounding"
+      ]
+    },
+    {
+      "id": "nightlife-1275511",
+      "title": "FRENCH DINER",
+      "address": "188 ORCHARD ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1737,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1965,
+      "last_complaint_date": "2026-06-28",
+      "days_since_last_complaint": 2,
+      "complaints_30d_100ft": 56,
+      "complaints_90d_100ft": 237,
+      "complaints_365d_100ft": 350,
+      "late_night_complaints_365d": 174,
+      "weekend_complaints_365d": 222,
+      "top_noise_descriptors": [
+        "Banging/Pounding",
+        "Loud Music/Party",
+        "Loud Talking",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1337363",
+      "title": "SAMI & SUSU",
+      "address": "190 ORCHARD ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1729,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1957,
+      "last_complaint_date": "2026-06-28",
+      "days_since_last_complaint": 2,
+      "complaints_30d_100ft": 56,
+      "complaints_90d_100ft": 237,
+      "complaints_365d_100ft": 350,
+      "late_night_complaints_365d": 169,
+      "weekend_complaints_365d": 219,
+      "top_noise_descriptors": [
+        "Banging/Pounding",
+        "Loud Music/Party",
+        "Loud Talking",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1289433",
+      "title": "GOLDSOUNDS",
+      "address": "44 WILSON AVE, BROOKLYN",
+      "borough": "Brooklyn",
+      "subtype_label": "Bars / taverns",
+      "trend_score": 1668,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1906,
+      "last_complaint_date": "2026-06-28",
+      "days_since_last_complaint": 2,
+      "complaints_30d_100ft": 79,
+      "complaints_90d_100ft": 188,
+      "complaints_365d_100ft": 260,
+      "late_night_complaints_365d": 282,
+      "weekend_complaints_365d": 159,
+      "top_noise_descriptors": [
+        "Loud Talking",
+        "Loud Music/Party",
+        "Banging/Pounding",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1257711",
+      "title": "CLAW DADDY'S",
+      "address": "185 ORCHARD ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1633,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1861,
+      "last_complaint_date": "2026-06-28",
+      "days_since_last_complaint": 2,
+      "complaints_30d_100ft": 49,
+      "complaints_90d_100ft": 220,
+      "complaints_365d_100ft": 329,
+      "late_night_complaints_365d": 187,
+      "weekend_complaints_365d": 212,
+      "top_noise_descriptors": [
+        "Banging/Pounding",
+        "Loud Music/Party",
+        "Loud Talking",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1218044",
+      "title": "ROCKWOOD'S",
+      "address": "192 ALLEN ST, GROUND FLOOR, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1633,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1861,
+      "last_complaint_date": "2026-06-28",
+      "days_since_last_complaint": 2,
+      "complaints_30d_100ft": 49,
+      "complaints_90d_100ft": 220,
+      "complaints_365d_100ft": 329,
+      "late_night_complaints_365d": 187,
+      "weekend_complaints_365d": 212,
+      "top_noise_descriptors": [
+        "Banging/Pounding",
+        "Loud Music/Party",
+        "Loud Talking",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1304945",
+      "title": "LA LONCHERIA & YOURS SINCERELY",
+      "address": "41 WILSON AVE, BROOKLYN",
+      "borough": "Brooklyn",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1614,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1842,
+      "last_complaint_date": "2026-06-28",
+      "days_since_last_complaint": 2,
+      "complaints_30d_100ft": 78,
+      "complaints_90d_100ft": 186,
+      "complaints_365d_100ft": 259,
+      "late_night_complaints_365d": 259,
+      "weekend_complaints_365d": 148,
+      "top_noise_descriptors": [
+        "Loud Talking",
+        "Loud Music/Party",
+        "Banging/Pounding",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1299191",
+      "title": "CAFE ERZULIE",
+      "address": "894 BROADWAY, GROUND FLOOR, BROOKLYN",
+      "borough": "Brooklyn",
+      "subtype_label": "Bars / taverns",
+      "trend_score": 1400,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1639,
+      "last_complaint_date": "2026-06-29",
+      "days_since_last_complaint": 1,
+      "complaints_30d_100ft": 51,
+      "complaints_90d_100ft": 138,
+      "complaints_365d_100ft": 206,
+      "late_night_complaints_365d": 288,
+      "weekend_complaints_365d": 229,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Banging/Pounding",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1340194",
+      "title": "COPA",
+      "address": "895 BROADWAY, BROOKLYN",
+      "borough": "Brooklyn",
+      "subtype_label": "Bars / taverns",
+      "trend_score": 1342,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1581,
+      "last_complaint_date": "2026-06-29",
+      "days_since_last_complaint": 1,
+      "complaints_30d_100ft": 51,
+      "complaints_90d_100ft": 139,
+      "complaints_365d_100ft": 208,
+      "late_night_complaints_365d": 257,
+      "weekend_complaints_365d": 197,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Car/Truck Music",
+        "Banging/Pounding"
+      ]
+    },
+    {
+      "id": "nightlife-1180483",
+      "title": "BECKETT'S RESTAURANT",
+      "address": "81 PEARL STREET, HANOVER SQ. &COENTIES SLIP, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Bars / taverns",
+      "trend_score": 1242,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1479,
+      "last_complaint_date": "2026-06-27",
+      "days_since_last_complaint": 3,
+      "complaints_30d_100ft": 54,
+      "complaints_90d_100ft": 121,
+      "complaints_365d_100ft": 137,
+      "late_night_complaints_365d": 277,
+      "weekend_complaints_365d": 187,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Banging/Pounding"
+      ]
+    },
+    {
+      "id": "nightlife-1340584",
+      "title": "ULYSSES",
+      "address": "91 97 PEARL ST, AKA 48 STONE ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Bars / taverns",
+      "trend_score": 1242,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1479,
+      "last_complaint_date": "2026-06-27",
+      "days_since_last_complaint": 3,
+      "complaints_30d_100ft": 54,
+      "complaints_90d_100ft": 121,
+      "complaints_365d_100ft": 137,
+      "late_night_complaints_365d": 277,
+      "weekend_complaints_365d": 187,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Banging/Pounding"
+      ]
+    },
+    {
+      "id": "nightlife-1282816",
+      "title": "BUS STOP DINER",
+      "address": "3341 BROADWAY, STORE 1, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1231,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1459,
+      "last_complaint_date": "2026-06-28",
+      "days_since_last_complaint": 2,
+      "complaints_30d_100ft": 69,
+      "complaints_90d_100ft": 180,
+      "complaints_365d_100ft": 187,
+      "late_night_complaints_365d": 48,
+      "weekend_complaints_365d": 111,
+      "top_noise_descriptors": [
+        "Banging/Pounding",
+        "Loud Music/Party",
+        "Loud Talking",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1308652",
+      "title": "ANOTHER BAR LLC",
+      "address": "899 BROADWAY, BROOKLYN",
+      "borough": "Brooklyn",
+      "subtype_label": "Bars / taverns",
+      "trend_score": 1212,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1451,
+      "last_complaint_date": "2026-06-29",
+      "days_since_last_complaint": 1,
+      "complaints_30d_100ft": 44,
+      "complaints_90d_100ft": 117,
+      "complaints_365d_100ft": 166,
+      "late_night_complaints_365d": 263,
+      "weekend_complaints_365d": 204,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Car/Truck Music",
+        "Banging/Pounding"
+      ]
+    },
+    {
+      "id": "nightlife-1213443",
+      "title": "MAMA SUSHI",
+      "address": "237 DYCKMAN ST, SEAMAN & BROADWAY, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Bars / taverns",
+      "trend_score": 1207,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1446,
+      "last_complaint_date": "2026-06-29",
+      "days_since_last_complaint": 1,
+      "complaints_30d_100ft": 76,
+      "complaints_90d_100ft": 101,
+      "complaints_365d_100ft": 108,
+      "late_night_complaints_365d": 182,
+      "weekend_complaints_365d": 226,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Car/Truck Music",
+        "Banging/Pounding",
+        "Loud Talking"
+      ]
+    },
+    {
+      "id": "nightlife-1158322",
+      "title": "IL SOLE RESTAURANT",
+      "address": "229 233 DYCKMAN ST, SEMAN AVENUE & BROADWAY, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1199,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1428,
+      "last_complaint_date": "2026-06-29",
+      "days_since_last_complaint": 1,
+      "complaints_30d_100ft": 76,
+      "complaints_90d_100ft": 101,
+      "complaints_365d_100ft": 108,
+      "late_night_complaints_365d": 182,
+      "weekend_complaints_365d": 226,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Car/Truck Music",
+        "Banging/Pounding",
+        "Loud Talking"
+      ]
+    },
+    {
+      "id": "nightlife-1320332",
+      "title": "SA'TACOS CORP",
+      "address": "231A DYCKMAN ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1199,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1428,
+      "last_complaint_date": "2026-06-29",
+      "days_since_last_complaint": 1,
+      "complaints_30d_100ft": 76,
+      "complaints_90d_100ft": 101,
+      "complaints_365d_100ft": 108,
+      "late_night_complaints_365d": 182,
+      "weekend_complaints_365d": 226,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Car/Truck Music",
+        "Banging/Pounding",
+        "Loud Talking"
+      ]
+    },
+    {
+      "id": "nightlife-1314146",
+      "title": "BAR FREDA",
+      "address": "801 SENECA AVE, RIDGEWOOD",
+      "borough": "Queens",
+      "subtype_label": "Bars / taverns",
+      "trend_score": 1162,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1398,
+      "last_complaint_date": "2026-06-26",
+      "days_since_last_complaint": 4,
+      "complaints_30d_100ft": 39,
+      "complaints_90d_100ft": 136,
+      "complaints_365d_100ft": 212,
+      "late_night_complaints_365d": 199,
+      "weekend_complaints_365d": 140,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Car/Truck Music",
+        "Banging/Pounding"
+      ]
+    },
+    {
+      "id": "nightlife-1222588",
+      "title": "THE DUBLINER",
+      "address": "21 23 S WILLIAM STREET, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 1064,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1291,
+      "last_complaint_date": "2026-06-27",
+      "days_since_last_complaint": 3,
+      "complaints_30d_100ft": 46,
+      "complaints_90d_100ft": 89,
+      "complaints_365d_100ft": 103,
+      "late_night_complaints_365d": 277,
+      "weekend_complaints_365d": 187,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Banging/Pounding"
+      ]
+    },
+    {
+      "id": "nightlife-1340906",
+      "title": "HARRY'S CAFE",
+      "address": "62 STONE ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 996,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1223,
+      "last_complaint_date": "2026-06-27",
+      "days_since_last_complaint": 3,
+      "complaints_30d_100ft": 33,
+      "complaints_90d_100ft": 78,
+      "complaints_365d_100ft": 112,
+      "late_night_complaints_365d": 288,
+      "weekend_complaints_365d": 197,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Banging/Pounding",
+        "Car/Truck Music"
+      ]
+    },
+    {
+      "id": "nightlife-1268835",
+      "title": "ROUTE 66 AMERICAN BBQ",
+      "address": "79 PEARL ST, AKA 46 STONE ST, NEW YORK",
+      "borough": "Manhattan",
+      "subtype_label": "Restaurants with nightlife potential",
+      "trend_score": 991,
+      "trend_tier": "very_high",
+      "feed_bucket": "hot_now",
+      "feed_priority": 1218,
+      "last_complaint_date": "2026-06-27",
+      "days_since_last_complaint": 3,
+      "complaints_30d_100ft": 38,
+      "complaints_90d_100ft": 80,
+      "complaints_365d_100ft": 93,
+      "late_night_complaints_365d": 279,
+      "weekend_complaints_365d": 189,
+      "top_noise_descriptors": [
+        "Loud Music/Party",
+        "Loud Talking",
+        "Banging/Pounding"
+      ]
+    }
+  ],
+  "data_note": "This active feed is generated from public 311 complaint records matched against the NYCIF nightlife correlation layer. It is not proof of crowd size, popularity, wrongdoing, violation, or unsafe conditions.",
+  "generated_at": "2026-06-30T20:35:04.645Z"
+}
