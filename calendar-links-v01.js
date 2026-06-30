@@ -106,7 +106,7 @@
     ].filter(Boolean).join('\r\n');
   }
 
-  function calendarHref(row, fallback) {
+  function appleCalendarHref(row, fallback) {
     return `data:text/calendar;charset=utf-8,${encodeURIComponent(makeIcs(row, fallback))}`;
   }
 
@@ -161,88 +161,81 @@
     const style = document.createElement('style');
     style.id = 'nycif-calendar-split-styles';
     style.textContent = `
-      .calendar-split-wrap {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        width: 100%;
-        min-width: min(250px, 100%);
-        margin: 6px 0;
-      }
-      .calendar-split-label {
-        align-self: flex-start;
-        padding: 4px 10px;
-        border-radius: 999px;
-        background: #d93025;
-        color: #fff;
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: .02em;
-        box-shadow: 0 4px 12px rgba(217,48,37,.25);
-      }
-      .calendar-split {
-        display: grid;
+      .calendar-split-pill {
+        display: inline-grid;
         grid-template-columns: 1fr 1fr;
+        align-items: stretch;
         overflow: hidden;
-        border-radius: 14px;
-        border: 1px solid rgba(255,255,255,.16);
-        box-shadow: 0 10px 24px rgba(0,0,0,.18);
+        min-width: 178px;
+        min-height: 38px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,.18);
+        background: rgba(255,255,255,.06);
+        box-shadow: 0 8px 20px rgba(0,0,0,.18);
+        vertical-align: middle;
       }
-      .calendar-segment {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        min-height: 46px;
-        padding: 10px 12px;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 800;
-        line-height: 1;
-        white-space: nowrap;
-        transition: transform .15s ease, opacity .15s ease, filter .15s ease;
-      }
-      .calendar-segment:hover {
-        opacity: .96;
-        filter: saturate(1.08);
-      }
-      .calendar-icon {
+      .calendar-split-segment {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 24px;
-        height: 24px;
+        gap: 6px;
+        min-height: 38px;
+        padding: 9px 12px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1;
+        white-space: nowrap;
+        transition: opacity .15s ease, filter .15s ease;
+      }
+      .calendar-split-segment:hover {
+        opacity: .96;
+        filter: saturate(1.08);
+      }
+      .calendar-split-segment:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: -3px;
+      }
+      .calendar-split-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
         border-radius: 999px;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 900;
         flex: 0 0 auto;
       }
-      .calendar-google {
-        background: #ffffff;
-        color: #202124;
-        border-right: 1px solid rgba(0,0,0,.1);
+      .calendar-android {
+        background: #e9f7ef;
+        color: #143a24;
+        border-right: 1px solid rgba(20,58,36,.15);
       }
-      .calendar-google .calendar-icon {
-        background: conic-gradient(from -45deg, #4285f4 0 25%, #34a853 0 50%, #fbbc05 0 75%, #ea4335 0 100%);
-        color: #fff;
+      .calendar-android .calendar-split-icon {
+        background: #3ddc84;
+        color: #0b2616;
       }
       .calendar-apple {
-        background: #111111;
-        color: #ffffff;
+        background: #111;
+        color: #fff;
       }
-      .calendar-apple .calendar-icon {
+      .calendar-apple .calendar-split-icon {
         background: rgba(255,255,255,.14);
         color: #fff;
-        font-size: 17px;
+        font-size: 16px;
       }
-      .quick-actions .calendar-split-wrap,
-      .field-actions .calendar-split-wrap {
-        flex-basis: 100%;
+      .popup-card .field-actions .calendar-split-pill {
+        flex: 1 1 178px;
       }
       @media (max-width: 640px) {
-        .calendar-segment {
-          min-height: 50px;
-          font-size: 15px;
+        .calendar-split-pill {
+          min-width: 190px;
+          min-height: 42px;
+        }
+        .calendar-split-segment {
+          min-height: 42px;
+          font-size: 14px;
         }
       }
     `;
@@ -250,55 +243,48 @@
   }
 
   function buildCalendarSplit(row, fallback = {}) {
-    const wrap = document.createElement('div');
-    wrap.className = 'calendar-split-wrap';
+    const split = document.createElement('span');
+    split.className = 'calendar-split-pill';
+    split.setAttribute('aria-label', 'Add this event to calendar');
 
-    const label = document.createElement('div');
-    label.className = 'calendar-split-label';
-    label.textContent = 'Add to Calendar';
-
-    const split = document.createElement('div');
-    split.className = 'calendar-split';
-
-    const google = document.createElement('a');
-    google.className = 'calendar-segment calendar-google';
-    google.href = googleCalendarHref(row, fallback);
-    google.target = '_blank';
-    google.rel = 'noopener';
-    google.setAttribute('aria-label', `Add ${fallback.title || 'event'} to Google Calendar from ${SOURCE_LABEL}`);
-    google.innerHTML = '<span class="calendar-icon" aria-hidden="true">G</span><span>Google</span>';
-    google.addEventListener('click', () => {
+    const android = document.createElement('a');
+    android.className = 'calendar-split-segment calendar-android';
+    android.href = googleCalendarHref(row, fallback);
+    android.target = '_blank';
+    android.rel = 'noopener';
+    android.setAttribute('aria-label', `Add ${fallback.title || 'event'} to Google Calendar from ${SOURCE_LABEL}`);
+    android.innerHTML = '<span class="calendar-split-icon" aria-hidden="true">🤖</span><span>Android</span>';
+    android.addEventListener('click', () => {
       const status = document.getElementById('status');
       if (status) status.textContent = `Opening Google Calendar with ${SOURCE_LABEL} in the subject.`;
     });
 
     const apple = document.createElement('a');
-    apple.className = 'calendar-segment calendar-apple';
-    apple.href = calendarHref(row, fallback);
+    apple.className = 'calendar-split-segment calendar-apple';
+    apple.href = appleCalendarHref(row, fallback);
     apple.download = calendarFilename(row, fallback.title || 'event');
     apple.setAttribute('aria-label', `Add ${fallback.title || 'event'} to Apple Calendar from ${SOURCE_LABEL}`);
-    apple.innerHTML = '<span class="calendar-icon" aria-hidden="true"></span><span>Apple</span>';
+    apple.innerHTML = '<span class="calendar-split-icon" aria-hidden="true"></span><span>Apple</span>';
     apple.addEventListener('click', () => {
       const status = document.getElementById('status');
       if (status) status.textContent = `Apple Calendar file created with ${SOURCE_LABEL} in the subject.`;
     });
 
-    split.appendChild(google);
+    split.appendChild(android);
     split.appendChild(apple);
-    wrap.appendChild(label);
-    wrap.appendChild(split);
-    return wrap;
+    return split;
   }
 
-  function addCalendarToActionGroup(group) {
-    if (!group || group.querySelector('.calendar-split-wrap')) return;
+  function addCalendarToPopupActions(group) {
+    if (!group || group.querySelector('.calendar-split-pill')) return;
     const copyButton = group.querySelector('[data-copy-id]');
-    const id = copyButton?.getAttribute('data-copy-id') || group.closest('[data-id]')?.getAttribute('data-id') || '';
+    const id = copyButton?.getAttribute('data-copy-id') || '';
     const row = rowForId(id);
-    const card = group.closest('.event-item, .popup-card');
-    const title = card?.querySelector('strong, h2')?.textContent || '';
-    const timeText = card?.querySelector('span:not(.item-tag):not(.item-source), dd')?.textContent || '';
-    const location = card?.querySelector('small')?.textContent || '';
+    const card = group.closest('.popup-card');
+    if (!card) return;
+    const title = card.querySelector('h2')?.textContent || '';
+    const timeText = card.querySelector('dd')?.textContent || '';
+    const location = card.querySelector('dl dd:nth-of-type(4), dl dd:last-of-type')?.textContent || '';
     const calendarControl = buildCalendarSplit(row, { title, timeText, location });
 
     const copy = group.querySelector('[data-copy-id]');
@@ -308,7 +294,7 @@
 
   function enhance() {
     injectStyles();
-    document.querySelectorAll('.field-actions, .quick-actions').forEach(addCalendarToActionGroup);
+    document.querySelectorAll('.popup-card .field-actions').forEach(addCalendarToPopupActions);
   }
 
   const observer = new MutationObserver(enhance);
