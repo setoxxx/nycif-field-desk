@@ -29,6 +29,10 @@
         top: calc(env(safe-area-inset-top, 0px) + 102px) !important;
       }
 
+      .live-alerts-close {
+        display: none !important;
+      }
+
       .event-item .quick-actions .calendar-split-pill {
         background: #ffffff !important;
         border: 1px solid rgba(17, 24, 39, .10) !important;
@@ -77,6 +81,66 @@
     document.head.appendChild(style);
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', injectStyles, { once: true });
-  else injectStyles();
+  function closePanel(panel, button) {
+    if (!panel || panel.hidden) return;
+    panel.hidden = true;
+    if (button) button.setAttribute('aria-expanded', 'false');
+  }
+
+  function closeFloatingPanels(except) {
+    const layersPanel = document.getElementById('layersPanel');
+    const layersBtn = document.getElementById('layersBtn');
+    const livePanel = document.getElementById('liveAlertsPanel');
+
+    if (except !== 'layers') closePanel(layersPanel, layersBtn);
+    if (except !== 'live') closePanel(livePanel, null);
+  }
+
+  function bindAutoClose() {
+    if (window.NYCIF_UI_POLISH_AUTOCLOSE) return;
+    window.NYCIF_UI_POLISH_AUTOCLOSE = true;
+
+    document.addEventListener('click', event => {
+      const target = event.target;
+      const layersPanel = document.getElementById('layersPanel');
+      const layersBtn = document.getElementById('layersBtn');
+      const livePanel = document.getElementById('liveAlertsPanel');
+      const liveBtn = document.getElementById('liveAlertsBtn');
+
+      const insideLayers = !!target.closest?.('#layersPanel, #layersBtn');
+      const insideLive = !!target.closest?.('#liveAlertsPanel, #liveAlertsBtn');
+
+      if (target.closest?.('#layersBtn')) {
+        closeFloatingPanels('layers');
+        return;
+      }
+      if (target.closest?.('#liveAlertsBtn')) {
+        closeFloatingPanels('live');
+        return;
+      }
+      if (target.closest?.('#deskBtn, #nearMeBtn, #map, .leaflet-container, .desk-drawer, .event-item')) {
+        closeFloatingPanels(null);
+        return;
+      }
+      if (!insideLayers && !insideLive) {
+        closeFloatingPanels(null);
+        return;
+      }
+
+      if (layersPanel && livePanel && insideLayers && !livePanel.hidden) closePanel(livePanel, null);
+      if (layersPanel && livePanel && insideLive && !layersPanel.hidden) closePanel(layersPanel, layersBtn);
+    }, true);
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeFloatingPanels(null);
+    });
+  }
+
+  function boot() {
+    injectStyles();
+    bindAutoClose();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
 })();
