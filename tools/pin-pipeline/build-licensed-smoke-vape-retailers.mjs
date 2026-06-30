@@ -10,11 +10,14 @@ const REVIEW_FILE = path.join(OUT_DIR, 'nycif_licensed_smoke_vape_retailers_need
 const REPORT_FILE = path.join(REPORT_DIR, 'licensed_smoke_vape_retailers_report.json');
 
 const LICENSE_TERMS = [
-  'tobacco retail dealer',
-  'electronic cigarette retail dealer',
-  'electronic cigarette dealer',
-  'e-cigarette retail dealer',
-  'cigarette retail dealer'
+  'tobacco',
+  'cigarette',
+  'electronic cigarette',
+  'e-cigarette',
+  'e cigarette',
+  'vape',
+  'vaping',
+  'smoke shop'
 ];
 
 const BORO_NAME = {
@@ -58,6 +61,15 @@ function sourceFields(rows) {
   return [...fields].sort();
 }
 
+function countValues(rows, field, limit = 20) {
+  const counts = new Map();
+  for (const row of rows) {
+    const value = clean(row[field] || '(blank)');
+    counts.set(value, (counts.get(value) || 0) + 1);
+  }
+  return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit).map(([value, count]) => ({ value, count }));
+}
+
 function licenseText(row) {
   return clean(get(row, ['license_type', 'license_category', 'license_description', 'industry', 'business_category', 'license_type_description']));
 }
@@ -68,6 +80,7 @@ function rowMatches(row) {
     row.business_name,
     row.business_name_2,
     row.dba,
+    row.dba_trade_name,
     row.trade_name,
     row.detail,
     row.comments
@@ -76,7 +89,7 @@ function rowMatches(row) {
 }
 
 function subtypeFor(row) {
-  const text = norm(licenseText(row));
+  const text = [licenseText(row), row.detail].map(norm).join(' ');
   if (/electronic cigarette|e-cigarette|e cigarette|vape|vaping/.test(text)) {
     return { subtype: 'licensed_electronic_cigarette_retailer', label: 'Licensed electronic cigarette / vape retailer', icon: '🏪' };
   }
@@ -122,11 +135,11 @@ function addressFrom(row) {
 }
 
 function businessName(row) {
-  return clean(get(row, ['business_name', 'business_name_2', 'dba', 'trade_name', 'licensee_name', 'entity_name'])) || 'Licensed retailer';
+  return clean(get(row, ['business_name', 'dba_trade_name', 'business_name_2', 'dba', 'trade_name', 'licensee_name', 'entity_name'])) || 'Licensed retailer';
 }
 
 function rawId(row, index) {
-  return clean(get(row, ['license_number', 'license_nbr', 'license_no', 'license_id', 'dca_license_number', 'record_id', 'id'])) || `licensed-smoke-vape-${index}`;
+  return clean(get(row, ['license_number', 'license_nbr', 'license_no', 'license_id', 'dca_license_number', 'record_id', 'business_unique_id', 'id'])) || `licensed-smoke-vape-${index}`;
 }
 
 function normalizePin(row, index) {
@@ -139,7 +152,8 @@ function normalizePin(row, index) {
   const borough = boroughFrom(row);
   const license = licenseText(row);
   const name = businessName(row);
-  const expiration = clean(get(row, ['license_expiration_date', 'expiration_date', 'license_expire_date', 'end_date']));
+  const expiration = clean(get(row, ['lic_expir_dd', 'license_expiration_date', 'expiration_date', 'license_expire_date', 'end_date']));
+  const status = clean(get(row, ['license_status', 'status']));
 
   const base = {
     id: `licensed-smoke-vape-${sourceId}`,
@@ -152,6 +166,7 @@ function normalizePin(row, index) {
     address,
     borough,
     license,
+    license_status: status,
     license_expiration_date: expiration,
     source: 'NYC Open Data / DCWP business license records',
     source_url: SOURCE_URL,
@@ -190,13 +205,27 @@ function countReasons(items) {
   return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([reason, count]) => ({ reason, count }));
 }
 
+function buildSourceUrl() {
+  const where = [
+    "lower(license_type) like '%tobacco%'",
+    "lower(license_type) like '%cigarette%'",
+    "lower(license_type) like '%vape%'",
+    "lower(detail) like '%tobacco%'",
+    "lower(detail) like '%cigarette%'",
+    "lower(detail) like '%vape%'"
+  ].join(' OR ');
+  const params = new URLSearchParams();
+  params.set('$select', '*');
+  params.set('$where', where);
+  params.set('$limit', String(FETCH_LIMIT));
+  return `${SOURCE_URL}?${params.toString()}`;
+}
+
 async function main() {
   await fs.mkdir(OUT_DIR, { recursive: true });
   await fs.mkdir(REPORT_DIR, { recursive: true });
 
-  const fields = '$select=*';
-  const limit = `$limit=${FETCH_LIMIT}`;
-  const url = `${SOURCE_URL}?${fields}&${limit}`;
+  const url = buildSourceUrl();
   console.log(`Fetching ${url}`);
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Source fetch failed: HTTP ${response.status}`);
@@ -216,6 +245,7 @@ async function main() {
 
   const report = {
     source_url: SOURCE_URL,
+    queried_url: url,
     source_rows: rows.length,
     fetch_limit: FETCH_LIMIT,
     matched_rows: mappedRaw.length + needsReview.length,
@@ -224,6 +254,8 @@ async function main() {
     rejected: rejected.length,
     duplicate_count: deduped.duplicate_count,
     subtype_counts: subtypeCounts,
+    license_type_sample: countValues(rows, 'license_type'),
+    license_status_sample: countValues(rows, 'license_status'),
     source_fields_sample: sourceFields(rows),
     top_review_reasons: countReasons(needsReview).slice(0, 10),
     top_rejection_reasons: countReasons(rejected).slice(0, 10),
