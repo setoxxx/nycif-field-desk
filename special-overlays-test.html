@@ -54,7 +54,7 @@
       white-space: pre-wrap;
     }
     .legend { margin-top: 10px; font-size: 11px; color: #cbd5e1; line-height: 1.35; }
-    .marker-nightlife, .marker-active, .marker-intel, .marker-licensed {
+    .marker-nightlife, .marker-active, .marker-intel, .marker-licensed, .marker-dispensary, .marker-correlation {
       display: grid;
       place-items: center;
       width: 32px;
@@ -69,6 +69,8 @@
     .marker-active { background: #b91c1c; }
     .marker-intel { background: #14532d; }
     .marker-licensed { background: #7c2d12; }
+    .marker-dispensary { background: #166534; }
+    .marker-correlation { background: #4338ca; }
 
     .leaflet-popup-content-wrapper {
       background: #ffffff;
@@ -117,10 +119,12 @@
       <label><input id="activeNightlifeToggle" type="checkbox"> <span>🔥 Active 5PM Feed</span></label>
       <label><input id="intelToggle" type="checkbox"> <span>🌿 Smoke / Vape Complaints</span></label>
       <label><input id="licensedToggle" type="checkbox"> <span>🏪 Licensed Smoke / Vape Retailers</span></label>
+      <label><input id="dispensaryToggle" type="checkbox"> <span>✅ Legal Cannabis Dispensaries</span></label>
+      <label><input id="correlationToggle" type="checkbox"> <span>🔎 Smoke/Vape/Cannabis Correlation</span></label>
       <label id="licensedActiveOnlyWrap" hidden><input id="licensedActiveOnly" type="checkbox" checked> <span>Active licenses only</span></label>
     </div>
     <div id="status">Ready. Turn on a layer.</div>
-    <div class="legend">Active 5PM Feed is a public-record activity signal for field review, not proof of crowd size, popularity, wrongdoing, or violation. Smoke / Vape Complaints are 311 public complaint records. Licensed Retailers load from the slim map JSON and cluster for performance.</div>
+    <div class="legend">Active 5PM Feed and correlation layers are public-record activity signals for field review, not proof of crowd size, causation, wrongdoing, or violation. Smoke / Vape Complaints are 311 public complaint records. Licensed Retailers load from the slim map JSON and cluster for performance.</div>
   </aside>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -148,19 +152,31 @@
         maxClusterRadius: 52,
         showCoverageOnHover: false,
         spiderfyOnMaxZoom: true
+      }),
+      dispensary: L.layerGroup(),
+      correlation: L.markerClusterGroup({
+        chunkedLoading: true,
+        chunkInterval: 40,
+        maxClusterRadius: 46,
+        showCoverageOnHover: false,
+        spiderfyOnMaxZoom: true
       })
     };
     const cacheRaw = {
       nightlife: null,
       activeNightlife: null,
       intel: null,
-      licensed: null
+      licensed: null,
+      dispensary: null,
+      correlation: null
     };
     const cacheMeta = {
       nightlife: null,
       activeNightlife: null,
       intel: null,
-      licensed: null
+      licensed: null,
+      dispensary: null,
+      correlation: null
     };
 
     function status(text) { statusEl.textContent = text; }
@@ -170,6 +186,10 @@
     function fmt(value) {
       const number = Number(value);
       return Number.isFinite(number) ? number.toLocaleString() : '';
+    }
+    function formatTopCounts(items) {
+      if (!Array.isArray(items)) return '';
+      return items.map(item => `${item.value || item.subtype || item.label || 'unknown'} (${item.count || 0})`).join(', ');
     }
     function isNYCoord(lat, lng) {
       return Number.isFinite(lat) && Number.isFinite(lng) && lat >= 40.4774 && lat <= 40.9176 && lng >= -74.2591 && lng <= -73.7004;
@@ -215,8 +235,11 @@
         `Normalized: ${normalized.length.toLocaleString()}${typeFilterNote(type)}`,
         `Markers: ${normalized.length.toLocaleString()}`
       ];
+      if (type === 'dispensary' && normalized.length === 0) {
+        lines.push('No official machine-readable NYS OCM/data.ny.gov dispensary source is configured yet. Placeholder layer is ready when an official source is added.');
+      }
       if (firstPin) {
-        lines.push(`First: ${firstPin.title} | ${firstPin.label || firstPin.feedBucket || firstPin.license || 'n/a'} | ${firstPin.lat.toFixed(4)}, ${firstPin.lng.toFixed(4)}`);
+        lines.push(`First: ${firstPin.title} | ${firstPin.label || firstPin.feedBucket || firstPin.locationKind || firstPin.license || 'n/a'} | ${firstPin.lat.toFixed(4)}, ${firstPin.lng.toFixed(4)}`);
       }
       return lines.join('\n');
     }
@@ -230,14 +253,16 @@
       if (!isNYCoord(lat, lng)) return null;
       return {
         id: row.id || row.raw_source_id || `${type}-${index}`,
-        title: row.title || row.subtype_label || (type === 'nightlife' ? '5PM spot' : type === 'activeNightlife' ? 'Active 5PM feed candidate' : type === 'licensed' ? 'Licensed retailer' : 'Public complaint intel'),
-        label: row.subtype_label || row.license || row.complaint_type || '',
+        title: row.title || row.subtype_label || (type === 'nightlife' ? '5PM spot' : type === 'activeNightlife' ? 'Active 5PM feed candidate' : type === 'dispensary' ? 'Legal cannabis dispensary' : type === 'correlation' ? 'Smoke/vape/cannabis correlation candidate' : type === 'licensed' ? 'Licensed retailer' : 'Public complaint intel'),
+        label: row.subtype_label || row.license || row.complaint_type || row.license_type || '',
         address: row.address || '',
         borough: row.borough || '',
         descriptor: row.descriptor || '',
         license: row.license || '',
         expiration: row.license_expiration_date || '',
         note: row.data_note || '',
+        licenseStatus: row.license_status || '',
+        locationKind: row.location_kind || '',
         feedBucket: row.feed_bucket || '',
         feedBuckets: Array.isArray(row.feed_buckets) ? row.feed_buckets.join(', ') : '',
         trendScore: row.trend_score ?? '',
@@ -245,10 +270,17 @@
         lastComplaintDate: row.last_complaint_date || '',
         complaints30d100ft: row.complaints_30d_100ft ?? '',
         complaints90d100ft: row.complaints_90d_100ft ?? '',
+        complaints180d100ft: row.complaints_180d_100ft ?? '',
         complaints365d100ft: row.complaints_365d_100ft ?? '',
+        complaints365d250ft: row.complaints_365d_250ft ?? '',
+        complaints365d500ft: row.complaints_365d_500ft ?? '',
         lateNightComplaints365d: row.late_night_complaints_365d ?? '',
         weekendComplaints365d: row.weekend_complaints_365d ?? '',
         topNoiseDescriptors: Array.isArray(row.top_noise_descriptors) ? row.top_noise_descriptors.join(', ') : '',
+        topComplaintSubtypes: formatTopCounts(row.top_complaint_subtypes),
+        topComplaintDescriptors: formatTopCounts(row.top_complaint_descriptors),
+        signalScore: row.signal_score ?? '',
+        signalTier: row.signal_tier || '',
         editorialNote: row.editorial_note || '',
         lat,
         lng,
@@ -259,14 +291,20 @@
       if (pin.type === 'activeNightlife') {
         return `<article class="popup"><div class="tag">🔥 Active 5PM Feed</div><h2>${esc(pin.title)}</h2>${pin.label ? `<p><strong>${esc(pin.label)}</strong></p>` : ''}${pin.address ? `<p>${esc(pin.address)}</p>` : ''}${pin.borough ? `<p>${esc(pin.borough)}</p>` : ''}${pin.feedBucket ? `<p><strong>Feed bucket:</strong> ${esc(pin.feedBucket)}</p>` : ''}${pin.trendTier ? `<p><strong>Trend tier:</strong> ${esc(pin.trendTier)}</p>` : ''}${pin.trendScore !== '' ? `<p><strong>Trend score:</strong> ${esc(fmt(pin.trendScore))}</p>` : ''}${pin.lastComplaintDate ? `<p><strong>Last complaint date:</strong> ${esc(pin.lastComplaintDate)}</p>` : ''}<p><strong>Nearby complaints:</strong> 30d ${esc(fmt(pin.complaints30d100ft))} / 90d ${esc(fmt(pin.complaints90d100ft))} / 365d ${esc(fmt(pin.complaints365d100ft))}</p>${pin.lateNightComplaints365d !== '' || pin.weekendComplaints365d !== '' ? `<p><strong>Late-night / weekend:</strong> ${esc(fmt(pin.lateNightComplaints365d))} / ${esc(fmt(pin.weekendComplaints365d))}</p>` : ''}${pin.topNoiseDescriptors ? `<p><strong>Top descriptors:</strong> ${esc(pin.topNoiseDescriptors)}</p>` : ''}<p class="note">Public-record activity signal only. Not proof of crowd size, popularity, wrongdoing, violation, or unsafe conditions. Verify before publication or field assignment.</p></article>`;
       }
+      if (pin.type === 'dispensary') {
+        return `<article class="popup"><div class="tag">✅ Legal Cannabis Dispensary</div><h2>${esc(pin.title)}</h2>${pin.label ? `<p><strong>${esc(pin.label)}</strong></p>` : ''}${pin.licenseStatus ? `<p><strong>Status:</strong> ${esc(pin.licenseStatus)}</p>` : ''}${pin.address ? `<p>${esc(pin.address)}</p>` : ''}${pin.borough ? `<p>${esc(pin.borough)}</p>` : ''}<p class="note">Official regulated cannabis location record where source data is available. Confirm current status before publication.</p></article>`;
+      }
+      if (pin.type === 'correlation') {
+        return `<article class="popup"><div class="tag">🔎 Smoke/Vape/Cannabis Correlation</div><h2>${esc(pin.title)}</h2>${pin.locationKind ? `<p><strong>Location kind:</strong> ${esc(pin.locationKind)}</p>` : ''}${pin.address ? `<p>${esc(pin.address)}</p>` : ''}${pin.borough ? `<p>${esc(pin.borough)}</p>` : ''}${pin.signalScore !== '' ? `<p><strong>Signal score:</strong> ${esc(fmt(pin.signalScore))}</p>` : ''}${pin.signalTier ? `<p><strong>Signal tier:</strong> ${esc(pin.signalTier)}</p>` : ''}${pin.lastComplaintDate ? `<p><strong>Last complaint date:</strong> ${esc(pin.lastComplaintDate)}</p>` : ''}<p><strong>Complaints 365d:</strong> 100ft ${esc(fmt(pin.complaints365d100ft))} / 250ft ${esc(fmt(pin.complaints365d250ft))} / 500ft ${esc(fmt(pin.complaints365d500ft))}</p>${pin.topComplaintSubtypes ? `<p><strong>Top subtypes:</strong> ${esc(pin.topComplaintSubtypes)}</p>` : ''}${pin.topComplaintDescriptors ? `<p><strong>Top descriptors:</strong> ${esc(pin.topComplaintDescriptors)}</p>` : ''}<p class="note">Complaint activity near a regulated location. Not proof of causation, illegal activity, or wrongdoing.</p></article>`;
+      }
       const tag = pin.type === 'nightlife' ? '🍸 5PM Spot' : pin.type === 'licensed' ? '🏪 Licensed Retailer' : '🌿 Public Complaint Intel';
       return `<article class="popup"><div class="tag">${tag}</div><h2>${esc(pin.title)}</h2>${pin.label ? `<p><strong>${esc(pin.label)}</strong></p>` : ''}${pin.descriptor ? `<p>${esc(pin.descriptor)}</p>` : ''}${pin.license ? `<p>${esc(pin.license)}</p>` : ''}${pin.expiration ? `<p><small>License expiration: ${esc(pin.expiration)}</small></p>` : ''}${pin.address ? `<p>${esc(pin.address)}</p>` : ''}${pin.borough ? `<p>${esc(pin.borough)}</p>` : ''}${pin.note ? `<p class="note">${esc(pin.note)}</p>` : ''}</article>`;
     }
     function markerFor(pin) {
-      const cls = pin.type === 'activeNightlife' ? 'marker-active' : pin.type === 'nightlife' ? 'marker-nightlife' : pin.type === 'licensed' ? 'marker-licensed' : 'marker-intel';
-      const iconText = pin.type === 'activeNightlife' ? '🔥' : pin.type === 'nightlife' ? '🍸' : pin.type === 'licensed' ? '🏪' : '🌿';
+      const cls = pin.type === 'activeNightlife' ? 'marker-active' : pin.type === 'dispensary' ? 'marker-dispensary' : pin.type === 'correlation' ? 'marker-correlation' : pin.type === 'nightlife' ? 'marker-nightlife' : pin.type === 'licensed' ? 'marker-licensed' : 'marker-intel';
+      const iconText = pin.type === 'activeNightlife' ? '🔥' : pin.type === 'dispensary' ? '✅' : pin.type === 'correlation' ? '🔎' : pin.type === 'nightlife' ? '🍸' : pin.type === 'licensed' ? '🏪' : '🌿';
       const icon = L.divIcon({ className: `${cls}-shell`, html: `<div class="${cls}">${iconText}</div>`, iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -16] });
-      return L.marker([pin.lat, pin.lng], { icon, title: pin.title, zIndexOffset: pin.type === 'licensed' ? 950 : pin.type === 'activeNightlife' ? 925 : pin.type === 'intel' ? 900 : 800 }).bindPopup(popupHtml(pin));
+      return L.marker([pin.lat, pin.lng], { icon, title: pin.title, zIndexOffset: pin.type === 'licensed' ? 950 : pin.type === 'correlation' ? 940 : pin.type === 'dispensary' ? 930 : pin.type === 'activeNightlife' ? 925 : pin.type === 'intel' ? 900 : 800 }).bindPopup(popupHtml(pin));
     }
     function fitVisible() {
       const points = [];
@@ -295,7 +333,9 @@
         nightlife: { url: './data/nycif_nightlife_spots.json', label: '5PM Spots' },
         activeNightlife: { url: './data/nycif_active_nightlife_feed.json', label: 'Active 5PM Feed' },
         intel: { url: './data/nycif_smoke_cannabis_vape_intel.json', label: 'Smoke / Vape Complaints' },
-        licensed: { url: './data/nycif_licensed_smoke_vape_retailers_slim.json', label: 'Licensed Smoke / Vape Retailers' }
+        licensed: { url: './data/nycif_licensed_smoke_vape_retailers_slim.json', label: 'Licensed Smoke / Vape Retailers' },
+        dispensary: { url: './data/nycif_legal_cannabis_dispensaries.json', label: 'Legal Cannabis Dispensaries' },
+        correlation: { url: './data/nycif_smoke_vape_cannabis_correlation.json', label: 'Smoke/Vape/Cannabis Correlation' }
       };
       const config = configs[type];
 
@@ -326,6 +366,8 @@
     document.getElementById('activeNightlifeToggle').addEventListener('change', event => toggleLayer('activeNightlife', event.target.checked));
     document.getElementById('intelToggle').addEventListener('change', event => toggleLayer('intel', event.target.checked));
     document.getElementById('licensedToggle').addEventListener('change', event => toggleLayer('licensed', event.target.checked));
+    document.getElementById('dispensaryToggle').addEventListener('change', event => toggleLayer('dispensary', event.target.checked));
+    document.getElementById('correlationToggle').addEventListener('change', event => toggleLayer('correlation', event.target.checked));
     licensedActiveOnlyToggle.addEventListener('change', () => {
       if (!document.getElementById('licensedToggle').checked) return;
       renderLayer('licensed', { label: 'Licensed Smoke / Vape Retailers' });
