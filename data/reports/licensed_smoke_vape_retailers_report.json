@@ -5,7 +5,55 @@
   "fetch_limit": 50000,
   "matched_rows": 9316,
   "mapped_total": 9057,
-  "slim_mapped_total": 9057,
+  "full_mapped_total": 9057,
+  "slim_mapped_total": 4882,
+  "slim_excluded_total": 4175,
+  "slim_filter": "license_status active and license_expiration_date within last 2 years",
+  "license_expiration_cutoff": "2024-06-30T04:00:00.000Z",
+  "full_status_counts": [
+    {
+      "value": "Active",
+      "count": 4882
+    },
+    {
+      "value": "Expired",
+      "count": 2634
+    },
+    {
+      "value": "Surrendered",
+      "count": 904
+    },
+    {
+      "value": "Revoked",
+      "count": 523
+    },
+    {
+      "value": "Suspended",
+      "count": 97
+    },
+    {
+      "value": "Voided",
+      "count": 12
+    },
+    {
+      "value": "Out of Business",
+      "count": 3
+    },
+    {
+      "value": "Failed to Renew",
+      "count": 1
+    },
+    {
+      "value": "Close",
+      "count": 1
+    }
+  ],
+  "slim_status_counts": [
+    {
+      "value": "Active",
+      "count": 4882
+    }
+  ],
   "needs_review": 64,
   "rejected": 5,
   "duplicate_count": 195,
@@ -131,6 +179,6 @@
       "count": 5
     }
   ],
-  "generated_at": "2026-06-30T16:12:23.134Z",
+  "generated_at": "2026-06-30T17:01:20.568Z",
   "data_note": "Official license/business records; confirm current license status with the source before publication or enforcement use."
 }

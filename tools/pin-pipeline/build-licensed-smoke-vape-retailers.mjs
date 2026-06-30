@@ -186,6 +186,41 @@ function normalizePin(row, index) {
   return { status: 'mapped', location_quality: coords.quality, lat: coords.lat, lng: coords.lng, ...base };
 }
 
+function parseDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function cutoffDateForRecentLicenses(now = new Date()) {
+  const cutoff = new Date(now);
+  cutoff.setFullYear(cutoff.getFullYear() - 2);
+  cutoff.setHours(0, 0, 0, 0);
+  return cutoff;
+}
+
+function isActiveLicense(pin) {
+  return String(pin.license_status || '').trim().toLowerCase() === 'active';
+}
+
+function isRecentlyCurrentLicense(pin, now = new Date()) {
+  if (!isActiveLicense(pin)) return false;
+
+  const expiration = parseDate(pin.license_expiration_date);
+  if (!expiration) return false;
+
+  const cutoff = cutoffDateForRecentLicenses(now);
+  return expiration >= cutoff;
+}
+
+function countStatusOnPins(pins) {
+  const counts = new Map();
+  for (const pin of pins) {
+    const value = clean(pin.license_status || '(blank)');
+    counts.set(value, (counts.get(value) || 0) + 1);
+  }
+  return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([value, count]) => ({ value, count }));
+}
+
 function slimPin(pin) {
   return {
     id: pin.id,
@@ -276,7 +311,9 @@ async function main() {
   const needsReview = normalized.filter(item => item.status === 'needs_review');
   const rejected = normalized.filter(item => item.status === 'rejected');
   const deduped = dedupePins(mappedRaw);
-  const slimPins = deduped.pins.map(slimPin);
+  const now = new Date();
+  const slimEligiblePins = deduped.pins.filter(pin => isRecentlyCurrentLicense(pin, now));
+  const slimPins = slimEligiblePins.map(slimPin);
 
   const subtypeCounts = deduped.pins.reduce((acc, pin) => {
     acc[pin.subtype] = (acc[pin.subtype] || 0) + 1;
@@ -290,7 +327,13 @@ async function main() {
     fetch_limit: FETCH_LIMIT,
     matched_rows: mappedRaw.length + needsReview.length,
     mapped_total: deduped.pins.length,
+    full_mapped_total: deduped.pins.length,
     slim_mapped_total: slimPins.length,
+    slim_excluded_total: deduped.pins.length - slimPins.length,
+    slim_filter: 'license_status active and license_expiration_date within last 2 years',
+    license_expiration_cutoff: cutoffDateForRecentLicenses(now).toISOString(),
+    full_status_counts: countStatusOnPins(deduped.pins),
+    slim_status_counts: countStatusOnPins(slimEligiblePins),
     needs_review: needsReview.length,
     rejected: rejected.length,
     duplicate_count: deduped.duplicate_count,
