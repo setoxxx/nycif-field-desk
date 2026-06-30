@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>NYCIF Special Overlays Test</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+    }
+    #map { position: fixed; inset: 0; }
+    .panel {
+      position: fixed;
+      z-index: 1000;
+      top: 14px;
+      left: 14px;
+      width: min(340px, calc(100vw - 28px));
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, .92);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 18px 45px rgba(0,0,0,.35);
+      backdrop-filter: blur(14px);
+    }
+    .panel h1 { margin: 0 0 6px; font-size: 17px; line-height: 1.15; }
+    .panel p { margin: 0 0 10px; font-size: 12px; color: #cbd5e1; line-height: 1.35; }
+    .checks { display: grid; gap: 8px; }
+    label {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.08);
+      cursor: pointer;
+      font-weight: 800;
+    }
+    input { width: 19px; height: 19px; }
+    #status {
+      margin-top: 10px;
+      padding: 9px 10px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.10);
+      font-size: 12px;
+      line-height: 1.35;
+      white-space: pre-wrap;
+    }
+    .legend { margin-top: 10px; font-size: 11px; color: #cbd5e1; line-height: 1.35; }
+    .marker-nightlife, .marker-intel {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,.94);
+      box-shadow: 0 8px 22px rgba(0,0,0,.32);
+      color: #fff;
+      font-size: 16px;
+    }
+    .marker-nightlife { background: #111827; }
+    .marker-intel { background: #14532d; }
+
+    .leaflet-popup-content-wrapper {
+      background: #ffffff;
+      color: #111827;
+      border-radius: 16px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, .28);
+      border: 1px solid rgba(15, 23, 42, .12);
+    }
+    .leaflet-popup-tip { background: #ffffff; }
+    .leaflet-popup-content { margin: 12px 14px; }
+    .leaflet-popup-close-button {
+      color: #111827 !important;
+      font-weight: 900;
+    }
+    .popup {
+      min-width: 220px;
+      max-width: 300px;
+      color: #111827;
+      background: #ffffff;
+      font: 500 12px/1.35 system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
+    }
+    .popup .tag {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 3px 7px;
+      background: rgba(15,23,42,.09);
+      color: #111827;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .popup h2 { margin: 7px 0 5px; color: #0f172a; font-size: 15px; line-height: 1.15; }
+    .popup p { margin: 4px 0; color: #111827; }
+    .popup strong { color: #0f172a; }
+    .popup .note { color: #4b5563; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <aside class="panel">
+    <h1>NYCIF Special Overlays Test</h1>
+    <p>Standalone diagnostic map. No daily events, no normal filters, no staged feed. This only tests generated overlay JSON.</p>
+    <div class="checks">
+      <label><input id="nightlifeToggle" type="checkbox"> <span>🍸 5PM Spots</span></label>
+      <label><input id="intelToggle" type="checkbox"> <span>🌿 Smoke / Vape Intel</span></label>
+    </div>
+    <div id="status">Ready. Turn on a layer.</div>
+    <div class="legend">Expected now: Smoke / Vape Intel should load 130 mapped public complaint pins. 5PM currently has zero pins until the source dataset is replaced.</div>
+  </aside>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map', { zoomControl: true }).setView([40.7128, -74.0060], 11);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
+
+    const statusEl = document.getElementById('status');
+    const layers = {
+      nightlife: L.layerGroup(),
+      intel: L.layerGroup()
+    };
+    const cache = {
+      nightlife: null,
+      intel: null
+    };
+
+    function status(text) { statusEl.textContent = text; }
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    }
+    function isNYCoord(lat, lng) {
+      return Number.isFinite(lat) && Number.isFinite(lng) && lat >= 40.4774 && lat <= 40.9176 && lng >= -74.2591 && lng <= -73.7004;
+    }
+    async function loadJson(url) {
+      const response = await fetch(`${url}?cache=${Date.now()}`, { cache: 'no-store', headers: { Accept: 'application/json' } });
+      if (!response.ok) throw new Error(`${url} HTTP ${response.status}`);
+      return response.json();
+    }
+    function normalize(row, index, type) {
+      const lat = Number.parseFloat(row.lat);
+      const lng = Number.parseFloat(row.lng);
+      if (!isNYCoord(lat, lng)) return null;
+      return {
+        id: row.id || row.raw_source_id || `${type}-${index}`,
+        title: row.title || row.subtype_label || (type === 'nightlife' ? '5PM spot' : 'Public complaint intel'),
+        label: row.subtype_label || row.license || row.complaint_type || '',
+        address: row.address || '',
+        borough: row.borough || '',
+        descriptor: row.descriptor || '',
+        note: row.data_note || '',
+        lat,
+        lng,
+        type
+      };
+    }
+    function popupHtml(pin) {
+      const tag = pin.type === 'nightlife' ? '🍸 5PM Spot' : '🌿 Public Complaint Intel';
+      return `<article class="popup"><div class="tag">${tag}</div><h2>${esc(pin.title)}</h2>${pin.label ? `<p><strong>${esc(pin.label)}</strong></p>` : ''}${pin.descriptor ? `<p>${esc(pin.descriptor)}</p>` : ''}${pin.address ? `<p>${esc(pin.address)}</p>` : ''}${pin.borough ? `<p>${esc(pin.borough)}</p>` : ''}${pin.note ? `<p class="note">${esc(pin.note)}</p>` : ''}</article>`;
+    }
+    function markerFor(pin) {
+      const cls = pin.type === 'nightlife' ? 'marker-nightlife' : 'marker-intel';
+      const iconText = pin.type === 'nightlife' ? '🍸' : '🌿';
+      const icon = L.divIcon({ className: `${cls}-shell`, html: `<div class="${cls}">${iconText}</div>`, iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -16] });
+      return L.marker([pin.lat, pin.lng], { icon, title: pin.title, zIndexOffset: pin.type === 'intel' ? 900 : 800 }).bindPopup(popupHtml(pin));
+    }
+    function fitVisible() {
+      const points = [];
+      Object.values(layers).forEach(layer => layer.eachLayer(marker => points.push(marker.getLatLng())));
+      if (!points.length) return;
+      map.fitBounds(L.latLngBounds(points), { padding: [70, 70], maxZoom: 13 });
+    }
+    async function toggleLayer(type, enabled) {
+      const config = type === 'nightlife'
+        ? { url: './data/nycif_nightlife_spots.json', label: '5PM Spots' }
+        : { url: './data/nycif_smoke_cannabis_vape_intel.json', label: 'Smoke / Vape Intel' };
+
+      if (!enabled) {
+        layers[type].remove();
+        status(`${config.label} hidden.`);
+        fitVisible();
+        return;
+      }
+
+      try {
+        status(`Loading ${config.label}...`);
+        if (!cache[type]) {
+          const rows = await loadJson(config.url);
+          cache[type] = Array.isArray(rows) ? rows.map((row, index) => normalize(row, index, type)).filter(Boolean) : [];
+        }
+        layers[type].clearLayers();
+        cache[type].forEach(pin => layers[type].addLayer(markerFor(pin)));
+        layers[type].addTo(map);
+        status(`${config.label} showing ${cache[type].length.toLocaleString()} mapped pins.`);
+        fitVisible();
+      } catch (error) {
+        console.error(error);
+        status(`${config.label} failed: ${error.message}`);
+      }
+    }
+
+    document.getElementById('nightlifeToggle').addEventListener('change', event => toggleLayer('nightlife', event.target.checked));
+    document.getElementById('intelToggle').addEventListener('change', event => toggleLayer('intel', event.target.checked));
+  </script>
+</body>
+</html>
