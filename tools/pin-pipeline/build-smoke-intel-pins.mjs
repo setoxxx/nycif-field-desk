@@ -3,7 +3,8 @@ import path from 'node:path';
 
 const SOURCE_URL = 'https://data.cityofnewyork.us/resource/erm2-nwe9.json';
 const FETCH_LIMIT = Number(process.env.NYCIF_SMOKE_FETCH_LIMIT || 50000);
-const LOOKBACK_DAYS = Number(process.env.NYCIF_SMOKE_LOOKBACK_DAYS || 180);
+const MAX_ROWS = Number(process.env.NYCIF_SMOKE_MAX_ROWS || 300000);
+const LOOKBACK_DAYS = Number(process.env.NYCIF_SMOKE_LOOKBACK_DAYS || 365);
 const OUT_DIR = 'data';
 const REPORT_DIR = 'data/reports';
 const OUT_FILE = path.join(OUT_DIR, 'nycif_smoke_cannabis_vape_intel.json');
@@ -11,9 +12,48 @@ const REVIEW_FILE = path.join(OUT_DIR, 'nycif_smoke_cannabis_vape_intel_needs_re
 const REPORT_FILE = path.join(REPORT_DIR, 'smoke_cannabis_vape_intel_report.json');
 
 const MATCH_RULES = [
-  { subtype: 'vape_complaint', label: 'Vape / e-cigarette complaint', icon: '💨', terms: ['vape', 'vaping', 'e-cigarette', 'e cigarette', 'electronic cigarette'] },
-  { subtype: 'smoke_shop_complaint', label: 'Smoke shop / smoking complaint', icon: '⚠️', terms: ['smoke shop', 'tobacco shop', 'smoking', 'cigar', 'hookah'] },
-  { subtype: 'cannabis_related_complaint', label: 'Cannabis-related complaint', icon: '🌿', terms: ['cannabis', 'marijuana', 'marihuana'] }
+  {
+    subtype: 'vape_complaint',
+    label: 'Vape / e-cigarette complaint',
+    icon: '💨',
+    bucket: 'vape_electronic_cigarette',
+    terms: ['vape', 'vaping', 'e-cigarette', 'e cigarette', 'ecigarette', 'electronic cigarette', 'electronic cig']
+  },
+  {
+    subtype: 'smoke_shop_complaint',
+    label: 'Smoke shop / tobacco retail complaint',
+    icon: '⚠️',
+    bucket: 'smoke_tobacco_retail',
+    terms: ['smoke shop', 'smokeshop', 'tobacco shop', 'tobacco store', 'cigar', 'hookah', 'bodega smoke', 'smoking store']
+  },
+  {
+    subtype: 'cannabis_related_complaint',
+    label: 'Cannabis-related complaint',
+    icon: '🌿',
+    bucket: 'cannabis_marijuana_weed',
+    terms: ['cannabis', 'marijuana', 'marihuana', 'weed', 'pot shop', 'dispensary', 'unlicensed cannabis', 'illegal cannabis']
+  },
+  {
+    subtype: 'smoke_odor_complaint',
+    label: 'Smoke / cannabis odor complaint',
+    icon: '💨',
+    bucket: 'odor_smoke_marijuana',
+    terms: ['smoke odor', 'smell of smoke', 'odor of smoke', 'marijuana odor', 'marihuana odor', 'cannabis odor', 'weed odor', 'smell of marijuana', 'smell of weed']
+  },
+  {
+    subtype: 'public_smoking_complaint',
+    label: 'Public / secondhand smoking complaint',
+    icon: '🚬',
+    bucket: 'public_secondhand_smoking',
+    terms: ['public smoking', 'smoking complaint', 'secondhand smoke', 'smoke free', 'smoke-free', 'smoking ban', 'clean indoor air', 'smoking in front']
+  },
+  {
+    subtype: 'unlicensed_sale_complaint',
+    label: 'Unlicensed sale complaint',
+    icon: '🔎',
+    bucket: 'unlicensed_illegal_sale',
+    terms: ['illegal sale', 'unlicensed sale', 'selling weed', 'selling cannabis', 'illegal smoke shop', 'unlicensed smoke shop']
+  }
 ];
 
 const BORO_NAME = {
@@ -48,11 +88,14 @@ function allText(row) {
   return [
     row.complaint_type,
     row.descriptor,
+    row.location_type,
     row.incident_address,
     row.street_name,
-    row.location_type,
+    row.cross_street_1,
+    row.cross_street_2,
     row.resolution_description,
-    row.agency_name
+    row.agency_name,
+    row.status
   ].map(clean).join(' ').toLowerCase();
 }
 
@@ -97,7 +140,7 @@ function rawId(row, index) {
 function normalizePin(row, index) {
   const rule = matchRule(row);
   const sourceId = rawId(row, index);
-  if (!rule) return { status: 'rejected', reason: 'no_smoke_or_vape_match', raw_source_id: sourceId, raw: row };
+  if (!rule) return { status: 'rejected', reason: 'no_smoke_vape_cannabis_match', raw_source_id: sourceId, raw: row };
 
   const coords = coordsFrom(row);
   const address = addressFrom(row);
@@ -110,20 +153,22 @@ function normalizePin(row, index) {
   const base = {
     id: `smoke-intel-${sourceId}`,
     layer: 'smoke_cannabis_vape_intel',
-    category: 'nightlife_intel',
+    category: 'public_complaint_intel',
     subtype: rule.subtype,
     subtype_label: rule.label,
+    match_bucket: rule.bucket,
     icon: rule.icon,
     title: titleParts.join(' — ') || rule.label,
     address,
     borough,
     complaint_type: complaintType,
     descriptor,
+    location_type: clean(row.location_type || ''),
     created_date: createdDate,
     source: 'NYC 311 Service Requests',
     source_url: SOURCE_URL,
     raw_source_id: sourceId,
-    data_note: '311 complaint record; not proof of illegal activity.',
+    data_note: '311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.',
     updated_at: new Date().toISOString(),
     raw: row
   };
@@ -135,17 +180,16 @@ function normalizePin(row, index) {
   return { status: 'mapped', location_quality: coords.quality, lat: coords.lat, lng: coords.lng, ...base };
 }
 
-function dedupePins(pins) {
+function dedupeBySourceId(pins) {
   const seen = new Set();
   const output = [];
   let duplicateCount = 0;
   for (const pin of pins) {
-    const key = [pin.subtype, norm(pin.address), Number(pin.lat).toFixed(5), Number(pin.lng).toFixed(5)].join('|');
-    if (seen.has(key)) {
+    if (seen.has(pin.raw_source_id)) {
       duplicateCount += 1;
       continue;
     }
-    seen.add(key);
+    seen.add(pin.raw_source_id);
     output.push(pin);
   }
   return { pins: output, duplicate_count: duplicateCount };
@@ -157,40 +201,63 @@ function countReasons(items) {
   return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([reason, count]) => ({ reason, count }));
 }
 
+function countBy(items, key) {
+  return items.reduce((acc, item) => {
+    const value = clean(typeof key === 'function' ? key(item) : item[key]) || 'unknown';
+    acc[value] = (acc[value] || 0) + 1;
+    return acc;
+  }, {});
+}
+
 function sinceDate() {
   const date = new Date();
   date.setUTCDate(date.getUTCDate() - LOOKBACK_DAYS);
   return date.toISOString().slice(0, 10);
 }
 
+function buildFetchUrl(since, offset) {
+  const where = encodeURIComponent(`created_date >= '${since}T00:00:00'`);
+  const order = encodeURIComponent('created_date DESC');
+  const select = encodeURIComponent([
+    'unique_key', 'created_date', 'complaint_type', 'descriptor', 'location_type', 'incident_address',
+    'street_name', 'city', 'incident_zip', 'borough', 'latitude', 'longitude', 'location',
+    'resolution_description', 'agency_name', 'status', 'cross_street_1', 'cross_street_2'
+  ].join(','));
+  return `${SOURCE_URL}?$select=${select}&$where=${where}&$order=${order}&$limit=${FETCH_LIMIT}&$offset=${offset}`;
+}
+
+async function fetchRows() {
+  const since = sinceDate();
+  const rows = [];
+  for (let offset = 0; offset < MAX_ROWS; offset += FETCH_LIMIT) {
+    const url = buildFetchUrl(since, offset);
+    console.log(`Fetching 311 smoke/vape/cannabis candidate rows ${offset}-${offset + FETCH_LIMIT}`);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Source fetch failed: HTTP ${response.status}`);
+    const batch = await response.json();
+    if (!Array.isArray(batch)) throw new Error('Source did not return an array');
+    rows.push(...batch);
+    if (batch.length < FETCH_LIMIT) break;
+  }
+  return { rows, since };
+}
+
 async function main() {
   await fs.mkdir(OUT_DIR, { recursive: true });
   await fs.mkdir(REPORT_DIR, { recursive: true });
 
-  const since = sinceDate();
-  const where = encodeURIComponent(`created_date >= '${since}T00:00:00'`);
-  const order = encodeURIComponent('created_date DESC');
-  const url = `${SOURCE_URL}?$where=${where}&$order=${order}&$limit=${FETCH_LIMIT}`;
-  console.log(`Fetching ${url}`);
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`Source fetch failed: HTTP ${response.status}`);
-  const rows = await response.json();
-  if (!Array.isArray(rows)) throw new Error('Source did not return an array');
-
+  const { rows, since } = await fetchRows();
   const normalized = rows.map(normalizePin);
   const mappedRaw = normalized.filter(item => item.status === 'mapped');
   const needsReview = normalized.filter(item => item.status === 'needs_review');
   const rejected = normalized.filter(item => item.status === 'rejected');
-  const deduped = dedupePins(mappedRaw);
-
-  const subtypeCounts = deduped.pins.reduce((acc, pin) => {
-    acc[pin.subtype] = (acc[pin.subtype] || 0) + 1;
-    return acc;
-  }, {});
+  const deduped = dedupeBySourceId(mappedRaw);
 
   const report = {
     source_url: SOURCE_URL,
     source_rows: rows.length,
+    fetch_limit: FETCH_LIMIT,
+    max_rows: MAX_ROWS,
     lookback_days: LOOKBACK_DAYS,
     since_date: since,
     matched_rows: mappedRaw.length + needsReview.length,
@@ -198,11 +265,14 @@ async function main() {
     needs_review: needsReview.length,
     rejected: rejected.length,
     duplicate_count: deduped.duplicate_count,
-    subtype_counts: subtypeCounts,
+    subtype_counts: countBy(deduped.pins, 'subtype'),
+    match_bucket_counts: countBy(deduped.pins, 'match_bucket'),
+    complaint_type_counts: countBy(deduped.pins, 'complaint_type'),
+    descriptor_counts: countBy(deduped.pins, 'descriptor'),
     top_review_reasons: countReasons(needsReview).slice(0, 10),
     top_rejection_reasons: countReasons(rejected).slice(0, 10),
     generated_at: new Date().toISOString(),
-    data_note: '311 complaint records are public complaint intel, not proof of illegal activity.'
+    data_note: '311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing.'
   };
 
   await fs.writeFile(OUT_FILE, `${JSON.stringify(deduped.pins, null, 2)}\n`);
