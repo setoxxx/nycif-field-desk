@@ -4,12 +4,38 @@
     const style = document.createElement('style');
     style.id = 'nycif-ui-polish-v01';
     style.textContent = `
-      .locate-btn {
+      .locate-btn,
+      .user-location-shell,
+      .user-location {
         display: none !important;
       }
 
+      .status {
+        display: none !important;
+      }
+
+      .leaflet-overlay-pane svg path[stroke="#d40000"] {
+        display: none !important;
+      }
+
+      .pill.layers-pill {
+        top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+        left: calc(env(safe-area-inset-left, 0px) + 8px) !important;
+      }
+
+      .live-alerts-button {
+        top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+        left: calc(env(safe-area-inset-left, 0px) + 102px) !important;
+        min-height: 36px !important;
+      }
+
+      .live-alerts-panel {
+        top: calc(env(safe-area-inset-top, 0px) + 52px) !important;
+        left: calc(env(safe-area-inset-left, 0px) + 8px) !important;
+      }
+
       .near-me-btn {
-        top: calc(env(safe-area-inset-top, 0px) + 58px) !important;
+        top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
         right: calc(env(safe-area-inset-right, 0px) + 8px) !important;
         min-height: 36px !important;
         padding: 0 13px !important;
@@ -17,16 +43,6 @@
         color: #111827 !important;
         border: 1px solid rgba(17, 24, 39, .12) !important;
         box-shadow: 0 8px 24px rgba(0,0,0,.18) !important;
-      }
-
-      .live-alerts-button {
-        top: calc(env(safe-area-inset-top, 0px) + 58px) !important;
-        left: calc(env(safe-area-inset-left, 0px) + 8px) !important;
-        min-height: 36px !important;
-      }
-
-      .live-alerts-panel {
-        top: calc(env(safe-area-inset-top, 0px) + 102px) !important;
       }
 
       .live-alerts-close {
@@ -69,12 +85,22 @@
       }
 
       @media (max-width: 720px) {
-        .near-me-btn,
-        .live-alerts-button {
-          top: calc(env(safe-area-inset-top, 0px) + 56px) !important;
+        .brand-card {
+          display: none !important;
         }
+
+        .pill.layers-pill,
+        .live-alerts-button,
+        .near-me-btn {
+          top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+        }
+
+        .live-alerts-button {
+          left: calc(env(safe-area-inset-left, 0px) + 94px) !important;
+        }
+
         .live-alerts-panel {
-          top: calc(env(safe-area-inset-top, 0px) + 100px) !important;
+          top: calc(env(safe-area-inset-top, 0px) + 52px) !important;
         }
       }
     `;
@@ -105,7 +131,6 @@
       const layersPanel = document.getElementById('layersPanel');
       const layersBtn = document.getElementById('layersBtn');
       const livePanel = document.getElementById('liveAlertsPanel');
-      const liveBtn = document.getElementById('liveAlertsBtn');
 
       const insideLayers = !!target.closest?.('#layersPanel, #layersBtn');
       const insideLive = !!target.closest?.('#liveAlertsPanel, #liveAlertsBtn');
