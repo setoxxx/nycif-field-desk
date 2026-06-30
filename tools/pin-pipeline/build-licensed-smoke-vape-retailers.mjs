@@ -71,7 +71,7 @@ function countValues(rows, field, limit = 20) {
 }
 
 function licenseText(row) {
-  return clean(get(row, ['business_category', 'license_type', 'license_category', 'license_description', 'industry', 'license_type_description', 'detail']));
+  return clean(get(row, ['business_category', 'license_category', 'license_description', 'license_type_description', 'detail', 'license_type', 'industry']));
 }
 
 function rowMatches(row) {
@@ -210,10 +210,12 @@ function countReasons(items) {
 function buildSourceUrl() {
   const where = [
     "lower(business_category) like '%tobacco%'",
+    "lower(business_category) like '%electronic cigarette%'",
     "lower(business_category) like '%cigarette%'",
     "lower(business_category) like '%vape%'",
     "lower(business_category) like '%smoke%'",
     "lower(detail) like '%tobacco%'",
+    "lower(detail) like '%electronic cigarette%'",
     "lower(detail) like '%cigarette%'",
     "lower(detail) like '%vape%'",
     "lower(dba_trade_name) like '%tobacco%'",
@@ -223,10 +225,7 @@ function buildSourceUrl() {
     "lower(business_name) like '%tobacco%'",
     "lower(business_name) like '%cigarette%'",
     "lower(business_name) like '%vape%'",
-    "lower(business_name) like '%smoke%'",
-    "lower(license_type) like '%tobacco%'",
-    "lower(license_type) like '%cigarette%'",
-    "lower(license_type) like '%vape%'"
+    "lower(business_name) like '%smoke%'"
   ].join(' OR ');
   const params = new URLSearchParams();
   params.set('$select', '*');

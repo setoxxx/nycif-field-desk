@@ -1,13 +1,57 @@
 {
   "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-  "source_rows": 50000,
+  "queried_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json?%24select=*&%24where=lower%28business_category%29+like+%27%25tobacco%25%27+OR+lower%28business_category%29+like+%27%25electronic+cigarette%25%27+OR+lower%28business_category%29+like+%27%25vape%25%27+OR+lower%28detail%29+like+%27%25tobacco%25%27+OR+lower%28detail%29+like+%27%25electronic+cigarette%25%27+OR+lower%28detail%29+like+%27%25vape%25%27&%24limit=50000",
+  "source_rows": 9310,
   "fetch_limit": 50000,
-  "matched_rows": 0,
-  "mapped_total": 0,
-  "needs_review": 0,
-  "rejected": 50000,
-  "duplicate_count": 0,
-  "subtype_counts": {},
+  "matched_rows": 9310,
+  "mapped_total": 9053,
+  "needs_review": 64,
+  "rejected": 0,
+  "duplicate_count": 193,
+  "subtype_counts": {
+    "licensed_electronic_cigarette_retailer": 2645,
+    "licensed_tobacco_retailer": 6408
+  },
+  "license_type_sample": [
+    {
+      "value": "Premises",
+      "count": 9310
+    }
+  ],
+  "license_status_sample": [
+    {
+      "value": "Active",
+      "count": 5073
+    },
+    {
+      "value": "Expired",
+      "count": 2669
+    },
+    {
+      "value": "Surrendered",
+      "count": 922
+    },
+    {
+      "value": "Revoked",
+      "count": 529
+    },
+    {
+      "value": "Suspended",
+      "count": 99
+    },
+    {
+      "value": "Voided",
+      "count": 14
+    },
+    {
+      "value": "Out of Business",
+      "count": 3
+    },
+    {
+      "value": "Close",
+      "count": 1
+    }
+  ],
   "source_fields_sample": [
     "address_borough",
     "address_building",
@@ -16,7 +60,6 @@
     "address_street_name",
     "address_type",
     "address_zip",
-    "apt_suite",
     "bbl",
     "bin",
     "business_category",
@@ -28,7 +71,6 @@
     "contact_phone",
     "council_district",
     "dba_trade_name",
-    "detail",
     "latitude",
     "lic_expir_dd",
     "license_creation_date",
@@ -36,16 +78,15 @@
     "license_status",
     "license_type",
     "longitude",
-    "nta",
-    "unit_type"
+    "nta"
   ],
-  "top_review_reasons": [],
-  "top_rejection_reasons": [
+  "top_review_reasons": [
     {
-      "reason": "no_licensed_smoke_vape_match",
-      "count": 50000
+      "reason": "needs_geocode",
+      "count": 64
     }
   ],
-  "generated_at": "2026-06-30T15:37:01.766Z",
+  "top_rejection_reasons": [],
+  "generated_at": "2026-06-30T15:55:57.921Z",
   "data_note": "Official license/business records; confirm current license status with the source before publication or enforcement use."
 }
