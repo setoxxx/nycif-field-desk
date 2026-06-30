@@ -1,11 +1,25 @@
 {
   "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
-  "source_rows": 0,
-  "matched_rows": 0,
-  "mapped_total": 0,
+  "source_rows": 50000,
+  "lookback_days": 180,
+  "since_date": "2026-01-01",
+  "matched_rows": 165,
+  "mapped_total": 130,
   "needs_review": 0,
-  "rejected": 0,
-  "duplicate_count": 0,
-  "status": "placeholder_until_pipeline_runs",
-  "generated_at": null
+  "rejected": 49835,
+  "duplicate_count": 35,
+  "subtype_counts": {
+    "vape_complaint": 72,
+    "cannabis_related_complaint": 46,
+    "smoke_shop_complaint": 12
+  },
+  "top_review_reasons": [],
+  "top_rejection_reasons": [
+    {
+      "reason": "no_smoke_or_vape_match",
+      "count": 49835
+    }
+  ],
+  "generated_at": "2026-06-30T14:19:20.795Z",
+  "data_note": "311 complaint records are public complaint intel, not proof of illegal activity."
 }
