@@ -54,7 +54,7 @@
       white-space: pre-wrap;
     }
     .legend { margin-top: 10px; font-size: 11px; color: #cbd5e1; line-height: 1.35; }
-    .marker-nightlife, .marker-intel, .marker-licensed {
+    .marker-nightlife, .marker-active, .marker-intel, .marker-licensed {
       display: grid;
       place-items: center;
       width: 32px;
@@ -66,6 +66,7 @@
       font-size: 16px;
     }
     .marker-nightlife { background: #111827; }
+    .marker-active { background: #b91c1c; }
     .marker-intel { background: #14532d; }
     .marker-licensed { background: #7c2d12; }
 
@@ -113,12 +114,13 @@
     <p>Standalone diagnostic map. No daily events, no normal filters, no staged feed. This only tests generated overlay JSON.</p>
     <div class="checks">
       <label><input id="nightlifeToggle" type="checkbox"> <span>🍸 5PM Spots</span></label>
+      <label><input id="activeNightlifeToggle" type="checkbox"> <span>🔥 Active 5PM Feed</span></label>
       <label><input id="intelToggle" type="checkbox"> <span>🌿 Smoke / Vape Complaints</span></label>
       <label><input id="licensedToggle" type="checkbox"> <span>🏪 Licensed Smoke / Vape Retailers</span></label>
       <label id="licensedActiveOnlyWrap" hidden><input id="licensedActiveOnly" type="checkbox" checked> <span>Active licenses only</span></label>
     </div>
     <div id="status">Ready. Turn on a layer.</div>
-    <div class="legend">Smoke / Vape Complaints are 311 public complaint records. Licensed Retailers load from the slim map JSON and cluster for performance.</div>
+    <div class="legend">Active 5PM Feed is a public-record activity signal for field review, not proof of crowd size, popularity, wrongdoing, or violation. Smoke / Vape Complaints are 311 public complaint records. Licensed Retailers load from the slim map JSON and cluster for performance.</div>
   </aside>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -132,6 +134,13 @@
     const licensedActiveOnlyToggle = document.getElementById('licensedActiveOnly');
     const layers = {
       nightlife: L.layerGroup(),
+      activeNightlife: L.markerClusterGroup({
+        chunkedLoading: true,
+        chunkInterval: 40,
+        maxClusterRadius: 42,
+        showCoverageOnHover: false,
+        spiderfyOnMaxZoom: true
+      }),
       intel: L.layerGroup(),
       licensed: L.markerClusterGroup({
         chunkedLoading: true,
@@ -143,11 +152,13 @@
     };
     const cacheRaw = {
       nightlife: null,
+      activeNightlife: null,
       intel: null,
       licensed: null
     };
     const cacheMeta = {
       nightlife: null,
+      activeNightlife: null,
       intel: null,
       licensed: null
     };
@@ -155,6 +166,10 @@
     function status(text) { statusEl.textContent = text; }
     function esc(value) {
       return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    }
+    function fmt(value) {
+      const number = Number(value);
+      return Number.isFinite(number) ? number.toLocaleString() : '';
     }
     function isNYCoord(lat, lng) {
       return Number.isFinite(lat) && Number.isFinite(lng) && lat >= 40.4774 && lat <= 40.9176 && lng >= -74.2591 && lng <= -73.7004;
@@ -201,7 +216,7 @@
         `Markers: ${normalized.length.toLocaleString()}`
       ];
       if (firstPin) {
-        lines.push(`First: ${firstPin.title} | ${firstPin.label || firstPin.license || 'n/a'} | ${firstPin.lat.toFixed(4)}, ${firstPin.lng.toFixed(4)}`);
+        lines.push(`First: ${firstPin.title} | ${firstPin.label || firstPin.feedBucket || firstPin.license || 'n/a'} | ${firstPin.lat.toFixed(4)}, ${firstPin.lng.toFixed(4)}`);
       }
       return lines.join('\n');
     }
@@ -215,7 +230,7 @@
       if (!isNYCoord(lat, lng)) return null;
       return {
         id: row.id || row.raw_source_id || `${type}-${index}`,
-        title: row.title || row.subtype_label || (type === 'nightlife' ? '5PM spot' : type === 'licensed' ? 'Licensed retailer' : 'Public complaint intel'),
+        title: row.title || row.subtype_label || (type === 'nightlife' ? '5PM spot' : type === 'activeNightlife' ? 'Active 5PM feed candidate' : type === 'licensed' ? 'Licensed retailer' : 'Public complaint intel'),
         label: row.subtype_label || row.license || row.complaint_type || '',
         address: row.address || '',
         borough: row.borough || '',
@@ -223,20 +238,35 @@
         license: row.license || '',
         expiration: row.license_expiration_date || '',
         note: row.data_note || '',
+        feedBucket: row.feed_bucket || '',
+        feedBuckets: Array.isArray(row.feed_buckets) ? row.feed_buckets.join(', ') : '',
+        trendScore: row.trend_score ?? '',
+        trendTier: row.trend_tier || '',
+        lastComplaintDate: row.last_complaint_date || '',
+        complaints30d100ft: row.complaints_30d_100ft ?? '',
+        complaints90d100ft: row.complaints_90d_100ft ?? '',
+        complaints365d100ft: row.complaints_365d_100ft ?? '',
+        lateNightComplaints365d: row.late_night_complaints_365d ?? '',
+        weekendComplaints365d: row.weekend_complaints_365d ?? '',
+        topNoiseDescriptors: Array.isArray(row.top_noise_descriptors) ? row.top_noise_descriptors.join(', ') : '',
+        editorialNote: row.editorial_note || '',
         lat,
         lng,
         type
       };
     }
     function popupHtml(pin) {
+      if (pin.type === 'activeNightlife') {
+        return `<article class="popup"><div class="tag">🔥 Active 5PM Feed</div><h2>${esc(pin.title)}</h2>${pin.label ? `<p><strong>${esc(pin.label)}</strong></p>` : ''}${pin.address ? `<p>${esc(pin.address)}</p>` : ''}${pin.borough ? `<p>${esc(pin.borough)}</p>` : ''}${pin.feedBucket ? `<p><strong>Feed bucket:</strong> ${esc(pin.feedBucket)}</p>` : ''}${pin.trendTier ? `<p><strong>Trend tier:</strong> ${esc(pin.trendTier)}</p>` : ''}${pin.trendScore !== '' ? `<p><strong>Trend score:</strong> ${esc(fmt(pin.trendScore))}</p>` : ''}${pin.lastComplaintDate ? `<p><strong>Last complaint date:</strong> ${esc(pin.lastComplaintDate)}</p>` : ''}<p><strong>Nearby complaints:</strong> 30d ${esc(fmt(pin.complaints30d100ft))} / 90d ${esc(fmt(pin.complaints90d100ft))} / 365d ${esc(fmt(pin.complaints365d100ft))}</p>${pin.lateNightComplaints365d !== '' || pin.weekendComplaints365d !== '' ? `<p><strong>Late-night / weekend:</strong> ${esc(fmt(pin.lateNightComplaints365d))} / ${esc(fmt(pin.weekendComplaints365d))}</p>` : ''}${pin.topNoiseDescriptors ? `<p><strong>Top descriptors:</strong> ${esc(pin.topNoiseDescriptors)}</p>` : ''}<p class="note">Public-record activity signal only. Not proof of crowd size, popularity, wrongdoing, violation, or unsafe conditions. Verify before publication or field assignment.</p></article>`;
+      }
       const tag = pin.type === 'nightlife' ? '🍸 5PM Spot' : pin.type === 'licensed' ? '🏪 Licensed Retailer' : '🌿 Public Complaint Intel';
       return `<article class="popup"><div class="tag">${tag}</div><h2>${esc(pin.title)}</h2>${pin.label ? `<p><strong>${esc(pin.label)}</strong></p>` : ''}${pin.descriptor ? `<p>${esc(pin.descriptor)}</p>` : ''}${pin.license ? `<p>${esc(pin.license)}</p>` : ''}${pin.expiration ? `<p><small>License expiration: ${esc(pin.expiration)}</small></p>` : ''}${pin.address ? `<p>${esc(pin.address)}</p>` : ''}${pin.borough ? `<p>${esc(pin.borough)}</p>` : ''}${pin.note ? `<p class="note">${esc(pin.note)}</p>` : ''}</article>`;
     }
     function markerFor(pin) {
-      const cls = pin.type === 'nightlife' ? 'marker-nightlife' : pin.type === 'licensed' ? 'marker-licensed' : 'marker-intel';
-      const iconText = pin.type === 'nightlife' ? '🍸' : pin.type === 'licensed' ? '🏪' : '🌿';
+      const cls = pin.type === 'activeNightlife' ? 'marker-active' : pin.type === 'nightlife' ? 'marker-nightlife' : pin.type === 'licensed' ? 'marker-licensed' : 'marker-intel';
+      const iconText = pin.type === 'activeNightlife' ? '🔥' : pin.type === 'nightlife' ? '🍸' : pin.type === 'licensed' ? '🏪' : '🌿';
       const icon = L.divIcon({ className: `${cls}-shell`, html: `<div class="${cls}">${iconText}</div>`, iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -16] });
-      return L.marker([pin.lat, pin.lng], { icon, title: pin.title, zIndexOffset: pin.type === 'licensed' ? 950 : pin.type === 'intel' ? 900 : 800 }).bindPopup(popupHtml(pin));
+      return L.marker([pin.lat, pin.lng], { icon, title: pin.title, zIndexOffset: pin.type === 'licensed' ? 950 : pin.type === 'activeNightlife' ? 925 : pin.type === 'intel' ? 900 : 800 }).bindPopup(popupHtml(pin));
     }
     function fitVisible() {
       const points = [];
@@ -263,6 +293,7 @@
     async function toggleLayer(type, enabled) {
       const configs = {
         nightlife: { url: './data/nycif_nightlife_spots.json', label: '5PM Spots' },
+        activeNightlife: { url: './data/nycif_active_nightlife_feed.json', label: 'Active 5PM Feed' },
         intel: { url: './data/nycif_smoke_cannabis_vape_intel.json', label: 'Smoke / Vape Complaints' },
         licensed: { url: './data/nycif_licensed_smoke_vape_retailers_slim.json', label: 'Licensed Smoke / Vape Retailers' }
       };
@@ -292,6 +323,7 @@
     }
 
     document.getElementById('nightlifeToggle').addEventListener('change', event => toggleLayer('nightlife', event.target.checked));
+    document.getElementById('activeNightlifeToggle').addEventListener('change', event => toggleLayer('activeNightlife', event.target.checked));
     document.getElementById('intelToggle').addEventListener('change', event => toggleLayer('intel', event.target.checked));
     document.getElementById('licensedToggle').addEventListener('change', event => toggleLayer('licensed', event.target.checked));
     licensedActiveOnlyToggle.addEventListener('change', () => {
