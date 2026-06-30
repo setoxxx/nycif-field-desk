@@ -1,0 +1,51 @@
+{
+  "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+  "source_rows": 50000,
+  "fetch_limit": 50000,
+  "matched_rows": 0,
+  "mapped_total": 0,
+  "needs_review": 0,
+  "rejected": 50000,
+  "duplicate_count": 0,
+  "subtype_counts": {},
+  "source_fields_sample": [
+    "address_borough",
+    "address_building",
+    "address_city",
+    "address_state",
+    "address_street_name",
+    "address_type",
+    "address_zip",
+    "apt_suite",
+    "bbl",
+    "bin",
+    "business_category",
+    "business_name",
+    "business_unique_id",
+    "census_block_2010_",
+    "census_tract",
+    "community_board",
+    "contact_phone",
+    "council_district",
+    "dba_trade_name",
+    "detail",
+    "latitude",
+    "lic_expir_dd",
+    "license_creation_date",
+    "license_nbr",
+    "license_status",
+    "license_type",
+    "longitude",
+    "nta",
+    "unit_type"
+  ],
+  "top_review_reasons": [],
+  "top_rejection_reasons": [
+    {
+      "reason": "no_licensed_smoke_vape_match",
+      "count": 50000
+    }
+  ],
+  "generated_at": "2026-06-30T15:31:21.812Z",
+  "data_note": "Official license/business records; confirm current license status with the source before publication or enforcement use."
+}
