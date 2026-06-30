@@ -1,25 +1,48 @@
 {
-  "source_url": "https://data.cityofnewyork.us/resource/hdtn-j62g.json",
-  "source_rows": 12,
-  "category_matches": 0,
+  "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
+  "queried_url": "https://data.ny.gov/resource/knqy-j52b.json?%24limit=50000&%24where=county+in+%28%27NEW+YORK%27%2C%27KINGS%27%2C%27QUEENS%27%2C%27BRONX%27%2C%27RICHMOND%27%29",
+  "source_rows": 20401,
+  "matched_rows": 11278,
+  "category_matches": 11278,
   "source_coordinate_matches": 0,
-  "geocoded_matches": 0,
-  "mapped_total": 0,
-  "needs_review": 0,
-  "rejected": 12,
-  "duplicate_count": 0,
-  "group_one": 0,
-  "group_two": 0,
-  "top_review_reasons": [],
+  "geocoded_matches": 10672,
+  "geocode_lookups": 11211,
+  "geocode_failures": 605,
+  "cache_file": "data/location_cache.json",
+  "mapped_total": 10653,
+  "needs_review": 606,
+  "rejected": 9123,
+  "duplicate_count": 19,
+  "group_one": 3683,
+  "group_two": 6970,
+  "top_review_reasons": [
+    {
+      "reason": "geocode_failed",
+      "count": 606
+    }
+  ],
   "top_rejection_reasons": [
     {
+      "reason": "excluded_business_type",
+      "count": 8413
+    },
+    {
       "reason": "no_nightlife_match",
-      "count": 12
+      "count": 710
     }
   ],
   "source_fields_sample": [
-    "community_board",
-    "unique_key"
+    "certificate_number",
+    "county",
+    "dba",
+    "license_expiration_date",
+    "license_type_code",
+    "method_of_operation",
+    "premise_address",
+    "premise_address_2",
+    "premise_city",
+    "premise_name",
+    "serial_number"
   ],
-  "generated_at": "2026-06-30T15:37:10.513Z"
+  "generated_at": "2026-06-30T18:28:07.226Z"
 }
