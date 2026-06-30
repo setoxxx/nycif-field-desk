@@ -166,88 +166,103 @@
         grid-template-columns: 1fr 1fr;
         align-items: center;
         overflow: hidden;
-        min-width: 166px;
-        min-height: 34px;
+        min-width: 156px;
+        min-height: 32px;
         border-radius: 999px;
-        border: 1px solid rgba(0,0,0,.12);
-        background: rgba(246,246,247,.92);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 5px 14px rgba(0,0,0,.12);
-        backdrop-filter: blur(14px) saturate(1.2);
-        -webkit-backdrop-filter: blur(14px) saturate(1.2);
+        border: 1px solid rgba(0,122,255,.24);
+        background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(236,245,255,.94));
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 4px 10px rgba(0,122,255,.12);
         vertical-align: middle;
       }
       .calendar-split-segment {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        min-height: 34px;
-        padding: 7px 11px;
+        gap: 5px;
+        min-height: 32px;
+        padding: 6px 9px;
         text-decoration: none;
-        font-size: 12.5px;
-        font-weight: 700;
+        font-size: 12px;
+        font-weight: 750;
         line-height: 1;
         white-space: nowrap;
-        color: #111;
+        color: #0a2540;
         transition: background .15s ease, opacity .15s ease;
       }
       .calendar-split-segment:hover {
-        background: rgba(0,0,0,.045);
+        background: rgba(0,122,255,.075);
       }
       .calendar-split-segment:focus-visible {
         outline: 2px solid rgba(0,122,255,.9);
         outline-offset: -3px;
       }
       .calendar-split-icon {
+        position: relative;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         width: 18px;
         height: 18px;
-        border-radius: 50%;
-        font-size: 12px;
-        font-weight: 800;
+        border-radius: 5px;
+        background: #fff;
+        border: 1px solid rgba(0,122,255,.22);
+        box-shadow: 0 1px 2px rgba(0,0,0,.08);
+        color: #007aff;
+        font-size: 10px;
+        font-weight: 900;
         flex: 0 0 auto;
       }
-      .calendar-android {
-        border-right: 1px solid rgba(0,0,0,.1);
+      .calendar-split-icon::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        border-radius: 4px 4px 0 0;
+        background: #ff3b30;
       }
-      .calendar-android .calendar-split-icon {
-        background: linear-gradient(135deg, #34a853, #3ddc84);
-        color: #fff;
+      .calendar-split-icon span {
+        position: relative;
+        z-index: 1;
+        margin-top: 4px;
+      }
+      .calendar-google {
+        border-right: 1px solid rgba(0,122,255,.16);
+      }
+      .calendar-google .calendar-split-icon {
+        color: #1a73e8;
       }
       .calendar-apple .calendar-split-icon {
-        background: #111;
-        color: #fff;
-        font-size: 14px;
+        color: #007aff;
       }
       .event-item .quick-actions .calendar-split-pill {
-        flex: 1 1 166px;
+        flex: 1 1 156px;
       }
       @media (prefers-color-scheme: dark) {
         .calendar-split-pill {
-          border-color: rgba(255,255,255,.16);
-          background: rgba(32,32,34,.88);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 5px 14px rgba(0,0,0,.22);
+          border-color: rgba(10,132,255,.35);
+          background: linear-gradient(180deg, rgba(54,61,72,.95), rgba(30,38,50,.94));
+          box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 4px 10px rgba(0,0,0,.22);
         }
         .calendar-split-segment {
-          color: #fff;
+          color: #f5f7fb;
         }
         .calendar-split-segment:hover {
-          background: rgba(255,255,255,.08);
+          background: rgba(10,132,255,.13);
         }
-        .calendar-android {
+        .calendar-google {
           border-right-color: rgba(255,255,255,.14);
         }
       }
       @media (max-width: 640px) {
         .calendar-split-pill {
-          min-width: 180px;
-          min-height: 38px;
+          min-width: 164px;
+          min-height: 36px;
         }
         .calendar-split-segment {
-          min-height: 38px;
-          font-size: 13px;
+          min-height: 36px;
+          font-size: 12.5px;
         }
       }
     `;
@@ -259,14 +274,14 @@
     split.className = 'calendar-split-pill';
     split.setAttribute('aria-label', 'Add this event to calendar');
 
-    const android = document.createElement('a');
-    android.className = 'calendar-split-segment calendar-android';
-    android.href = googleCalendarHref(row, fallback);
-    android.target = '_blank';
-    android.rel = 'noopener';
-    android.setAttribute('aria-label', `Add ${fallback.title || 'event'} to Google Calendar from ${SOURCE_LABEL}`);
-    android.innerHTML = '<span class="calendar-split-icon" aria-hidden="true">G</span><span>Google</span>';
-    android.addEventListener('click', event => {
+    const google = document.createElement('a');
+    google.className = 'calendar-split-segment calendar-google';
+    google.href = googleCalendarHref(row, fallback);
+    google.target = '_blank';
+    google.rel = 'noopener';
+    google.setAttribute('aria-label', `Add ${fallback.title || 'event'} to Google Calendar from ${SOURCE_LABEL}`);
+    google.innerHTML = '<span class="calendar-split-icon" aria-hidden="true"><span>G</span></span><span>Calendar</span>';
+    google.addEventListener('click', event => {
       event.stopPropagation();
       const status = document.getElementById('status');
       if (status) status.textContent = `Opening Google Calendar with ${SOURCE_LABEL} in the subject.`;
@@ -277,14 +292,14 @@
     apple.href = appleCalendarHref(row, fallback);
     apple.download = calendarFilename(row, fallback.title || 'event');
     apple.setAttribute('aria-label', `Add ${fallback.title || 'event'} to Apple Calendar from ${SOURCE_LABEL}`);
-    apple.innerHTML = '<span class="calendar-split-icon" aria-hidden="true"></span><span>Apple</span>';
+    apple.innerHTML = '<span class="calendar-split-icon" aria-hidden="true"><span></span></span><span>Calendar</span>';
     apple.addEventListener('click', event => {
       event.stopPropagation();
       const status = document.getElementById('status');
       if (status) status.textContent = `Apple Calendar file created with ${SOURCE_LABEL} in the subject.`;
     });
 
-    split.appendChild(android);
+    split.appendChild(google);
     split.appendChild(apple);
     return split;
   }
