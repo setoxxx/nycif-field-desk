@@ -71,12 +71,14 @@ function countValues(rows, field, limit = 20) {
 }
 
 function licenseText(row) {
-  return clean(get(row, ['license_type', 'license_category', 'license_description', 'industry', 'business_category', 'license_type_description']));
+  return clean(get(row, ['business_category', 'license_type', 'license_category', 'license_description', 'industry', 'license_type_description', 'detail']));
 }
 
 function rowMatches(row) {
   const text = [
+    row.business_category,
     licenseText(row),
+    row.license_type,
     row.business_name,
     row.business_name_2,
     row.dba,
@@ -89,7 +91,7 @@ function rowMatches(row) {
 }
 
 function subtypeFor(row) {
-  const text = [licenseText(row), row.detail].map(norm).join(' ');
+  const text = [row.business_category, licenseText(row), row.license_type, row.detail].map(norm).join(' ');
   if (/electronic cigarette|e-cigarette|e cigarette|vape|vaping/.test(text)) {
     return { subtype: 'licensed_electronic_cigarette_retailer', label: 'Licensed electronic cigarette / vape retailer', icon: '🏪' };
   }
@@ -135,7 +137,7 @@ function addressFrom(row) {
 }
 
 function businessName(row) {
-  return clean(get(row, ['business_name', 'dba_trade_name', 'business_name_2', 'dba', 'trade_name', 'licensee_name', 'entity_name'])) || 'Licensed retailer';
+  return clean(get(row, ['dba_trade_name', 'business_name', 'business_name_2', 'dba', 'trade_name', 'licensee_name', 'entity_name'])) || 'Licensed retailer';
 }
 
 function rawId(row, index) {
@@ -153,7 +155,7 @@ function normalizePin(row, index) {
   const license = licenseText(row);
   const name = businessName(row);
   const expiration = clean(get(row, ['lic_expir_dd', 'license_expiration_date', 'expiration_date', 'license_expire_date', 'end_date']));
-  const status = clean(get(row, ['license_status', 'status']));
+  const licenseStatus = clean(get(row, ['license_status', 'status']));
 
   const base = {
     id: `licensed-smoke-vape-${sourceId}`,
@@ -166,7 +168,7 @@ function normalizePin(row, index) {
     address,
     borough,
     license,
-    license_status: status,
+    license_status: licenseStatus,
     license_expiration_date: expiration,
     source: 'NYC Open Data / DCWP business license records',
     source_url: SOURCE_URL,
@@ -207,12 +209,24 @@ function countReasons(items) {
 
 function buildSourceUrl() {
   const where = [
-    "lower(license_type) like '%tobacco%'",
-    "lower(license_type) like '%cigarette%'",
-    "lower(license_type) like '%vape%'",
+    "lower(business_category) like '%tobacco%'",
+    "lower(business_category) like '%cigarette%'",
+    "lower(business_category) like '%vape%'",
+    "lower(business_category) like '%smoke%'",
     "lower(detail) like '%tobacco%'",
     "lower(detail) like '%cigarette%'",
-    "lower(detail) like '%vape%'"
+    "lower(detail) like '%vape%'",
+    "lower(dba_trade_name) like '%tobacco%'",
+    "lower(dba_trade_name) like '%cigarette%'",
+    "lower(dba_trade_name) like '%vape%'",
+    "lower(dba_trade_name) like '%smoke%'",
+    "lower(business_name) like '%tobacco%'",
+    "lower(business_name) like '%cigarette%'",
+    "lower(business_name) like '%vape%'",
+    "lower(business_name) like '%smoke%'",
+    "lower(license_type) like '%tobacco%'",
+    "lower(license_type) like '%cigarette%'",
+    "lower(license_type) like '%vape%'"
   ].join(' OR ');
   const params = new URLSearchParams();
   params.set('$select', '*');
@@ -254,6 +268,7 @@ async function main() {
     rejected: rejected.length,
     duplicate_count: deduped.duplicate_count,
     subtype_counts: subtypeCounts,
+    business_category_sample: countValues(rows, 'business_category'),
     license_type_sample: countValues(rows, 'license_type'),
     license_status_sample: countValues(rows, 'license_status'),
     source_fields_sample: sourceFields(rows),
