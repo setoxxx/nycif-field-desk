@@ -221,8 +221,8 @@
         color: #fff;
         font-size: 14px;
       }
-      .popup-card .field-actions .calendar-split-pill {
-        flex: 0 0 auto;
+      .event-item .quick-actions .calendar-split-pill {
+        flex: 1 1 166px;
       }
       @media (prefers-color-scheme: dark) {
         .calendar-split-pill {
@@ -266,7 +266,8 @@
     android.rel = 'noopener';
     android.setAttribute('aria-label', `Add ${fallback.title || 'event'} to Google Calendar from ${SOURCE_LABEL}`);
     android.innerHTML = '<span class="calendar-split-icon" aria-hidden="true">G</span><span>Google</span>';
-    android.addEventListener('click', () => {
+    android.addEventListener('click', event => {
+      event.stopPropagation();
       const status = document.getElementById('status');
       if (status) status.textContent = `Opening Google Calendar with ${SOURCE_LABEL} in the subject.`;
     });
@@ -277,7 +278,8 @@
     apple.download = calendarFilename(row, fallback.title || 'event');
     apple.setAttribute('aria-label', `Add ${fallback.title || 'event'} to Apple Calendar from ${SOURCE_LABEL}`);
     apple.innerHTML = '<span class="calendar-split-icon" aria-hidden="true"></span><span>Apple</span>';
-    apple.addEventListener('click', () => {
+    apple.addEventListener('click', event => {
+      event.stopPropagation();
       const status = document.getElementById('status');
       if (status) status.textContent = `Apple Calendar file created with ${SOURCE_LABEL} in the subject.`;
     });
@@ -287,16 +289,16 @@
     return split;
   }
 
-  function addCalendarToPopupActions(group) {
+  function addCalendarToEventListActions(group) {
     if (!group || group.querySelector('.calendar-split-pill')) return;
     const copyButton = group.querySelector('[data-copy-id]');
-    const id = copyButton?.getAttribute('data-copy-id') || '';
+    const id = copyButton?.getAttribute('data-copy-id') || group.closest('[data-id]')?.getAttribute('data-id') || '';
     const row = rowForId(id);
-    const card = group.closest('.popup-card');
+    const card = group.closest('.event-item');
     if (!card) return;
-    const title = card.querySelector('h2')?.textContent || '';
-    const timeText = card.querySelector('dd')?.textContent || '';
-    const location = card.querySelector('dl dd:nth-of-type(4), dl dd:last-of-type')?.textContent || '';
+    const title = card.querySelector('strong')?.textContent || '';
+    const timeText = card.querySelector('strong + span')?.textContent || '';
+    const location = card.querySelector('small')?.textContent || '';
     const calendarControl = buildCalendarSplit(row, { title, timeText, location });
 
     const copy = group.querySelector('[data-copy-id]');
@@ -306,7 +308,7 @@
 
   function enhance() {
     injectStyles();
-    document.querySelectorAll('.popup-card .field-actions').forEach(addCalendarToPopupActions);
+    document.querySelectorAll('.event-item .quick-actions').forEach(addCalendarToEventListActions);
   }
 
   const observer = new MutationObserver(enhance);
