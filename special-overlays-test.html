@@ -115,7 +115,7 @@
       <label><input id="licensedToggle" type="checkbox"> <span>🏪 Licensed Smoke / Vape Retailers</span></label>
     </div>
     <div id="status">Ready. Turn on a layer.</div>
-    <div class="legend">Smoke / Vape Complaints are 311 public complaint records. Licensed Retailers are a separate official-license layer that will populate after the next pin-pipeline run validates the source.</div>
+    <div class="legend">Smoke / Vape Complaints are 311 public complaint records. Licensed Retailers now load from the slim map JSON without backend raw objects.</div>
   </aside>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -186,7 +186,7 @@
       const configs = {
         nightlife: { url: './data/nycif_nightlife_spots.json', label: '5PM Spots' },
         intel: { url: './data/nycif_smoke_cannabis_vape_intel.json', label: 'Smoke / Vape Complaints' },
-        licensed: { url: './data/nycif_licensed_smoke_vape_retailers.json', label: 'Licensed Smoke / Vape Retailers' }
+        licensed: { url: './data/nycif_licensed_smoke_vape_retailers_slim.json', label: 'Licensed Smoke / Vape Retailers' }
       };
       const config = configs[type];
 
