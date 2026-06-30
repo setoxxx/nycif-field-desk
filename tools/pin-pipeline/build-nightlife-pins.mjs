@@ -1,13 +1,20 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-const SOURCE_URL = 'https://data.cityofnewyork.us/resource/hdtn-j62g.json';
+const SOURCE_URL = 'https://data.ny.gov/resource/knqy-j52b.json';
+const SOURCE_LABEL = 'NY SLA liquor licenses';
 const FETCH_LIMIT = Number(process.env.NYCIF_FETCH_LIMIT || 50000);
+const GEOCODE_CONCURRENCY = Number(process.env.NYCIF_GEOCODE_CONCURRENCY || 12);
+const GEOCODE_DELAY_MS = Number(process.env.NYCIF_GEOCODE_DELAY_MS || 25);
+const GEOSEARCH_URL = 'https://geosearch.planninglabs.nyc/v2/search';
 const OUT_DIR = 'data';
 const REPORT_DIR = 'data/reports';
+const CACHE_FILE = path.join(OUT_DIR, 'location_cache.json');
 const OUT_FILE = path.join(OUT_DIR, 'nycif_nightlife_spots.json');
 const REVIEW_FILE = path.join(OUT_DIR, 'nycif_nightlife_spots_needs_review.json');
 const REPORT_FILE = path.join(REPORT_DIR, 'nightlife_pin_report.json');
+
+const NYC_COUNTIES = ['NEW YORK', 'KINGS', 'QUEENS', 'BRONX', 'RICHMOND'];
 
 const GROUP_ONE = [
   { key: 'bar_tavern', label: 'Bars / taverns', terms: ['bar', 'tavern', 'pub', 'sports bar'] },
@@ -165,14 +172,15 @@ function matchCategory(row) {
 }
 
 function titleFrom(row) {
-  return field(row, ['dba', 'trade_name', 'business_name', 'premises_name', 'premise_name', 'entity_name', 'licensee_name', 'name', 'corporation_name']) || 'Nightlife spot';
+  return field(row, ['dba', 'premise_name', 'premises_name', 'trade_name', 'business_name', 'entity_name', 'licensee_name', 'name', 'corporation_name']) || 'Nightlife spot';
 }
 
 function addressFrom(row) {
-  const address = field(row, ['address', 'premises_address', 'premise_address', 'street_address', 'location_address', 'incident_address']);
-  const city = field(row, ['city', 'premises_city', 'premise_city']);
+  const line1 = field(row, ['premise_address', 'premises_address', 'address', 'street_address', 'location_address', 'incident_address']);
+  const line2 = field(row, ['premise_address_2', 'premises_address_2']);
+  const city = field(row, ['premise_city', 'premises_city', 'city']);
   const zip = field(row, ['zip', 'zipcode', 'zip_code', 'premises_zip', 'incident_zip']);
-  return [address, city, zip].filter(Boolean).join(', ');
+  return [line1, line2, city, zip].filter(Boolean).join(', ');
 }
 
 function boroughFrom(row) {
@@ -187,11 +195,155 @@ function boroughFrom(row) {
 }
 
 function licenseText(row) {
-  return field(row, ['license_type_name', 'license_type', 'license_class', 'license_class_code', 'license_category', 'license', 'type', 'category', 'industry', 'descriptor', 'complaint_type']);
+  const code = field(row, ['license_type_code', 'license_type_name', 'license_type', 'license_class', 'license_class_code']);
+  const method = field(row, ['method_of_operation', 'license_category', 'descriptor']);
+  const fallback = field(row, ['license', 'type', 'category', 'industry', 'complaint_type']);
+  return [code, method].filter(Boolean).join(' · ') || fallback;
 }
 
 function rawId(row, index) {
   return field(row, ['serial_number', 'license_number', 'record_id', 'id', 'objectid', 'license_id', 'unique_key']) || `row-${index}`;
+}
+
+function cacheKey(address, borough, zip = '') {
+  return [norm(address), norm(borough), norm(zip)].join('|');
+}
+
+function geocodeQuery(address, borough) {
+  return [address, borough, 'NY'].filter(Boolean).join(', ');
+}
+
+async function loadCache() {
+  try {
+    const raw = await fs.readFile(CACHE_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+async function saveCache(cache) {
+  await fs.writeFile(CACHE_FILE, `${JSON.stringify(cache, null, 2)}\n`);
+}
+
+async function geocodeAddress(query) {
+  const url = `${GEOSEARCH_URL}?${new URLSearchParams({ text: query, size: '1' })}`;
+  const response = await fetch(url);
+  if (!response.ok) return null;
+  const data = await response.json();
+  const feature = data?.features?.[0];
+  if (!feature?.geometry?.coordinates) return null;
+  const [lng, lat] = feature.geometry.coordinates;
+  if (!isNYCoord(lat, lng)) return { outside_nyc: true, lat, lng, label: feature.properties?.label || query };
+  return { lat, lng, label: feature.properties?.label || query };
+}
+
+async function resolveGeocodes(items, cache) {
+  const pending = new Map();
+  for (const item of items) {
+    if (item.reason !== 'needs_geocode') continue;
+    const key = cacheKey(item.address, item.borough);
+    const cached = cache[key];
+    if (cached?.lat !== undefined && cached?.lng !== undefined) continue;
+    if (cached?.quality === 'geocode_outside_nyc' || cached?.quality === 'geocode_failed') continue;
+    if (!pending.has(key)) pending.set(key, geocodeQuery(item.address, item.borough));
+  }
+
+  const keys = [...pending.keys()];
+  let cacheDirty = false;
+  let geocodedMatches = 0;
+  let geocodeFailures = 0;
+
+  for (let index = 0; index < keys.length; index += GEOCODE_CONCURRENCY) {
+    const batch = keys.slice(index, index + GEOCODE_CONCURRENCY);
+    const results = await Promise.all(batch.map(async key => {
+      const query = pending.get(key);
+      try {
+        const result = await geocodeAddress(query);
+        return { key, query, result };
+      } catch {
+        return { key, query, result: null };
+      }
+    }));
+
+    for (const { key, query, result } of results) {
+      if (result && Number.isFinite(result.lat) && Number.isFinite(result.lng) && !result.outside_nyc) {
+        cache[key] = {
+          query,
+          lat: result.lat,
+          lng: result.lng,
+          quality: 'geocoded',
+          provider: 'nyc_geosearch',
+          updated_at: new Date().toISOString()
+        };
+        cacheDirty = true;
+        geocodedMatches += 1;
+        continue;
+      }
+
+      cache[key] = {
+        query,
+        quality: result?.outside_nyc ? 'geocode_outside_nyc' : 'geocode_failed',
+        provider: 'nyc_geosearch',
+        updated_at: new Date().toISOString()
+      };
+      cacheDirty = true;
+      geocodeFailures += 1;
+    }
+
+    if (GEOCODE_DELAY_MS > 0 && index + GEOCODE_CONCURRENCY < keys.length) {
+      await new Promise(resolve => setTimeout(resolve, GEOCODE_DELAY_MS));
+    }
+
+    if ((index / GEOCODE_CONCURRENCY) % 25 === 0 && index > 0) {
+      console.log(`Geocoded ${Math.min(index + GEOCODE_CONCURRENCY, keys.length)}/${keys.length} unique addresses...`);
+    }
+  }
+
+  return { cache, cacheDirty, geocodedMatches, geocodeFailures, geocode_lookups: keys.length };
+}
+
+function applyGeocodes(sourceMapped, needsReview, cache) {
+  const mapped = [...sourceMapped];
+  const stillReview = [];
+  let geocodedMatches = 0;
+
+  for (const item of needsReview) {
+    if (item.reason !== 'needs_geocode') {
+      stillReview.push(item);
+      continue;
+    }
+
+    const key = cacheKey(item.address, item.borough);
+    const cached = cache[key];
+    if (cached?.lat !== undefined && cached?.lng !== undefined && isNYCoord(cached.lat, cached.lng)) {
+      const { status, reason, ...pin } = item;
+      mapped.push({
+        ...pin,
+        status: 'mapped',
+        lat: cached.lat,
+        lng: cached.lng,
+        location_quality: cached.quality || 'geocoded'
+      });
+      geocodedMatches += 1;
+      continue;
+    }
+
+    if (cached?.quality === 'geocode_outside_nyc') {
+      stillReview.push({ ...item, reason: 'geocode_outside_nyc' });
+      continue;
+    }
+
+    if (cached?.quality === 'geocode_failed') {
+      stillReview.push({ ...item, reason: 'geocode_failed' });
+      continue;
+    }
+
+    stillReview.push(item);
+  }
+
+  return { mapped, stillReview, geocodedMatches };
 }
 
 function normalizePin(row, index) {
@@ -216,11 +368,11 @@ function normalizePin(row, index) {
     address,
     borough,
     license,
-    source: 'NYC Open Data',
+    source: SOURCE_LABEL,
     source_url: SOURCE_URL,
     raw_source_id: sourceId,
     updated_at: new Date().toISOString(),
-    raw
+    raw: row
   };
 
   if (!coords) {
@@ -264,11 +416,18 @@ function sourceFields(rows) {
   return [...keys].sort();
 }
 
+function buildSourceUrl() {
+  const params = new URLSearchParams();
+  params.set('$limit', String(FETCH_LIMIT));
+  params.set('$where', `county in (${NYC_COUNTIES.map(county => `'${county}'`).join(',')})`);
+  return `${SOURCE_URL}?${params.toString()}`;
+}
+
 async function main() {
   await fs.mkdir(OUT_DIR, { recursive: true });
   await fs.mkdir(REPORT_DIR, { recursive: true });
 
-  const url = `${SOURCE_URL}?$limit=${FETCH_LIMIT}`;
+  const url = buildSourceUrl();
   console.log(`Fetching ${url}`);
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Source fetch failed: HTTP ${response.status}`);
@@ -276,31 +435,45 @@ async function main() {
   if (!Array.isArray(rows)) throw new Error('Source did not return an array');
 
   const normalized = rows.map(normalizePin);
-  const mappedRaw = normalized.filter(item => item.status === 'mapped');
-  const needsReview = normalized.filter(item => item.status === 'needs_review');
+  const sourceMapped = normalized.filter(item => item.status === 'mapped');
+  const needsGeocode = normalized.filter(item => item.status === 'needs_review' && item.reason === 'needs_geocode');
+  const otherReview = normalized.filter(item => item.status === 'needs_review' && item.reason !== 'needs_geocode');
   const rejected = normalized.filter(item => item.status === 'rejected');
-  const deduped = dedupePins(mappedRaw);
+
+  let cache = await loadCache();
+  const geocodeStats = await resolveGeocodes(needsGeocode, cache);
+  cache = geocodeStats.cache;
+  if (geocodeStats.cacheDirty) await saveCache(cache);
+
+  const applied = applyGeocodes(sourceMapped, [...needsGeocode, ...otherReview], cache);
+  const deduped = dedupePins(applied.mapped);
+  const matchedRows = sourceMapped.length + needsGeocode.length + otherReview.length;
 
   const report = {
     source_url: SOURCE_URL,
+    queried_url: url,
     source_rows: rows.length,
-    category_matches: mappedRaw.length + needsReview.length,
-    source_coordinate_matches: mappedRaw.length,
-    geocoded_matches: 0,
+    matched_rows: matchedRows,
+    category_matches: matchedRows,
+    source_coordinate_matches: sourceMapped.length,
+    geocoded_matches: applied.geocodedMatches,
+    geocode_lookups: geocodeStats.geocode_lookups,
+    geocode_failures: geocodeStats.geocodeFailures,
+    cache_file: CACHE_FILE,
     mapped_total: deduped.pins.length,
-    needs_review: needsReview.length,
+    needs_review: applied.stillReview.length,
     rejected: rejected.length,
     duplicate_count: deduped.duplicate_count,
     group_one: deduped.pins.filter(pin => pin.group === 1).length,
     group_two: deduped.pins.filter(pin => pin.group === 2).length,
-    top_review_reasons: countReasons(needsReview).slice(0, 10),
+    top_review_reasons: countReasons(applied.stillReview).slice(0, 10),
     top_rejection_reasons: countReasons(rejected).slice(0, 10),
     source_fields_sample: sourceFields(rows),
     generated_at: new Date().toISOString()
   };
 
   await fs.writeFile(OUT_FILE, `${JSON.stringify(deduped.pins, null, 2)}\n`);
-  await fs.writeFile(REVIEW_FILE, `${JSON.stringify(needsReview, null, 2)}\n`);
+  await fs.writeFile(REVIEW_FILE, `${JSON.stringify(applied.stillReview, null, 2)}\n`);
   await fs.writeFile(REPORT_FILE, `${JSON.stringify(report, null, 2)}\n`);
 
   console.log(JSON.stringify(report, null, 2));
