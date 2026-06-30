@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>NYCIF Special Overlays Test</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
   <style>
     html, body {
       height: 100%;
@@ -113,23 +115,38 @@
       <label><input id="nightlifeToggle" type="checkbox"> <span>🍸 5PM Spots</span></label>
       <label><input id="intelToggle" type="checkbox"> <span>🌿 Smoke / Vape Complaints</span></label>
       <label><input id="licensedToggle" type="checkbox"> <span>🏪 Licensed Smoke / Vape Retailers</span></label>
+      <label id="licensedActiveOnlyWrap" hidden><input id="licensedActiveOnly" type="checkbox" checked> <span>Active licenses only</span></label>
     </div>
     <div id="status">Ready. Turn on a layer.</div>
-    <div class="legend">Smoke / Vape Complaints are 311 public complaint records. Licensed Retailers now load from the slim map JSON without backend raw objects.</div>
+    <div class="legend">Smoke / Vape Complaints are 311 public complaint records. Licensed Retailers load from the slim map JSON and cluster for performance.</div>
   </aside>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script>
     const map = L.map('map', { zoomControl: true }).setView([40.7128, -74.0060], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
 
     const statusEl = document.getElementById('status');
+    const licensedActiveOnlyWrap = document.getElementById('licensedActiveOnlyWrap');
+    const licensedActiveOnlyToggle = document.getElementById('licensedActiveOnly');
     const layers = {
       nightlife: L.layerGroup(),
       intel: L.layerGroup(),
-      licensed: L.layerGroup()
+      licensed: L.markerClusterGroup({
+        chunkedLoading: true,
+        chunkInterval: 40,
+        maxClusterRadius: 52,
+        showCoverageOnHover: false,
+        spiderfyOnMaxZoom: true
+      })
     };
-    const cache = {
+    const cacheRaw = {
+      nightlife: null,
+      intel: null,
+      licensed: null
+    };
+    const cacheMeta = {
       nightlife: null,
       intel: null,
       licensed: null
@@ -142,10 +159,55 @@
     function isNYCoord(lat, lng) {
       return Number.isFinite(lat) && Number.isFinite(lng) && lat >= 40.4774 && lat <= 40.9176 && lng >= -74.2591 && lng <= -73.7004;
     }
-    async function loadJson(url) {
-      const response = await fetch(`${url}?cache=${Date.now()}`, { cache: 'no-store', headers: { Accept: 'application/json' } });
+    async function loadJsonWithMeta(url) {
+      const fetchUrl = `${url}?cache=${Date.now()}`;
+      const response = await fetch(fetchUrl, { cache: 'no-store', headers: { Accept: 'application/json' } });
+      const meta = {
+        url: fetchUrl,
+        status: response.status,
+        ok: response.ok,
+        contentType: response.headers.get('content-type') || '',
+        bytes: Number(response.headers.get('content-length')) || null
+      };
       if (!response.ok) throw new Error(`${url} HTTP ${response.status}`);
-      return response.json();
+      const text = await response.text();
+      meta.bytes = meta.bytes ?? text.length;
+      let rows;
+      try {
+        rows = JSON.parse(text);
+      } catch (error) {
+        throw new Error(`${url} JSON parse failed: ${error.message}`);
+      }
+      return { rows, meta };
+    }
+    function isActiveLicense(row) {
+      return String(row.license_status || '').trim().toLowerCase() === 'active';
+    }
+    function normalizeRows(rows, type) {
+      const list = Array.isArray(rows) ? rows : [];
+      const filtered = type === 'licensed' && licensedActiveOnlyToggle.checked
+        ? list.filter(isActiveLicense)
+        : list;
+      return filtered.map((row, index) => normalize(row, index, type)).filter(Boolean);
+    }
+    function formatDiagnostics(label, type, meta, rawCount, normalized, firstPin) {
+      const lines = [
+        label,
+        `URL: ${meta?.url || 'n/a'}`,
+        `HTTP: ${meta?.status ?? 'n/a'}`,
+        `Bytes: ${meta?.bytes != null ? meta.bytes.toLocaleString() : 'n/a'}`,
+        `Raw rows: ${rawCount.toLocaleString()}`,
+        `Normalized: ${normalized.length.toLocaleString()}${typeFilterNote(type)}`,
+        `Markers: ${normalized.length.toLocaleString()}`
+      ];
+      if (firstPin) {
+        lines.push(`First: ${firstPin.title} | ${firstPin.label || firstPin.license || 'n/a'} | ${firstPin.lat.toFixed(4)}, ${firstPin.lng.toFixed(4)}`);
+      }
+      return lines.join('\n');
+    }
+    function typeFilterNote(type) {
+      if (type !== 'licensed' || !licensedActiveOnlyToggle.checked) return '';
+      return ' (Active only)';
     }
     function normalize(row, index, type) {
       const lat = Number.parseFloat(row.lat);
@@ -182,6 +244,22 @@
       if (!points.length) return;
       map.fitBounds(L.latLngBounds(points), { padding: [70, 70], maxZoom: 13 });
     }
+    function renderLayer(type, config) {
+      const rawRows = cacheRaw[type] || [];
+      const pins = normalizeRows(rawRows, type);
+      layers[type].clearLayers();
+      pins.forEach(pin => layers[type].addLayer(markerFor(pin)));
+      layers[type].addTo(map);
+      status(formatDiagnostics(
+        `${config.label} loaded`,
+        type,
+        cacheMeta[type],
+        rawRows.length,
+        pins,
+        pins[0] || null
+      ));
+      fitVisible();
+    }
     async function toggleLayer(type, enabled) {
       const configs = {
         nightlife: { url: './data/nycif_nightlife_spots.json', label: '5PM Spots' },
@@ -189,6 +267,8 @@
         licensed: { url: './data/nycif_licensed_smoke_vape_retailers_slim.json', label: 'Licensed Smoke / Vape Retailers' }
       };
       const config = configs[type];
+
+      licensedActiveOnlyWrap.hidden = type !== 'licensed' || !enabled;
 
       if (!enabled) {
         layers[type].remove();
@@ -198,25 +278,26 @@
       }
 
       try {
-        status(`Loading ${config.label}...`);
-        if (!cache[type]) {
-          const rows = await loadJson(config.url);
-          cache[type] = Array.isArray(rows) ? rows.map((row, index) => normalize(row, index, type)).filter(Boolean) : [];
+        status(`Loading ${config.label}...\nURL: ${config.url}`);
+        if (!cacheRaw[type]) {
+          const { rows, meta } = await loadJsonWithMeta(config.url);
+          cacheRaw[type] = Array.isArray(rows) ? rows : [];
+          cacheMeta[type] = meta;
         }
-        layers[type].clearLayers();
-        cache[type].forEach(pin => layers[type].addLayer(markerFor(pin)));
-        layers[type].addTo(map);
-        status(`${config.label} showing ${cache[type].length.toLocaleString()} mapped pins.`);
-        fitVisible();
+        renderLayer(type, config);
       } catch (error) {
         console.error(error);
-        status(`${config.label} failed: ${error.message}`);
+        status(`${config.label} failed\nURL: ${config.url}\nError: ${error.message}`);
       }
     }
 
     document.getElementById('nightlifeToggle').addEventListener('change', event => toggleLayer('nightlife', event.target.checked));
     document.getElementById('intelToggle').addEventListener('change', event => toggleLayer('intel', event.target.checked));
     document.getElementById('licensedToggle').addEventListener('change', event => toggleLayer('licensed', event.target.checked));
+    licensedActiveOnlyToggle.addEventListener('change', () => {
+      if (!document.getElementById('licensedToggle').checked) return;
+      renderLayer('licensed', { label: 'Licensed Smoke / Vape Retailers' });
+    });
   </script>
 </body>
 </html>
