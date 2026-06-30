@@ -6,6 +6,7 @@ const FETCH_LIMIT = Number(process.env.NYCIF_LICENSED_SMOKE_FETCH_LIMIT || 50000
 const OUT_DIR = 'data';
 const REPORT_DIR = 'data/reports';
 const OUT_FILE = path.join(OUT_DIR, 'nycif_licensed_smoke_vape_retailers.json');
+const SLIM_FILE = path.join(OUT_DIR, 'nycif_licensed_smoke_vape_retailers_slim.json');
 const REVIEW_FILE = path.join(OUT_DIR, 'nycif_licensed_smoke_vape_retailers_needs_review.json');
 const REPORT_FILE = path.join(REPORT_DIR, 'licensed_smoke_vape_retailers_report.json');
 
@@ -185,6 +186,31 @@ function normalizePin(row, index) {
   return { status: 'mapped', location_quality: coords.quality, lat: coords.lat, lng: coords.lng, ...base };
 }
 
+function slimPin(pin) {
+  return {
+    id: pin.id,
+    layer: pin.layer,
+    category: pin.category,
+    subtype: pin.subtype,
+    subtype_label: pin.subtype_label,
+    icon: pin.icon,
+    title: pin.title,
+    address: pin.address,
+    borough: pin.borough,
+    license: pin.license,
+    license_status: pin.license_status,
+    license_expiration_date: pin.license_expiration_date,
+    lat: pin.lat,
+    lng: pin.lng,
+    location_quality: pin.location_quality,
+    source: pin.source,
+    source_url: pin.source_url,
+    raw_source_id: pin.raw_source_id,
+    data_note: pin.data_note,
+    updated_at: pin.updated_at
+  };
+}
+
 function dedupePins(pins) {
   const seen = new Set();
   const output = [];
@@ -250,6 +276,7 @@ async function main() {
   const needsReview = normalized.filter(item => item.status === 'needs_review');
   const rejected = normalized.filter(item => item.status === 'rejected');
   const deduped = dedupePins(mappedRaw);
+  const slimPins = deduped.pins.map(slimPin);
 
   const subtypeCounts = deduped.pins.reduce((acc, pin) => {
     acc[pin.subtype] = (acc[pin.subtype] || 0) + 1;
@@ -263,10 +290,14 @@ async function main() {
     fetch_limit: FETCH_LIMIT,
     matched_rows: mappedRaw.length + needsReview.length,
     mapped_total: deduped.pins.length,
+    slim_mapped_total: slimPins.length,
     needs_review: needsReview.length,
     rejected: rejected.length,
     duplicate_count: deduped.duplicate_count,
     subtype_counts: subtypeCounts,
+    map_file: SLIM_FILE,
+    full_backend_file: OUT_FILE,
+    review_file: REVIEW_FILE,
     business_category_sample: countValues(rows, 'business_category'),
     license_type_sample: countValues(rows, 'license_type'),
     license_status_sample: countValues(rows, 'license_status'),
@@ -278,11 +309,13 @@ async function main() {
   };
 
   await fs.writeFile(OUT_FILE, `${JSON.stringify(deduped.pins, null, 2)}\n`);
+  await fs.writeFile(SLIM_FILE, `${JSON.stringify(slimPins, null, 2)}\n`);
   await fs.writeFile(REVIEW_FILE, `${JSON.stringify(needsReview, null, 2)}\n`);
   await fs.writeFile(REPORT_FILE, `${JSON.stringify(report, null, 2)}\n`);
 
   console.log(JSON.stringify(report, null, 2));
   console.log(`Wrote ${OUT_FILE}`);
+  console.log(`Wrote ${SLIM_FILE}`);
   console.log(`Wrote ${REVIEW_FILE}`);
   console.log(`Wrote ${REPORT_FILE}`);
 }
