@@ -84,37 +84,55 @@ async function loadApprovedGeocodes() {
   try {
     await access(APPROVED_GEOCODES_PATH);
   } catch {
-    return new Map();
+    return { map: new Map(), rows: [] };
   }
   const raw = await readFile(APPROVED_GEOCODES_PATH, 'utf8');
   const parsed = JSON.parse(raw);
   const rows = Array.isArray(parsed) ? parsed : (parsed.approved || parsed.rows || []);
   const map = new Map();
   for (const row of rows) {
+    if (row.approval_status !== 'proposed_exact_match') continue;
     const id = String(row.source_record_id || '').trim();
     if (!id) continue;
     map.set(id, row);
   }
-  return map;
+  return { map, rows: [...map.values()] };
 }
 
-function applyGeocodeOverride(row, overrides) {
+function applyApprovedGeocode(row, overrides) {
   const override = overrides.get(String(row.source_record_id || '').trim());
-  if (!override) return row;
+  if (!override) return { row, applied: false };
   const lat = Number(override.lat);
   const lng = Number(override.lng);
-  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return row;
+  if (!Number.isFinite(lat) || !Number.isFinite(lng) || !inNycBounds(lat, lng)) {
+    return { row, applied: false, reason: 'invalid_override_coordinates' };
+  }
+
+  const reviewReasons = (row.review_reasons || []).filter(reason => reason !== 'missing_geocode');
   return {
-    ...row,
-    lat,
-    lng,
-    display_location: override.display_location || row.display_location || row.location,
-    geocode_source: override.geocode_source || 'approved_override',
-    missing_geocode: false
+    applied: true,
+    override,
+    row: {
+      ...row,
+      lat,
+      lng,
+      display_location: override.display_location || row.display_location || row.location,
+      geocode_source: override.match_method || override.geocode_source || 'approved_override',
+      geocode_confidence: override.match_confidence || 'proposed_exact_match',
+      missing_geocode: false,
+      review_reasons: reviewReasons,
+      approved_geocode_applied: true
+    }
   };
 }
 
-function prototypeToMajorFeedRow(row) {
+function canPromoteToPreviewMajor(row) {
+  if (!hasValidCoordinates(row)) return false;
+  const blockers = (row.review_reasons || []).filter(reason => reason !== 'missing_geocode');
+  return blockers.length === 0;
+}
+
+function prototypeToMajorFeedRow(row, previewPhase = 'C5G3') {
   return {
     id: row.id,
     title: row.title,
@@ -128,7 +146,7 @@ function prototypeToMajorFeedRow(row) {
     lng: row.lng,
     photo_pick: Boolean(row.photo_pick),
     priority_score: row.major_score ?? null,
-    verification_status: row.verification_status || 'source_listed',
+    verification_status: row.approved_geocode_applied ? 'source_listed' : (row.verification_status || 'source_listed'),
     source_name: row.source_name || null,
     source_url: row.source_url || null,
     source_record_id: row.source_record_id || null,
@@ -142,12 +160,13 @@ function prototypeToMajorFeedRow(row) {
     safety_note: row.safety_note || null,
     assignment_feed: 'major',
     preview_feed: true,
-    preview_phase: 'C4',
-    geocode_source: row.geocode_source || null
+    preview_phase: previewPhase,
+    geocode_source: row.geocode_source || null,
+    approved_geocode_applied: Boolean(row.approved_geocode_applied)
   };
 }
 
-function prototypeToStagedRow(row) {
+function prototypeToStagedRow(row, previewPhase = 'C5G3') {
   return {
     id: row.id,
     title: row.title,
@@ -164,11 +183,12 @@ function prototypeToStagedRow(row) {
     source_record_id: row.source_record_id || null,
     major_score: row.major_score ?? null,
     major_reason: row.major_reason || null,
-    verification_status: row.verification_status || 'source_listed',
+    verification_status: row.approved_geocode_applied ? 'source_listed' : (row.verification_status || 'source_listed'),
     preview_feed: true,
-    preview_phase: 'C4',
+    preview_phase: previewPhase,
     staged_preview: true,
-    production_ready: false
+    production_ready: false,
+    approved_geocode_applied: Boolean(row.approved_geocode_applied)
   };
 }
 
@@ -176,7 +196,7 @@ function manualToStagedRow(row) {
   return {
     ...row,
     preview_feed: true,
-    preview_phase: 'C4',
+    preview_phase: 'C5G3',
     staged_preview: true,
     preview_preserved_manual: true,
     production_ready: false
@@ -244,7 +264,7 @@ function buildJuly4Coverage(headlineRows, majorRows, reviewRows) {
 async function main() {
   const generatedAt = new Date().toISOString();
 
-  const [prototypeMappedRaw, prototypeReviewRaw, prototypeReportRaw, productionMajorRaw, productionAllRaw, geocodeOverrides] = await Promise.all([
+  const [prototypeMappedRaw, prototypeReviewRaw, prototypeReportRaw, productionMajorRaw, productionAllRaw, approvedGeocodes] = await Promise.all([
     readFile(PROTOTYPE_MAPPED_PATH, 'utf8'),
     readFile(PROTOTYPE_REVIEW_PATH, 'utf8'),
     readFile(PROTOTYPE_REPORT_PATH, 'utf8'),
@@ -252,6 +272,11 @@ async function main() {
     fetchJson(PRODUCTION_ALL_URL),
     loadApprovedGeocodes()
   ]);
+
+  const geocodeOverrides = approvedGeocodes.map;
+  const previewPhase = geocodeOverrides.size > 0 ? 'C5G3' : 'C4';
+  const reportPhase = geocodeOverrides.size > 0 ? 'C5G3' : 'C4';
+  const reportMode = geocodeOverrides.size > 0 ? 'preview_only_with_approved_geocodes' : 'preview_only';
 
   const prototypeMapped = JSON.parse(prototypeMappedRaw);
   const prototypeReview = JSON.parse(prototypeReviewRaw);
@@ -262,10 +287,57 @@ async function main() {
   const manualMajorRecords = productionMajor.filter(isManualRecord);
   const manualAllRecords = productionAll.filter(isManualRecord);
 
-  const mappedWithOverrides = prototypeMapped.map(row => applyGeocodeOverride(row, geocodeOverrides));
-  const reviewWithOverrides = prototypeReview.map(row => applyGeocodeOverride(row, geocodeOverrides));
+  const appliedRows = [];
+  const unusedGeocodes = [];
+  const rowsMovedFromNeedsReview = [];
 
-  const promotableMapped = mappedWithOverrides.filter(hasValidCoordinates).map(prototypeToMajorFeedRow);
+  const mappedWithOverrides = prototypeMapped.map(row => {
+    const result = applyApprovedGeocode(row, geocodeOverrides);
+    if (result.applied) appliedRows.push({ source_record_id: row.source_record_id, title: row.title, from: 'prototype_mapped' });
+    return result.row;
+  });
+
+  const reviewProcessed = prototypeReview.map(row => {
+    const result = applyApprovedGeocode(row, geocodeOverrides);
+    if (result.applied) {
+      appliedRows.push({ source_record_id: row.source_record_id, title: row.title, from: 'prototype_needs_review' });
+    }
+    return result.row;
+  });
+
+  for (const override of approvedGeocodes.rows) {
+    const id = String(override.source_record_id || '').trim();
+    const wasApplied = appliedRows.some(item => String(item.source_record_id) === id);
+    if (!wasApplied) {
+      unusedGeocodes.push({
+        source_record_id: id,
+        title: override.title,
+        reason: 'no_matching_prototype_row_or_invalid_coordinates'
+      });
+    }
+  }
+
+  const promotedFromReview = [];
+  const previewNeedsReview = [];
+
+  for (const row of reviewProcessed) {
+    if (canPromoteToPreviewMajor(row)) {
+      promotedFromReview.push(row);
+      rowsMovedFromNeedsReview.push({
+        source_record_id: row.source_record_id,
+        title: row.title,
+        date: row.date,
+        borough: row.borough,
+        lat: row.lat,
+        lng: row.lng,
+        geocode_source: row.geocode_source,
+        previous_review_reasons: row.review_reasons || []
+      });
+    } else {
+      previewNeedsReview.push(row);
+    }
+  }
+
   const blockedMappedCandidates = mappedWithOverrides
     .filter(row => !hasValidCoordinates(row))
     .map(row => ({
@@ -274,8 +346,14 @@ async function main() {
       review_reasons: [...new Set([...(row.review_reasons || []), 'missing_geocode'])]
     }));
 
-  const previewNeedsReview = [...reviewWithOverrides, ...blockedMappedCandidates]
-    .sort((a, b) => (b.major_score || 0) - (a.major_score || 0) || String(a.start_date_time).localeCompare(String(b.start_date_time)));
+  previewNeedsReview.push(...blockedMappedCandidates);
+  previewNeedsReview.sort((a, b) => (b.major_score || 0) - (a.major_score || 0)
+    || String(a.start_date_time).localeCompare(String(b.start_date_time)));
+
+  const promotableMapped = [
+    ...mappedWithOverrides.filter(hasValidCoordinates),
+    ...promotedFromReview
+  ].map(row => prototypeToMajorFeedRow(row, previewPhase));
 
   const previewMajor = mergeById(
     manualMajorRecords,
@@ -284,10 +362,10 @@ async function main() {
   ).sort((a, b) => (b.priority_score || b.major_score || 0) - (a.priority_score || a.major_score || 0)
     || String(a.start_date_time || a.date).localeCompare(String(b.start_date_time || b.date)));
 
-  const nonRejectedCandidates = [...mappedWithOverrides, ...reviewWithOverrides];
+  const nonRejectedCandidates = [...mappedWithOverrides, ...reviewProcessed];
   const allFeedGeocodedCandidates = nonRejectedCandidates
     .filter(hasValidCoordinates)
-    .map(prototypeToMajorFeedRow);
+    .map(row => prototypeToMajorFeedRow(row, previewPhase));
   const allFeedExcludedNoGeocode = nonRejectedCandidates.filter(row => !hasValidCoordinates(row)).length;
 
   const previewAll = mergeById(
@@ -298,7 +376,20 @@ async function main() {
 
   const stagedEvents = mergeById(
     manualMajorRecords.map(manualToStagedRow),
-    promotableMapped.map(prototypeToStagedRow),
+    promotableMapped.map(row => prototypeToStagedRow({
+      ...row,
+      lat: row.lat,
+      lng: row.lng,
+      title: row.title,
+      date: row.date,
+      borough: row.borough,
+      location: row.location,
+      display_location: row.display_location,
+      source_record_id: row.source_record_id,
+      major_score: row.major_score ?? row.priority_score,
+      major_reason: row.major_reason,
+      approved_geocode_applied: row.approved_geocode_applied
+    }, previewPhase)),
     { preservePrimary: true }
   );
 
@@ -306,7 +397,7 @@ async function main() {
     events: stagedEvents,
     generated_at_utc: generatedAt,
     preview_feed: true,
-    preview_phase: 'C4',
+    preview_phase: previewPhase,
     production_feed: false,
     production_ready: false,
     staged_feed: true,
@@ -328,8 +419,8 @@ async function main() {
   );
 
   const report = {
-    phase: 'C4',
-    mode: 'preview_only',
+    phase: reportPhase,
+    mode: reportMode,
     generated_at: generatedAt,
     production_feeds_modified: false,
     public_ui_modified: false,
@@ -338,6 +429,10 @@ async function main() {
     source_rows: prototypeReport.source_rows,
     prototype_mapped_rows: prototypeMapped.length,
     prototype_needs_review_rows: prototypeReview.length,
+    approved_geocodes_available: approvedGeocodes.rows.length,
+    approved_geocodes_applied: rowsMovedFromNeedsReview.length + appliedRows.filter(item => item.from === 'prototype_mapped').length,
+    approved_geocodes_unused: unusedGeocodes,
+    rows_moved_from_needs_review_to_preview: rowsMovedFromNeedsReview,
     preview_major_feed_rows: previewMajor.length,
     preview_all_feed_rows: previewAll.length,
     preview_staged_rows: stagedEvents.length,
@@ -358,6 +453,8 @@ async function main() {
     missing_geocode_count: previewNeedsReview.filter(row => row.missing_geocode || !hasValidCoordinates(row)).length,
     headline_july_4_in_preview_or_review: headlineInPreviewOrReview,
     all_feed_excluded_no_geocode: allFeedExcludedNoGeocode,
+    possible_matches_still_blocked: true,
+    unmatched_still_blocked: true,
     approved_geocode_overrides_loaded: geocodeOverrides.size,
     production_major_snapshot_rows: productionMajor.length,
     production_all_snapshot_rows: productionAll.length,
@@ -366,15 +463,18 @@ async function main() {
       'nycif_all_radar_map_events.json',
       'data/nycif_staged_live_events.json'
     ],
+    c5_production_publish_blocked: true,
     c5_required_for_production_publish: true,
+    explicit_howard_approval_required: true,
     explicit_howard_approval_required_for_c5: true,
     inputs: {
       prototype_mapped_path: 'data/prototype_major_events.json',
       prototype_review_path: 'data/prototype_major_events_needs_review.json',
       prototype_report_path: 'data/reports/prototype_major_events_report.json',
+      approved_geocodes_path: 'data/approved_major_event_geocodes.json',
+      approved_geocodes_needs_review_path: 'data/approved_major_event_geocodes_needs_review.json',
       production_major_url: PRODUCTION_MAJOR_URL,
       production_all_url: PRODUCTION_ALL_URL,
-      approved_geocodes_path: 'data/approved_major_event_geocodes.json',
       approved_geocodes_present: geocodeOverrides.size > 0
     },
     outputs: {
@@ -402,6 +502,9 @@ async function main() {
   console.log(`preview_all_feed_rows=${report.preview_all_feed_rows}`);
   console.log(`preview_staged_rows=${report.preview_staged_rows}`);
   console.log(`preview_needs_review_rows=${report.preview_needs_review_rows}`);
+  console.log(`approved_geocodes_available=${report.approved_geocodes_available}`);
+  console.log(`approved_geocodes_applied=${report.approved_geocodes_applied}`);
+  console.log(`rows_moved_from_needs_review_to_preview=${report.rows_moved_from_needs_review_to_preview.length}`);
   console.log(`preserved_manual_records=${report.preserved_manual_records}`);
   console.log(`manual_records_removed=${report.manual_records_removed}`);
   console.log(`headline_july_4_in_preview_or_review=${report.headline_july_4_in_preview_or_review}`);
