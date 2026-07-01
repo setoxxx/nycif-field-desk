@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>NYCIF Preview Major Feed Review (QA Only)</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --panel: #121a2b;
+      --panel-2: #182235;
+      --line: rgba(255,255,255,.08);
+      --text: #eef2ff;
+      --muted: #9aa7c0;
+      --warn: #fbbf24;
+      --ok: #34d399;
+      --bad: #f87171;
+      --accent: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #0a0f1a, #111827 240px, var(--bg));
+      color: var(--text);
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 20px 16px 48px; }
+    h1 { margin: 0 0 6px; font-size: 24px; }
+    .sub { color: var(--muted); margin: 0 0 18px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .panel h2 { margin: 0 0 12px; font-size: 16px; }
+    .status-grid, .counts-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    .stat {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .stat .label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .stat .value { font-size: 22px; font-weight: 700; }
+    .warn {
+      border-left: 4px solid var(--warn);
+      background: rgba(251,191,36,.08);
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #fde68a;
+    }
+    .block {
+      border-left: 4px solid var(--bad);
+      background: rgba(248,113,113,.08);
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #fecaca;
+    }
+    label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 6px; }
+    input[type="search"], select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
+    }
+    .controls { display: grid; gap: 12px; grid-template-columns: 1fr; }
+    @media (min-width: 900px) { .controls { grid-template-columns: 1.2fr 1fr; } }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .filters button {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .filters button.active {
+      background: rgba(96,165,250,.18);
+      border-color: rgba(96,165,250,.45);
+      color: #dbeafe;
+    }
+    .meta { color: var(--muted); font-size: 12px; margin-top: 8px; }
+    .cards { display: grid; gap: 12px; }
+    .card {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+    .card h3 { margin: 0; font-size: 16px; line-height: 1.25; }
+    .badge {
+      background: rgba(96,165,250,.15);
+      color: #bfdbfe;
+      border: 1px solid rgba(96,165,250,.25);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+    .tag {
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: rgba(255,255,255,.06);
+      color: #cbd5e1;
+    }
+    .tag.ok { background: rgba(52,211,153,.12); color: #a7f3d0; }
+    .tag.warn { background: rgba(251,191,36,.12); color: #fde68a; }
+    .tag.bad { background: rgba(248,113,113,.12); color: #fecaca; }
+    .grid-2 {
+      display: grid;
+      gap: 8px 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .grid-2 strong { color: var(--text); font-weight: 600; }
+    .safety { margin-top: 10px; color: #cbd5e1; font-size: 12px; }
+    #map {
+      height: 360px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+    }
+    .empty { color: var(--muted); padding: 24px; text-align: center; }
+    .error { color: var(--bad); }
+    .reason-list { display: grid; gap: 8px; margin-top: 10px; }
+    .reason-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Preview Major Feed Review</h1>
+    <p class="sub">Standalone GitHub Pages QA dashboard for C5G3 preview major feed outputs. Not the production public map or live production feed.</p>
+
+    <section class="panel" aria-label="Project status">
+      <h2>Project status</h2>
+      <div class="status-grid">
+        <div class="stat"><div class="label">Phase</div><div class="value" style="font-size:16px">C5G4 — Preview Major Feed Review</div></div>
+        <div class="stat"><div class="label">Mode</div><div class="value" style="font-size:16px;color:var(--warn)">QA only</div></div>
+        <div class="stat"><div class="label">Production feeds modified</div><div class="value" style="color:var(--ok)">false</div></div>
+        <div class="stat"><div class="label">WordPress modified</div><div class="value" style="color:var(--ok)">false</div></div>
+        <div class="stat"><div class="label">Public map modified</div><div class="value" style="color:var(--ok)">false</div></div>
+        <div class="stat"><div class="label">Production publish blocked</div><div class="value" style="color:var(--warn)">true</div></div>
+      </div>
+      <p class="meta" id="reportMeta">Loading report…</p>
+    </section>
+
+    <section class="panel warn" aria-label="QA warning">
+      <strong>QA warning:</strong>
+      This is a preview review page. These records are not published to the live production feed.
+      Production publishing requires explicit Howard approval.
+    </section>
+
+    <section class="panel block" aria-label="Production block">
+      <strong>Production block:</strong>
+      This page does not publish production feed files. Review only.
+      Blocked files: <code>nycif_major_radar_map_events.json</code>,
+      <code>nycif_all_radar_map_events.json</code>,
+      <code>data/nycif_staged_live_events.json</code>.
+    </section>
+
+    <section class="panel" aria-label="Summary counts">
+      <h2>Summary counts</h2>
+      <div class="counts-grid" id="countsGrid"></div>
+    </section>
+
+    <section class="panel" aria-label="Controls">
+      <h2>Preview row filters</h2>
+      <div class="controls">
+        <div>
+          <label for="searchBox">Search title, location, borough, source ID</label>
+          <input id="searchBox" type="search" placeholder="Search preview rows…">
+        </div>
+        <div>
+          <label for="boroughSelect">Borough</label>
+          <select id="boroughSelect">
+            <option value="">All boroughs</option>
+          </select>
+        </div>
+      </div>
+      <div class="filters" id="filterButtons"></div>
+      <p class="meta" id="resultMeta"></p>
+    </section>
+
+    <section class="panel" aria-label="Map">
+      <h2>Preview major feed map</h2>
+      <div id="map" aria-label="Preview major feed map"></div>
+      <p class="meta" id="mapMeta"></p>
+    </section>
+
+    <section class="panel" aria-label="Preview rows">
+      <h2>Preview major feed rows</h2>
+      <div class="cards" id="previewCards"></div>
+    </section>
+
+    <section class="panel" aria-label="Blocked rows">
+      <h2>Rows still blocked from production</h2>
+      <p class="meta" id="blockedSummary"></p>
+      <div class="reason-list" id="blockedReasons"></div>
+      <p class="meta" style="margin-top:12px">Sample blocked rows (searchable subset; full file has <span id="blockedTotal">896</span> rows):</p>
+      <div class="controls" style="margin-top:10px">
+        <div>
+          <label for="blockedSearch">Search blocked rows</label>
+          <input id="blockedSearch" type="search" placeholder="Search blocked needs-review rows…">
+        </div>
+      </div>
+      <p class="meta" id="blockedMeta"></p>
+      <div class="cards" id="blockedCards"></div>
+    </section>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const HEADLINE_RE = /\bfireworks\b|\bparade\b|\bindependence day\b|\bnathan'?s?\b|\bblock party\b|\bhuck finn\b|\bjuly 4\b|\bjuly 4th\b/i;
+    const JULY_4 = '2026-07-04';
+    const MANUAL_RE = /manual|hardwrite|field[-_ ]intel|nypd/i;
+
+    const state = {
+      report: null,
+      preview: [],
+      blocked: [],
+      filter: 'all',
+      search: '',
+      borough: '',
+      blockedSearch: '',
+      map: null,
+      markers: []
+    };
+
+    const FILTERS = [
+      { id: 'all', label: 'All preview rows' },
+      { id: 'manual', label: 'Manual / NYPD preserved' },
+      { id: 'approved_geocode', label: 'Approved-geocode tvpp' },
+      { id: 'headline_july_4', label: 'Headline July 4' }
+    ];
+
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    }
+
+    function isManual(row) {
+      return row.verification_status === 'nypd_field_intel'
+        || row._manual_priority
+        || /^nypd-hardwrite-/i.test(String(row.id || ''))
+        || MANUAL_RE.test(String(row.source_file || ''));
+    }
+
+    function isApprovedGeocode(row) {
+      return row.approved_geocode_applied === true;
+    }
+
+    function isHeadline(row) {
+      return HEADLINE_RE.test(String(row.title || ''))
+        || (String(row.date || '').slice(0, 10) === JULY_4 && HEADLINE_RE.test(String(row.location || row.display_location || '')));
+    }
+
+    function rowTags(row) {
+      const items = [];
+      if (isManual(row)) items.push('<span class="tag ok">manual/NYPD preserved</span>');
+      if (isApprovedGeocode(row)) items.push('<span class="tag ok">approved geocode applied</span>');
+      if (isHeadline(row)) items.push('<span class="tag warn">headline July 4</span>');
+      if (row.verification_status) items.push(`<span class="tag">${esc(row.verification_status)}</span>`);
+      return items.join('');
+    }
+
+    function matchesFilter(row) {
+      switch (state.filter) {
+        case 'manual': return isManual(row);
+        case 'approved_geocode': return isApprovedGeocode(row);
+        case 'headline_july_4': return isHeadline(row);
+        default: return true;
+      }
+    }
+
+    function matchesSearch(row, query) {
+      if (!query) return true;
+      const hay = [
+        row.title,
+        row.location,
+        row.display_location,
+        row.borough,
+        row.source_record_id,
+        row.id,
+        row.major_reason,
+        row.verification_status
+      ].join(' ').toLowerCase();
+      return hay.includes(query);
+    }
+
+    function activePreviewRows() {
+      const query = state.search.trim().toLowerCase();
+      return state.preview.filter(row =>
+        matchesFilter(row)
+        && matchesSearch(row, query)
+        && (!state.borough || String(row.borough || '') === state.borough)
+      );
+    }
+
+    function renderCounts() {
+      const r = state.report || {};
+      const items = [
+        ['preview_major_feed_rows', r.preview_major_feed_rows],
+        ['preview_needs_review_rows', r.preview_needs_review_rows],
+        ['preserved_manual_records', r.preserved_manual_records],
+        ['manual_records_removed', r.manual_records_removed],
+        ['approved_geocodes_applied', r.approved_geocodes_applied],
+        ['headline_july_4_in_preview_or_review', r.headline_july_4_in_preview_or_review],
+        ['possible_matches_still_blocked', r.possible_matches_still_blocked],
+        ['c5_production_publish_blocked', r.c5_production_publish_blocked]
+      ];
+      document.getElementById('countsGrid').innerHTML = items.map(([label, value]) =>
+        `<div class="stat"><div class="label">${esc(label)}</div><div class="value">${esc(value ?? '—')}</div></div>`
+      ).join('');
+      document.getElementById('reportMeta').textContent = r.generated_at
+        ? `Report generated ${esc(r.generated_at)} · phase ${esc(r.phase)} · mode ${esc(r.mode)}`
+        : 'Report not loaded.';
+      document.getElementById('blockedTotal').textContent = String(r.preview_needs_review_rows ?? state.blocked.length);
+    }
+
+    function renderFilters() {
+      document.getElementById('filterButtons').innerHTML = FILTERS.map(filter =>
+        `<button type="button" data-filter="${esc(filter.id)}" class="${state.filter === filter.id ? 'active' : ''}">${esc(filter.label)}</button>`
+      ).join('');
+      document.querySelectorAll('#filterButtons button').forEach(button => {
+        button.addEventListener('click', () => {
+          state.filter = button.dataset.filter;
+          renderFilters();
+          renderPreviewCards();
+          renderMap();
+        });
+      });
+    }
+
+    function renderPreviewCards() {
+      const rows = activePreviewRows();
+      document.getElementById('resultMeta').textContent =
+        `${rows.length.toLocaleString()} preview row(s) shown · manual preserved: ${state.preview.filter(isManual).length} · approved geocode: ${state.preview.filter(isApprovedGeocode).length}`;
+      document.getElementById('previewCards').innerHTML = rows.length
+        ? rows.map(row => `
+          <article class="card">
+            <div class="card-head">
+              <h3>${esc(row.title)}</h3>
+              <div class="badge">${esc(row.priority_score ?? row.major_score ?? '—')}</div>
+            </div>
+            <div class="tags">${rowTags(row)}</div>
+            <div class="grid-2">
+              <div><strong>Date</strong><br>${esc(row.date)}</div>
+              <div><strong>Borough</strong><br>${esc(row.borough)}</div>
+              <div><strong>Source ID</strong><br>${esc(row.source_record_id || row.id)}</div>
+              <div><strong>Verification</strong><br>${esc(row.verification_status)}</div>
+              <div><strong>Lat/Lng</strong><br>${esc(row.lat)}, ${esc(row.lng)}</div>
+              <div><strong>Geocode source</strong><br>${esc(row.geocode_source || 'production/manual')}</div>
+            </div>
+            <p style="margin:10px 0 0;color:#cbd5e1">${esc(row.display_location || row.location)}</p>
+            <p class="safety">${esc(row.safety_note || 'Source-listed public event listing. Field/photo candidate. Confirm before traveling.')}</p>
+            <p class="meta">major_reason: ${esc(row.major_reason)}</p>
+          </article>
+        `).join('')
+        : '<div class="empty">No preview rows match the current filter/search.</div>';
+    }
+
+    function renderMap() {
+      const rows = activePreviewRows().filter(row => Number.isFinite(Number(row.lat)) && Number.isFinite(Number(row.lng)));
+      document.getElementById('mapMeta').textContent =
+        `${rows.length.toLocaleString()} preview row(s) with coordinates on map · total preview rows: ${state.preview.length}`;
+      if (!state.map) {
+        state.map = L.map('map').setView([40.7128, -74.006], 11);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '&copy; OpenStreetMap'
+        }).addTo(state.map);
+      }
+      state.markers.forEach(marker => marker.remove());
+      state.markers = [];
+      rows.forEach(row => {
+        const marker = L.marker([row.lat, row.lng]).addTo(state.map);
+        marker.bindPopup(`<strong>${esc(row.title)}</strong><br>${esc(row.date)}<br>${esc(row.borough)}`);
+        state.markers.push(marker);
+      });
+      if (rows.length) {
+        const bounds = L.latLngBounds(rows.map(row => [row.lat, row.lng]));
+        state.map.fitBounds(bounds.pad(0.15));
+      }
+    }
+
+    function blockedReasonCounts() {
+      const counts = {};
+      state.blocked.forEach(row => {
+        (row.review_reasons || ['unknown']).forEach(reason => {
+          counts[reason] = (counts[reason] || 0) + 1;
+        });
+      });
+      return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+    }
+
+    function renderBlocked() {
+      const r = state.report || {};
+      document.getElementById('blockedSummary').textContent =
+        `${(r.preview_needs_review_rows ?? state.blocked.length).toLocaleString()} rows remain in preview needs-review and are blocked from production publish. Possible/fuzzy geocode matches are not auto-applied.`;
+      document.getElementById('blockedReasons').innerHTML = blockedReasonCounts().map(([reason, count]) =>
+        `<div class="reason-item"><span>${esc(reason)}</span><strong>${count.toLocaleString()}</strong></div>`
+      ).join('');
+
+      const query = state.blockedSearch.trim().toLowerCase();
+      const sample = state.blocked
+        .filter(row => matchesSearch(row, query))
+        .slice(0, 24);
+      document.getElementById('blockedMeta').textContent =
+        `${sample.length.toLocaleString()} blocked sample row(s) shown (max 24) · search filters within blocked file`;
+      document.getElementById('blockedCards').innerHTML = sample.length
+        ? sample.map(row => `
+          <article class="card">
+            <div class="card-head">
+              <h3>${esc(row.title)}</h3>
+              <div class="badge">score ${esc(row.major_score ?? '—')}</div>
+            </div>
+            <div class="tags">${(row.review_reasons || []).map(r => `<span class="tag warn">${esc(r)}</span>`).join('')}${row.missing_geocode ? '<span class="tag bad">missing_geocode</span>' : ''}</div>
+            <div class="grid-2">
+              <div><strong>Date</strong><br>${esc(row.date)}</div>
+              <div><strong>Borough</strong><br>${esc(row.borough)}</div>
+              <div><strong>Source ID</strong><br>${esc(row.source_record_id)}</div>
+            </div>
+            <p style="margin:10px 0 0;color:#cbd5e1">${esc(row.display_location || row.location)}</p>
+          </article>
+        `).join('')
+        : '<div class="empty">No blocked sample rows match search.</div>';
+    }
+
+    function renderBoroughs() {
+      const boroughs = [...new Set(state.preview.map(row => row.borough).filter(Boolean))].sort();
+      document.getElementById('boroughSelect').innerHTML =
+        `<option value="">All boroughs</option>${boroughs.map(b => `<option value="${esc(b)}">${esc(b)}</option>`).join('')}`;
+    }
+
+    function renderAll() {
+      renderCounts();
+      renderPreviewCards();
+      renderMap();
+      renderBlocked();
+    }
+
+    async function loadData() {
+      const cacheBust = `v=${encodeURIComponent(new URLSearchParams(location.search).get('v') || Date.now())}`;
+      const [report, preview, blocked] = await Promise.all([
+        fetch(`./data/reports/preview_major_feed_report.json?${cacheBust}`, { cache: 'no-store' }).then(r => r.json()),
+        fetch(`./data/preview_major_feed.json?${cacheBust}`, { cache: 'no-store' }).then(r => r.json()),
+        fetch(`./data/preview_major_feed_needs_review.json?${cacheBust}`, { cache: 'no-store' }).then(r => r.json())
+      ]);
+      state.report = report;
+      state.preview = Array.isArray(preview) ? preview : [];
+      state.blocked = Array.isArray(blocked) ? blocked : [];
+      renderFilters();
+      renderBoroughs();
+      renderAll();
+    }
+
+    document.getElementById('searchBox').addEventListener('input', event => {
+      state.search = event.target.value;
+      renderPreviewCards();
+      renderMap();
+    });
+    document.getElementById('boroughSelect').addEventListener('change', event => {
+      state.borough = event.target.value;
+      renderPreviewCards();
+      renderMap();
+    });
+    document.getElementById('blockedSearch').addEventListener('input', event => {
+      state.blockedSearch = event.target.value;
+      renderBlocked();
+    });
+
+    loadData().catch(error => {
+      document.getElementById('countsGrid').innerHTML = `<div class="error">Failed to load preview data: ${esc(error.message)}</div>`;
+    });
+  </script>
+</body>
+</html>
