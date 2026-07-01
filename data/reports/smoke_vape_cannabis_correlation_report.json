@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1892,
-  "usable_complaints": 1892,
+  "source_complaints": 1851,
+  "usable_complaints": 1851,
   "source_dispensaries": 241,
   "source_retailers": 4882,
   "correlation_locations": 5123,
-  "output_locations": 204,
-  "low_signal_excluded": 4919,
+  "output_locations": 202,
+  "low_signal_excluded": 4921,
   "radius_feet": [
     100,
     250,
@@ -22,20 +22,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 179,
+    "licensed_smoke_vape_retailer": 177,
     "legal_cannabis_dispensary": 25
   },
   "borough_counts": {
-    "Brooklyn": 59,
-    "Bronx": 37,
-    "Manhattan": 70,
-    "Queens": 36,
+    "Brooklyn": 60,
+    "Bronx": 34,
+    "Manhattan": 71,
+    "Queens": 35,
     "Staten Island": 2
   },
   "signal_tier_counts": {
     "very_high": 2,
-    "high": 21,
-    "moderate": 181
+    "high": 16,
+    "moderate": 184
   },
   "top_locations_sample": [
     {
@@ -182,28 +182,6 @@
       "last_complaint_date": "2026-06-27"
     },
     {
-      "title": "FLOR DE FRED",
-      "location_kind": "legal_cannabis_dispensary",
-      "address": "BITAR ASSETS INC 9605 LIBERTY, OZONE PARK, 11417 1623",
-      "borough": "Queens",
-      "signal_score": 22,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-03"
-    },
-    {
-      "title": "9TH AVENUE GOURMET INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "781 9TH AVE, NEW YORK, 10019",
-      "borough": "Manhattan",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-03"
-    },
-    {
       "title": "BURKE CANDY & CONVENIENCE CORP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "702 BURKE AVE, BRONX, 10467",
@@ -226,17 +204,6 @@
       "last_complaint_date": "2026-06-16"
     },
     {
-      "title": "FOOD VALLEY DELI & GROCERY",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "9601 LIBERTY AVENUE, OZONE PARK, 11417",
-      "borough": "Queens",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-03"
-    },
-    {
       "title": "GARDENIA DELI",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "404 8 AVENUE, NEW YORK, 10001",
@@ -257,28 +224,6 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-06-12"
-    },
-    {
-      "title": "SMOKE SCENE N VAPE CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "786 9 AVENUE, NEW YORK, 10019",
-      "borough": "Manhattan",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-03"
-    },
-    {
-      "title": "SMOKE SCENE N VAPE CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "786 9 AVENUE, NEW YORK, 10019",
-      "borough": "Manhattan",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-03"
     },
     {
       "title": "SPEEDWAY LLC",
@@ -303,17 +248,72 @@
       "last_complaint_date": "2026-06-13"
     },
     {
-      "title": "BROWNSVILLE DELI & GROCERY INC",
+      "title": "CIGAR VAPE INC I",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "784 SARATOGA AVE, BROOKLYN, 11212",
+      "address": "452 5 AVENUE, BROOKLYN, 11215",
       "borough": "Brooklyn",
       "signal_score": 13,
       "signal_tier": "moderate",
       "complaints_365d_100ft": 1,
       "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-24"
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "CIGAR VAPE INC I",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "452 5 AVENUE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 13,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "FIVE STARS DELI GROCERY",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "10413 JAMAICA AVE, JAMAICA, 11418",
+      "borough": "Queens",
+      "signal_score": 13,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-22"
+    },
+    {
+      "title": "212PARTNERS LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "1119 BROADWAY, BROOKLYN, 11221 8520",
+      "borough": "Brooklyn",
+      "signal_score": 12,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 1,
+      "last_complaint_date": "2026-06-08"
+    },
+    {
+      "title": "401 NEW YORK DELI CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "401 SCHENECTADY AVE, BROOKLYN, 11213",
+      "borough": "Brooklyn",
+      "signal_score": 12,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-25"
+    },
+    {
+      "title": "82ND CONVENIENCE STORE CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "8202 ROOSEVELT AVE, JACKSON HEIGHTS, 11372",
+      "borough": "Queens",
+      "signal_score": 12,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-11"
     }
   ],
-  "generated_at": "2026-07-01T00:23:15.334Z",
+  "generated_at": "2026-07-01T13:15:35.988Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
