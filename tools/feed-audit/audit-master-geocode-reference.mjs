@@ -5,7 +5,7 @@
  */
 import { readdir, readFile, stat, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const NEEDS_REVIEW_PATH = path.join(ROOT, 'data/prototype_major_events_needs_review.json');
@@ -595,7 +595,24 @@ async function main() {
   console.log(`recommended_master_reference_file=${report.recommended_master_reference_file}`);
 }
 
-main().catch(error => {
-  console.error(error);
-  process.exit(1);
-});
+const isMainModule = process.argv[1]
+  && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url;
+
+if (isMainModule) {
+  main().catch(error => {
+    console.error(error);
+    process.exit(1);
+  });
+}
+
+export {
+  norm,
+  cacheKey,
+  strictExactKeys,
+  isHeadlineJuly4,
+  classifyRow,
+  buildReferenceIndex,
+  buildTokenIndex,
+  summarizeCandidate,
+  hasValidCoordinates
+};

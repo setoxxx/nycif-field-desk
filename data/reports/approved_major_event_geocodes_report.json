@@ -1,0 +1,31 @@
+{
+  "phase": "C5G2",
+  "mode": "review_only_geocode_overrides",
+  "generated_at": "2026-07-01T18:59:24.147Z",
+  "production_feeds_modified": false,
+  "public_ui_modified": false,
+  "wordpress_modified": false,
+  "master_reference_file": "data/location_cache.json",
+  "audit_report": "data/reports/master_geocode_reference_audit.json",
+  "match_samples": "data/reports/master_geocode_reference_match_samples.json",
+  "tvpp_needs_review_rows": 897,
+  "exact_matches_promoted_to_proposed_geocodes": 1,
+  "possible_matches_routed_to_review": 249,
+  "exact_non_master_routed_to_review": 5,
+  "geocode_review_rows": 254,
+  "unmatched_count": 642,
+  "headline_july_4_proposed_exact_count": 0,
+  "headline_july_4_needs_review_count": 26,
+  "headline_july_4_unmatched_count": 57,
+  "approved_geocode_file": "data/approved_major_event_geocodes.json",
+  "needs_review_geocode_file": "data/approved_major_event_geocodes_needs_review.json",
+  "production_publish_blocked": true,
+  "c5_required_for_publish": true,
+  "explicit_howard_approval_required": true,
+  "promotion_rules": [
+    "Only location_cache.json master exact matches with single coordinate set are proposed.",
+    "Possible/fuzzy matches routed to needs_review geocode file.",
+    "Non-master exact matches require human confirmation.",
+    "Unmatched rows are reported only; not auto-approved."
+  ]
+}
