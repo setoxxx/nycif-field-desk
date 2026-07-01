@@ -1,0 +1,101 @@
+{
+  "phase": "C5PV-F",
+  "mode": "post_publish_regression_investigation_report_only",
+  "generated_at": "2026-07-01T20:30:00.000Z",
+  "investigation_doc": "docs/postpublish-map-regression-investigation.md",
+  "test_url": "https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-01&resetFilters=1",
+  "recommended_retest_url": "https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1",
+  "live_feeds_pr": 1,
+  "live_feeds_merge_commit": "1ab5a08",
+  "howard_reported_failure": {
+    "page_loads": true,
+    "major_only_default_works": false,
+    "manual_nypd_visible": false,
+    "queensboro_visible_or_findable": false,
+    "blocked_rows_absent_check_passed": false,
+    "approved_overlays_listed": false,
+    "wordpress_untouched": true,
+    "load_all_spinner_stuck": true
+  },
+  "browser_console_errors": [],
+  "browser_console_error_summary": "No JavaScript exceptions observed in automated session; symptoms match filter state hiding all rows.",
+  "service_worker_status": {
+    "registered": true,
+    "cache_name": "nycif-v013-major-default",
+    "controller_active": true,
+    "stale_major_feed_cache_observed": true,
+    "browser_major_row_count": 786,
+    "curl_major_row_count": 582
+  },
+  "feed_json_validation": {
+    "nycif_major_radar_map_events.json": {
+      "parse_ok": true,
+      "row_count": 582,
+      "duplicate_ids": 0,
+      "invalid_coordinates": 0
+    },
+    "nycif_all_radar_map_events.json": {
+      "parse_ok": true,
+      "row_count": 12210
+    },
+    "data_nycif_staged_live_events.json": {
+      "parse_ok": true,
+      "row_count": 27918,
+      "modified_by_c5p": false
+    }
+  },
+  "row_914695_validation": {
+    "exists_in_major_feed": true,
+    "exists_in_all_feed": true,
+    "lat": 40.739312,
+    "lng": -73.842193,
+    "source_record_id": "914695",
+    "geocode_source": "normalized_exact",
+    "approved_geocode_applied": true,
+    "lat_lng_types": "number",
+    "make_event_simulation_ok": true,
+    "schema_regression_detected": false
+  },
+  "manual_nypd_preservation_check": {
+    "preserved_manual_records": 11,
+    "manual_records_removed": 0,
+    "raw_feed_verified": true
+  },
+  "blocked_rows_check": {
+    "blocked_needs_review_rows_published": 0,
+    "blocked_needs_review_rows_total": 896,
+    "preview_needs_review_file_published": false
+  },
+  "field_desk_script_loading_check": {
+    "public_map_autoload_loaded_by_index_html": false,
+    "public_map_defaults_loaded": true,
+    "app_v06_safe_loaded": true,
+    "public_approved_overlays_loaded": true,
+    "public_default_version": "major-only-v03",
+    "overlay_controls_injected": true,
+    "wordpress_modified": false,
+    "public_ui_modified_for_investigation": false
+  },
+  "reproduction_findings": {
+    "reset_filters_local_storage_categories_all_false": true,
+    "major_only_checked": true,
+    "visible_assignments_with_broken_defaults": 0,
+    "simulated_visible_2026_06_28_with_correct_categories": 58,
+    "simulated_nypd_2026_06_28_with_correct_categories": 3,
+    "simulated_visible_2026_07_02_with_correct_categories": 2,
+    "simulated_queensboro_2026_07_02_with_correct_categories": 1
+  },
+  "suspected_root_cause": "field_desk_public_map_default_category_filters_all_false_on_resetFilters_conflicts_with_eventMatches_category_gate",
+  "secondary_factor": "service_worker_may_serve_stale_cached_major_feed_786_vs_current_582",
+  "live_feeds_json_regression": false,
+  "suspected_root_cause_confirmed": true,
+  "recommended_fix_path": "field_desk_minimal_hotfix_update_public_default_categories_enable_sports_parade_market_arts_optional_service_worker_feed_cache_hardening",
+  "rollback_recommendation": {
+    "rollback_live_feeds_pr_1": false,
+    "reason": "Production feeds validate; regression reproduced from filter defaults not feed corruption",
+    "emergency_restore_backup_if_needed": "data/backups/nycif_major_radar_map_events.2026-07-01T19-55-07-881Z.json"
+  },
+  "production_publish_cycle_closed": false,
+  "wordpress_touched": false,
+  "next_step": "Open minimal field-desk hotfix PR for public default category prefs; re-run browser QA at v=c5p-postpublish-02; do not touch WordPress; do not rollback feeds unless new evidence."
+}
