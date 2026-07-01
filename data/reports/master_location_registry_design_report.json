@@ -1,0 +1,138 @@
+{
+  "phase": "XRI-G0",
+  "mode": "design_report_only",
+  "generated_at": "2026-07-01T22:00:00.000Z",
+  "production_feeds_modified": false,
+  "public_ui_modified": false,
+  "wordpress_modified": false,
+  "live_staging_executed": false,
+  "registry_name": "NYCIF Master Location Registry",
+  "registry_concept_defined": true,
+  "location_record_types_defined": true,
+  "matching_statuses_defined": true,
+  "production_publish_requires_approved_match": true,
+  "possible_matches_blocked_from_production": true,
+  "location_cache_read_only": true,
+  "wordpress_gate_required": true,
+  "design_doc": "docs/master-location-registry-design.md",
+  "matching_rules_doc": "docs/location-matching-rules.md",
+  "design_doc_repo": "setoxxx/nycif-field-desk",
+  "design_doc_placement": "cross_repo_design_reference_only",
+  "future_registry_primary_repo": "setoxxx/nycif-live-feeds",
+  "related_repos": [
+    "setoxxx/nycif-live-feeds",
+    "setoxxx/nycif-field-desk",
+    "setoxxx/nycif-web-platform"
+  ],
+  "location_record_types": [
+    "venue",
+    "park",
+    "park_asset",
+    "intersection",
+    "street_segment",
+    "address_point",
+    "neighborhood",
+    "borough",
+    "source_specific_override",
+    "manual_editorial_override"
+  ],
+  "core_registry_fields": [
+    "registry_id",
+    "registry_type",
+    "canonical_name",
+    "alternate_names",
+    "normalized_name",
+    "normalized_location_key",
+    "borough",
+    "neighborhood",
+    "address",
+    "cross_streets",
+    "street_name",
+    "from_street",
+    "to_street",
+    "park_id",
+    "venue_id",
+    "source_dataset_ids",
+    "lat",
+    "lng",
+    "geometry_type",
+    "geometry_source",
+    "coordinate_quality",
+    "approval_status",
+    "match_confidence",
+    "match_methods_supported",
+    "created_at",
+    "updated_at",
+    "version",
+    "retired_at",
+    "notes"
+  ],
+  "match_result_statuses": [
+    "approved_exact",
+    "approved_source_override",
+    "possible_match",
+    "conflict",
+    "unmatched",
+    "rejected"
+  ],
+  "production_allowed_match_statuses": [
+    "approved_exact",
+    "approved_source_override"
+  ],
+  "production_blocked_match_statuses": [
+    "possible_match",
+    "conflict",
+    "unmatched",
+    "rejected"
+  ],
+  "source_inputs_read_only": [
+    "data/location_cache.json",
+    "data/reports/master_geocode_reference_audit.json",
+    "data/reports/master_geocode_reference_match_samples.json",
+    "data/approved_major_event_geocodes.json",
+    "SODA cpcm-i88g (Parks Event Locations)"
+  ],
+  "prior_work_referenced": [
+    "C5G master geocode reference audit",
+    "C5G2 approved geocode overrides",
+    "C5P production publish closeout"
+  ],
+  "safety_rules": [
+    "No invented coordinates",
+    "No automatic fuzzy geocode publishing",
+    "No hidden publication of possible matches",
+    "location_cache.json remains read-only unless explicitly approved",
+    "Registry is a reference system, not proof of event validity",
+    "Confirm before traveling language where appropriate"
+  ],
+  "repo_ownership": {
+    "nycif-live-feeds": "Primary owner (future): registry storage, source adapters, match pipeline, production feed geocoding, needs-review reports",
+    "nycif-field-desk": "Review UI, map approved records, admin views for non-approved matches; hosts G0 design doc only",
+    "nycif-web-platform": "Staging/operator gates; no WordPress without explicit approval"
+  },
+  "roadmap_phases": [
+    { "phase": "XRI-G0", "scope": "Registry design", "mode": "design_report_only" },
+    { "phase": "XRI-G1", "scope": "Existing location asset inventory", "mode": "report_only" },
+    { "phase": "XRI-G2", "scope": "Registry source inventory and candidate schema", "mode": "report_only" },
+    { "phase": "XRI-G3", "scope": "Prototype registry builder", "mode": "local_report_only" },
+    { "phase": "XRI-G4", "scope": "Match audit against SODA source samples", "mode": "report_only" },
+    { "phase": "XRI-G5", "scope": "Review UI for possible/conflict/unmatched matches", "mode": "admin_only" },
+    { "phase": "XRI-G6", "scope": "Approved override workflow", "mode": "approval_gated" },
+    { "phase": "XRI-G7", "scope": "Production-feed integration", "mode": "approval_gated" },
+    { "phase": "XRI-G8", "scope": "Monitoring and correction workflow", "mode": "approval_gated" }
+  ],
+  "next_step": "XRI-G1 existing location asset inventory; report only.",
+  "files_changed": [
+    "docs/master-location-registry-design.md",
+    "docs/location-matching-rules.md",
+    "data/reports/master_location_registry_design_report.json"
+  ],
+  "files_not_modified": [
+    "data/location_cache.json",
+    "production feed JSON",
+    "public map runtime files",
+    "iframe/embed settings",
+    "scheduled workflows",
+    "WordPress"
+  ]
+}
