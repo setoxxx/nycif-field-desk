@@ -1,0 +1,174 @@
+{
+  "phase": "C5",
+  "mode": "approval_checklist_only",
+  "generated_at": "2026-07-01T18:20:00.000Z",
+  "production_feeds_modified": false,
+  "public_ui_modified": false,
+  "wordpress_modified": false,
+  "checklist_doc": "docs/major-event-production-publish-checklist.md",
+  "prototype_review_url": "https://setoxxx.github.io/nycif-field-desk/prototype-major-events-review.html?v=c2b-01",
+  "c4_merge_commit": "cbeb650",
+  "c4_pr": 35,
+  "preview_counts": {
+    "preview_major_feed_rows": 11,
+    "preview_all_feed_rows": 14,
+    "preview_staged_rows": 11,
+    "preview_needs_review_rows": 897,
+    "preserved_manual_records": 11,
+    "manual_records_removed": 0,
+    "missing_geocode_count": 897,
+    "headline_july_4_in_preview_or_review": true
+  },
+  "preview_artifacts": {
+    "preview_major_feed": "data/preview_major_feed.json",
+    "preview_all_feed": "data/preview_all_feed.json",
+    "preview_staged_feed": "data/preview_staged_feed.json",
+    "preview_needs_review": "data/preview_major_feed_needs_review.json",
+    "preview_report": "data/reports/preview_major_feed_report.json",
+    "rebuild_command": "node tools/feed-audit/build-preview-major-feed.mjs"
+  },
+  "blocked_production_files": [
+    "nycif_major_radar_map_events.json",
+    "nycif_all_radar_map_events.json",
+    "data/nycif_staged_live_events.json"
+  ],
+  "blocked_production_repo": "setoxxx/nycif-live-feeds",
+  "approval_checklist": [
+    {
+      "id": 1,
+      "gate": "PR #35 preview outputs merged",
+      "required": true,
+      "evidence": "Merge commit cbeb650; preview files on main"
+    },
+    {
+      "id": 2,
+      "gate": "preview_major_feed.json preserves 11 manual/NYPD-style records",
+      "required": true,
+      "evidence": "preserved_manual_records: 11"
+    },
+    {
+      "id": 3,
+      "gate": "manual_records_removed is 0",
+      "required": true,
+      "evidence": "preview report manual_records_removed: 0"
+    },
+    {
+      "id": 4,
+      "gate": "preview_major_feed_needs_review.json contains 897 rows",
+      "required": true,
+      "evidence": "preview_needs_review_rows: 897"
+    },
+    {
+      "id": 5,
+      "gate": "headline_july_4_in_preview_or_review is true",
+      "required": true,
+      "evidence": "preview report july_4_coverage"
+    },
+    {
+      "id": 6,
+      "gate": "Missing-geocode tvpp rows not promoted into major preview pins",
+      "required": true,
+      "evidence": "preview_major_feed_rows: 11 manual only; 897 in needs-review"
+    },
+    {
+      "id": 7,
+      "gate": "No fabricated times, locations, popularity, expected crowd, or verified-crowd claims",
+      "required": true,
+      "evidence": "C2/C4 fields only; no expected_crowd_score or crowd_level fabrication"
+    },
+    {
+      "id": 8,
+      "gate": "Production feed rollback snapshots created before publish",
+      "required": true,
+      "evidence": "Timestamped backups in live-feeds data/backups/"
+    },
+    {
+      "id": 9,
+      "gate": "Production publish in setoxxx/nycif-live-feeds, not field-desk preview files",
+      "required": true,
+      "evidence": "Separate live-feeds publish PR"
+    },
+    {
+      "id": 10,
+      "gate": "WordPress remains untouched",
+      "required": true,
+      "evidence": "No WordPress/iframe PR in publish batch"
+    },
+    {
+      "id": 11,
+      "gate": "Public map UI remains untouched",
+      "required": true,
+      "evidence": "No index.html, app-v06-safe.js, or overlay script changes"
+    },
+    {
+      "id": 12,
+      "gate": "Howard explicitly approves exact production files before overwrite",
+      "required": true,
+      "evidence": "Written approval naming each target file"
+    }
+  ],
+  "rollback_plan": {
+    "backup_repo": "setoxxx/nycif-live-feeds",
+    "pre_publish_backups": [
+      "data/backups/nycif_major_radar_map_events.<ISO>.json",
+      "data/backups/nycif_all_radar_map_events.<ISO>.json",
+      "data/backups/nycif_staged_live_events.<ISO>.json"
+    ],
+    "publish_report": "data/reports/production_feed_publish_report.json",
+    "rollback_methods": [
+      "commit revert in live-feeds",
+      "restore timestamped backup snapshot",
+      "verify raw GitHub feed URLs before WordPress changes"
+    ],
+    "rollback_triggers": [
+      "missing headline July 4 events",
+      "manual NYPD records dropped",
+      "invalid coordinates outside NYC bounds",
+      "empty or broken major feed",
+      "unexpected row count drop"
+    ]
+  },
+  "approval_gate": {
+    "explicit_howard_approval_required": true,
+    "approval_must_name_files": [
+      "nycif_major_radar_map_events.json",
+      "nycif_all_radar_map_events.json",
+      "data/nycif_staged_live_events.json"
+    ],
+    "approval_must_confirm_backups_committed": true,
+    "blocked_until_all_checklist_items_satisfied": true
+  },
+  "future_publish_pr": {
+    "repo": "setoxxx/nycif-live-feeds",
+    "not_in_field_desk": true,
+    "expected_files": {
+      "backups": [
+        "data/backups/nycif_major_radar_map_events.<ISO>.json",
+        "data/backups/nycif_all_radar_map_events.<ISO>.json",
+        "data/backups/nycif_staged_live_events.<ISO>.json"
+      ],
+      "report": "data/reports/production_feed_publish_report.json",
+      "production_overwrites": [
+        "nycif_major_radar_map_events.json",
+        "nycif_all_radar_map_events.json",
+        "data/nycif_staged_live_events.json"
+      ]
+    },
+    "read_only_inputs_from_field_desk": [
+      "data/preview_major_feed.json",
+      "data/preview_all_feed.json",
+      "data/preview_staged_feed.json",
+      "data/reports/preview_major_feed_report.json"
+    ],
+    "verification_commands": [
+      "curl -sS https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json | jq 'length'",
+      "curl -sS https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/data/nycif_staged_live_events.json | jq '.events | length'"
+    ],
+    "public_map_smoke_test_url": "https://setoxxx.github.io/nycif-field-desk/?v=post-publish-qa-01&resetFilters=1"
+  },
+  "safety_statements": [
+    "No production feed files are modified by this checklist PR.",
+    "Production publishing requires a separate PR in setoxxx/nycif-live-feeds and explicit Howard approval."
+  ],
+  "next_step": "Human review of preview outputs; open live-feeds publish PR only after explicit Howard approval and rollback backups"
+}
