@@ -3,8 +3,8 @@
     active5pm: {
       id: 'active5pm',
       checkboxId: 'approvedOverlayActive5pm',
-      label: '🔥 Active 5PM Feed',
-      shortLabel: 'Active 5PM Feed',
+      label: "🔥 It's 5PM Somewhere",
+      shortLabel: "It's 5PM Somewhere",
       url: './data/nycif_active_nightlife_feed.json',
       icon: '🔥',
       className: 'nycif-approved-marker-active',
@@ -81,7 +81,7 @@
       .nycif-approved-marker-active { background: #b91c1c; }
       .nycif-approved-marker-cannabis { background: #166534; }
       .nycif-approved-marker-correlation { background: #4338ca; }
-      .nycif-approved-popup { min-width: 220px; max-width: 310px; font: 500 12px/1.35 system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; color: #111827; }
+      .nycif-approved-popup { min-width: 220px; max-width: 310px; padding: 12px 14px; border-radius: 16px; background: #fff; font: 500 12px/1.35 system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; color: #111827; box-shadow: 0 18px 45px rgba(15,23,42,.16); }
       .nycif-approved-popup .tag { display: inline-flex; border-radius: 999px; padding: 3px 7px; background: rgba(15,23,42,.09); color: #111827; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; }
       .nycif-approved-popup h2 { margin: 7px 0 5px; color: #0f172a; font-size: 15px; line-height: 1.15; }
       .nycif-approved-popup p { margin: 4px 0; color: #111827; }
