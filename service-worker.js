@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-v012-ui-defaults';
+const CACHE_NAME = 'nycif-v013-major-default';
 const APP_SHELL = [
   './',
   './index.html',
@@ -25,7 +25,7 @@ const APP_SHELL = [
   './icons/icon-512.svg'
 ];
 
-const UI_CONFIG_RE = /\/(?:index\.html|public-map-defaults-v01\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js)$/;
+const UI_CONFIG_RE = /\/(?:index\.html|app-v06-safe\.js|public-map-defaults-v01\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js)$/;
 
 function isUiConfigRequest(url) {
   return url.origin === location.origin && UI_CONFIG_RE.test(url.pathname);

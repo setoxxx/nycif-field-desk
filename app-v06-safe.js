@@ -1,6 +1,7 @@
 const VERSION = '0.6-staged-03-new-admin-filter';
 const NYC_CENTER = [40.7128, -74.0060];
 const STORAGE_KEY = 'nycif-field-desk-state-v06-safe';
+const PUBLIC_DEFAULT_VERSION = 'major-only-v03';
 
 const FEEDS = {
   major: 'https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json',
@@ -228,22 +229,115 @@ function sortEvents(a, b) {
   return b.priority - a.priority || ((a.start?.getTime() || 9999999999999) - (b.start?.getTime() || 9999999999999));
 }
 
+function isPublicMapPage() {
+  return document.body.classList.contains('public-map-page');
+}
+
+function getPublicDefaultPrefs() {
+  return {
+    borough: 'all',
+    sort: 'priority',
+    dateMode: 'today',
+    categories: { sports: false, parade: false, market: false, arts: false, parks: false, general: false },
+    majorOnly: true,
+    photoOnly: false,
+    nypdOnly: false,
+    newOnly: false,
+    nycifDefaultVersion: PUBLIC_DEFAULT_VERSION
+  };
+}
+
+function shouldForcePublicDefaultReset() {
+  try {
+    const url = new URL(window.location.href);
+    const resetFlag = url.searchParams.get('resetFilters');
+    const versionFlag = url.searchParams.get('v');
+    return resetFlag === '1'
+      || versionFlag === 'major-default-qa-01'
+      || versionFlag === 'ui-defaults-02';
+  } catch {
+    return false;
+  }
+}
+
+function applyPublicDefaultPrefsToState() {
+  const defaults = getPublicDefaultPrefs();
+  state.borough = defaults.borough;
+  state.sort = defaults.sort;
+  state.dateMode = defaults.dateMode;
+  state.categories = { ...defaults.categories };
+  state.majorOnly = defaults.majorOnly;
+  state.photoOnly = defaults.photoOnly;
+  state.nypdOnly = defaults.nypdOnly;
+  state.newOnly = defaults.newOnly;
+}
+
+function applyPublicPrefsToState(prefs) {
+  if (prefs.borough) state.borough = prefs.borough;
+  if (prefs.sort) state.sort = prefs.sort;
+  if (prefs.dateMode) state.dateMode = prefs.dateMode;
+  state.categories = {
+    sports: !!prefs.categories?.sports,
+    parade: !!prefs.categories?.parade,
+    market: !!prefs.categories?.market,
+    arts: !!prefs.categories?.arts,
+    parks: !!prefs.categories?.parks,
+    general: !!prefs.categories?.general
+  };
+  state.majorOnly = !!prefs.majorOnly;
+  state.photoOnly = !!prefs.photoOnly;
+  state.nypdOnly = !!prefs.nypdOnly;
+  state.newOnly = !!prefs.newOnly;
+}
+
+function applyLegacyPrefsToState(prefs) {
+  if (prefs.borough) state.borough = prefs.borough;
+  if (prefs.sort) state.sort = prefs.sort;
+  if (prefs.dateMode) state.dateMode = prefs.dateMode;
+  if (prefs.categories) state.categories = { ...state.categories, ...prefs.categories };
+  state.majorOnly = !!prefs.majorOnly;
+  state.photoOnly = !!prefs.photoOnly;
+  state.nypdOnly = !!prefs.nypdOnly;
+  state.newOnly = !!prefs.newOnly;
+}
+
+function loadPublicMapPrefs() {
+  const forceReset = shouldForcePublicDefaultReset();
+  if (forceReset) localStorage.removeItem(STORAGE_KEY);
+
+  const prefs = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  if (forceReset || prefs.nycifDefaultVersion !== PUBLIC_DEFAULT_VERSION) {
+    applyPublicDefaultPrefsToState();
+    savePrefs();
+    return;
+  }
+
+  applyPublicPrefsToState(prefs);
+}
+
 function savePrefs() {
-  const prefs = { borough: state.borough, sort: state.sort === 'near' && !state.userLocation ? 'priority' : state.sort, dateMode: state.dateMode, categories: state.categories, majorOnly: state.majorOnly, photoOnly: state.photoOnly, nypdOnly: state.nypdOnly, newOnly: state.newOnly };
+  const prefs = {
+    borough: state.borough,
+    sort: state.sort === 'near' && !state.userLocation ? 'priority' : state.sort,
+    dateMode: state.dateMode,
+    categories: { ...state.categories },
+    majorOnly: state.majorOnly,
+    photoOnly: state.photoOnly,
+    nypdOnly: state.nypdOnly,
+    newOnly: state.newOnly
+  };
+  if (isPublicMapPage()) prefs.nycifDefaultVersion = PUBLIC_DEFAULT_VERSION;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
 }
 
 function loadPrefs() {
   try {
-    const prefs = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    if (prefs.borough) state.borough = prefs.borough;
-    if (prefs.sort) state.sort = prefs.sort;
-    if (prefs.dateMode) state.dateMode = prefs.dateMode;
-    if (prefs.categories) state.categories = { ...state.categories, ...prefs.categories };
-    state.majorOnly = !!prefs.majorOnly;
-    state.photoOnly = !!prefs.photoOnly;
-    state.nypdOnly = !!prefs.nypdOnly;
-    state.newOnly = !!prefs.newOnly;
+    if (isPublicMapPage()) {
+      loadPublicMapPrefs();
+      return;
+    }
+
+    applyLegacyPrefsToState(JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'));
   } catch {}
 }
 
