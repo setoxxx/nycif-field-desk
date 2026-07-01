@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>NYCIF Prototype Major-Event Review (QA Only)</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --panel: #121a2b;
+      --panel-2: #182235;
+      --line: rgba(255,255,255,.08);
+      --text: #eef2ff;
+      --muted: #9aa7c0;
+      --warn: #fbbf24;
+      --ok: #34d399;
+      --bad: #f87171;
+      --accent: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #0a0f1a, #111827 240px, var(--bg));
+      color: var(--text);
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 20px 16px 48px; }
+    h1 { margin: 0 0 6px; font-size: 24px; }
+    .sub { color: var(--muted); margin: 0 0 18px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .panel h2 { margin: 0 0 12px; font-size: 16px; }
+    .status-grid, .counts-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    .stat {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .stat .label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .stat .value { font-size: 22px; font-weight: 700; }
+    .warn {
+      border-left: 4px solid var(--warn);
+      background: rgba(251,191,36,.08);
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #fde68a;
+    }
+    .controls {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 900px) {
+      .controls { grid-template-columns: 1.2fr 1fr 1fr; }
+    }
+    label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 6px; }
+    input[type="search"], select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .filters button {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .filters button.active {
+      background: rgba(96,165,250,.18);
+      border-color: rgba(96,165,250,.45);
+      color: #dbeafe;
+    }
+    .meta { color: var(--muted); font-size: 12px; margin-top: 8px; }
+    .cards { display: grid; gap: 12px; }
+    .card {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+    .card h3 { margin: 0; font-size: 16px; line-height: 1.25; }
+    .score {
+      background: rgba(96,165,250,.15);
+      color: #bfdbfe;
+      border: 1px solid rgba(96,165,250,.25);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+    .tag {
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: rgba(255,255,255,.06);
+      color: #cbd5e1;
+    }
+    .tag.warn { background: rgba(251,191,36,.12); color: #fde68a; }
+    .tag.bad { background: rgba(248,113,113,.12); color: #fecaca; }
+    .grid-2 {
+      display: grid;
+      gap: 8px 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .grid-2 strong { color: var(--text); font-weight: 600; }
+    .safety { margin-top: 10px; color: #cbd5e1; font-size: 12px; }
+    #map {
+      height: 320px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      display: none;
+    }
+    #map.visible { display: block; }
+    .empty { color: var(--muted); padding: 24px; text-align: center; }
+    .headline-list { display: grid; gap: 10px; }
+    .headline-item {
+      display: grid;
+      gap: 4px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--line);
+    }
+    .error { color: var(--bad); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Prototype Major-Event Review</h1>
+    <p class="sub">Standalone GitHub Pages QA dashboard for Phase C2 prototype outputs. Not the production public map.</p>
+
+    <section class="panel" aria-label="Project status">
+      <h2>Project status</h2>
+      <div class="status-grid">
+        <div class="stat"><div class="label">Phase</div><div class="value" style="font-size:16px">C2B — Prototype Major-Event Review</div></div>
+        <div class="stat"><div class="label">Mode</div><div class="value" style="font-size:16px;color:var(--warn)">QA only</div></div>
+        <div class="stat"><div class="label">Production feeds modified</div><div class="value" style="color:var(--ok)">false</div></div>
+        <div class="stat"><div class="label">WordPress modified</div><div class="value" style="color:var(--ok)">false</div></div>
+        <div class="stat"><div class="label">Public map modified</div><div class="value" style="color:var(--ok)">false</div></div>
+      </div>
+      <p class="meta" id="reportMeta">Loading report…</p>
+    </section>
+
+    <section class="panel warn" aria-label="QA warning">
+      <strong>QA warning:</strong>
+      This is a prototype review page. These records are not published to the live public event feed.
+      Locations may require human review/geocoding. Confirm before publication.
+    </section>
+
+    <section class="panel" aria-label="Summary counts">
+      <h2>Summary counts</h2>
+      <div class="counts-grid" id="countsGrid"></div>
+    </section>
+
+    <section class="panel" aria-label="Controls">
+      <h2>Review controls</h2>
+      <div class="controls">
+        <div>
+          <label for="searchBox">Search title, location, borough, type, agency, source ID</label>
+          <input id="searchBox" type="search" placeholder="Search prototype rows…">
+        </div>
+        <div>
+          <label for="sortSelect">Sort</label>
+          <select id="sortSelect">
+            <option value="score_desc">major_score descending</option>
+            <option value="date_asc">date ascending</option>
+            <option value="borough">borough</option>
+            <option value="event_type">event_type</option>
+            <option value="review_reason">review reason</option>
+          </select>
+        </div>
+        <div>
+          <label>Dataset</label>
+          <select id="datasetSelect">
+            <option value="needs_review">Needs-review rows</option>
+            <option value="mapped">Mapped prototype rows</option>
+            <option value="all">All prototype rows</option>
+          </select>
+        </div>
+      </div>
+      <div class="filters" id="filterButtons" style="margin-top:14px"></div>
+      <p class="meta" id="resultMeta"></p>
+    </section>
+
+    <section class="panel" aria-label="Headline July 4">
+      <h2>Headline July 4 candidates</h2>
+      <div class="headline-list" id="headlineList"></div>
+    </section>
+
+    <section class="panel" aria-label="Map">
+      <h2>Prototype map preview</h2>
+      <div id="map" aria-label="Prototype mapped rows map"></div>
+      <p class="meta" id="mapMeta">No mapped rows with coordinates in the current prototype pass.</p>
+    </section>
+
+    <section class="panel" aria-label="Review rows">
+      <h2>Review rows</h2>
+      <div class="cards" id="cards"></div>
+    </section>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const HEADLINE_RE = /\bfireworks\b|\bparade\b|\bindependence day\b|\bnathan'?s?\b|\bblock party\b|\bhuck finn\b|\bjuly 4\b|\bjuly 4th\b/i;
+    const JULY_4 = '2026-07-04';
+
+    const state = {
+      report: null,
+      mapped: [],
+      needsReview: [],
+      filter: 'all_needs_review',
+      search: '',
+      sort: 'score_desc',
+      dataset: 'needs_review'
+    };
+
+    const FILTERS = [
+      { id: 'all_needs_review', label: 'All needs-review rows' },
+      { id: 'july_4', label: 'July 4 only' },
+      { id: 'headline_july_4', label: 'Headline July 4 only' },
+      { id: 'missing_geocode', label: 'Missing geocode' },
+      { id: 'time_needs_review', label: 'Time needs review' },
+      { id: 'parade_march', label: 'Parade / march' },
+      { id: 'festival_cultural', label: 'Festival / cultural' },
+      { id: 'street_activity', label: 'Street activity' },
+      { id: 'sports_routine', label: 'Sports/routine review' }
+    ];
+
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    }
+
+    function tags(row) {
+      const items = [];
+      (row.major_reason_tags || []).forEach(tag => items.push(`<span class="tag">${esc(tag)}</span>`));
+      (row.review_reasons || []).forEach(tag => items.push(`<span class="tag warn">${esc(tag)}</span>`));
+      if (row.missing_geocode) items.push('<span class="tag bad">missing_geocode</span>');
+      if (row.vague_location) items.push('<span class="tag bad">vague_location</span>');
+      if (row.time_needs_review) items.push('<span class="tag warn">time_needs_review</span>');
+      return items.join('');
+    }
+
+    function isHeadline(row) {
+      return HEADLINE_RE.test(String(row.title || ''));
+    }
+
+    function matchesFilter(row) {
+      switch (state.filter) {
+        case 'all_needs_review':
+          return true;
+        case 'july_4':
+          return row.date === JULY_4;
+        case 'headline_july_4':
+          return row.date === JULY_4 && isHeadline(row);
+        case 'missing_geocode':
+          return !!row.missing_geocode;
+        case 'time_needs_review':
+          return !!row.time_needs_review;
+        case 'parade_march':
+          return (row.major_reason_tags || []).some(t => t.includes('parade'));
+        case 'festival_cultural':
+          return (row.major_reason_tags || []).some(t => t.includes('festival') || t.includes('cultural'));
+        case 'street_activity':
+          return (row.major_reason_tags || []).some(t => t.includes('street'));
+        case 'sports_routine':
+          return (row.review_reasons || []).some(r => r.includes('routine_sports') || r.includes('july_4_routine_sports'));
+        default:
+          return true;
+      }
+    }
+
+    function matchesSearch(row) {
+      if (!state.search) return true;
+      const hay = [
+        row.title,
+        row.location,
+        row.display_location,
+        row.borough,
+        row.event_type,
+        row.event_agency,
+        row.source_record_id,
+        row.major_reason,
+        (row.review_reasons || []).join(' ')
+      ].join(' ').toLowerCase();
+      return hay.includes(state.search);
+    }
+
+    function activeRows() {
+      const base = state.dataset === 'mapped'
+        ? state.mapped
+        : state.dataset === 'all'
+          ? [...state.mapped, ...state.needsReview]
+          : state.needsReview;
+      return base.filter(row => matchesFilter(row) && matchesSearch(row));
+    }
+
+    function sortRows(rows) {
+      const copy = [...rows];
+      switch (state.sort) {
+        case 'date_asc':
+          copy.sort((a, b) => String(a.start_date_time || a.date).localeCompare(String(b.start_date_time || b.date)));
+          break;
+        case 'borough':
+          copy.sort((a, b) => String(a.borough || '').localeCompare(String(b.borough || '')));
+          break;
+        case 'event_type':
+          copy.sort((a, b) => String(a.event_type || '').localeCompare(String(b.event_type || '')));
+          break;
+        case 'review_reason':
+          copy.sort((a, b) => String((a.review_reasons || [])[0] || '').localeCompare(String((b.review_reasons || [])[0] || '')));
+          break;
+        default:
+          copy.sort((a, b) => (b.major_score || 0) - (a.major_score || 0));
+      }
+      return copy;
+    }
+
+    function renderCounts() {
+      const r = state.report || {};
+      const items = [
+        ['source_rows', r.source_rows],
+        ['mapped_rows', r.mapped_rows],
+        ['needs_review_rows', r.needs_review_rows],
+        ['rejected_rows', r.rejected_rows],
+        ['july_4_source_rows', r.july_4_source_rows],
+        ['july_4_mapped_rows', r.july_4_mapped_rows],
+        ['july_4_needs_review_rows', r.july_4_needs_review_rows],
+        ['missing_geocode_count', r.missing_geocode_count],
+        ['vague_location_count', r.vague_location_count],
+        ['time_needs_review_count', r.time_needs_review_count]
+      ];
+      document.getElementById('countsGrid').innerHTML = items.map(([label, value]) =>
+        `<div class="stat"><div class="label">${esc(label)}</div><div class="value">${esc(value ?? '—')}</div></div>`
+      ).join('');
+      document.getElementById('reportMeta').textContent = r.generated_at
+        ? `Report generated ${esc(r.generated_at)} · query window ${esc(r.query_window?.start)} to ${esc(r.query_window?.end)}`
+        : 'Report not loaded.';
+    }
+
+    function renderHeadlines() {
+      const rows = state.needsReview.filter(row => isHeadline(row));
+      const unique = new Map();
+      rows.forEach(row => unique.set(row.source_record_id, row));
+      const list = [...unique.values()].sort((a, b) => (b.major_score || 0) - (a.major_score || 0));
+      document.getElementById('headlineList').innerHTML = list.length
+        ? list.map(row => `<div class="headline-item"><strong>${esc(row.title)}</strong><span>${esc(row.date)} · ${esc(row.borough)} · score ${esc(row.major_score)}</span><span>${esc((row.review_reasons || []).join(', ') || 'mapped')}</span></div>`).join('')
+        : '<div class="empty">No headline July 4 rows found.</div>';
+    }
+
+    function renderCards() {
+      const rows = sortRows(activeRows());
+      document.getElementById('resultMeta').textContent = `${rows.length.toLocaleString()} row(s) shown · filter: ${state.filter} · dataset: ${state.dataset}`;
+      document.getElementById('cards').innerHTML = rows.length
+        ? rows.map(row => `
+          <article class="card">
+            <div class="card-head">
+              <h3>${esc(row.title)}</h3>
+              <div class="score">score ${esc(row.major_score)}</div>
+            </div>
+            <div class="tags">${tags(row)}</div>
+            <div class="grid-2">
+              <div><strong>Date</strong><br>${esc(row.date)}</div>
+              <div><strong>Start</strong><br>${esc(row.start_date_time)}</div>
+              <div><strong>End</strong><br>${esc(row.end_date_time)}</div>
+              <div><strong>Borough</strong><br>${esc(row.borough)}</div>
+              <div><strong>Agency</strong><br>${esc(row.event_agency)}</div>
+              <div><strong>Type</strong><br>${esc(row.event_type)}</div>
+              <div><strong>Closure</strong><br>${esc(row.street_closure_type)}</div>
+              <div><strong>Source ID</strong><br>${esc(row.source_record_id)}</div>
+            </div>
+            <p style="margin:10px 0 0;color:#cbd5e1">${esc(row.display_location || row.location)}</p>
+            <p class="safety">${esc(row.safety_note)}</p>
+            <p class="meta">major_reason: ${esc(row.major_reason)}</p>
+          </article>
+        `).join('')
+        : '<div class="empty">No rows match the current filter/search.</div>';
+    }
+
+    function renderMap() {
+      const mappedWithGps = state.mapped.filter(row => Number.isFinite(Number(row.lat)) && Number.isFinite(Number(row.lng)));
+      const mapEl = document.getElementById('map');
+      const mapMeta = document.getElementById('mapMeta');
+      if (!mappedWithGps.length) {
+        mapEl.classList.remove('visible');
+        mapMeta.textContent = 'No mapped rows with coordinates in the current prototype pass.';
+        return;
+      }
+      mapEl.classList.add('visible');
+      mapMeta.textContent = `${mappedWithGps.length.toLocaleString()} mapped row(s) with coordinates.`;
+      const map = L.map('map').setView([40.7128, -74.006], 11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+      mappedWithGps.forEach(row => {
+        L.marker([row.lat, row.lng]).addTo(map).bindPopup(`<strong>${esc(row.title)}</strong><br>${esc(row.date)}`);
+      });
+    }
+
+    function renderFilters() {
+      document.getElementById('filterButtons').innerHTML = FILTERS.map(filter =>
+        `<button type="button" data-filter="${esc(filter.id)}" class="${state.filter === filter.id ? 'active' : ''}">${esc(filter.label)}</button>`
+      ).join('');
+      document.querySelectorAll('#filterButtons button').forEach(button => {
+        button.addEventListener('click', () => {
+          state.filter = button.dataset.filter;
+          renderFilters();
+          renderCards();
+        });
+      });
+    }
+
+    function renderAll() {
+      renderCounts();
+      renderHeadlines();
+      renderCards();
+      renderMap();
+    }
+
+    async function loadData() {
+      const cacheBust = `v=${encodeURIComponent(new URLSearchParams(location.search).get('v') || Date.now())}`;
+      const [report, mapped, needsReview] = await Promise.all([
+        fetch(`./data/reports/prototype_major_events_report.json?${cacheBust}`, { cache: 'no-store' }).then(r => r.json()),
+        fetch(`./data/prototype_major_events.json?${cacheBust}`, { cache: 'no-store' }).then(r => r.json()),
+        fetch(`./data/prototype_major_events_needs_review.json?${cacheBust}`, { cache: 'no-store' }).then(r => r.json())
+      ]);
+      state.report = report;
+      state.mapped = Array.isArray(mapped) ? mapped : [];
+      state.needsReview = Array.isArray(needsReview) ? needsReview : [];
+      renderFilters();
+      renderAll();
+    }
+
+    document.getElementById('searchBox').addEventListener('input', event => {
+      state.search = event.target.value.trim().toLowerCase();
+      renderCards();
+    });
+    document.getElementById('sortSelect').addEventListener('change', event => {
+      state.sort = event.target.value;
+      renderCards();
+    });
+    document.getElementById('datasetSelect').addEventListener('change', event => {
+      state.dataset = event.target.value;
+      renderCards();
+    });
+
+    loadData().catch(error => {
+      document.getElementById('countsGrid').innerHTML = `<div class="error">Failed to load prototype data: ${esc(error.message)}</div>`;
+    });
+  </script>
+</body>
+</html>
