@@ -1,0 +1,88 @@
+{
+  "phase": "C5P-CLOSEOUT",
+  "mode": "final_verification_closeout_report_only",
+  "generated_at": "2026-07-01T21:30:00.000Z",
+  "closeout_doc": "docs/major-feed-production-publish-closeout.md",
+  "live_feeds_repo": "setoxxx/nycif-live-feeds",
+  "live_feeds_pr": 1,
+  "live_feeds_merge_commit": "1ab5a08",
+  "production_publish_summary": {
+    "action": "in_place_approved_geocode_update",
+    "source_record_id": "914695",
+    "title": "2026 Queensboro Dance Festival",
+    "lat": 40.739312,
+    "lng": -73.842193
+  },
+  "preserved_manual_records": 11,
+  "manual_records_removed": 0,
+  "blocked_needs_review_rows_published": 0,
+  "regression_investigation": {
+    "initial_browser_qa_failed": true,
+    "root_cause": "field_desk_default_category_filters_all_false_on_resetFilters_1",
+    "live_feeds_json_cause": false,
+    "live_feeds_rollback_needed": false,
+    "investigation_doc": "docs/postpublish-map-regression-investigation.md",
+    "investigation_pr": 43
+  },
+  "field_desk_hotfix_pr": 44,
+  "field_desk_hotfix_merge_commit": "c1b40ea58b51d8222c5bd6e58577fdb4c31f90e8",
+  "field_desk_hotfix_changed_files": [
+    "app-v06-safe.js",
+    "public-map-defaults-v01.js",
+    "service-worker.js",
+    "index.html"
+  ],
+  "field_desk_hotfix_details": {
+    "default_version": "major-only-v04",
+    "service_worker_cache": "nycif-v014-category-defaults-fix",
+    "categories_enabled_by_default": ["sports", "parade", "market", "arts"]
+  },
+  "row_914695_verified": true,
+  "row_914695_lat": 40.739312,
+  "row_914695_lng": -73.842193,
+  "final_browser_qa": {
+    "test_url": "https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1",
+    "service_worker_unregistered_once": true,
+    "local_storage_cleared": true,
+    "hard_refresh": true,
+    "pages_deployed": true,
+    "page_loads": true,
+    "major_only_default_works": true,
+    "today_markers_without_manual_category_enable": true,
+    "today_marker_count": 25,
+    "date_2026_06_28_nypd_manual_pins_visible": true,
+    "date_2026_06_28_marker_count": 106,
+    "date_2026_07_02_queensboro_914695_visible_or_findable": true,
+    "queensboro_coordinates_verified": true,
+    "blocked_rows_absent": true,
+    "approved_overlays_listed": true,
+    "wordpress_touched": false
+  },
+  "final_browser_qa_passed": true,
+  "major_only_default_works": true,
+  "today_marker_count": 25,
+  "date_2026_06_28_marker_count": 106,
+  "queensboro_914695_visible": true,
+  "approved_overlays_listed": true,
+  "approved_overlays": [
+    "It's 5PM Somewhere",
+    "Cannabis Dispensaries",
+    "Smoke/Vape/Cannabis Correlation"
+  ],
+  "wordpress_touched": false,
+  "live_feeds_rollback_needed": false,
+  "production_publish_cycle_status": "verified_closed",
+  "next_step": "Monitor normally; do not touch WordPress.",
+  "safety_confirmations": {
+    "wordpress_touched": false,
+    "iframe_embed_touched": false,
+    "scheduled_workflows_touched": false,
+    "location_cache_touched": false,
+    "production_feeds_modified_by_this_pr": false,
+    "field_desk_public_ui_modified_by_this_pr": false
+  },
+  "production_feed_urls": [
+    "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json",
+    "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_all_radar_map_events.json"
+  ]
+}
