@@ -684,6 +684,90 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "legal-dispensary-OCM-RETL-24-000191",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "CANNALICIOUS LLC",
+    "address": "435 5TH AVE, BROOKLYN, 11215 4012",
+    "borough": "Brooklyn",
+    "lat": 40.66942,
+    "lng": -73.98609,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.66942,
+      "lng": -73.98609,
+      "id": "legal-dispensary-OCM-RETL-24-000191",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "CANNALICIOUS LLC",
+      "address": "435 5TH AVE, BROOKLYN, 11215 4012",
+      "borough": "Brooklyn",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-24-000191",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "934285412",
+        "legal_name": "CANNALICIOUS LLC",
+        "ocm_license_number": "OCM-RETL-24-000191",
+        "physical_county": "KINGS",
+        "physical_address": "435 5TH AVE",
+        "physical_city": "BROOKLYN",
+        "physical_state": "NY",
+        "physical_zip": "11215 4012",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.98609,
+            40.66942
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "894",
+        ":@computed_region_wbg7_3whc": "893",
+        ":@computed_region_kjdx_g34t": "2090"
+      }
+    },
+    "complaints_30d_100ft": 2,
+    "complaints_30d_250ft": 3,
+    "complaints_30d_500ft": 3,
+    "complaints_90d_100ft": 2,
+    "complaints_90d_250ft": 3,
+    "complaints_90d_500ft": 3,
+    "complaints_180d_100ft": 2,
+    "complaints_180d_250ft": 3,
+    "complaints_180d_500ft": 3,
+    "complaints_365d_100ft": 2,
+    "complaints_365d_250ft": 3,
+    "complaints_365d_500ft": 3,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 3
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Product Concerns",
+        "count": 3
+      }
+    ],
+    "last_complaint_date": "2026-06-27",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69513118",
+      "smoke-intel-69487171",
+      "smoke-intel-69450308"
+    ],
+    "signal_score": 23,
+    "signal_tier": "high",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "licensed-smoke-vape-2071883-1-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "5Th AVENUE CANDY & GROCERY INC",
@@ -752,6 +836,97 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "legal-dispensary-OCM-CAURD-24-000214",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "BLAZINUP, LLC",
+    "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
+    "borough": "Manhattan",
+    "lat": 40.74675,
+    "lng": -73.99742,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.74675,
+      "lng": -73.99742,
+      "id": "legal-dispensary-OCM-CAURD-24-000214",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "BLAZINUP, LLC",
+      "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
+      "borough": "Manhattan",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-24-000214",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "883939747",
+        "legal_name": "BLAZINUP, LLC",
+        "ocm_license_number": "OCM-CAURD-24-000214",
+        "physical_county": "NEW YORK",
+        "physical_address": "MIGUEL BERNARD 302 8TH AVE",
+        "physical_city": "NEW YORK",
+        "physical_state": "NY",
+        "physical_zip": "10001 4813",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.99742,
+            40.74675
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "749",
+        ":@computed_region_wbg7_3whc": "717",
+        ":@computed_region_kjdx_g34t": "2095"
+      }
+    },
+    "complaints_30d_100ft": 2,
+    "complaints_30d_250ft": 2,
+    "complaints_30d_500ft": 2,
+    "complaints_90d_100ft": 2,
+    "complaints_90d_250ft": 2,
+    "complaints_90d_500ft": 2,
+    "complaints_180d_100ft": 2,
+    "complaints_180d_250ft": 2,
+    "complaints_180d_500ft": 2,
+    "complaints_365d_100ft": 2,
+    "complaints_365d_250ft": 2,
+    "complaints_365d_500ft": 2,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      },
+      {
+        "value": "Vape / e-cigarette complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Smoking, Cigar, or Vape Store",
+        "count": 1
+      },
+      {
+        "value": "Too Close to a School",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-16",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69388207",
+      "smoke-intel-69324181"
+    ],
+    "signal_score": 22,
+    "signal_tier": "high",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "licensed-smoke-vape-1361393-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "DELI & SMOKE SHOP",
@@ -813,6 +988,94 @@
       "smoke-intel-69513118",
       "smoke-intel-69487171",
       "smoke-intel-69450308"
+    ],
+    "signal_score": 22,
+    "signal_tier": "high",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-CAURD-24-000154",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "FLOR DE FRED",
+    "address": "BITAR ASSETS INC 9605 LIBERTY, OZONE PARK, 11417 1623",
+    "borough": "Queens",
+    "lat": 40.68062,
+    "lng": -73.84287,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.68062,
+      "lng": -73.84287,
+      "id": "legal-dispensary-OCM-CAURD-24-000154",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "FLOR DE FRED",
+      "address": "BITAR ASSETS INC 9605 LIBERTY, OZONE PARK, 11417 1623",
+      "borough": "Queens",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-24-000154",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "820939477",
+        "legal_name": "BITAR ASSETS INC",
+        "dba_name": "FLOR DE FRED",
+        "ocm_license_number": "OCM-CAURD-24-000154",
+        "physical_county": "QUEENS",
+        "physical_address": "BITAR ASSETS INC 9605 LIBERTY",
+        "physical_city": "OZONE PARK",
+        "physical_state": "NY",
+        "physical_zip": "11417 1623",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.84287,
+            40.68062
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "196",
+        ":@computed_region_wbg7_3whc": "1164",
+        ":@computed_region_kjdx_g34t": "2137"
+      }
+    },
+    "complaints_30d_100ft": 2,
+    "complaints_30d_250ft": 2,
+    "complaints_30d_500ft": 2,
+    "complaints_90d_100ft": 2,
+    "complaints_90d_250ft": 2,
+    "complaints_90d_500ft": 2,
+    "complaints_180d_100ft": 2,
+    "complaints_180d_250ft": 2,
+    "complaints_180d_500ft": 2,
+    "complaints_365d_100ft": 2,
+    "complaints_365d_250ft": 2,
+    "complaints_365d_500ft": 2,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 2
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Product Concerns",
+        "count": 1
+      },
+      {
+        "value": "Too Close to a House of Worship",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-03",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69233408",
+      "smoke-intel-69214779"
     ],
     "signal_score": 22,
     "signal_tier": "high",
@@ -1793,6 +2056,88 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "legal-dispensary-OCM-CAURD-24-000217",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "212PARTNERS LLC",
+    "address": "1119 BROADWAY, BROOKLYN, 11221 8520",
+    "borough": "Brooklyn",
+    "lat": 40.69374,
+    "lng": -73.92952,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.69374,
+      "lng": -73.92952,
+      "id": "legal-dispensary-OCM-CAURD-24-000217",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "212PARTNERS LLC",
+      "address": "1119 BROADWAY, BROOKLYN, 11221 8520",
+      "borough": "Brooklyn",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-24-000217",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "933745258",
+        "legal_name": "212PARTNERS LLC",
+        "ocm_license_number": "OCM-CAURD-24-000217",
+        "physical_county": "KINGS",
+        "physical_address": "1119 BROADWAY",
+        "physical_city": "BROOKLYN",
+        "physical_state": "NY",
+        "physical_zip": "11221 8520",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.92952,
+            40.69374
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "894",
+        ":@computed_region_wbg7_3whc": "900",
+        ":@computed_region_kjdx_g34t": "2090"
+      }
+    },
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Suspicious Activity",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-08",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69291429"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "licensed-smoke-vape-2129863-1-DCWP",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "401 NEW YORK DELI CORP",
@@ -2002,6 +2347,418 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "legal-dispensary-OCM-RETL-24-000121",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "ALTITUDE NY LLC",
+    "address": "807 MANHATTAN AVE, BROOKLYN, 11222 2710",
+    "borough": "Brooklyn",
+    "lat": 40.728,
+    "lng": -73.95321,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.728,
+      "lng": -73.95321,
+      "id": "legal-dispensary-OCM-RETL-24-000121",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "ALTITUDE NY LLC",
+      "address": "807 MANHATTAN AVE, BROOKLYN, 11222 2710",
+      "borough": "Brooklyn",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-24-000121",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "934259071",
+        "legal_name": "ALTITUDE NY LLC",
+        "ocm_license_number": "OCM-RETL-24-000121",
+        "physical_county": "KINGS",
+        "physical_address": "807 MANHATTAN AVE",
+        "physical_city": "BROOKLYN",
+        "physical_state": "NY",
+        "physical_zip": "11222 2710",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.95321,
+            40.728
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "894",
+        ":@computed_region_wbg7_3whc": "901",
+        ":@computed_region_kjdx_g34t": "2090"
+      }
+    },
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 4,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 4,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 4,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 4,
+    "top_complaint_subtypes": [
+      {
+        "value": "Vape / e-cigarette complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Smoking, Cigar, or Vape Store",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-18",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69409578"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-CAURD-24-000123",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "BEAST COAST GROUP LLC",
+    "address": "JOHN MAGNA 16105 29TH AVE STORE, FLUSHING, 11358 1049",
+    "borough": "Queens",
+    "lat": 40.77123,
+    "lng": -73.80315,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.77123,
+      "lng": -73.80315,
+      "id": "legal-dispensary-OCM-CAURD-24-000123",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "BEAST COAST GROUP LLC",
+      "address": "JOHN MAGNA 16105 29TH AVE STORE, FLUSHING, 11358 1049",
+      "borough": "Queens",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-24-000123",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "884055489",
+        "legal_name": "BEAST COAST GROUP LLC",
+        "ocm_license_number": "OCM-CAURD-24-000123",
+        "physical_county": "QUEENS",
+        "physical_address": "JOHN MAGNA 16105 29TH AVE STORE",
+        "physical_city": "FLUSHING",
+        "physical_state": "NY",
+        "physical_zip": "11358 1049",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.80315,
+            40.77123
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "196",
+        ":@computed_region_wbg7_3whc": "828",
+        ":@computed_region_kjdx_g34t": "2137"
+      }
+    },
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Sales to Minors Under 21",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-15",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69371206"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-CAURD-24-000064",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "BRONX JOINT",
+    "address": "925 HUNTS POINT AVE, BRONX, 10459 5190",
+    "borough": "Bronx",
+    "lat": 40.8204,
+    "lng": -73.89091,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.8204,
+      "lng": -73.89091,
+      "id": "legal-dispensary-OCM-CAURD-24-000064",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "BRONX JOINT",
+      "address": "925 HUNTS POINT AVE, BRONX, 10459 5190",
+      "borough": "Bronx",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-24-000064",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "884118676",
+        "legal_name": "LUKE CLOUD, INC.",
+        "dba_name": "BRONX JOINT",
+        "ocm_license_number": "OCM-CAURD-24-000064",
+        "physical_county": "BRONX",
+        "physical_address": "925 HUNTS POINT AVE",
+        "physical_city": "BRONX",
+        "physical_state": "NY",
+        "physical_zip": "10459 5190",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.89091,
+            40.8204
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "307",
+        ":@computed_region_wbg7_3whc": "655",
+        ":@computed_region_kjdx_g34t": "2032"
+      }
+    },
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Product Concerns",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-08",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69284801"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-RETL-25-000285",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "BUZZY NY, LLC",
+    "address": "BUZZY NY LLC 137 COURT ST, BROOKLYN, 11201 6210",
+    "borough": "Brooklyn",
+    "lat": 40.68954,
+    "lng": -73.99246,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.68954,
+      "lng": -73.99246,
+      "id": "legal-dispensary-OCM-RETL-25-000285",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "BUZZY NY, LLC",
+      "address": "BUZZY NY LLC 137 COURT ST, BROOKLYN, 11201 6210",
+      "borough": "Brooklyn",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-25-000285",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "372112874",
+        "legal_name": "BUZZY NY, LLC",
+        "ocm_license_number": "OCM-RETL-25-000285",
+        "physical_county": "KINGS",
+        "physical_address": "BUZZY NY LLC 137 COURT ST",
+        "physical_city": "BROOKLYN",
+        "physical_state": "NY",
+        "physical_zip": "11201 6210",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.99246,
+            40.68954
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "894",
+        ":@computed_region_wbg7_3whc": "880",
+        ":@computed_region_kjdx_g34t": "2090"
+      }
+    },
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Sales to Minors Under 21",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-04",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69237866"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-CAURD-25-000226",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "CANNABIS SCENTRAL",
+    "address": "CANNABIS SCENTRAL 3012 ASTORIA BLVD, ASTORIA, 11102 1163",
+    "borough": "Queens",
+    "lat": 40.7702,
+    "lng": -73.91857,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.7702,
+      "lng": -73.91857,
+      "id": "legal-dispensary-OCM-CAURD-25-000226",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "CANNABIS SCENTRAL",
+      "address": "CANNABIS SCENTRAL 3012 ASTORIA BLVD, ASTORIA, 11102 1163",
+      "borough": "Queens",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-25-000226",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "920471631",
+        "legal_name": "DOMINICA62 RETAIL LICENSE, INC.",
+        "dba_name": "CANNABIS SCENTRAL",
+        "ocm_license_number": "OCM-CAURD-25-000226",
+        "physical_county": "QUEENS",
+        "physical_address": "CANNABIS SCENTRAL 3012 ASTORIA BLVD",
+        "physical_city": "ASTORIA",
+        "physical_state": "NY",
+        "physical_zip": "11102 1163",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.91857,
+            40.7702
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "196",
+        ":@computed_region_wbg7_3whc": "874",
+        ":@computed_region_kjdx_g34t": "2137"
+      }
+    },
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Product Concerns",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-13",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69344865"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "licensed-smoke-vape-2035597-1-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "CHEVY DELI & GROCERY CORP.",
@@ -2066,6 +2823,334 @@
     "nearby_complaint_ids_sample": [
       "smoke-intel-69478235",
       "smoke-intel-69298054"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-CAURD-25-000315",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "DIAMOND DISPENSARY LLC",
+    "address": "HECTOR BONILLA 455 GRAHAM AVE, BROOKLYN, 11222 5077",
+    "borough": "Brooklyn",
+    "lat": 40.71908,
+    "lng": -73.94525,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.71908,
+      "lng": -73.94525,
+      "id": "legal-dispensary-OCM-CAURD-25-000315",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "DIAMOND DISPENSARY LLC",
+      "address": "HECTOR BONILLA 455 GRAHAM AVE, BROOKLYN, 11222 5077",
+      "borough": "Brooklyn",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-25-000315",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "920300409",
+        "legal_name": "DIAMOND DISPENSARY LLC",
+        "ocm_license_number": "OCM-CAURD-25-000315",
+        "physical_county": "KINGS",
+        "physical_address": "HECTOR BONILLA 455 GRAHAM AVE",
+        "physical_city": "BROOKLYN",
+        "physical_state": "NY",
+        "physical_zip": "11222 5077",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.94525,
+            40.71908
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "894",
+        ":@computed_region_wbg7_3whc": "901",
+        ":@computed_region_kjdx_g34t": "2090"
+      }
+    },
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Weeds or Grass",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-08",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69294764"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-RETL-25-000450",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "DIAMOND STAR GROUP, INC",
+    "address": "85 NASSAU ST, NEW YORK, 10038 3704",
+    "borough": "Manhattan",
+    "lat": 40.71,
+    "lng": -74.00795,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.71,
+      "lng": -74.00795,
+      "id": "legal-dispensary-OCM-RETL-25-000450",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "DIAMOND STAR GROUP, INC",
+      "address": "85 NASSAU ST, NEW YORK, 10038 3704",
+      "borough": "Manhattan",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-25-000450",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "821095811",
+        "legal_name": "DIAMOND STAR GROUP, INC",
+        "ocm_license_number": "OCM-RETL-25-000450",
+        "physical_county": "NEW YORK",
+        "physical_address": "85 NASSAU ST",
+        "physical_city": "NEW YORK",
+        "physical_state": "NY",
+        "physical_zip": "10038 3704",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -74.00795,
+            40.71
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "749",
+        ":@computed_region_wbg7_3whc": "797",
+        ":@computed_region_kjdx_g34t": "2095"
+      }
+    },
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 2,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 2,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 2,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 2,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Suspicious Activity",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-06",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69269194"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-CAURD-26-000326",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "GAIA OPERATIONS LLC",
+    "address": "10412 LEFFERTS BLVD, S RICHMOND HILL, 11419 2710",
+    "borough": "Queens",
+    "lat": 40.68585,
+    "lng": -73.82398,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.68585,
+      "lng": -73.82398,
+      "id": "legal-dispensary-OCM-CAURD-26-000326",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "GAIA OPERATIONS LLC",
+      "address": "10412 LEFFERTS BLVD, S RICHMOND HILL, 11419 2710",
+      "borough": "Queens",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-26-000326",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "334259425",
+        "legal_name": "GAIA OPERATIONS LLC",
+        "ocm_license_number": "OCM-CAURD-26-000326",
+        "physical_county": "QUEENS",
+        "physical_address": "10412 LEFFERTS BLVD",
+        "physical_city": "S RICHMOND HILL",
+        "physical_state": "NY",
+        "physical_zip": "11419 2710",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.82398,
+            40.68585
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "196",
+        ":@computed_region_wbg7_3whc": "1166",
+        ":@computed_region_kjdx_g34t": "2137"
+      }
+    },
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Suspicious Activity",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-22",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69451667"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-RETL-24-000260",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "NY RETAIL 5 INC.",
+    "address": "519 MADISON AVE, NEW YORK, 10022",
+    "borough": "Manhattan",
+    "lat": 40.75999,
+    "lng": -73.97404,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.75999,
+      "lng": -73.97404,
+      "id": "legal-dispensary-OCM-RETL-24-000260",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "NY RETAIL 5 INC.",
+      "address": "519 MADISON AVE, NEW YORK, 10022",
+      "borough": "Manhattan",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-24-000260",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "934357813",
+        "legal_name": "NY RETAIL 5 INC.",
+        "ocm_license_number": "OCM-RETL-24-000260",
+        "physical_county": "NEW YORK",
+        "physical_address": "519 MADISON AVE",
+        "physical_city": "NEW YORK",
+        "physical_state": "NY",
+        "physical_zip": "10022",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.97404,
+            40.75999
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "749",
+        ":@computed_region_wbg7_3whc": "749",
+        ":@computed_region_kjdx_g34t": "2095"
+      }
+    },
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Suspicious Activity",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-17",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69395275"
     ],
     "signal_score": 12,
     "signal_tier": "moderate",
@@ -9461,6 +10546,94 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "legal-dispensary-OCM-CAURD-25-000282",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "WEEDKRAFT LLC",
+    "address": "112 CHRISTOPHER ST # 12, NEW YORK, 10014 0684",
+    "borough": "Manhattan",
+    "lat": 40.73324,
+    "lng": -74.00525,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.73324,
+      "lng": -74.00525,
+      "id": "legal-dispensary-OCM-CAURD-25-000282",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "WEEDKRAFT LLC",
+      "address": "112 CHRISTOPHER ST # 12, NEW YORK, 10014 0684",
+      "borough": "Manhattan",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-25-000282",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "883921519",
+        "legal_name": "WEEDKRAFT LLC",
+        "ocm_license_number": "OCM-CAURD-25-000282",
+        "physical_county": "NEW YORK",
+        "physical_address": "112 CHRISTOPHER ST # 12",
+        "physical_city": "NEW YORK",
+        "physical_state": "NY",
+        "physical_zip": "10014 0684",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -74.00525,
+            40.73324
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "749",
+        ":@computed_region_wbg7_3whc": "738",
+        ":@computed_region_kjdx_g34t": "2095"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 3,
+    "complaints_30d_500ft": 45,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 3,
+    "complaints_90d_500ft": 45,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 3,
+    "complaints_180d_500ft": 45,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 3,
+    "complaints_365d_500ft": 45,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 3
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Sales to Minors Under 21",
+        "count": 2
+      },
+      {
+        "value": "Unlicensed",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-18",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69406692",
+      "smoke-intel-69406691",
+      "smoke-intel-69359767"
+    ],
+    "signal_score": 5,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "licensed-smoke-vape-1431683-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "104 CANDY CORP",
@@ -9965,6 +11138,89 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "legal-dispensary-OCM-RETL-25-000428",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "TWINN LEAF LLC",
+    "address": "SANDRA JAQUEZ 229 DYCKMAN ST #, NEW YORK, 10034 5314",
+    "borough": "Manhattan",
+    "lat": 40.86601,
+    "lng": -73.92777,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.86601,
+      "lng": -73.92777,
+      "id": "legal-dispensary-OCM-RETL-25-000428",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "TWINN LEAF LLC",
+      "address": "SANDRA JAQUEZ 229 DYCKMAN ST #, NEW YORK, 10034 5314",
+      "borough": "Manhattan",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-25-000428",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "880998621",
+        "legal_name": "TWINN LEAF LLC",
+        "ocm_license_number": "OCM-RETL-25-000428",
+        "physical_county": "NEW YORK",
+        "physical_address": "SANDRA JAQUEZ 229 DYCKMAN ST #",
+        "physical_city": "NEW YORK",
+        "physical_state": "NY",
+        "physical_zip": "10034 5314",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.92777,
+            40.86601
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "749",
+        ":@computed_region_wbg7_3whc": "793",
+        ":@computed_region_kjdx_g34t": "2095"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 2,
+    "complaints_30d_500ft": 2,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 2,
+    "complaints_90d_500ft": 2,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 2,
+    "complaints_180d_500ft": 2,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 2,
+    "complaints_365d_500ft": 2,
+    "top_complaint_subtypes": [
+      {
+        "value": "Vape / e-cigarette complaint",
+        "count": 2
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Allowed in Smoke Free Area",
+        "count": 2
+      }
+    ],
+    "last_complaint_date": "2026-06-13",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69350416",
+      "smoke-intel-69284833"
+    ],
+    "signal_score": 4,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "licensed-smoke-vape-2122329-2-DCWP",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "ZO GRILL MINIMARKET CORP.",
@@ -10028,6 +11284,88 @@
       "smoke-intel-69353199"
     ],
     "signal_score": 4,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-RETL-25-000306",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "100 NORTH 3RD LTD.",
+    "address": "7 LEAF CLOVER 132 METROPOLITAN AVE, BROOKLYN, 11249 3921",
+    "borough": "Brooklyn",
+    "lat": 40.71627,
+    "lng": -73.96252,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.71627,
+      "lng": -73.96252,
+      "id": "legal-dispensary-OCM-RETL-25-000306",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "100 NORTH 3RD LTD.",
+      "address": "7 LEAF CLOVER 132 METROPOLITAN AVE, BROOKLYN, 11249 3921",
+      "borough": "Brooklyn",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-25-000306",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "831094841",
+        "legal_name": "100 NORTH 3RD LTD.",
+        "ocm_license_number": "OCM-RETL-25-000306",
+        "physical_county": "KINGS",
+        "physical_address": "7 LEAF CLOVER 132 METROPOLITAN AVE",
+        "physical_city": "BROOKLYN",
+        "physical_state": "NY",
+        "physical_zip": "11249 3921",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.96252,
+            40.71627
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "894",
+        ":@computed_region_wbg7_3whc": "889",
+        ":@computed_region_kjdx_g34t": "2090"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Vape / e-cigarette complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Allowed in Smoke Free Area",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-13",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69346291"
+    ],
+    "signal_score": 3,
     "signal_tier": "moderate",
     "include": true,
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
@@ -10369,6 +11707,170 @@
     "nearby_complaint_ids_sample": [
       "smoke-intel-69335955",
       "smoke-intel-69331482"
+    ],
+    "signal_score": 3,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-RETL-24-000133",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "716 M.J. LLC",
+    "address": "1118 PENNSYLVANIA AVE, BROOKLYN, 11207 9008",
+    "borough": "Brooklyn",
+    "lat": 40.65309,
+    "lng": -73.88676,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.65309,
+      "lng": -73.88676,
+      "id": "legal-dispensary-OCM-RETL-24-000133",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "716 M.J. LLC",
+      "address": "1118 PENNSYLVANIA AVE, BROOKLYN, 11207 9008",
+      "borough": "Brooklyn",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-24-000133",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "933332161",
+        "legal_name": "716 M.J. LLC",
+        "ocm_license_number": "OCM-RETL-24-000133",
+        "physical_county": "KINGS",
+        "physical_address": "1118 PENNSYLVANIA AVE",
+        "physical_city": "BROOKLYN",
+        "physical_state": "NY",
+        "physical_zip": "11207 9008",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.88676,
+            40.65309
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "894",
+        ":@computed_region_wbg7_3whc": "885",
+        ":@computed_region_kjdx_g34t": "2090"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Weeds or Grass",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-26",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69494438"
+    ],
+    "signal_score": 3,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-RETL-24-000178",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "AA 301 W. 45TH ST INC.",
+    "address": "743 9TH AVE, NEW YORK, 10019 6648",
+    "borough": "Manhattan",
+    "lat": 40.76364,
+    "lng": -73.98884,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.76364,
+      "lng": -73.98884,
+      "id": "legal-dispensary-OCM-RETL-24-000178",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "AA 301 W. 45TH ST INC.",
+      "address": "743 9TH AVE, NEW YORK, 10019 6648",
+      "borough": "Manhattan",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-24-000178",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "933681669",
+        "legal_name": "AA 301 W. 45TH ST INC.",
+        "ocm_license_number": "OCM-RETL-24-000178",
+        "physical_county": "NEW YORK",
+        "physical_address": "743 9TH AVE",
+        "physical_city": "NEW YORK",
+        "physical_state": "NY",
+        "physical_zip": "10019 6648",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.98884,
+            40.76364
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "749",
+        ":@computed_region_wbg7_3whc": "742",
+        ":@computed_region_kjdx_g34t": "2095"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 2,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 2,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 2,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 2,
+    "top_complaint_subtypes": [
+      {
+        "value": "Vape / e-cigarette complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "E-Cigarette Sales",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-15",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69371210"
     ],
     "signal_score": 3,
     "signal_tier": "moderate",
@@ -10771,6 +12273,88 @@
     "nearby_complaint_ids_sample": [
       "smoke-intel-69335628",
       "smoke-intel-69234492"
+    ],
+    "signal_score": 3,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-RETL-24-000093",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "DIVINE KINNEKTION LLC",
+    "address": "DARONNE HUDSON 2610 BROADWAY, NEW YORK, 10025 5012",
+    "borough": "Manhattan",
+    "lat": 40.79618,
+    "lng": -73.97055,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.79618,
+      "lng": -73.97055,
+      "id": "legal-dispensary-OCM-RETL-24-000093",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "DIVINE KINNEKTION LLC",
+      "address": "DARONNE HUDSON 2610 BROADWAY, NEW YORK, 10025 5012",
+      "borough": "Manhattan",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-24-000093",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "871722805",
+        "legal_name": "DIVINE KINNEKTION LLC",
+        "ocm_license_number": "OCM-RETL-24-000093",
+        "physical_county": "NEW YORK",
+        "physical_address": "DARONNE HUDSON 2610 BROADWAY",
+        "physical_city": "NEW YORK",
+        "physical_state": "NY",
+        "physical_zip": "10025 5012",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.97055,
+            40.79618
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "749",
+        ":@computed_region_wbg7_3whc": "752",
+        ":@computed_region_kjdx_g34t": "2095"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Unlicensed",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-05",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69250157"
     ],
     "signal_score": 3,
     "signal_tier": "moderate",
@@ -11185,6 +12769,336 @@
     "nearby_complaint_ids_sample": [
       "smoke-intel-69526500",
       "smoke-intel-69450321"
+    ],
+    "signal_score": 3,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-RETL-24-000027",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "HUDSON PARK AGENCY LLC",
+    "address": "14407 243RD ST, ROSEDALE, 11422 2327",
+    "borough": "Queens",
+    "lat": 40.6601,
+    "lng": -73.73951,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.6601,
+      "lng": -73.73951,
+      "id": "legal-dispensary-OCM-RETL-24-000027",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "HUDSON PARK AGENCY LLC",
+      "address": "14407 243RD ST, ROSEDALE, 11422 2327",
+      "borough": "Queens",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-24-000027",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "934137537",
+        "legal_name": "HUDSON PARK AGENCY LLC",
+        "ocm_license_number": "OCM-RETL-24-000027",
+        "physical_county": "QUEENS",
+        "physical_address": "14407 243RD ST",
+        "physical_city": "ROSEDALE",
+        "physical_state": "NY",
+        "physical_zip": "11422 2327",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.73951,
+            40.6601
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "196",
+        ":@computed_region_wbg7_3whc": "1169",
+        ":@computed_region_kjdx_g34t": "2137"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Weeds or Grass",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-12",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69334405"
+    ],
+    "signal_score": 3,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-CAURD-24-000094",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "I LOVE MY PET FOOD AND SUPPLIES",
+    "address": "299 KNICKERBOCKER AVE, BROOKLYN, 11237 3103",
+    "borough": "Brooklyn",
+    "lat": 40.7018,
+    "lng": -73.92363,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.7018,
+      "lng": -73.92363,
+      "id": "legal-dispensary-OCM-CAURD-24-000094",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "I LOVE MY PET FOOD AND SUPPLIES",
+      "address": "299 KNICKERBOCKER AVE, BROOKLYN, 11237 3103",
+      "borough": "Brooklyn",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-24-000094",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "931823472",
+        "legal_name": "CAURD BROOKLYN CORP.",
+        "dba_name": "I LOVE MY PET FOOD AND SUPPLIES",
+        "ocm_license_number": "OCM-CAURD-24-000094",
+        "physical_county": "KINGS",
+        "physical_address": "299 KNICKERBOCKER AVE",
+        "physical_city": "BROOKLYN",
+        "physical_state": "NY",
+        "physical_zip": "11237 3103",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.92363,
+            40.7018
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "894",
+        ":@computed_region_wbg7_3whc": "820",
+        ":@computed_region_kjdx_g34t": "2090"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Public / secondhand smoking complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Smoking Ban - Smoking on Construction Site",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-10",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69312073"
+    ],
+    "signal_score": 3,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-CAURD-24-000156",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "JUST A LITTLE HIGHER MURRAY HILL",
+    "address": "GREGORY KORNEGAY 698 2ND AVE, NEW YORK, 10016 3205",
+    "borough": "Manhattan",
+    "lat": 40.74712,
+    "lng": -73.9742,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.74712,
+      "lng": -73.9742,
+      "id": "legal-dispensary-OCM-CAURD-24-000156",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "JUST A LITTLE HIGHER MURRAY HILL",
+      "address": "GREGORY KORNEGAY 698 2ND AVE, NEW YORK, 10016 3205",
+      "borough": "Manhattan",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-24-000156",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "883869177",
+        "legal_name": "A LITTLE PLACE TO RELAX LLC",
+        "dba_name": "JUST A LITTLE HIGHER MURRAY HILL",
+        "ocm_license_number": "OCM-CAURD-24-000156",
+        "physical_county": "NEW YORK",
+        "physical_address": "GREGORY KORNEGAY 698 2ND AVE",
+        "physical_city": "NEW YORK",
+        "physical_state": "NY",
+        "physical_zip": "10016 3205",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.9742,
+            40.74712
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "749",
+        ":@computed_region_wbg7_3whc": "739",
+        ":@computed_region_kjdx_g34t": "2095"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Vape / e-cigarette complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Smoking, Cigar, or Vape Store",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-16",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69380597"
+    ],
+    "signal_score": 3,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-RETL-25-000298",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "JWA DH INC.",
+    "address": "VERDI PARK SLOPE 360 7TH AVE, BROOKLYN, 11215 4315",
+    "borough": "Brooklyn",
+    "lat": 40.66597,
+    "lng": -73.98235,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.66597,
+      "lng": -73.98235,
+      "id": "legal-dispensary-OCM-RETL-25-000298",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "JWA DH INC.",
+      "address": "VERDI PARK SLOPE 360 7TH AVE, BROOKLYN, 11215 4315",
+      "borough": "Brooklyn",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-RETL-25-000298",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "934243983",
+        "legal_name": "JWA DH INC.",
+        "ocm_license_number": "OCM-RETL-25-000298",
+        "physical_county": "KINGS",
+        "physical_address": "VERDI PARK SLOPE 360 7TH AVE",
+        "physical_city": "BROOKLYN",
+        "physical_state": "NY",
+        "physical_zip": "11215 4315",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.98235,
+            40.66597
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "894",
+        ":@computed_region_wbg7_3whc": "893",
+        ":@computed_region_kjdx_g34t": "2090"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Vape / e-cigarette complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Allowed in Smoke Free Area",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-23",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69463294"
     ],
     "signal_score": 3,
     "signal_tier": "moderate",
@@ -11886,6 +13800,89 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "legal-dispensary-OCM-CAURD-24-000096",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "SMILEY EXOTICS",
+    "address": "201 E 30TH ST, NEW YORK, 10016 8205",
+    "borough": "Manhattan",
+    "lat": 40.74307,
+    "lng": -73.97966,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.74307,
+      "lng": -73.97966,
+      "id": "legal-dispensary-OCM-CAURD-24-000096",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "SMILEY EXOTICS",
+      "address": "201 E 30TH ST, NEW YORK, 10016 8205",
+      "borough": "Manhattan",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-24-000096",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "923479915",
+        "legal_name": "201 EAST 30TH CORP.",
+        "dba_name": "SMILEY EXOTICS",
+        "ocm_license_number": "OCM-CAURD-24-000096",
+        "physical_county": "NEW YORK",
+        "physical_address": "201 E 30TH ST",
+        "physical_city": "NEW YORK",
+        "physical_state": "NY",
+        "physical_zip": "10016 8205",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.97966,
+            40.74307
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "749",
+        ":@computed_region_wbg7_3whc": "739",
+        ":@computed_region_kjdx_g34t": "2095"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 2,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 2,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 2,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 2,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Suspicious Activity",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-11",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69322748"
+    ],
+    "signal_score": 3,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "licensed-smoke-vape-2134378-1-DCWP",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "TRUE ORGANIC DELI CORP",
@@ -11946,6 +13943,88 @@
     "nearby_complaint_ids_sample": [
       "smoke-intel-69424941",
       "smoke-intel-69230353"
+    ],
+    "signal_score": 3,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-CAURD-24-000191",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "TWISTED VIBRATION, LLC",
+    "address": "JEAN LEVASSEUR 301 BROADWAY, BROOKLYN, 11211 7640",
+    "borough": "Brooklyn",
+    "lat": 40.70833,
+    "lng": -73.95769,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.70833,
+      "lng": -73.95769,
+      "id": "legal-dispensary-OCM-CAURD-24-000191",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "TWISTED VIBRATION, LLC",
+      "address": "JEAN LEVASSEUR 301 BROADWAY, BROOKLYN, 11211 7640",
+      "borough": "Brooklyn",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-24-000191",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "993101681",
+        "legal_name": "TWISTED VIBRATION, LLC",
+        "ocm_license_number": "OCM-CAURD-24-000191",
+        "physical_county": "KINGS",
+        "physical_address": "JEAN LEVASSEUR 301 BROADWAY",
+        "physical_city": "BROOKLYN",
+        "physical_state": "NY",
+        "physical_zip": "11211 7640",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.95769,
+            40.70833
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "894",
+        ":@computed_region_wbg7_3whc": "889",
+        ":@computed_region_kjdx_g34t": "2090"
+      }
+    },
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 1,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 1,
+    "complaints_90d_500ft": 1,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 1,
+    "complaints_180d_500ft": 1,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 1,
+    "complaints_365d_500ft": 1,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 1
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Sales to Minors Under 21",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-06-17",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69391033"
     ],
     "signal_score": 3,
     "signal_tier": "moderate",
