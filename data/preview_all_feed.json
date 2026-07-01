@@ -459,5 +459,38 @@
     "nypd_notice": "Bronx Locations/Fan Zones Dates: June 13 through June 14, 2026. Exterior Street perimeter of Terminal Market, River Avenue, East 153rd, East 150th.",
     "_hard_written": true,
     "_manual_priority": "NYPD"
+  },
+  {
+    "id": "prototype-tvpp-914695",
+    "title": "2026 Queensboro Dance Festival",
+    "date": "2026-07-02",
+    "start_date_time": "2026-07-02T18:00:00.000",
+    "end_date_time": "2026-07-02T19:00:00.000",
+    "borough": "Queens",
+    "location": "Flushing Meadows Corona Park: Around the Unisphere",
+    "display_location": "Flushing Meadows Corona Park: Around the Unisphere",
+    "lat": 40.739312,
+    "lng": -73.842193,
+    "photo_pick": true,
+    "priority_score": 75,
+    "verification_status": "source_listed",
+    "source_name": "NYC Permitted Event Information",
+    "source_url": "https://data.cityofnewyork.us/resource/tvpp-9vvx.json",
+    "source_record_id": "914695",
+    "event_agency": "Parks Department",
+    "event_type": "Special Event",
+    "street_closure_type": "N/A",
+    "major_score": 75,
+    "major_reason": "festival_or_cultural_event",
+    "major_reason_tags": [
+      "festival_or_cultural_event"
+    ],
+    "expected_crowd_signal": "source_listed_public_event",
+    "safety_note": "Source-listed public event listing. Field/photo candidate. Confirm before traveling. Event details can change.",
+    "assignment_feed": "major",
+    "preview_feed": true,
+    "preview_phase": "C5G3",
+    "geocode_source": "normalized_exact",
+    "approved_geocode_applied": true
   }
 ]

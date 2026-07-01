@@ -1,7 +1,7 @@
 {
-  "phase": "C4",
-  "mode": "preview_only",
-  "generated_at": "2026-07-01T18:09:27.007Z",
+  "phase": "C5G3",
+  "mode": "preview_only_with_approved_geocodes",
+  "generated_at": "2026-07-01T19:06:48.751Z",
   "production_feeds_modified": false,
   "public_ui_modified": false,
   "wordpress_modified": false,
@@ -9,10 +9,25 @@
   "source_rows": 30210,
   "prototype_mapped_rows": 0,
   "prototype_needs_review_rows": 897,
-  "preview_major_feed_rows": 11,
-  "preview_all_feed_rows": 14,
-  "preview_staged_rows": 11,
-  "preview_needs_review_rows": 897,
+  "approved_geocodes_available": 1,
+  "approved_geocodes_applied": 1,
+  "approved_geocodes_unused": [],
+  "rows_moved_from_needs_review_to_preview": [
+    {
+      "source_record_id": "914695",
+      "title": "2026 Queensboro Dance Festival",
+      "date": "2026-07-02",
+      "borough": "Queens",
+      "lat": 40.739312,
+      "lng": -73.842193,
+      "geocode_source": "normalized_exact",
+      "previous_review_reasons": []
+    }
+  ],
+  "preview_major_feed_rows": 12,
+  "preview_all_feed_rows": 15,
+  "preview_staged_rows": 12,
+  "preview_needs_review_rows": 896,
   "preserved_manual_records": 11,
   "manual_records_removed": 0,
   "dropped_rows_count": 29313,
@@ -638,10 +653,12 @@
       }
     ]
   },
-  "missing_geocode_count": 897,
+  "missing_geocode_count": 896,
   "headline_july_4_in_preview_or_review": true,
-  "all_feed_excluded_no_geocode": 897,
-  "approved_geocode_overrides_loaded": 0,
+  "all_feed_excluded_no_geocode": 896,
+  "possible_matches_still_blocked": true,
+  "unmatched_still_blocked": true,
+  "approved_geocode_overrides_loaded": 1,
   "production_major_snapshot_rows": 582,
   "production_all_snapshot_rows": 12210,
   "production_files_blocked": [
@@ -649,16 +666,19 @@
     "nycif_all_radar_map_events.json",
     "data/nycif_staged_live_events.json"
   ],
+  "c5_production_publish_blocked": true,
   "c5_required_for_production_publish": true,
+  "explicit_howard_approval_required": true,
   "explicit_howard_approval_required_for_c5": true,
   "inputs": {
     "prototype_mapped_path": "data/prototype_major_events.json",
     "prototype_review_path": "data/prototype_major_events_needs_review.json",
     "prototype_report_path": "data/reports/prototype_major_events_report.json",
+    "approved_geocodes_path": "data/approved_major_event_geocodes.json",
+    "approved_geocodes_needs_review_path": "data/approved_major_event_geocodes_needs_review.json",
     "production_major_url": "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json",
     "production_all_url": "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_all_radar_map_events.json",
-    "approved_geocodes_path": "data/approved_major_event_geocodes.json",
-    "approved_geocodes_present": false
+    "approved_geocodes_present": true
   },
   "outputs": {
     "preview_major_feed": "data/preview_major_feed.json",
