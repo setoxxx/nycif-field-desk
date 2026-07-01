@@ -1,0 +1,88 @@
+{
+  "phase": "C5PV",
+  "mode": "post_publish_verification_report_only",
+  "generated_at": "2026-07-01T20:15:00.000Z",
+  "verification_doc": "docs/major-feed-post-publish-verification.md",
+  "live_feeds_repo": "setoxxx/nycif-live-feeds",
+  "live_feeds_pr": 1,
+  "live_feeds_merge_commit": "1ab5a08",
+  "live_feeds_publish_report": "setoxxx/nycif-live-feeds/data/reports/production_feed_publish_report.json",
+  "production_publish_summary": {
+    "action": "in_place_approved_geocode_update",
+    "source_record_id": "914695",
+    "title": "2026 Queensboro Dance Festival",
+    "lat": 40.739312,
+    "lng": -73.842193,
+    "geocode_source": "normalized_exact",
+    "approved_geocode_applied": true,
+    "rows_updated": 1,
+    "rows_added": 0,
+    "merge_strategy": "merge_not_replace"
+  },
+  "production_feeds_modified_by_live_feeds_pr": true,
+  "production_feeds_modified_by_this_pr": false,
+  "field_desk_public_ui_modified": false,
+  "wordpress_modified": false,
+  "production_feed_urls": [
+    "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json",
+    "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_all_radar_map_events.json"
+  ],
+  "rollback_backups": {
+    "major": "setoxxx/nycif-live-feeds/data/backups/nycif_major_radar_map_events.2026-07-01T19-55-07-881Z.json",
+    "all": "setoxxx/nycif-live-feeds/data/backups/nycif_all_radar_map_events.2026-07-01T19-55-07-881Z.json"
+  },
+  "raw_major_feed_verified": true,
+  "raw_all_feed_verified": true,
+  "row_914695_coordinates_verified": true,
+  "row_914695_lat": 40.739312,
+  "row_914695_lng": -73.842193,
+  "row_914695_source_record_id": "914695",
+  "major_feed_row_count": 582,
+  "all_feed_row_count": 12210,
+  "preserved_manual_records": 11,
+  "manual_records_removed": 0,
+  "blocked_needs_review_rows_published": 0,
+  "blocked_needs_review_rows_total": 896,
+  "safety_confirmations": {
+    "wordpress_touched": false,
+    "public_ui_touched": false,
+    "iframe_embed_touched": false,
+    "scheduled_workflows_touched": false,
+    "location_cache_touched": false,
+    "staged_live_events_touched": false
+  },
+  "browser_qa_status": "partial",
+  "browser_qa_test_url": "https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-01&resetFilters=1",
+  "browser_qa_completed_checks": [
+    "page_structure_ok",
+    "major_events_only_default_ok",
+    "public_overlays_labels_present"
+  ],
+  "browser_qa_remaining_checks": [
+    "hard_refresh",
+    "date_window_2026_06_28",
+    "date_window_2026_07_02",
+    "queensboro_row_visible_or_findable",
+    "manual_nypd_records_visible",
+    "no_blocked_rows_visible",
+    "overlay_layers_functional"
+  ],
+  "browser_qa_expected_major_feed_counts_by_date": {
+    "2026-06-28": {
+      "major_rows": 79,
+      "nypd_manual_rows": 4,
+      "queensboro_row": 0
+    },
+    "2026-07-02": {
+      "major_rows": 3,
+      "nypd_manual_rows": 0,
+      "queensboro_row": 1
+    }
+  },
+  "remaining_risks": [
+    "browser_or_service_worker_cache_may_hide_updated_feed_until_hard_refresh",
+    "date_filtering_may_hide_queensboro_row_depending_on_map_state",
+    "no_evidence_of_bad_feed_publish_if_raw_feeds_remain_correct"
+  ],
+  "next_step": "Complete browser hard-refresh/date QA; do not touch WordPress."
+}
