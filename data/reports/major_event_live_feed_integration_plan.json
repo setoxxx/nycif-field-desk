@@ -1,0 +1,242 @@
+{
+  "phase": "C3",
+  "mode": "planning_only",
+  "generated_at": "2026-07-01T18:00:00.000Z",
+  "public_ui_modified": false,
+  "wordpress_modified": false,
+  "production_feeds_modified": false,
+  "plan_doc": "docs/major-event-live-feed-integration-plan.md",
+  "prototype_review_url": "https://setoxxx.github.io/nycif-field-desk/prototype-major-events-review.html?v=c2b-01",
+  "c2_counts": {
+    "source_rows": 30210,
+    "mapped_rows": 0,
+    "needs_review_rows": 897,
+    "rejected_rows": 29313,
+    "july_4_source_rows": 844,
+    "july_4_mapped_rows": 0,
+    "july_4_needs_review_rows": 52,
+    "missing_geocode_count": 897,
+    "vague_location_count": 0,
+    "time_needs_review_count": 9
+  },
+  "completed_phases": [
+    {
+      "phase": "C1",
+      "pr": 31,
+      "summary": "Report-only tvpp major-event source audit runner"
+    },
+    {
+      "phase": "C2",
+      "pr": 32,
+      "summary": "Prototype major-event builder from tvpp-9vvx"
+    },
+    {
+      "phase": "C2B",
+      "pr": 33,
+      "summary": "Standalone prototype review page on GitHub Pages"
+    }
+  ],
+  "recommended_architecture": {
+    "field_desk_repo": "setoxxx/nycif-field-desk",
+    "field_desk_owns": [
+      "source audit and prototype builder",
+      "prototype and preview review UI",
+      "preview feed builder (C4)",
+      "human review decisions and approved geocode overrides"
+    ],
+    "live_feeds_repo": "setoxxx/nycif-live-feeds",
+    "live_feeds_owns": [
+      "production feed JSON outputs",
+      "staged QA sync workflow",
+      "rollback backups and publish reports (C5)"
+    ],
+    "integration_rule": "Preview artifacts and human QA in field-desk; production overwrite only in live-feeds after explicit Howard approval and all QA gates pass",
+    "production_overwrite_blocked_until": "C5 with explicit approval"
+  },
+  "data_flow": {
+    "source": {
+      "dataset": "tvpp-9vvx",
+      "url": "https://data.cityofnewyork.us/resource/tvpp-9vvx.json"
+    },
+    "current_outputs": [
+      "data/prototype_major_events.json",
+      "data/prototype_major_events_needs_review.json",
+      "data/reports/prototype_major_events_report.json"
+    ],
+    "future_preview_outputs": [
+      "data/preview_major_feed.json",
+      "data/preview_all_feed.json",
+      "data/preview_staged_feed.json",
+      "data/preview_major_feed_needs_review.json",
+      "data/reports/preview_major_feed_report.json"
+    ],
+    "future_production_outputs_blocked": [
+      "nycif_major_radar_map_events.json",
+      "nycif_all_radar_map_events.json",
+      "data/nycif_staged_live_events.json"
+    ]
+  },
+  "human_review_gate": {
+    "review_artifact": "data/major_event_human_review_decisions.json",
+    "allowed_decisions": [
+      "approve",
+      "reject",
+      "needs_geocode",
+      "needs_better_time",
+      "needs_better_source",
+      "duplicate",
+      "manual_override"
+    ],
+    "blockers_before_promotion": [
+      "missing_geocode without approved coordinates",
+      "time_needs_review without verified source time",
+      "fabricated times or locations",
+      "unsupported crowd or popularity claims"
+    ],
+    "headline_july_4_reject_blocked": true
+  },
+  "geocoding_strategy": {
+    "c2_finding": "mapped_rows=0 because tvpp has no native lat/lng and cache-only lookup did not match event locations",
+    "blocked": [
+      "blind writes to data/location_cache.json"
+    ],
+    "recommended_c4_approach": [
+      {
+        "option": "manual_review_geocode_file",
+        "file": "data/approved_major_event_geocodes.json",
+        "risk": "low",
+        "approval_required": true
+      },
+      {
+        "option": "read_only_approved_overrides",
+        "description": "Builder reads overrides only; never writes cache",
+        "risk": "low",
+        "approval_required": true
+      },
+      {
+        "option": "review_export_for_coordinate_entry",
+        "description": "CSV/JSON export for human coordinate entry on headline and high-score rows",
+        "risk": "low",
+        "approval_required": true
+      },
+      {
+        "option": "controlled_geocoder_run",
+        "description": "Future geocoder for approved rows only; writes to override file not cache",
+        "risk": "medium",
+        "approval_required": true
+      }
+    ],
+    "rules": [
+      "All coordinates must pass NYC bounds check",
+      "geocode_source must be explicit (human_review, approved_override, cemsid_bridge)",
+      "Rows without approved coordinates remain in needs_review"
+    ]
+  },
+  "july_4_strategy": {
+    "problem": "Production major feed stale (~2026-06-27); headline July 4 events missing despite 844 tvpp rows on 2026-07-04",
+    "headline_keywords": [
+      "fireworks",
+      "parade",
+      "Independence Day",
+      "Nathan's",
+      "block party",
+      "Huck Finn",
+      "July 4"
+    ],
+    "c2_protection": "Headline rows forced to needs_review or mapped; never silent rejection",
+    "c4_c5_requirements": [
+      "Carry forward C2 headline detection",
+      "Preview report includes headline_july_4_coverage",
+      "All headline rows human-reviewed before C5",
+      "Production publish asserts headline rows present or explicitly held in review"
+    ],
+    "c2_headline_july_4_requires_review_count": 24
+  },
+  "manual_override_strategy": {
+    "preserve_manual_records": true,
+    "merge_not_replace": true,
+    "identification_signals": [
+      "verification_status === nypd_field_intel",
+      "_manual_priority set",
+      "id prefix nypd-hardwrite-",
+      "source_file manual/hardwrite patterns"
+    ],
+    "removal_requires_explicit_approval": true,
+    "c5_report_fields": [
+      "manual_records_preserved_count",
+      "manual_records_removed"
+    ]
+  },
+  "preview_output_files": [
+    "data/preview_major_feed.json",
+    "data/preview_all_feed.json",
+    "data/preview_staged_feed.json",
+    "data/preview_major_feed_needs_review.json",
+    "data/reports/preview_major_feed_report.json"
+  ],
+  "c4_allowed_files": [
+    "tools/feed-audit/build-preview-major-feed.mjs",
+    "data/preview_major_feed.json",
+    "data/preview_all_feed.json",
+    "data/preview_staged_feed.json",
+    "data/preview_major_feed_needs_review.json",
+    "data/reports/preview_major_feed_report.json",
+    "data/major_event_human_review_decisions.json",
+    "data/approved_major_event_geocodes.json",
+    "preview-major-events-review.html"
+  ],
+  "production_files_blocked": [
+    "nycif_major_radar_map_events.json",
+    "nycif_all_radar_map_events.json",
+    "data/nycif_staged_live_events.json"
+  ],
+  "qa_gates": [
+    "prototype review page approved",
+    "headline July 4 rows reviewed",
+    "geocoding reviewed",
+    "no fabricated times",
+    "no fabricated locations",
+    "no unsupported popularity or crowd claims",
+    "manual hard-written feed records preserved",
+    "rollback file created",
+    "report counts reviewed",
+    "browser test passes",
+    "Howard explicitly approves production feed update"
+  ],
+  "rollback_plan": {
+    "pre_publish_backups": [
+      "data/backups/nycif_major_radar_map_events.<timestamp>.json",
+      "data/backups/nycif_all_radar_map_events.<timestamp>.json",
+      "data/backups/nycif_staged_live_events.<timestamp>.json"
+    ],
+    "backup_repo": "setoxxx/nycif-live-feeds",
+    "rollback_methods": [
+      "commit-based revert in live-feeds",
+      "restore from timestamped snapshot backup",
+      "verify raw GitHub feed URLs before any WordPress change"
+    ],
+    "rollback_triggers": [
+      "missing headline July 4 events",
+      "manual NYPD records dropped",
+      "invalid coordinates outside NYC bounds",
+      "empty or broken major feed",
+      "unexpected row count drop beyond agreed threshold"
+    ]
+  },
+  "future_phases": {
+    "C3": {
+      "scope": "planning and report only",
+      "production_writes": false
+    },
+    "C4": {
+      "scope": "preview builder, human review artifacts, optional preview review page",
+      "production_writes": false
+    },
+    "C5": {
+      "scope": "production feed publish in nycif-live-feeds",
+      "production_writes": true,
+      "requires": "explicit Howard approval and all QA gates"
+    }
+  },
+  "next_phase": "C4 — preview builder only; do not overwrite production feeds"
+}
