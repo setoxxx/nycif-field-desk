@@ -1,7 +1,7 @@
 const VERSION = '0.6-staged-03-new-admin-filter';
 const NYC_CENTER = [40.7128, -74.0060];
 const STORAGE_KEY = 'nycif-field-desk-state-v06-safe';
-const PUBLIC_DEFAULT_VERSION = 'major-only-v03';
+const PUBLIC_DEFAULT_VERSION = 'major-only-v04';
 
 const FEEDS = {
   major: 'https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json',
@@ -238,7 +238,7 @@ function getPublicDefaultPrefs() {
     borough: 'all',
     sort: 'priority',
     dateMode: 'today',
-    categories: { sports: false, parade: false, market: false, arts: false, parks: false, general: false },
+    categories: { sports: true, parade: true, market: true, arts: true, parks: false, general: false },
     majorOnly: true,
     photoOnly: false,
     nypdOnly: false,
@@ -254,7 +254,8 @@ function shouldForcePublicDefaultReset() {
     const versionFlag = url.searchParams.get('v');
     return resetFlag === '1'
       || versionFlag === 'major-default-qa-01'
-      || versionFlag === 'ui-defaults-02';
+      || versionFlag === 'ui-defaults-02'
+      || versionFlag === 'c5p-postpublish-02';
   } catch {
     return false;
   }
