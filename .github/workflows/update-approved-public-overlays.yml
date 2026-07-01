@@ -1,0 +1,75 @@
+name: Update approved public overlays
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 10 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-approved-public-overlays
+  cancel-in-progress: false
+
+jobs:
+  update-approved-public-overlays:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Rebuild approved public overlay data
+        run: node tools/pin-pipeline/run-approved-public-overlays.mjs
+
+      - name: Show generated changes
+        run: git status --short
+
+      - name: Commit updated generated overlay data
+        run: |
+          if git diff --quiet; then
+            echo "No generated overlay changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            data/nycif_active_nightlife_feed.json \
+            data/nycif_active_nightlife_digest.json \
+            data/reports/active_nightlife_feed_report.json \
+            data/nycif_legal_cannabis_dispensaries.json \
+            data/nycif_legal_cannabis_dispensaries_needs_review.json \
+            data/reports/legal_cannabis_dispensaries_report.json \
+            data/nycif_smoke_vape_cannabis_correlation.json \
+            data/nycif_smoke_vape_cannabis_correlation_needs_review.json \
+            data/reports/smoke_vape_cannabis_correlation_report.json \
+            data/nycif_nightlife_spots.json \
+            data/nycif_nightlife_spots_needs_review.json \
+            data/reports/nightlife_pin_report.json \
+            data/nycif_nightlife_noise_correlation.json \
+            data/nycif_nightlife_noise_correlation_needs_review.json \
+            data/reports/nightlife_noise_correlation_report.json \
+            data/nycif_smoke_cannabis_vape_intel.json \
+            data/nycif_smoke_cannabis_vape_intel_needs_review.json \
+            data/reports/smoke_cannabis_vape_intel_report.json \
+            data/nycif_licensed_smoke_vape_retailers.json \
+            data/nycif_licensed_smoke_vape_retailers_slim.json \
+            data/nycif_licensed_smoke_vape_retailers_needs_review.json \
+            data/reports/licensed_smoke_vape_retailers_report.json
+
+          if git diff --cached --quiet; then
+            echo "No approved overlay output changes to commit after path filter."
+            exit 0
+          fi
+
+          git commit -m "Update approved public overlay data"
+          git push
