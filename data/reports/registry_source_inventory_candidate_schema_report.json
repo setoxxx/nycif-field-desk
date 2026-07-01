@@ -1,0 +1,186 @@
+{
+  "phase": "XRI-G2",
+  "mode": "report_only_schema_design_only",
+  "generated_at": "2026-07-01T23:45:00.000Z",
+  "prior_phase": "XRI-G1",
+  "prior_phase_pr": 47,
+  "design_doc_repo": "setoxxx/nycif-field-desk",
+  "future_registry_primary_repo": "setoxxx/nycif-live-feeds",
+  "repos_referenced": [
+    "setoxxx/nycif-live-feeds",
+    "setoxxx/nycif-field-desk",
+    "setoxxx/nycif-web-platform"
+  ],
+  "changed_files": [
+    "docs/registry-source-inventory-and-candidate-schema.md",
+    "docs/registry-candidate-schema.md",
+    "data/reports/registry_source_inventory_candidate_schema_report.json"
+  ],
+  "prohibited_files_touched": [],
+  "wordpress_touched": false,
+  "production_feed_touched": false,
+  "public_map_runtime_touched": false,
+  "iframe_embed_touched": false,
+  "scheduled_workflows_touched": false,
+  "location_cache_modified": false,
+  "live_staging_executed": false,
+  "registry_created": false,
+  "importer_created": false,
+  "candidate_schema_defined": true,
+  "candidate_schema_field_count": 37,
+  "candidate_schema_doc": "docs/registry-candidate-schema.md",
+  "source_tiers_defined": true,
+  "source_tiers": [
+    {
+      "tier": 0,
+      "name": "authoritative_approved_manual_production_geocode",
+      "examples": [
+        "setoxxx/nycif-live-feeds/data/location_cache.json",
+        "setoxxx/nycif-field-desk/data/location_cache.json",
+        "setoxxx/nycif-field-desk/data/approved_major_event_geocodes.json"
+      ]
+    },
+    {
+      "tier": 1,
+      "name": "approved_pipeline_artifacts_review_outputs",
+      "examples": [
+        "setoxxx/nycif-live-feeds/data/gps_reviewed_approval_artifact.json",
+        "setoxxx/nycif-live-feeds/data/gps_phase2e_promotion_report.json",
+        "setoxxx/nycif-field-desk/data/reports/master_geocode_reference_audit.json"
+      ]
+    },
+    {
+      "tier": 2,
+      "name": "useful_candidate_enrichment_sources",
+      "examples": [
+        "SODA cpcm-i88g",
+        "setoxxx/nycif-field-desk/data/nycif_nightlife_spots.json",
+        "setoxxx/nycif-web-platform/data-sources/geocoding-cache.schema.json"
+      ]
+    },
+    {
+      "tier": 3,
+      "name": "raw_needs_review_problem_sources",
+      "examples": [
+        "possible_match rows",
+        "setoxxx/nycif-live-feeds/nycif_all_radar_map_events.json",
+        "setoxxx/nycif-field-desk/event-location-corrections-v01.js"
+      ]
+    }
+  ],
+  "dual_cache_reconciliation_designed": true,
+  "dual_cache_summary": {
+    "live_feeds_cache": {
+      "repo": "setoxxx/nycif-live-feeds",
+      "path": "data/location_cache.json",
+      "approx_keys": 43522,
+      "key_format": "cemsid/place-memory with borough/confidence",
+      "asset_family": "event_gps_memory",
+      "merge_executed": false
+    },
+    "field_desk_cache": {
+      "repo": "setoxxx/nycif-field-desk",
+      "path": "data/location_cache.json",
+      "approx_keys": 11211,
+      "key_format": "normalize(location)|normalize(borough)|",
+      "asset_family": "retailer_venue_pin_pipeline",
+      "merge_executed": false
+    },
+    "reconciliation_executed": false,
+    "future_reconciliation_phase": "XRI-G5"
+  },
+  "parks_cpcm_i88g_feasibility_documented": true,
+  "parks_cpcm_i88g": {
+    "dataset_id": "cpcm-i88g",
+    "endpoint": "https://data.cityofnewyork.us/resource/cpcm-i88g.json",
+    "join_key": "event_id",
+    "role": "parks_event_location_enrichment",
+    "sample_rows_fetched": 3,
+    "observed_fields": [
+      "event_id",
+      "name",
+      "park_id",
+      "lat",
+      "long",
+      "borough",
+      "address",
+      "zip"
+    ],
+    "borough_codes_observed": ["B", "R", "X"],
+    "default_candidate_status": "needs_schema_review",
+    "production_ready": false,
+    "bulk_fetch_executed": false
+  },
+  "missing_references_documented": [
+    {
+      "path": "setoxxx/nycif-live-feeds/data/manual_gps_reference.json",
+      "referenced_by": "Phase 2C geocoder fill",
+      "status": "source_missing",
+      "invented_in_g2": false
+    },
+    {
+      "path": "setoxxx/nycif-live-feeds/data/nyc_parks_facility_reference.json",
+      "referenced_by": "Phase 2C geocoder fill",
+      "status": "source_missing",
+      "invented_in_g2": false
+    }
+  ],
+  "high_risk_assets_carried_forward": [
+    "setoxxx/nycif-field-desk/event-location-corrections-v01.js",
+    "setoxxx/nycif-field-desk/tools/pin-pipeline/build-nightlife-pins.mjs",
+    "setoxxx/nycif-live-feeds/scripts/build_gps_repository.py",
+    "setoxxx/nycif-live-feeds/scripts/build_location_cache.py",
+    "setoxxx/nycif-live-feeds/scripts/publish_c5p_approved_major_event_row.mjs",
+    "setoxxx/nycif-live-feeds/scripts/apply_gps_staged_feed_integration_update.py",
+    "setoxxx/nycif-live-feeds/nycif_all_radar_map_events.json",
+    "setoxxx/nycif-live-feeds/nycif_major_radar_map_events.json",
+    "setoxxx/nycif-live-feeds/.github/workflows/live-sync-qa.yml",
+    "setoxxx/nycif-live-feeds/.github/workflows/gps-staged-feed-integration-update.yml",
+    "setoxxx/nycif-web-platform/scripts/export_public_radar_geojson.py",
+    "setoxxx/nycif-web-platform/wordpress-plugins/nycif-events-map/nycif-events-map.php"
+  ],
+  "candidate_statuses": [
+    "seed_approved_candidate",
+    "needs_schema_review",
+    "possible_duplicate",
+    "coordinate_conflict",
+    "source_missing",
+    "raw_unapproved",
+    "excluded_runtime_patch",
+    "excluded_public_feed_output",
+    "rejected"
+  ],
+  "conflict_detection_codes": [
+    "KEY_COORD_MISMATCH",
+    "COORD_NAME_MISMATCH",
+    "VENUE_BOROUGH_AMBIGUITY",
+    "MISSING_BOROUGH",
+    "OVERRIDE_CACHE_CONFLICT",
+    "RUNTIME_PATCH_CONFLICT",
+    "FEED_UNTRACEABLE_COORD",
+    "SOURCE_FILE_MISSING",
+    "STALE_SUPERSEDED"
+  ],
+  "production_allowed_from_g2": false,
+  "production_rule": "No XRI-G2 candidate is production-approved. seed_approved_candidate means eligible for future registry seeding review only.",
+  "runtime_patch_flagged": {
+    "path": "setoxxx/nycif-field-desk/event-location-corrections-v01.js",
+    "default_candidate_status": "excluded_runtime_patch",
+    "removed_in_g2": false,
+    "retirement_requires": "equivalent approved source-owned registry/cache record"
+  },
+  "scheduled_workflow_risk_flagged": true,
+  "future_roadmap_phases": [
+    { "phase": "XRI-G3", "scope": "Candidate schema fixtures and validation contract", "mode": "local_report_only" },
+    { "phase": "XRI-G4", "scope": "Read-only candidate extractor prototype", "mode": "no_source_writes" },
+    { "phase": "XRI-G5", "scope": "Cache reconciliation report", "mode": "no_merge" },
+    { "phase": "XRI-G6", "scope": "Registry candidate preview artifact", "mode": "not_production" },
+    { "phase": "XRI-G7", "scope": "Field-desk review UI contract for candidates", "mode": "admin_design" },
+    { "phase": "XRI-G8", "scope": "Approved registry seed PR", "mode": "howard_approval_required" },
+    { "phase": "XRI-G9", "scope": "Preview feed integration", "mode": "howard_approval_required" },
+    { "phase": "XRI-G10", "scope": "Production feed integration", "mode": "howard_approval_required" },
+    { "phase": "XRI-G11", "scope": "WordPress/platform coordination", "mode": "separate_approval_required" }
+  ],
+  "next_recommended_phase": "XRI-G3 — Candidate schema fixtures and validation contract, local/report only",
+  "main_design_doc": "docs/registry-source-inventory-and-candidate-schema.md"
+}
