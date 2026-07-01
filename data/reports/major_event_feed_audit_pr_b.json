@@ -1,0 +1,86 @@
+{
+  "audit_name": "major_event_feed_audit_pr_b",
+  "issue": 26,
+  "scope": "audit_only",
+  "changed_public_ui": false,
+  "changed_wordpress": false,
+  "changed_feed_outputs": false,
+  "changed_generated_data": false,
+  "field_desk_repo": "setoxxx/nycif-field-desk",
+  "live_feed_repo": "setoxxx/nycif-live-feeds",
+  "map_feed_urls": {
+    "major": "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json",
+    "full": "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_all_radar_map_events.json",
+    "staged": "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/data/nycif_staged_live_events.json"
+  },
+  "current_feed_findings": {
+    "major_feed": "present and populated with hard-written/NYPD-style field-intel examples dated 2026-06-27",
+    "full_feed": "direct fetch returned an empty response body",
+    "staged_feed": "direct fetch returned an empty response body",
+    "builder_search": "no obvious code-search hits for nycif_major_radar_map_events, tvpp-9vvx, workflow_dispatch, or cron in setoxxx/nycif-live-feeds during this audit pass"
+  },
+  "tvpp_9vvx": {
+    "source_url": "https://data.cityofnewyork.us/resource/tvpp-9vvx.json",
+    "metadata_url": "https://data.cityofnewyork.us/api/views/tvpp-9vvx",
+    "dataset_name": "NYC Permitted Event Information",
+    "publisher": "Office of Citywide Event Coordination and Management (CECM)",
+    "provenance": "official",
+    "category": "City Government",
+    "description_summary": "Approved event applications that will occur within the next month; permitted film events only reflect permits impacting one or more streets for at least five days.",
+    "observed_fields": [
+      "event_id",
+      "event_name",
+      "start_date_time",
+      "end_date_time",
+      "event_agency",
+      "event_type",
+      "event_borough",
+      "event_location",
+      "event_street_side",
+      "street_closure_type",
+      "community_board",
+      "police_precinct",
+      "cemsid"
+    ],
+    "strengths": [
+      "official source",
+      "future/current-window oriented",
+      "citywide",
+      "date/time fields",
+      "borough and location fields",
+      "agency/type/street-closure fields"
+    ],
+    "limitations": [
+      "no lat/lng observed in sample rows",
+      "free-text location requires geocoding or location-cache matching",
+      "start/end may be permit/setup/breakdown windows rather than public audience times",
+      "noisy routine parks sports and permit records",
+      "July 4 records can be routine sports permits, not necessarily citywide July 4 public-interest events"
+    ],
+    "july_4_sample_observed": {
+      "event_id": "948580",
+      "event_name": "Soccer - Non Regulation",
+      "start_date_time": "2026-07-04T17:00:00.000",
+      "end_date_time": "2026-07-04T20:00:00.000",
+      "event_agency": "Parks Department",
+      "event_type": "Sport - Youth",
+      "event_borough": "Queens",
+      "event_location": "Marconi Park: Soccer-01",
+      "interpretation": "Shows July 4 date coverage exists in raw source, but this sample is not a major citywide July 4 event. Scoring/filtering is required."
+    }
+  },
+  "recommended_next_pr": {
+    "name": "PR C1 - source audit runner only",
+    "branch": "cursor/build-tvpp-major-event-source-audit",
+    "outputs": [
+      "data/reports/major_event_source_audit_tvpp_9vvx.json",
+      "data/reports/major_event_source_audit_tvpp_9vvx_samples.json"
+    ],
+    "must_not_do": [
+      "do not overwrite production major/all/staged feeds",
+      "do not touch WordPress",
+      "do not touch public UI",
+      "do not fabricate event times or locations"
+    ]
+  }
+}
