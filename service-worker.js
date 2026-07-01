@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-v013-major-default';
+const CACHE_NAME = 'nycif-v014-category-defaults-fix';
 const APP_SHELL = [
   './',
   './index.html',

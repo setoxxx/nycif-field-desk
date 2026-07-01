@@ -1,15 +1,15 @@
 (function () {
   const STORAGE_KEY = 'nycif-field-desk-state-v06-safe';
-  const DEFAULT_VERSION = 'major-only-v03';
+  const DEFAULT_VERSION = 'major-only-v04';
   const defaults = {
     borough: 'all',
     sort: 'priority',
     dateMode: 'today',
     categories: {
-      sports: false,
-      parade: false,
-      market: false,
-      arts: false,
+      sports: true,
+      parade: true,
+      market: true,
+      arts: true,
       parks: false,
       general: false
     },
@@ -38,7 +38,8 @@
     const versionFlag = url.searchParams.get('v');
     const forceReset = url.searchParams.get('resetFilters') === '1'
       || versionFlag === 'major-default-qa-01'
-      || versionFlag === 'ui-defaults-02';
+      || versionFlag === 'ui-defaults-02'
+      || versionFlag === 'c5p-postpublish-02';
     applyDefaults(forceReset);
   } catch {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
