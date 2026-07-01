@@ -4,11 +4,11 @@
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
   "source_complaints": 1892,
   "usable_complaints": 1892,
-  "source_dispensaries": 0,
+  "source_dispensaries": 241,
   "source_retailers": 4882,
-  "correlation_locations": 4882,
-  "output_locations": 179,
-  "low_signal_excluded": 4703,
+  "correlation_locations": 5123,
+  "output_locations": 204,
+  "low_signal_excluded": 4919,
   "radius_feet": [
     100,
     250,
@@ -22,19 +22,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 179
+    "licensed_smoke_vape_retailer": 179,
+    "legal_cannabis_dispensary": 25
   },
   "borough_counts": {
-    "Brooklyn": 49,
-    "Bronx": 36,
-    "Manhattan": 61,
-    "Queens": 31,
+    "Brooklyn": 59,
+    "Bronx": 37,
+    "Manhattan": 70,
+    "Queens": 36,
     "Staten Island": 2
   },
   "signal_tier_counts": {
     "very_high": 2,
-    "high": 18,
-    "moderate": 159
+    "high": 21,
+    "moderate": 181
   },
   "top_locations_sample": [
     {
@@ -137,6 +138,17 @@
       "last_complaint_date": "2026-06-19"
     },
     {
+      "title": "CANNALICIOUS LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "435 5TH AVE, BROOKLYN, 11215 4012",
+      "borough": "Brooklyn",
+      "signal_score": 23,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
       "title": "5Th AVENUE CANDY & GROCERY INC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "439 5TH AVE, BROOKLYN, 11215",
@@ -148,6 +160,17 @@
       "last_complaint_date": "2026-06-27"
     },
     {
+      "title": "BLAZINUP, LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
+      "borough": "Manhattan",
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-16"
+    },
+    {
       "title": "DELI & SMOKE SHOP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "439 5TH AVE, BROOKLYN, 11215",
@@ -157,6 +180,17 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "FLOR DE FRED",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "BITAR ASSETS INC 9605 LIBERTY, OZONE PARK, 11417 1623",
+      "borough": "Queens",
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-03"
     },
     {
       "title": "9TH AVENUE GOURMET INC.",
@@ -278,41 +312,8 @@
       "complaints_365d_100ft": 1,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-06-24"
-    },
-    {
-      "title": "CIGAR VAPE INC I",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "452 5 AVENUE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 13,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
-    },
-    {
-      "title": "CIGAR VAPE INC I",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "452 5 AVENUE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 13,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
-    },
-    {
-      "title": "FIVE STARS DELI GROCERY",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "10413 JAMAICA AVE, JAMAICA, 11418",
-      "borough": "Queens",
-      "signal_score": 13,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-22"
     }
   ],
-  "generated_at": "2026-06-30T21:49:03.473Z",
+  "generated_at": "2026-07-01T00:23:15.334Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }

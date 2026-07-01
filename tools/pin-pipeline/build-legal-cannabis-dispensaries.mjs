@@ -1,15 +1,20 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-const DEFAULT_SOURCE_URL = process.env.NYCIF_CANNABIS_DISPENSARY_SOURCE_URL || '';
-const SOURCE_NOTE = 'Use an official NYS Office of Cannabis Management or data.ny.gov source. If no official machine-readable source is configured, this builder writes empty outputs with a limitation note.';
+const CANONICAL_SOURCE_URL = 'https://data.ny.gov/resource/gttd-5u6y.json';
+const SOURCE_LABEL = 'NYS Registered Retail Dealers of Adult-use Cannabis Products';
+const DATA_NOTE = 'Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.';
+const DEFAULT_SOURCE_URL = process.env.NYCIF_CANNABIS_DISPENSARY_SOURCE_URL || CANONICAL_SOURCE_URL;
+const SOURCE_NOTE = 'Official NYS registered adult-use cannabis retail dealer records from data.ny.gov dataset gttd-5u6y.';
 const OUT_DIR = 'data';
 const REPORT_DIR = 'data/reports';
 const OUT_FILE = path.join(OUT_DIR, 'nycif_legal_cannabis_dispensaries.json');
 const REVIEW_FILE = path.join(OUT_DIR, 'nycif_legal_cannabis_dispensaries_needs_review.json');
 const REPORT_FILE = path.join(REPORT_DIR, 'legal_cannabis_dispensaries_report.json');
 
-const NYC_BOROUGH_TERMS = ['new york', 'manhattan', 'brooklyn', 'kings', 'queens', 'bronx', 'richmond', 'staten island'];
+const NYC_COUNTIES = new Set(['NEW YORK', 'KINGS', 'QUEENS', 'BRONX', 'RICHMOND']);
+const LICENSE_TYPE = 'Registered adult-use cannabis retail dealer';
+const LICENSE_STATUS = 'Registered';
 
 function clean(value) {
   return String(value ?? '').replace(/\s+/g, ' ').trim();
@@ -36,10 +41,51 @@ function firstValue(row, names) {
   return '';
 }
 
+function countyRaw(row) {
+  return clean(firstValue(row, ['physical_county', 'county', 'County'])).toUpperCase();
+}
+
+function isNycCounty(row) {
+  return NYC_COUNTIES.has(countyRaw(row));
+}
+
+function boroughFrom(row) {
+  const county = countyRaw(row);
+  if (county === 'NEW YORK') return 'Manhattan';
+  if (county === 'KINGS') return 'Brooklyn';
+  if (county === 'QUEENS') return 'Queens';
+  if (county === 'BRONX') return 'Bronx';
+  if (county === 'RICHMOND') return 'Staten Island';
+  return clean(firstValue(row, ['borough', 'city', 'physical_city', 'municipality']));
+}
+
+function addressFrom(row) {
+  const address = firstValue(row, ['physical_address', 'address', 'street_address', 'premise_address', 'address_line_1']);
+  const city = firstValue(row, ['physical_city', 'city', 'municipality']);
+  const zip = firstValue(row, ['physical_zip', 'zip', 'zipcode', 'zip_code', 'postal_code']);
+  return [address, city, zip].map(clean).filter(Boolean).join(', ');
+}
+
+function titleFrom(row) {
+  return firstValue(row, ['dba_name', 'legal_name', 'dba', 'entity_name', 'name', 'business_name']) || 'Registered cannabis retail dealer';
+}
+
+function rawId(row, index) {
+  return firstValue(row, ['ocm_license_number', 'external_tpid', 'license_number', 'license_id', 'id']) || `legal-dispensary-${index}`;
+}
+
 function coordsFrom(row) {
-  const lat = numberFrom(firstValue(row, ['latitude', 'lat', 'Latitude', 'LATITUDE', 'y']));
-  const lng = numberFrom(firstValue(row, ['longitude', 'lng', 'lon', 'Longitude', 'LONGITUDE', 'x']));
+  const georef = row.georeference;
+  if (georef && typeof georef === 'object' && Array.isArray(georef.coordinates) && georef.coordinates.length >= 2) {
+    const lng = numberFrom(georef.coordinates[0]);
+    const lat = numberFrom(georef.coordinates[1]);
+    if (isNYCoord(lat, lng)) return { lat, lng, quality: 'source_georeference' };
+  }
+
+  const lat = numberFrom(firstValue(row, ['latitude', 'lat', 'y']));
+  const lng = numberFrom(firstValue(row, ['longitude', 'lng', 'lon', 'x']));
   if (isNYCoord(lat, lng)) return { lat, lng, quality: 'source_coordinates' };
+
   const location = row.location || row.Location || row.geocoded_column;
   if (location && typeof location === 'object') {
     const objectLat = numberFrom(location.latitude || location.lat);
@@ -52,67 +98,53 @@ function coordsFrom(row) {
       if (isNYCoord(b, a)) return { lat: b, lng: a, quality: 'source_coordinates_reversed' };
     }
   }
+
   return null;
 }
 
-function boroughFrom(row) {
-  const raw = firstValue(row, ['borough', 'county', 'city', 'municipality', 'Borough', 'County', 'City']);
-  const value = norm(raw);
-  if (value === 'new york') return 'Manhattan';
-  if (value === 'kings') return 'Brooklyn';
-  if (value === 'richmond') return 'Staten Island';
-  if (value.includes('manhattan')) return 'Manhattan';
-  if (value.includes('brooklyn')) return 'Brooklyn';
-  if (value.includes('queens')) return 'Queens';
-  if (value.includes('bronx')) return 'Bronx';
-  if (value.includes('staten island')) return 'Staten Island';
-  return clean(raw);
-}
-
-function addressFrom(row) {
-  const address = firstValue(row, ['address', 'street_address', 'premise_address', 'physical_address', 'Address', 'Street Address']);
-  const city = firstValue(row, ['city', 'municipality', 'City']);
-  const zip = firstValue(row, ['zip', 'zipcode', 'postal_code', 'ZIP', 'Zip']);
-  return [address, city, zip].map(clean).filter(Boolean).join(', ');
-}
-
-function isNycRow(row) {
-  const haystack = [boroughFrom(row), addressFrom(row), firstValue(row, ['county', 'County'])].join(' ').toLowerCase();
-  return NYC_BOROUGH_TERMS.some(term => haystack.includes(term));
-}
-
-function normalize(row, index, sourceUrl) {
-  const coords = coordsFrom(row);
-  const name = firstValue(row, ['name', 'business_name', 'licensee_name', 'dba', 'trade_name', 'Name', 'DBA']) || `Legal cannabis dispensary ${index + 1}`;
+function normalize(row, index) {
+  const sourceId = rawId(row, index);
+  const title = titleFrom(row);
   const address = addressFrom(row);
   const borough = boroughFrom(row);
-  const licenseType = firstValue(row, ['license_type', 'license_category', 'type', 'License Type']);
-  const licenseStatus = firstValue(row, ['license_status', 'status', 'Status']) || 'Unknown';
-  const sourceId = firstValue(row, ['license_number', 'license_id', 'id', 'serial_number', 'License Number']) || `legal-dispensary-${index}`;
 
   const base = {
     id: `legal-dispensary-${sourceId}`.replace(/\s+/g, '-'),
     layer: 'legal_cannabis_dispensaries',
     category: 'regulated_cannabis_location',
-    title: name,
+    title,
     address,
     borough,
-    license_type: licenseType || 'Adult-use cannabis dispensary',
-    license_status: licenseStatus,
-    source: 'NYS Office of Cannabis Management / official configured source',
-    source_url: sourceUrl,
+    license_type: LICENSE_TYPE,
+    license_status: LICENSE_STATUS,
+    source: SOURCE_LABEL,
+    source_url: CANONICAL_SOURCE_URL,
     raw_source_id: sourceId,
-    data_note: 'Official regulated cannabis location record where source data is available; confirm current status before publication.',
+    data_note: DATA_NOTE,
     raw: row
   };
 
-  if (!isNycRow(row) && !coords) return { status: 'rejected', reason: 'not_nyc_or_missing_location', ...base };
-  if (!coords) return { status: 'needs_review', reason: address ? 'needs_geocode' : 'missing_coordinates_and_address', ...base };
+  if (!isNycCounty(row)) {
+    return { status: 'rejected', reason: 'outside_nyc_county', ...base };
+  }
+
+  const coords = coordsFrom(row);
+  if (!coords) {
+    return { status: 'needs_review', reason: address ? 'needs_geocode' : 'missing_coordinates_and_address', ...base };
+  }
+
   return { status: 'mapped', location_quality: coords.quality, lat: coords.lat, lng: coords.lng, ...base };
 }
 
 async function fetchOfficialSource(sourceUrl) {
-  if (!sourceUrl) return { rows: [], limitation: 'No official machine-readable OCM/data.ny.gov dispensary source URL configured in NYCIF_CANNABIS_DISPENSARY_SOURCE_URL.' };
+  if (!sourceUrl) {
+    return {
+      rows: [],
+      limitation: 'No official machine-readable OCM/data.ny.gov dispensary source URL configured in NYCIF_CANNABIS_DISPENSARY_SOURCE_URL.'
+    };
+  }
+
+  console.log(`Fetching ${sourceUrl}`);
   const response = await fetch(sourceUrl, { headers: { Accept: 'application/json' } });
   if (!response.ok) throw new Error(`Dispensary source fetch failed: HTTP ${response.status}`);
   const rows = await response.json();
@@ -128,28 +160,38 @@ function countBy(items, key) {
   }, {});
 }
 
+function countReasons(items) {
+  const counts = new Map();
+  for (const item of items) counts.set(item.reason || 'unknown', (counts.get(item.reason || 'unknown') || 0) + 1);
+  return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([reason, count]) => ({ reason, count }));
+}
+
 async function main() {
   await fs.mkdir(OUT_DIR, { recursive: true });
   await fs.mkdir(REPORT_DIR, { recursive: true });
 
   const { rows, limitation } = await fetchOfficialSource(DEFAULT_SOURCE_URL);
-  const normalized = rows.map((row, index) => normalize(row, index, DEFAULT_SOURCE_URL));
+  const normalized = rows.map((row, index) => normalize(row, index));
   const mapped = normalized.filter(item => item.status === 'mapped');
   const needsReview = normalized.filter(item => item.status === 'needs_review');
   const rejected = normalized.filter(item => item.status === 'rejected');
 
   const report = {
-    source_url: DEFAULT_SOURCE_URL || null,
+    source_url: CANONICAL_SOURCE_URL,
+    queried_url: DEFAULT_SOURCE_URL,
     source_note: SOURCE_NOTE,
     source_rows: rows.length,
+    nyc_county_filter: [...NYC_COUNTIES].sort(),
     mapped_total: mapped.length,
     needs_review: needsReview.length,
     rejected: rejected.length,
     borough_counts: countBy(mapped, 'borough'),
     license_status_counts: countBy(mapped, 'license_status'),
+    top_rejection_reasons: countReasons(rejected).slice(0, 10),
+    top_review_reasons: countReasons(needsReview).slice(0, 10),
     limitation: limitation || null,
     generated_at: new Date().toISOString(),
-    data_note: 'Legal cannabis dispensary records are regulated-location records only; confirm current status before publication.'
+    data_note: DATA_NOTE
   };
 
   await fs.writeFile(OUT_FILE, `${JSON.stringify(mapped, null, 2)}\n`);
