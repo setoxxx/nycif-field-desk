@@ -16,6 +16,17 @@ https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilt
 
 Not implemented in v5b. No HTML, CSS, JS, routing, auth, or deploy workflow is added by this requirement.
 
+## Current admin dashboard status
+
+- **planned** — requirement and master tracker documented only
+- **documentation only** — no admin UI in this PR or repo path yet
+- **admin UI not implemented yet** — no `admin/index.html` or equivalent route
+- **GitHub Pages 404 is expected** until an admin page/index.html or equivalent route is added
+- **the 404 is not a production map failure** — it reflects missing admin assets, not a broken public map
+- **the 404 does not affect the current public Field Desk page** — the public URL above remains the live operator/public entry point
+
+Every future Cursor report related to admin/dashboard work should end with both links and a clear status line (see footer below).
+
 ## Purpose
 
 The admin page **visually shows everything that is happening across the system** for operator review:
@@ -144,5 +155,6 @@ See `tools/event-sources/README.md` and repo root `AGENTS.md` for full agent rul
 
 ---
 
+Field Desk: [NYCIF Field Desk](https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1)
 Admin page: [NYCIF Admin Dashboard](https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1)
-Admin page status: planned; documentation updated; admin UI not implemented yet
+Admin page status: planned; currently 404 until admin UI is implemented; documentation updated

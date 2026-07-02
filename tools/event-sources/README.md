@@ -154,6 +154,8 @@ Planned **read-only admin/operator version of the existing NYCIF Field Desk GitH
 
 **Proposed admin field desk:** https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1
 
+**Current admin status:** planned; documentation only; admin UI not implemented. The admin URL currently returns a GitHub Pages **404** until `admin/index.html` or an equivalent route exists. This is expected — it is not a production map failure and does not affect the public Field Desk page.
+
 Purpose: visually show everything happening across the system — live data, candidate/staged data, source freshness, TVPP assignment feed output, triage buckets, warnings, needs-review rows, what has been added or pushed, and build/commit/status metadata when available.
 
 The dashboard shows **all categories separately** with **no hidden filtering logic**. Category views/toggles are for visibility and navigation only; they **do not decide** what appears on the public map.
@@ -169,8 +171,9 @@ Constraints:
 
 Full requirement doc: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md) (includes [NYCIF Master Completion Tracker](./admin-dashboard-requirement.md#nycif-master-completion-tracker))
 
+Field Desk: [NYCIF Field Desk](https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1)
 Admin page: [NYCIF Admin Dashboard](https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1)
-Admin page status: planned; documentation updated; admin UI not implemented yet
+Admin page status: planned; currently 404 until admin UI is implemented; documentation updated
 
 ## Tests
 
