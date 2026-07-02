@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>NYCIF Master Admin Projects</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --panel: #121a2b;
+      --panel-2: #182235;
+      --panel-3: #0f172a;
+      --line: rgba(255,255,255,.1);
+      --text: #eef2ff;
+      --muted: #9aa7c0;
+      --warn: #fbbf24;
+      --danger: #fb7185;
+      --ok: #34d399;
+      --accent: #60a5fa;
+      --chip: rgba(96,165,250,.12);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(180deg, #0a0f1a, #111827 240px, var(--bg)); color: var(--text); }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 20px 16px 48px; }
+    .topbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+    h1 { margin: 0 0 6px; font-size: clamp(24px, 4vw, 34px); letter-spacing: -.03em; }
+    h2 { margin: 0 0 12px; font-size: 17px; }
+    h3 { margin: 0 0 8px; font-size: 14px; }
+    .sub { color: var(--muted); margin: 0; max-width: 860px; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 12px 30px rgba(0,0,0,.16); }
+    .notice { border-left: 4px solid var(--warn); background: rgba(251,191,36,.08); color: #fde68a; border-radius: 12px; padding: 12px 14px; margin: 10px 0; }
+    .notice.ok { border-left-color: var(--ok); background: rgba(52,211,153,.08); color: #a7f3d0; }
+    .notice.danger { border-left-color: var(--danger); background: rgba(251,113,133,.08); color: #fecdd3; }
+    .links, .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    a { color: var(--accent); }
+    .links a, .chip { color: #bfdbfe; text-decoration: none; border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); padding: 6px 10px; font-size: 12px; }
+    .grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+    .stat, .card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+    .label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .value { font-size: 18px; font-weight: 750; word-break: break-word; }
+    .detail { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-3); margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 700; background: rgba(255,255,255,.03); }
+    tr:last-child td { border-bottom: 0; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .truncate { max-width: 340px; overflow-wrap: anywhere; }
+    .empty { color: var(--muted); font-style: italic; }
+    .progress { height: 8px; border-radius: 999px; background: #0f172a; border: 1px solid var(--line); overflow: hidden; margin-top: 8px; }
+    .progress > span { display: block; height: 100%; background: linear-gradient(90deg, #60a5fa, #34d399); width: 0%; }
+    @media (max-width: 760px) { .wrap { padding: 16px 10px 40px; } .panel { padding: 14px; border-radius: 14px; } table { min-width: 820px; } .truncate { max-width: 240px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div>
+        <h1>NYCIF Master Admin Projects</h1>
+        <p class="sub">Read-only portfolio control center for tracking NYCIF repositories as one master project. This page is a public static snapshot and must not contain secrets or private repo internals.</p>
+      </div>
+      <nav class="links" aria-label="Admin links">
+        <a href="./">Admin Dashboard</a>
+        <a href="./xri-registry-review.html">XRI Registry Review</a>
+        <a href="../">Field Desk</a>
+      </nav>
+    </header>
+
+    <section class="panel" aria-label="Security notice">
+      <h2>Security / access reality check</h2>
+      <div class="notice danger">GitHub Pages is static public hosting for this project page. A JavaScript password box would only hide content cosmetically; it would not secure the data.</div>
+      <div class="notice ok">Safe v1 approach: publish only project names, repo visibility, high-level status, and next-action placeholders. Use Cloudflare Access, Netlify, Vercel, or private hosting for real password protection.</div>
+    </section>
+
+    <section class="panel" id="load-errors-panel" hidden>
+      <h2>Load errors</h2>
+      <div id="load-errors"></div>
+    </section>
+
+    <section class="panel" id="master-summary">
+      <h2>Master project summary</h2>
+      <div id="summary-grid" class="grid"></div>
+    </section>
+
+    <section class="panel" id="project-table-section">
+      <h2>Project inventory</h2>
+      <div id="project-table"></div>
+    </section>
+
+    <section class="panel" id="security-plan">
+      <h2>Secure admin path</h2>
+      <div id="access-policy"></div>
+    </section>
+  </div>
+
+  <script>
+    const RESOURCE = './data/master-projects.json';
+
+    function byId(id) { return document.getElementById(id); }
+    function text(value) {
+      if (value === null || value === undefined || value === '') return '—';
+      if (Array.isArray(value)) return value.length ? value.join(', ') : '—';
+      if (typeof value === 'object') return JSON.stringify(value);
+      return String(value);
+    }
+    function el(tag, className, value) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (value !== undefined) node.textContent = text(value);
+      return node;
+    }
+    function clear(node) { node.replaceChildren(); return node; }
+    function stat(label, value, detail) {
+      const card = el('div', 'stat');
+      card.appendChild(el('div', 'label', label));
+      card.appendChild(el('div', 'value', value));
+      if (detail) card.appendChild(el('div', 'detail', detail));
+      if (typeof value === 'number') {
+        const bar = el('div', 'progress');
+        const fill = document.createElement('span');
+        fill.style.width = `${Math.max(0, Math.min(100, value))}%`;
+        bar.appendChild(fill);
+        card.appendChild(bar);
+      }
+      return card;
+    }
+    function chips(values) {
+      const wrap = el('div', 'chips');
+      const list = Array.isArray(values) ? values : [values];
+      if (!list.filter(Boolean).length) wrap.appendChild(el('span', 'empty', '—'));
+      for (const value of list.filter(Boolean)) wrap.appendChild(el('span', 'chip', value));
+      return wrap;
+    }
+    function table(columns, rows) {
+      const wrap = el('div', 'table-wrap');
+      const tableNode = document.createElement('table');
+      const thead = document.createElement('thead');
+      const trHead = document.createElement('tr');
+      for (const column of columns) trHead.appendChild(el('th', null, column.label));
+      thead.appendChild(trHead);
+      tableNode.appendChild(thead);
+      const tbody = document.createElement('tbody');
+      if (!rows.length) {
+        const row = document.createElement('tr');
+        const cell = el('td', 'empty', 'No project rows.');
+        cell.colSpan = columns.length;
+        row.appendChild(cell);
+        tbody.appendChild(row);
+      } else {
+        for (const item of rows) {
+          const row = document.createElement('tr');
+          for (const column of columns) {
+            const cell = document.createElement('td');
+            if (column.className) cell.className = column.className;
+            const value = column.value(item);
+            if (value instanceof Node) cell.appendChild(value);
+            else cell.textContent = text(value);
+            row.appendChild(cell);
+          }
+          tbody.appendChild(row);
+        }
+      }
+      tableNode.appendChild(tbody);
+      wrap.appendChild(tableNode);
+      return wrap;
+    }
+    async function loadMasterProjects() {
+      const response = await fetch(RESOURCE);
+      if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+      return response.json();
+    }
+    function render(data) {
+      const summary = clear(byId('summary-grid'));
+      summary.appendChild(stat('Master project', data.master_project?.name, data.master_project?.status));
+      summary.appendChild(stat('Overall completion', data.master_project?.completion_percent, data.master_project?.next_action));
+      summary.appendChild(stat('Repositories', data.summary?.repo_count, `${text(data.summary?.public_repo_count)} public / ${text(data.summary?.private_repo_count)} private`));
+      summary.appendChild(stat('Generated', data.generated_at, data.dashboard_phase));
+      summary.appendChild(stat('Write controls', data.master_project?.write_controls_allowed, 'Must remain false on public static admin.'));
+      summary.appendChild(stat('Public runtime allowed', data.master_project?.public_runtime_allowed, 'Must remain false.'));
+
+      clear(byId('project-table')).appendChild(table([
+        { label: 'Project', value: (row) => row.name, className: 'mono' },
+        { label: 'Repo', value: (row) => row.full_name, className: 'mono truncate' },
+        { label: 'Visibility', value: (row) => row.visibility },
+        { label: 'Branch', value: (row) => row.default_branch },
+        { label: 'Role', value: (row) => row.role, className: 'truncate' },
+        { label: 'Tracking status', value: (row) => row.tracking_status },
+        { label: 'Completion', value: (row) => row.completion_percent },
+        { label: 'Next action', value: (row) => row.next_action, className: 'truncate' },
+      ], data.projects || []));
+
+      const policy = clear(byId('access-policy'));
+      policy.appendChild(stat('Current hosting', data.access_policy?.current_hosting, data.security_note));
+      policy.appendChild(stat('Real password supported here', data.access_policy?.real_password_supported_here, 'False for public static GitHub Pages.'));
+      policy.appendChild(stat('Soft client gate supported', data.access_policy?.soft_client_gate_supported, 'Cosmetic only; not security.'));
+      policy.appendChild(el('h3', null, 'Recommended secure options'));
+      policy.appendChild(chips(data.access_policy?.recommended_secure_options || []));
+    }
+    loadMasterProjects().then(render).catch((error) => {
+      const panel = byId('load-errors-panel');
+      panel.hidden = false;
+      clear(byId('load-errors')).appendChild(el('div', 'notice danger', `${RESOURCE}: ${error.message}`));
+    });
+  </script>
+</body>
+</html>
