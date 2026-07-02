@@ -1,12 +1,12 @@
 {
   "project": "NYCIF XRI Master Location Registry",
-  "completion_percent": 65,
+  "completion_percent": 70,
   "expected_completion_after_merge": 70,
   "current_phase": "XRI-G7",
   "current_phase_title": "Candidate Review Rules + Operator Decision Model",
   "previous_phase": "XRI-G6 — Registry Candidate Preview Artifact",
   "phase_mode": "CONTRACT ONLY",
-  "phase_status": "contract_draft",
+  "phase_status": "merged",
   "merged_phases": [
     "XRI-G0",
     "XRI-G1",
@@ -14,12 +14,13 @@
     "XRI-G3",
     "XRI-G4",
     "XRI-G5",
-    "XRI-G6"
+    "XRI-G6",
+    "XRI-G7"
   ],
   "active_pr": null,
-  "active_branch": "chatgpt/xri-g7-candidate-review-contract",
-  "last_merged_pr": 68,
-  "last_merge_sha": "acad12de2b737bc43600d7d640ad3167bf737282",
+  "active_branch": null,
+  "last_merged_pr": 69,
+  "last_merge_sha": "c060c9fee62eaa1bc7d0cd26edc46709f3657ff5",
   "qa_agent_found": false,
   "qa_agent_result": "not_run_documentation_status_only_change",
   "qa_agent_warnings": [
@@ -39,8 +40,8 @@
   "geocodes_approved": false,
   "candidates_promoted": false,
   "runtime_wiring_added": false,
-  "manual_action_needed": "Review and merge G7 contract PR before starting G8.",
+  "manual_action_needed": "none — XRI-G7 merged; XRI-G8 not authorized.",
   "next_recommended_phase": "XRI-G8 — Review Artifact Schema + Fixture Validator",
   "next_phase_authorized": false,
-  "last_updated": "2026-07-02T18:30:00.000Z"
+  "last_updated": "2026-07-02T16:42:00.000Z"
 }
