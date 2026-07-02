@@ -10,6 +10,7 @@ import { asString } from './event-lead.mjs';
 import { enrichParksEventLead } from './normalizers/parks-joins.mjs';
 import { normalizeEventLead } from './normalizers/index.mjs';
 import {
+  buildBaseFetchOptions,
   buildEventIdWhereClause,
   parseSamplePipelineArgs,
   printSamplePipelineHelp,
@@ -25,21 +26,26 @@ const JOIN_SOURCES = [
 ];
 
 /**
- * @param {number} limit
+ * @param {import('./parks-pipeline.mjs').SamplePipelineArgs} args
  * @returns {Promise<import('./event-lead.mjs').EventLead[]>}
  */
-export async function runParksSamplePipeline(limit) {
+export async function runParksSamplePipeline(args) {
   const baseSource = getEventSourceById('fudw-fgrp');
   if (!baseSource) {
     throw new Error('Missing fudw-fgrp source config');
   }
 
-  const { rows: baseRows, fetchedAt } = await fetchSocrataSource(baseSource, { limit });
+  const fetchOptions = buildBaseFetchOptions(args);
+  const { rows: baseRows, fetchedAt, url } = await fetchSocrataSource(baseSource, fetchOptions);
   const eventIds = [...new Set(baseRows.map((row) => asString(row.event_id)).filter(Boolean))];
 
-  console.error(
-    `Parks sample pipeline: ${baseRows.length} base row(s), ${eventIds.length} distinct event_id(s)`,
-  );
+  console.error(`Parks sample pipeline: ${baseRows.length} base row(s), ${eventIds.length} distinct event_id(s)`);
+  console.error(`  base fetch: ${url}`);
+  if (args.upcoming) {
+    console.error(`  upcoming filter from ${args.fromDate}, order ${args.order}`);
+  } else {
+    console.error('  upcoming filter disabled');
+  }
 
   /** @type {import('./normalizers/parks-joins.mjs').ParksJoinRows} */
   const joins = {};
@@ -66,15 +72,15 @@ export async function runParksSamplePipeline(limit) {
 }
 
 async function main() {
-  const { limit, pretty, help } = parseSamplePipelineArgs();
+  const args = parseSamplePipelineArgs();
 
-  if (help) {
+  if (args.help) {
     printSamplePipelineHelp();
     return;
   }
 
-  const leads = await runParksSamplePipeline(limit);
-  const json = pretty ? JSON.stringify(leads, null, 2) : JSON.stringify(leads);
+  const leads = await runParksSamplePipeline(args);
+  const json = args.pretty ? JSON.stringify(leads, null, 2) : JSON.stringify(leads);
   console.log(json);
 }
 

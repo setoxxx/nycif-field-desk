@@ -57,6 +57,8 @@ Manual dev script that fetches a small Parks sample, joins matching rows by `eve
 node tools/event-sources/sample-parks-pipeline.mjs --limit 3 --pretty
 ```
 
+By default the sample applies an upcoming filter (`date >= today`, ordered by `date ASC`). Use `--no-upcoming` to disable the date filter, or `--from-date YYYY-MM-DD` to override the start date.
+
 - **stdout:** JSON array of enriched EventLead objects only
 - **stderr:** fetch summary logs
 - **no files written** — not production feed output, not map runtime wiring
