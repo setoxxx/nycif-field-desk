@@ -1,0 +1,250 @@
+{
+  "phase": "XRI-G5",
+  "mode": "open_only_cache_reconciliation_report_only",
+  "merge_permission": false,
+  "production_allowed_from_g5": false,
+  "generated_at": "2026-07-02T16:15:00.000Z",
+  "prior_phase": "XRI-G4",
+  "prior_phase_pr": 66,
+  "design_doc_repo": "setoxxx/nycif-field-desk",
+  "future_registry_primary_repo": "setoxxx/nycif-live-feeds",
+  "changed_files": [
+    "docs/cache-reconciliation-report.md",
+    "data/reports/cache_reconciliation_report.json",
+    "data/reports/cache_reconciliation_summary.sample.json"
+  ],
+  "prohibited_files_touched": [],
+  "wordpress_touched": false,
+  "production_feed_touched": false,
+  "public_map_runtime_touched": false,
+  "iframe_embed_touched": false,
+  "scheduled_workflows_touched": false,
+  "location_cache_modified": false,
+  "location_cache_read_only": true,
+  "live_staging_executed": false,
+  "registry_created": false,
+  "importer_implemented": false,
+  "production_extractor_implemented": false,
+  "cache_merge_executed": false,
+  "merged_cache_created": false,
+  "geocodes_approved": false,
+  "candidates_promoted": false,
+  "external_api_called": false,
+  "soda_fetched": false,
+  "main_design_doc": "docs/cache-reconciliation-report.md",
+  "sample_summary_file": "data/reports/cache_reconciliation_summary.sample.json",
+  "cache_families": [
+    {
+      "id": "field_desk_cache",
+      "repo": "setoxxx/nycif-field-desk",
+      "path": "data/location_cache.json",
+      "asset_family": "retailer_venue_pin_pipeline",
+      "key_format": "normalize(location)|normalize(borough)|",
+      "local_read_status": "read_only_inspected",
+      "key_count_observed": 11211,
+      "records_with_coordinates_observed": 10606,
+      "records_geocode_failed_observed": 605,
+      "file_size_bytes_observed": 3241075,
+      "g1_approx_keys": 11211,
+      "key_count_matches_g1_estimate": true
+    },
+    {
+      "id": "live_feeds_cache",
+      "repo": "setoxxx/nycif-live-feeds",
+      "path": "data/location_cache.json",
+      "asset_family": "event_gps_memory",
+      "key_format": "cemsid/place-memory with borough/confidence",
+      "local_read_status": "unavailable_for_local_read",
+      "key_count_observed": null,
+      "g1_approx_keys": 43522,
+      "g2_design_metadata_only": true
+    }
+  ],
+  "read_only_inputs_inspected": [
+    {
+      "path": "data/location_cache.json",
+      "repo": "setoxxx/nycif-field-desk",
+      "inspection": "read_only_statistical_metadata",
+      "modified": false
+    },
+    {
+      "path": "data/fixtures/registry-candidate-fixtures.sample.json",
+      "repo": "setoxxx/nycif-field-desk",
+      "inspection": "read_only_schema_reference",
+      "modified": false
+    },
+    {
+      "path": "data/reports/existing_location_assets_inventory_report.json",
+      "repo": "setoxxx/nycif-field-desk",
+      "inspection": "read_only_prior_phase_metadata",
+      "modified": false
+    },
+    {
+      "path": "data/reports/registry_source_inventory_candidate_schema_report.json",
+      "repo": "setoxxx/nycif-field-desk",
+      "inspection": "read_only_dual_cache_design_metadata",
+      "modified": false
+    },
+    {
+      "path": "data/reports/candidate_schema_fixtures_validation_report.json",
+      "repo": "setoxxx/nycif-field-desk",
+      "inspection": "read_only_validation_contract_metadata",
+      "modified": false
+    },
+    {
+      "path": "data/reports/read_only_candidate_extractor_prototype_report.json",
+      "repo": "setoxxx/nycif-field-desk",
+      "inspection": "read_only_prior_phase_metadata",
+      "modified": false
+    }
+  ],
+  "inputs_unavailable_or_skipped": [
+    {
+      "path": "data/location_cache.json",
+      "repo": "setoxxx/nycif-live-feeds",
+      "status": "unavailable_for_local_read",
+      "reason": "live-feeds repo cache not present in local field-desk clone",
+      "fetch_attempted": false,
+      "recommended_future_step": "Dedicated read-only clone/sync of setoxxx/nycif-live-feeds before cross-cache key/coordinate comparison"
+    },
+    {
+      "path": "nycif_all_radar_map_events.json",
+      "repo": "setoxxx/nycif-live-feeds",
+      "status": "skipped_forbidden_input",
+      "reason": "production feed JSON forbidden as G5 input"
+    },
+    {
+      "path": "event-location-corrections-v01.js",
+      "repo": "setoxxx/nycif-field-desk",
+      "status": "skipped_runtime_reference_only",
+      "reason": "public map runtime file; referenced as risk category only from prior XRI docs"
+    }
+  ],
+  "reconciliation_categories_defined": [
+    "exact_key_same_coordinates",
+    "exact_key_different_coordinates",
+    "same_normalized_name_same_coordinates",
+    "same_normalized_name_different_coordinates",
+    "same_coordinates_different_name",
+    "same_name_different_borough",
+    "missing_borough_ambiguous",
+    "source_specific_override_candidate",
+    "manual_override_candidate",
+    "runtime_patch_conflict",
+    "public_feed_untraceable_coordinate",
+    "cache_only_no_provenance",
+    "possible_stale_key",
+    "possible_duplicate_key",
+    "source_missing",
+    "excluded_from_seed"
+  ],
+  "overlap_summary": {
+    "cross_cache_key_overlap_observed": false,
+    "cross_cache_overlap_reason": "live-feeds cache unavailable_for_local_read; no key intersection computed",
+    "field_desk_internal_observations": {
+      "total_keys": 11211,
+      "keys_with_pipe_separator": 11211,
+      "borough_embedded_in_key": true,
+      "borough_distribution_in_key": {
+        "manhattan": 5481,
+        "brooklyn": 2582,
+        "queens": 2192,
+        "bronx": 598,
+        "staten island": 358
+      },
+      "geocoded_records": 10606,
+      "geocode_failed_records": 605,
+      "coordinate_coverage_pct": 94.6
+    },
+    "live_feeds_metadata_from_prior_phases": {
+      "approx_keys": 43522,
+      "asset_family": "event_gps_memory",
+      "local_statistical_analysis": "not_performed"
+    },
+    "conceptual_overlap_hypotheses_for_future_g6": [
+      "Venue/address keys in field-desk may map to event place-memory keys in live-feeds when normalized names and borough align",
+      "Park/event location names may appear in both families with different key encodings",
+      "Exact string key overlap expected to be low due to different key_format conventions"
+    ]
+  },
+  "conflict_summary": {
+    "cross_cache_conflicts_observed": false,
+    "cross_cache_conflict_reason": "live-feeds cache unavailable_for_local_read",
+    "field_desk_internal_conflict_signals": {
+      "geocode_failed_without_coordinates": 605,
+      "likely_categories": [
+        "cache_only_no_provenance",
+        "missing_borough_ambiguous",
+        "possible_stale_key"
+      ]
+    },
+    "design_time_conflict_categories_from_g2_g3": [
+      "exact_key_different_coordinates",
+      "same_coordinates_different_name",
+      "same_name_different_borough",
+      "runtime_patch_conflict",
+      "public_feed_untraceable_coordinate"
+    ],
+    "runtime_patch_risk": {
+      "asset": "setoxxx/nycif-field-desk/event-location-corrections-v01.js",
+      "category": "runtime_patch_conflict",
+      "reconciliation_action": "excluded_from_seed until approved override exists"
+    }
+  },
+  "risk_summary": [
+    {
+      "id": "dual_cache_not_locally_comparable",
+      "severity": "high",
+      "description": "Cross-cache reconciliation statistics require read-only access to live-feeds data/location_cache.json in a future dedicated clone/sync step."
+    },
+    {
+      "id": "different_key_spaces",
+      "severity": "high",
+      "description": "field-desk uses normalize(location)|borough| keys; live-feeds uses cemsid/place-memory keys. Blind merge would be unsafe."
+    },
+    {
+      "id": "field_desk_geocode_failed_rows",
+      "severity": "medium",
+      "description": "605 field-desk cache rows lack coordinates (quality=geocode_failed); not safe seed candidates without review."
+    },
+    {
+      "id": "cache_writers",
+      "severity": "high",
+      "description": "Both repos have scripts/workflows that can write location_cache.json; reconciliation must remain read-only until G8+ gates."
+    },
+    {
+      "id": "runtime_patch_bypass",
+      "severity": "high",
+      "description": "event-location-corrections-v01.js can present coordinates not traceable to cache approval chain."
+    },
+    {
+      "id": "no_merge_executed",
+      "severity": "info",
+      "description": "G5 correctly performed report-only analysis; no merged cache artifact created."
+    }
+  ],
+  "safe_registry_seed_implications": {
+    "field_desk_tier0_candidate_pool_estimate": 10606,
+    "field_desk_excluded_estimate": 605,
+    "live_feeds_seed_pool": "unknown_pending_local_read",
+    "production_approved_from_g5": false,
+    "recommended_default_status": "needs_schema_review",
+    "seed_approved_candidate_requires": [
+      "cross-cache dedup in G6 preview",
+      "provenance chain to Tier 0/1 source",
+      "G4 validation levels 0-3 pass",
+      "no runtime_patch_conflict",
+      "Howard gate at G8+"
+    ]
+  },
+  "future_roadmap_phases": [
+    { "phase": "XRI-G6", "scope": "Registry candidate preview artifact", "mode": "not_production" },
+    { "phase": "XRI-G7", "scope": "Field-desk review UI contract", "mode": "admin_design" },
+    { "phase": "XRI-G8", "scope": "Approved registry seed PR", "mode": "howard_approval_required" },
+    { "phase": "XRI-G9", "scope": "Preview feed integration", "mode": "howard_approval_required" },
+    { "phase": "XRI-G10", "scope": "Production feed integration", "mode": "howard_approval_required" },
+    { "phase": "XRI-G11", "scope": "WordPress/platform coordination", "mode": "separate_approval_required" }
+  ],
+  "next_recommended_phase": "XRI-G6 — Registry candidate preview artifact, not production",
+  "pr_contract": "OPEN ONLY — must not be merged without ChatGPT MERGE verdict for this PR number and final changed-file list"
+}
