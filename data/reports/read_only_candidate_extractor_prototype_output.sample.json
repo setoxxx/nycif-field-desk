@@ -1,0 +1,247 @@
+{
+  "_output_metadata": {
+    "phase": "XRI-G4",
+    "mode": "sample_only_prototype_only_not_production_not_approved_not_registry",
+    "warning": "SAMPLE ONLY / PROTOTYPE ONLY \u2014 not production, not approved, not registry. Not consumed by runtime code.",
+    "generated_at": "2026-07-02T15:32:12.000Z",
+    "fixture_file_read": "data/fixtures/registry-candidate-fixtures.sample.json",
+    "production_allowed_from_g4": false,
+    "records_processed": 17
+  },
+  "accepted_candidates": [
+    {
+      "candidate_id": "nycif-cand-fixture-tier0-00001",
+      "proposed_registry_status": "seed_approved_candidate",
+      "validation_level_passed": 3,
+      "production_allowed": false
+    },
+    {
+      "candidate_id": "nycif-cand-fixture-tier1-00001",
+      "proposed_registry_status": "needs_schema_review",
+      "validation_level_passed": 3,
+      "production_allowed": false
+    },
+    {
+      "candidate_id": "nycif-cand-fixture-tier2-00001",
+      "proposed_registry_status": "needs_schema_review",
+      "validation_level_passed": 3,
+      "production_allowed": false
+    }
+  ],
+  "validation_errors": [
+    {
+      "candidate_id": "nycif-cand-fixture-tier3-00001",
+      "source_path": "data/prototype_major_events_needs_review.json",
+      "error_code": "SAFETY_BLOCKED_STATUS",
+      "error_message": "Blocked proposed_registry_status: raw_unapproved",
+      "severity": "error",
+      "validation_level": 3
+    },
+    {
+      "candidate_id": "nycif-cand-fixture-tier3-00001",
+      "source_path": "data/prototype_major_events_needs_review.json",
+      "error_code": "SAFETY_BLOCKED_STATUS_PUBLISH_ATTEMPT",
+      "error_message": "Blocked match_status for publishing: unmatched",
+      "severity": "error",
+      "validation_level": 3
+    },
+    {
+      "candidate_id": "nycif-cand-fixture-tier3-00002",
+      "source_path": "event-location-corrections-v01.js",
+      "error_code": "SAFETY_BLOCKED_STATUS",
+      "error_message": "Blocked proposed_registry_status: excluded_runtime_patch",
+      "severity": "error",
+      "validation_level": 3
+    },
+    {
+      "candidate_id": "nycif-cand-fixture-tier3-00003",
+      "source_path": "nycif_all_radar_map_events.json",
+      "error_code": "SAFETY_BLOCKED_STATUS",
+      "error_message": "Blocked proposed_registry_status: excluded_public_feed_output",
+      "severity": "error",
+      "validation_level": 3
+    },
+    {
+      "candidate_id": "nycif-cand-fixture-tier3-00004",
+      "source_path": "data/manual_gps_reference.json",
+      "error_code": "SAFETY_BLOCKED_STATUS",
+      "error_message": "Blocked proposed_registry_status: source_missing",
+      "severity": "error",
+      "validation_level": 3
+    },
+    {
+      "candidate_id": null,
+      "source_path": "data/location_cache.json",
+      "error_code": "SHAPE_MISSING_REQUIRED_FIELD",
+      "error_message": "Missing required field: candidate_id",
+      "severity": "error",
+      "validation_level": 0
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00002",
+      "source_path": null,
+      "error_code": "SHAPE_MISSING_REQUIRED_FIELD",
+      "error_message": "Missing required field: source_repo",
+      "severity": "error",
+      "validation_level": 0
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00002",
+      "source_path": null,
+      "error_code": "SHAPE_MISSING_REQUIRED_FIELD",
+      "error_message": "Missing required field: source_path",
+      "severity": "error",
+      "validation_level": 0
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00003",
+      "source_path": "data/location_cache.json",
+      "error_code": "COORD_INCOMPLETE_PAIR",
+      "error_message": "lat and lng must both be present or both null",
+      "severity": "error",
+      "validation_level": 1
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00004",
+      "source_path": "data/location_cache.json",
+      "error_code": "COORD_MISSING_GEOMETRY_SOURCE",
+      "error_message": "geometry_source required and must not be 'none' when coordinates exist",
+      "severity": "error",
+      "validation_level": 1
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00005",
+      "source_path": "data/location_cache.json",
+      "error_code": "PROVENANCE_INSUFFICIENT_FOR_SEED",
+      "error_message": "seed_approved_candidate requires provenance.extracted_by",
+      "severity": "error",
+      "validation_level": 2
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00005",
+      "source_path": "data/location_cache.json",
+      "error_code": "PROVENANCE_INSUFFICIENT_FOR_SEED",
+      "error_message": "seed_approved_candidate requires provenance.source_phase",
+      "severity": "error",
+      "validation_level": 2
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00005",
+      "source_path": "data/location_cache.json",
+      "error_code": "PROVENANCE_INSUFFICIENT_FOR_SEED",
+      "error_message": "seed_approved_candidate requires provenance.source_version",
+      "severity": "error",
+      "validation_level": 2
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00005",
+      "source_path": "data/location_cache.json",
+      "error_code": "PROVENANCE_INSUFFICIENT_FOR_SEED",
+      "error_message": "seed_approved_candidate requires provenance.not_production_approved=true",
+      "severity": "error",
+      "validation_level": 2
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00006",
+      "source_path": "data/location_cache.json",
+      "error_code": "PROVENANCE_INSUFFICIENT_FOR_SEED",
+      "error_message": "seed_approved_candidate requires provenance.not_production_approved=true",
+      "severity": "error",
+      "validation_level": 2
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00007",
+      "source_path": "data/approved_major_event_geocodes_needs_review.json",
+      "error_code": "SAFETY_PRODUCTION_APPROVAL_FORBIDDEN",
+      "error_message": "Forbidden production field present: publish_allowed=true",
+      "severity": "error",
+      "validation_level": 3
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00007",
+      "source_path": "data/approved_major_event_geocodes_needs_review.json",
+      "error_code": "SAFETY_BLOCKED_STATUS",
+      "error_message": "Blocked proposed_registry_status: raw_unapproved",
+      "severity": "error",
+      "validation_level": 3
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00007",
+      "source_path": "data/approved_major_event_geocodes_needs_review.json",
+      "error_code": "SAFETY_BLOCKED_STATUS_PUBLISH_ATTEMPT",
+      "error_message": "Blocked match_status for publishing: possible_match",
+      "severity": "error",
+      "validation_level": 3
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00008",
+      "source_path": "event-location-corrections-v01.js",
+      "error_code": "PROVENANCE_INSUFFICIENT_FOR_SEED",
+      "error_message": "seed_approved_candidate requires provenance.not_production_approved=true",
+      "severity": "error",
+      "validation_level": 2
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00009",
+      "source_path": "nycif_major_radar_map_events.json",
+      "error_code": "PROVENANCE_INSUFFICIENT_FOR_SEED",
+      "error_message": "seed_approved_candidate requires provenance.not_production_approved=true",
+      "severity": "error",
+      "validation_level": 2
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00010",
+      "source_path": "data/nyc_parks_facility_reference.json",
+      "error_code": "SAFETY_BLOCKED_STATUS",
+      "error_message": "Blocked proposed_registry_status: source_missing",
+      "severity": "error",
+      "validation_level": 3
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00010",
+      "source_path": "data/nyc_parks_facility_reference.json",
+      "error_code": "SAFETY_INVENTED_COORDINATES",
+      "error_message": "source_missing must not carry invented replacement coordinates",
+      "severity": "error",
+      "validation_level": 3
+    },
+    {
+      "candidate_id": "nycif-cand-invalid-00010",
+      "source_path": "data/nyc_parks_facility_reference.json",
+      "error_code": "SAFETY_INVENTED_COORDINATES",
+      "error_message": "geometry_source invented_replacement is forbidden",
+      "severity": "error",
+      "validation_level": 3
+    }
+  ],
+  "warnings": [
+    {
+      "candidate_id": "nycif-cand-fixture-tier0-00001",
+      "conflict_flags": [],
+      "recommended_review_action": "future_seeding_review_only",
+      "severity": "warning",
+      "message": "seed_approved_candidate is validation-pass only; not production-approved"
+    },
+    {
+      "candidate_id": "nycif-cand-fixture-tier1-00001",
+      "conflict_flags": [],
+      "recommended_review_action": "schema_review_before_seed",
+      "severity": "warning",
+      "message": "Candidate requires schema review before seed eligibility"
+    },
+    {
+      "candidate_id": "nycif-cand-fixture-tier1-00001",
+      "conflict_flags": [],
+      "recommended_review_action": "reconcile_phase_2e_before_seed",
+      "severity": "warning",
+      "message": "Phase 2E reconciliation required before seed eligibility"
+    },
+    {
+      "candidate_id": "nycif-cand-fixture-tier2-00001",
+      "conflict_flags": [],
+      "recommended_review_action": "schema_review_before_seed",
+      "severity": "warning",
+      "message": "Candidate requires schema review before seed eligibility"
+    }
+  ]
+}
