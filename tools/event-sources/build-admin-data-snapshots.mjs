@@ -1,5 +1,5 @@
 /**
- * Admin Data Snapshots v0 — read-only JSON under admin/data/.
+ * Admin Data Snapshots — read-only JSON under admin/data/.
  * Uses existing Event Sources dev tooling. Does not geocode, write feeds, or touch map runtime.
  */
 
@@ -21,6 +21,7 @@ import {
   parseTvppAssignmentFeedArgs,
   TVPP_SOURCE_DATASET_ID,
 } from './tvpp-assignment-feed.mjs';
+import { buildTvppLocationCleanupReport } from './tvpp-location-cleanup.mjs';
 import { buildTvppLocationReadinessReport } from './tvpp-location-readiness.mjs';
 import { buildTvppTriagedFeedReport } from './tvpp-triage.mjs';
 
@@ -29,7 +30,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.resolve(__dirname, '../..');
 export const ADMIN_DATA_DIR = path.join(REPO_ROOT, 'admin', 'data');
 export const SNAPSHOT_TOOL = 'build-admin-data-snapshots';
-export const SNAPSHOT_VERSION = 'v0';
+export const SNAPSHOT_VERSION = 'v1-location-cleanup';
 
 export const ADMIN_SNAPSHOT_FILENAMES = [
   'project-status.json',
@@ -37,6 +38,7 @@ export const ADMIN_SNAPSHOT_FILENAMES = [
   'tvpp-candidates.json',
   'tvpp-triage.json',
   'tvpp-location-readiness.json',
+  'tvpp-location-cleanup.json',
   'index.json',
 ];
 
@@ -63,11 +65,7 @@ export const FORBIDDEN_SNAPSHOT_WRITE_PREFIXES = [
  * @property {string|null} eventType
  */
 
-/**
- * @param {string} filename
- * @param {string} [adminDataDir]
- * @returns {string}
- */
+/** @param {string} filename @param {string} [adminDataDir] @returns {string} */
 export function resolveAdminDataFilePath(filename, adminDataDir = ADMIN_DATA_DIR) {
   if (!ADMIN_SNAPSHOT_FILENAMES.includes(filename)) {
     throw new Error(`Disallowed admin snapshot filename: ${filename}`);
@@ -82,10 +80,7 @@ export function resolveAdminDataFilePath(filename, adminDataDir = ADMIN_DATA_DIR
   return resolved;
 }
 
-/**
- * @param {string} filePath
- * @param {string} [adminDataDir]
- */
+/** @param {string} filePath @param {string} [adminDataDir] */
 export function assertWritableAdminPath(filePath, adminDataDir = ADMIN_DATA_DIR) {
   const resolved = path.resolve(filePath);
   const adminRoot = path.resolve(adminDataDir);
@@ -94,19 +89,13 @@ export function assertWritableAdminPath(filePath, adminDataDir = ADMIN_DATA_DIR)
   }
 }
 
-/**
- * @param {string} relativePath
- * @returns {boolean}
- */
+/** @param {string} relativePath @returns {boolean} */
 export function isForbiddenSnapshotWritePath(relativePath) {
   const normalized = String(relativePath).replace(/\\/g, '/');
   return FORBIDDEN_SNAPSHOT_WRITE_PREFIXES.some((prefix) => normalized.startsWith(prefix));
 }
 
-/**
- * @param {string} generatedAt
- * @returns {Object}
- */
+/** @param {string} generatedAt @returns {Object} */
 export function buildProjectStatusSnapshot(generatedAt) {
   return {
     generatedAt,
@@ -121,12 +110,12 @@ export function buildProjectStatusSnapshot(generatedAt) {
       note: 'Admin snapshots are not consumed by the public map.',
     },
     adminDashboardStatus: {
-      summary: 'Static admin skeleton exists; data panels not wired yet.',
-      dataSnapshots: 'v0 generated under admin/data/',
-      wiringStatus: 'not_wired',
+      summary: 'Static admin dashboard exists with read-only data panels and admin map preview.',
+      dataSnapshots: 'generated under admin/data/',
+      wiringStatus: 'admin_visibility_only',
     },
     eventSourcesStatus: {
-      summary: 'Dev tooling covers inventory, normalizers, freshness, TVPP candidate feed, triage, and location readiness audit.',
+      summary: 'Dev tooling covers inventory, normalizers, freshness, TVPP candidate feed, triage, location readiness, and location cleanup candidates.',
       productionFeedWrites: false,
       geocoding: false,
     },
@@ -138,109 +127,44 @@ export function buildProjectStatusSnapshot(generatedAt) {
     warnings: [
       'Admin data snapshots are visibility-only and must not be treated as production feed JSON.',
       'Snapshots do not create GPS coordinates, call geocoding APIs, or write geocode caches.',
-      'Triage and locationReadiness metadata are operator hints only — not approval or map visibility controls.',
+      'Triage, locationReadiness, and locationCleanup metadata are operator hints only — not approval or map visibility controls.',
     ],
     masterCompletionTracker: [
-      {
-        area: 'Production map current scope',
-        completion: '85–90%',
-        summary: 'Existing map/feeds are operational and gated. Remaining work is geocodes, QA, more sources, and controlled promotion.',
-      },
-      {
-        area: 'Event Sources dev tooling',
-        completion: '94–97%',
-        summary: 'Source inventory, normalizers, sample pipelines, freshness, query tuning, TVPP candidate feed, triage, and location readiness audit are built.',
-      },
-      {
-        area: 'TVPP assignment-feed candidate',
-        completion: '89–93%',
-        summary: 'TVPP is current, normalized, sampled, triaged, and location-audited. No geocoding, production feed file, scoring, or map wiring.',
-      },
-      {
-        area: 'Event API pipeline overall',
-        completion: '82–87% dev-side / 0% production-side',
-        summary: 'Dev proof is strong. Production output, scheduled generation, cache/feed writes, and map integration are intentionally not done.',
-      },
-      {
-        area: 'Admin / Operator dashboard',
-        completion: '35–40%',
-        summary: 'Requirement documented; static skeleton exists; admin data snapshots v0 available; data panels not wired.',
-      },
-      {
-        area: 'XRI registry roadmap',
-        completion: '33%',
-        summary: 'G0–G3 merged. G4–G11 not started.',
-      },
-      {
-        area: 'XRI registry implementation',
-        completion: '0%',
-        summary: 'No extractor, registry DB, reconciliation, seed workflow, UI, feeds, or WordPress integration.',
-      },
-      {
-        area: 'WordPress / nycinfocus.com integration',
-        completion: '0%',
-        summary: 'Intentionally untouched.',
-      },
-      {
-        area: 'Full NYCIF platform vision',
-        completion: '60–68%',
-        summary: 'Production map exists and Event Sources intelligence is stronger, but admin dashboard, XRI, WordPress, production event feed integration, and automation remain incomplete.',
-      },
+      { area: 'Production map current scope', completion: '85–90%', summary: 'Existing map/feeds are operational and gated. Event Sources are not wired into production map yet.' },
+      { area: 'Event Sources dev tooling', completion: '97–99%', summary: 'Source inventory, normalizers, freshness, TVPP candidate feed, triage, location readiness, and cleanup candidates are built.' },
+      { area: 'TVPP assignment-feed candidate', completion: '91–95%', summary: 'TVPP is current, normalized, triaged, location-audited, and cleanup-candidate ready. No geocoding, production feed file, or map wiring.' },
+      { area: 'Event API pipeline overall', completion: '90–93% dev-side / 0% production-side', summary: 'Dev proof is strong. Production output, scheduled generation, cache/feed writes, and map integration are intentionally not done.' },
+      { area: 'Admin / Operator dashboard', completion: '82–88%', summary: 'Admin dashboard, data panels, all-data map preview, and cleanup candidate panel are in scope. Production decisions remain separate.' },
+      { area: 'XRI registry roadmap', completion: '33%', summary: 'G0–G3 merged. G4–G11 not started.' },
+      { area: 'XRI registry implementation', completion: '0%', summary: 'No extractor, registry DB, reconciliation, seed workflow, UI, feeds, or WordPress integration.' },
+      { area: 'WordPress / nycinfocus.com integration', completion: '0%', summary: 'Intentionally untouched.' },
+      { area: 'Full NYCIF platform vision', completion: '75–83%', summary: 'Production map exists and admin intelligence is stronger, but reviewed geocoding, production event feed integration, XRI, WordPress, and automation remain incomplete.' },
     ],
   };
 }
 
-/**
- * @param {import('./source-freshness.mjs').FreshnessStatus} freshness
- * @param {string} sourceDatasetId
- * @returns {string}
- */
+/** @param {import('./source-freshness.mjs').FreshnessStatus} freshness @param {string} sourceDatasetId @returns {string} */
 export function deriveFreshnessRecommendation(freshness, sourceDatasetId) {
   switch (freshness) {
-    case 'current':
-      return 'use_for_current_feed';
-    case 'stale':
-      return sourceDatasetId === '6v4b-5gp4'
-        ? 'stale_or_empty — PPD date_and_time is free-text; sampled dates may be old'
-        : 'use_for_historical_context';
-    case 'empty':
-      return 'stale_or_empty';
-    case 'unknown':
-      return 'needs_query_fix';
-    default:
-      return 'skip_for_now';
+    case 'current': return 'use_for_current_feed';
+    case 'stale': return sourceDatasetId === '6v4b-5gp4' ? 'stale_or_empty — PPD date_and_time is free-text; sampled dates may be old' : 'use_for_historical_context';
+    case 'empty': return 'stale_or_empty';
+    case 'unknown': return 'needs_query_fix';
+    default: return 'skip_for_now';
   }
 }
 
-/**
- * @param {Object} entry
- * @returns {string[]}
- */
+/** @param {Object} entry @returns {string[]} */
 export function buildFreshnessWarnings(entry) {
-  /** @type {string[]} */
   const warnings = [];
-
-  if (entry.freshness === 'empty') {
-    warnings.push('No rows returned under the upcoming sample filter.');
-  }
-  if (entry.freshness === 'stale') {
-    warnings.push('Sampled dates appear older than today under the current filter.');
-  }
-  if (entry.freshness === 'unknown') {
-    warnings.push('Could not infer current/upcoming dates from sampled rows.');
-  }
-  if (entry.rowCount === 0) {
-    warnings.push('Zero rows fetched.');
-  }
-
+  if (entry.freshness === 'empty') warnings.push('No rows returned under the upcoming sample filter.');
+  if (entry.freshness === 'stale') warnings.push('Sampled dates appear older than today under the current filter.');
+  if (entry.freshness === 'unknown') warnings.push('Could not infer current/upcoming dates from sampled rows.');
+  if (entry.rowCount === 0) warnings.push('Zero rows fetched.');
   return warnings;
 }
 
-/**
- * @param {Object} entry
- * @param {import('./event-source-config.mjs').EventSourceConfig|undefined} sourceConfig
- * @returns {Object}
- */
+/** @param {Object} entry @param {import('./event-source-config.mjs').EventSourceConfig|undefined} sourceConfig @returns {Object} */
 export function summarizeSourceFreshnessForAdmin(entry, sourceConfig) {
   return {
     sourceDatasetId: entry.sourceDatasetId,
@@ -255,10 +179,7 @@ export function summarizeSourceFreshnessForAdmin(entry, sourceConfig) {
   };
 }
 
-/**
- * @param {import('./event-source-config.mjs').EventSourceConfig} sourceConfig
- * @returns {Object}
- */
+/** @param {import('./event-source-config.mjs').EventSourceConfig} sourceConfig @returns {Object} */
 export function buildDocumentedOnlySourceEntry(sourceConfig) {
   return {
     sourceDatasetId: sourceConfig.id,
@@ -271,17 +192,10 @@ export function buildDocumentedOnlySourceEntry(sourceConfig) {
   };
 }
 
-/**
- * @param {Object} input
- * @param {string} input.generatedAt
- * @param {Object[]} input.sourceEntries
- * @param {number} input.limit
- * @returns {Object}
- */
+/** @param {Object} input @returns {Object} */
 export function buildSourceFreshnessSnapshot({ generatedAt, sourceEntries, limit }) {
   const dotSource = getEventSourceById('dot-trafalrt');
   const documentedOnlySources = dotSource ? [buildDocumentedOnlySourceEntry(dotSource)] : [];
-
   return {
     generatedAt,
     tool: SNAPSHOT_TOOL,
@@ -290,17 +204,11 @@ export function buildSourceFreshnessSnapshot({ generatedAt, sourceEntries, limit
     limit,
     sources: sourceEntries,
     documentedOnlySources,
-    warnings: [
-      'Not production feed output.',
-      'documented_only sources are listed but not fetched.',
-    ],
+    warnings: ['Not production feed output.', 'documented_only sources are listed but not fetched.'],
   };
 }
 
-/**
- * @param {Object} report
- * @returns {Object}
- */
+/** @param {Object} report @returns {Object} */
 export function buildTvppCandidatesSnapshot(report) {
   return {
     generatedAt: report.generatedAt,
@@ -318,10 +226,7 @@ export function buildTvppCandidatesSnapshot(report) {
   };
 }
 
-/**
- * @param {Object} report
- * @returns {Object}
- */
+/** @param {Object} report @returns {Object} */
 export function buildTvppTriageSnapshot(report) {
   return {
     generatedAt: report.generatedAt,
@@ -340,10 +245,7 @@ export function buildTvppTriageSnapshot(report) {
   };
 }
 
-/**
- * @param {Object} report
- * @returns {Object}
- */
+/** @param {Object} report @returns {Object} */
 export function buildTvppLocationReadinessSnapshot(report) {
   return {
     generatedAt: report.generatedAt,
@@ -362,253 +264,146 @@ export function buildTvppLocationReadinessSnapshot(report) {
   };
 }
 
-/**
- * @param {string} generatedAt
- * @param {Record<string, string>} files
- * @returns {Object}
- */
-export function buildAdminSnapshotIndex(generatedAt, files) {
+/** @param {Object} report @returns {Object} */
+export function buildTvppLocationCleanupSnapshot(report) {
   return {
-    generatedAt,
+    generatedAt: report.generatedAt,
     tool: SNAPSHOT_TOOL,
     version: SNAPSHOT_VERSION,
-    adminMode: 'read_only',
     purpose: 'admin_visibility_only',
-    files,
+    sourceDatasetId: report.sourceDatasetId,
+    source: report.source,
+    fromDate: report.fromDate,
+    limit: report.limit,
+    rowCount: report.rowCount,
+    itemCount: report.itemCount,
+    bucketCounts: report.bucketCounts,
+    items: report.items,
   };
 }
 
-/**
- * @param {AdminSnapshotBuildArgs} args
- * @param {{ today?: Date, adminDataDir?: string }} [context]
- * @returns {Promise<{ snapshots: Record<string, Object>, filesWritten: string[] }>}
- */
+/** @param {string} generatedAt @param {Record<string, string>} files @returns {Object} */
+export function buildAdminSnapshotIndex(generatedAt, files) {
+  return { generatedAt, tool: SNAPSHOT_TOOL, version: SNAPSHOT_VERSION, adminMode: 'read_only', purpose: 'admin_visibility_only', files };
+}
+
+/** @param {AdminSnapshotBuildArgs} args @param {{ today?: Date, adminDataDir?: string }} [context] */
 export async function buildAdminDataSnapshots(args, context = {}) {
   const today = context.today ?? new Date();
   const generatedAt = today.toISOString();
   const adminDataDir = context.adminDataDir ?? ADMIN_DATA_DIR;
+  const freshnessArgs = parseMultiSourceFreshnessArgs(['--limit', String(Math.min(args.limit, 3)), '--from-date', args.fromDate], { today });
 
-  const freshnessArgs = parseMultiSourceFreshnessArgs([
-    '--limit', String(Math.min(args.limit, 3)),
-    '--from-date', args.fromDate,
-  ], { today });
-
-  console.error('Admin Data Snapshots v0 — building read-only admin/data files');
+  console.error('Admin Data Snapshots — building read-only admin/data files');
   console.error(`  tvppLimit: ${args.limit}, freshnessSampleLimit: ${freshnessArgs.limit}`);
 
   const freshnessEntries = await runMultiSourceFreshnessReport(freshnessArgs, { today });
-  const sourceEntries = freshnessEntries.map((entry) => {
-    const sourceConfig = getEventSourceById(entry.sourceDatasetId);
-    return summarizeSourceFreshnessForAdmin(entry, sourceConfig);
-  });
+  const sourceEntries = freshnessEntries.map((entry) => summarizeSourceFreshnessForAdmin(entry, getEventSourceById(entry.sourceDatasetId)));
 
   const tvppSource = getEventSourceById(TVPP_SOURCE_DATASET_ID);
-  if (!tvppSource) {
-    throw new Error(`Missing source config for ${TVPP_SOURCE_DATASET_ID}`);
-  }
+  if (!tvppSource) throw new Error(`Missing source config for ${TVPP_SOURCE_DATASET_ID}`);
 
   const fetchOptions = buildTvppFetchOptions(args);
   const { rows, fetchedAt } = await fetchSocrataSource(tvppSource, fetchOptions);
-  const leads = rows.map((row) => normalizeEventLead(TVPP_SOURCE_DATASET_ID, row, {
-    lastFetchedAt: fetchedAt,
-  }));
-
+  const leads = rows.map((row) => normalizeEventLead(TVPP_SOURCE_DATASET_ID, row, { lastFetchedAt: fetchedAt }));
   console.error(`  TVPP rows fetched: ${rows.length}`);
 
-  const tvppBase = {
-    generatedAt,
-    fromDate: args.fromDate,
-    limit: args.limit,
-    rowCount: rows.length,
-    leads,
-  };
-
+  const tvppBase = { generatedAt, fromDate: args.fromDate, limit: args.limit, rowCount: rows.length, leads };
   const candidatesReport = buildTvppAssignmentFeedReport(tvppBase);
   const triageReport = buildTvppTriagedFeedReport(tvppBase);
   const locationReport = buildTvppLocationReadinessReport(tvppBase);
+  const cleanupReport = buildTvppLocationCleanupReport(tvppBase);
 
   const snapshots = {
     'project-status.json': buildProjectStatusSnapshot(generatedAt),
-    'source-freshness.json': buildSourceFreshnessSnapshot({
-      generatedAt,
-      sourceEntries,
-      limit: freshnessArgs.limit,
-    }),
+    'source-freshness.json': buildSourceFreshnessSnapshot({ generatedAt, sourceEntries, limit: freshnessArgs.limit }),
     'tvpp-candidates.json': buildTvppCandidatesSnapshot(candidatesReport),
     'tvpp-triage.json': buildTvppTriageSnapshot(triageReport),
     'tvpp-location-readiness.json': buildTvppLocationReadinessSnapshot(locationReport),
+    'tvpp-location-cleanup.json': buildTvppLocationCleanupSnapshot(cleanupReport),
   };
 
   validateAdminSnapshots(snapshots);
 
-  const filesWritten = await writeAdminSnapshots(snapshots, {
-    pretty: args.pretty,
-    adminDataDir,
-  });
-
+  const filesWritten = await writeAdminSnapshots(snapshots, { pretty: args.pretty, adminDataDir });
   const indexPath = 'index.json';
-  const index = buildAdminSnapshotIndex(generatedAt, Object.fromEntries(
-    [...Object.keys(snapshots), indexPath].map((name) => [name, `admin/data/${name}`]),
-  ));
+  const index = buildAdminSnapshotIndex(generatedAt, Object.fromEntries([...Object.keys(snapshots), indexPath].map((name) => [name, `admin/data/${name}`])));
   const indexFilePath = resolveAdminDataFilePath(indexPath, adminDataDir);
   assertWritableAdminPath(indexFilePath, adminDataDir);
   await mkdir(adminDataDir, { recursive: true });
-  await writeFile(
-    indexFilePath,
-    args.pretty ? `${JSON.stringify(index, null, 2)}\n` : `${JSON.stringify(index)}\n`,
-    'utf8',
-  );
+  await writeFile(indexFilePath, args.pretty ? `${JSON.stringify(index, null, 2)}\n` : `${JSON.stringify(index)}\n`, 'utf8');
   filesWritten.push(indexFilePath);
-
   console.error(`  wrote ${filesWritten.length} file(s) under admin/data/`);
 
   return { snapshots: { ...snapshots, [indexPath]: index }, filesWritten };
 }
 
-/**
- * @param {Record<string, Object>} snapshots
- */
+/** @param {Record<string, Object>} snapshots */
 export function validateAdminSnapshots(snapshots) {
   const projectStatus = snapshots['project-status.json'];
-  if (projectStatus?.adminMode !== 'read_only') {
-    throw new Error('project-status.json must include adminMode: "read_only"');
-  }
+  if (projectStatus?.adminMode !== 'read_only') throw new Error('project-status.json must include adminMode: "read_only"');
 
   for (const lead of snapshots['tvpp-candidates.json']?.leads ?? []) {
-    if (!hasEventLeadShape(lead)) {
-      throw new Error('TVPP candidate lead failed EventLead shape validation');
-    }
-    if ('triage' in lead || 'locationReadiness' in lead) {
-      throw new Error('TVPP candidate lead must not include triage or locationReadiness');
-    }
-    if (lead.latitude != null || lead.longitude != null) {
-      throw new Error('TVPP candidate leads must not receive GPS coordinates in snapshots');
-    }
+    if (!hasEventLeadShape(lead)) throw new Error('TVPP candidate lead failed EventLead shape validation');
+    if ('triage' in lead || 'locationReadiness' in lead || 'locationCleanup' in lead) throw new Error('TVPP candidate lead must not include triage, locationReadiness, or locationCleanup');
+    if (lead.latitude != null || lead.longitude != null) throw new Error('TVPP candidate leads must not receive GPS coordinates in snapshots');
   }
 
   for (const item of snapshots['tvpp-triage.json']?.items ?? []) {
-    if ('triage' in item.lead || 'locationReadiness' in item.lead) {
-      throw new Error('Triage snapshot must keep triage separate from lead');
-    }
-    if (!item.triage) {
-      throw new Error('Triage snapshot item missing triage metadata');
-    }
+    if ('triage' in item.lead || 'locationReadiness' in item.lead || 'locationCleanup' in item.lead) throw new Error('Triage snapshot must keep metadata separate from lead');
+    if (!item.triage) throw new Error('Triage snapshot item missing triage metadata');
   }
 
   for (const item of snapshots['tvpp-location-readiness.json']?.items ?? []) {
-    if ('locationReadiness' in item.lead || 'triage' in item.lead) {
-      throw new Error('Location readiness snapshot must keep locationReadiness separate from lead');
-    }
-    if (item.lead.latitude != null || item.lead.longitude != null) {
-      throw new Error('Location readiness snapshot must not create GPS coordinates');
-    }
-    if (!item.locationReadiness) {
-      throw new Error('Location readiness snapshot item missing locationReadiness metadata');
-    }
+    if ('locationReadiness' in item.lead || 'triage' in item.lead || 'locationCleanup' in item.lead) throw new Error('Location readiness snapshot must keep metadata separate from lead');
+    if (item.lead.latitude != null || item.lead.longitude != null) throw new Error('Location readiness snapshot must not create GPS coordinates');
+    if (!item.locationReadiness) throw new Error('Location readiness snapshot item missing locationReadiness metadata');
+  }
+
+  for (const item of snapshots['tvpp-location-cleanup.json']?.items ?? []) {
+    if ('locationCleanup' in item.lead || 'locationReadiness' in item.lead || 'triage' in item.lead) throw new Error('Location cleanup snapshot must keep locationCleanup separate from lead');
+    if (item.lead.latitude != null || item.lead.longitude != null) throw new Error('Location cleanup snapshot must not create GPS coordinates');
+    if (!item.locationCleanup) throw new Error('Location cleanup snapshot item missing locationCleanup metadata');
+    if ('latitude' in item.locationCleanup || 'longitude' in item.locationCleanup) throw new Error('locationCleanup metadata must not contain GPS coordinates');
   }
 }
 
-/**
- * @param {Record<string, Object>} snapshots
- * @param {{ pretty?: boolean, adminDataDir?: string }} [options]
- * @returns {Promise<string[]>}
- */
+/** @param {Record<string, Object>} snapshots @param {{ pretty?: boolean, adminDataDir?: string }} [options] @returns {Promise<string[]>} */
 export async function writeAdminSnapshots(snapshots, options = {}) {
   const { pretty = false, adminDataDir = ADMIN_DATA_DIR } = options;
-  /** @type {string[]} */
   const filesWritten = [];
-
   await mkdir(adminDataDir, { recursive: true });
-
   for (const filename of Object.keys(snapshots)) {
-    if (!ADMIN_SNAPSHOT_FILENAMES.includes(filename)) {
-      throw new Error(`Refusing to write disallowed snapshot file: ${filename}`);
-    }
-
+    if (!ADMIN_SNAPSHOT_FILENAMES.includes(filename)) throw new Error(`Refusing to write disallowed snapshot file: ${filename}`);
     const filePath = resolveAdminDataFilePath(filename, adminDataDir);
     assertWritableAdminPath(filePath, adminDataDir);
-
     const relativeFromRepo = path.relative(REPO_ROOT, filePath).replace(/\\/g, '/');
-    if (isForbiddenSnapshotWritePath(relativeFromRepo)) {
-      throw new Error(`Refusing to write forbidden path: ${relativeFromRepo}`);
-    }
-
-    const payload = pretty
-      ? `${JSON.stringify(snapshots[filename], null, 2)}\n`
-      : `${JSON.stringify(snapshots[filename])}\n`;
-
+    if (isForbiddenSnapshotWritePath(relativeFromRepo)) throw new Error(`Refusing to write forbidden path: ${relativeFromRepo}`);
+    const payload = pretty ? `${JSON.stringify(snapshots[filename], null, 2)}\n` : `${JSON.stringify(snapshots[filename])}\n`;
     await writeFile(filePath, payload, 'utf8');
     filesWritten.push(filePath);
   }
-
   return filesWritten;
 }
 
-/**
- * @param {string[]} [argv]
- * @param {{ today?: Date }} [context]
- * @returns {AdminSnapshotBuildArgs}
- */
+/** @param {string[]} [argv] @param {{ today?: Date }} [context] @returns {AdminSnapshotBuildArgs} */
 export function parseAdminSnapshotArgs(argv = process.argv.slice(2), context = {}) {
   const tvppArgs = parseTvppAssignmentFeedArgs(argv, context);
-  return {
-    limit: tvppArgs.limit,
-    pretty: tvppArgs.pretty,
-    help: tvppArgs.help,
-    fromDate: tvppArgs.fromDate,
-    borough: tvppArgs.borough,
-    eventType: tvppArgs.eventType,
-  };
+  return { limit: tvppArgs.limit, pretty: tvppArgs.pretty, help: tvppArgs.help, fromDate: tvppArgs.fromDate, borough: tvppArgs.borough, eventType: tvppArgs.eventType };
 }
 
-/**
- * @param {NodeJS.WritableStream} [stream]
- */
+/** @param {NodeJS.WritableStream} [stream] */
 export function printAdminSnapshotHelp(stream = process.stderr) {
-  stream.write(`NYCIF Admin Data Snapshots v0 (writes admin/data/ JSON only)
-
-Usage:
-  node tools/event-sources/build-admin-data-snapshots.mjs [options]
-
-Options:
-  --limit N          Max TVPP events to include (default ${DEFAULT_TVPP_FEED_LIMIT}, max ${MAX_TVPP_FEED_LIMIT})
-  --pretty           Write pretty-printed JSON files
-  --from-date DATE   TVPP upcoming filter start date YYYY-MM-DD (default: today)
-  --borough NAME     Filter TVPP by event_borough
-  --event-type TYPE  Filter TVPP by event_type
-  --help             Show this help
-
-Files written:
-  admin/data/project-status.json
-  admin/data/source-freshness.json
-  admin/data/tvpp-candidates.json
-  admin/data/tvpp-triage.json
-  admin/data/tvpp-location-readiness.json
-  admin/data/index.json
-
-Notes:
-  - read-only admin visibility only; not production feed output
-  - no GPS coordinates, geocoding APIs, or geocode cache writes
-  - no map runtime, service worker, deploy config, WordPress, or XRI changes
-  - triage and locationReadiness remain separate metadata
-  - admin/index.html is not wired by this script
-`);
+  stream.write(`NYCIF Admin Data Snapshots (writes admin/data/ JSON only)\n\nUsage:\n  node tools/event-sources/build-admin-data-snapshots.mjs [options]\n\nOptions:\n  --limit N          Max TVPP events to include (default ${DEFAULT_TVPP_FEED_LIMIT}, max ${MAX_TVPP_FEED_LIMIT})\n  --pretty           Write pretty-printed JSON files\n  --from-date DATE   TVPP upcoming filter start date YYYY-MM-DD (default: today)\n  --borough NAME     Filter TVPP by event_borough\n  --event-type TYPE  Filter TVPP by event_type\n  --help             Show this help\n\nFiles written:\n  admin/data/project-status.json\n  admin/data/source-freshness.json\n  admin/data/tvpp-candidates.json\n  admin/data/tvpp-triage.json\n  admin/data/tvpp-location-readiness.json\n  admin/data/tvpp-location-cleanup.json\n  admin/data/index.json\n\nNotes:\n  - read-only admin visibility only; not production feed output\n  - no GPS coordinates, geocoding APIs, or geocode cache writes\n  - no map runtime, service worker, deploy config, WordPress, or XRI changes\n  - triage, locationReadiness, and locationCleanup remain separate metadata\n`);
 }
 
 async function main() {
   const args = parseAdminSnapshotArgs();
-
-  if (args.help) {
-    printAdminSnapshotHelp();
-    return;
-  }
-
+  if (args.help) { printAdminSnapshotHelp(); return; }
   await buildAdminDataSnapshots(args);
 }
 
-const isMainProcess = process.argv[1]
-  && import.meta.url === pathToFileURL(process.argv[1]).href;
-
+const isMainProcess = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMainProcess) {
   main().catch((error) => {
     console.error(error instanceof Error ? error.message : String(error));
