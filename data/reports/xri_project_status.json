@@ -1,12 +1,12 @@
 {
   "project": "NYCIF XRI Master Location Registry",
   "completion_percent": 70,
-  "expected_completion_after_merge": 70,
-  "current_phase": "XRI-G7",
-  "current_phase_title": "Candidate Review Rules + Operator Decision Model",
-  "previous_phase": "XRI-G6 — Registry Candidate Preview Artifact",
-  "phase_mode": "CONTRACT ONLY",
-  "phase_status": "merged",
+  "expected_completion_after_merge": 78,
+  "current_phase": "XRI-G8",
+  "current_phase_title": "Review Artifact Schema + Fixture Validator",
+  "previous_phase": "XRI-G7 — Candidate Review Rules + Operator Decision Model",
+  "phase_mode": "OFFLINE SCHEMA + FIXTURE VALIDATOR",
+  "phase_status": "open_pr",
   "merged_phases": [
     "XRI-G0",
     "XRI-G1",
@@ -18,14 +18,15 @@
     "XRI-G7"
   ],
   "active_pr": null,
-  "active_branch": null,
+  "active_branch": "chatgpt/xri-g8-review-artifact-schema-fixture-validator",
   "last_merged_pr": 69,
   "last_merge_sha": "c060c9fee62eaa1bc7d0cd26edc46709f3657ff5",
-  "qa_agent_found": false,
-  "qa_agent_result": "not_run_documentation_status_only_change",
+  "qa_agent_found": true,
+  "qa_agent_result": "offline_validator_created",
+  "qa_agent_command": "python3 tools/xri/validate_registry_candidate_review_fixture.py",
   "qa_agent_warnings": [
-    "G7 is a documentation/status-only contract phase; no runtime validator is required for this PR.",
-    "G7 does not authorize production registry seeding, public map use, geocode approval, or automated promotion."
+    "Validator is offline-only and not wired to runtime.",
+    "G8 does not authorize production registry seeding, public map use, geocode approval, or automated promotion."
   ],
   "production_allowed": false,
   "public_map_touched": false,
@@ -40,8 +41,8 @@
   "geocodes_approved": false,
   "candidates_promoted": false,
   "runtime_wiring_added": false,
-  "manual_action_needed": "none — XRI-G7 merged; XRI-G8 not authorized.",
-  "next_recommended_phase": "XRI-G8 — Review Artifact Schema + Fixture Validator",
+  "manual_action_needed": "none unless GitHub requires ready-for-review click",
+  "next_recommended_phase": "XRI-G9 — Registry Seed Artifact, not runtime",
   "next_phase_authorized": false,
-  "last_updated": "2026-07-02T16:42:00.000Z"
+  "last_updated": "2026-07-02T17:00:00.000Z"
 }
