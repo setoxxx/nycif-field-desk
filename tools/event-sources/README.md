@@ -148,30 +148,29 @@ See also: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md)
 
 ## Future Operator/Admin Dashboard
 
-Planned **read-only** GitHub-hosted operator/ops page at **`/admin/`** (not implemented in v5b). Purpose: visual inspection of live vs candidate state without mutating feeds, caches, map runtime, or deploys.
+Planned **read-only admin/operator version of the existing NYCIF Field Desk GitHub Pages page** (not implemented in v5b).
 
-The dashboard shows **all categories separately** (live, candidate, staged, stale, source-health, needs-review) with **no hidden filtering logic**. It **does not decide** what should or should not appear on the public map.
+**Public field desk:** https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1
 
-Future dashboard should show:
+**Proposed admin field desk:** https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1
 
-- **live map preview** — read-only view of what the public map displays
-- **live feed stats** — counts, freshness, last-updated metadata when available
-- **TVPP candidate feed preview** — from `sample-tvpp-assignment-feed.mjs`
-- **triage bucket counts** — from `--with-triage` (`bucketCounts`, labels, reasons)
-- **source freshness/recommendations** — from v4/v4b dev scripts
-- **warnings** — missing location, weak title, stale source, empty source
-- **live vs candidate diff** — future; what would change on publish
-- **latest commit/build metadata** — future; Git SHA, report `generatedAt`
+Purpose: visually show everything happening across the system — live data, candidate/staged data, source freshness, TVPP assignment feed output, triage buckets, warnings, needs-review rows, what has been added or pushed, and build/commit/status metadata when available.
+
+The dashboard shows **all categories separately** with **no hidden filtering logic**. Category views/toggles are for visibility and navigation only; they **do not decide** what appears on the public map.
+
+Categories include: live, candidate, staged, strong_assignment, possible_assignment, logistics_or_closure, low_value, needs_review, stale, empty, source-health, missing location, missing geocode, live vs candidate diff.
 
 Constraints:
 
-- read-only visibility — not an editor; **no write buttons**, **no deploy buttons**
-- does not decide map visibility; does not mutate feeds, caches, map runtime, or deploys
-- all categories shown separately; no hidden filtering logic
+- read-only visibility — **no write buttons**, **no deploy buttons**
+- not a filtering system for map content; does not publish, mutate, approve, reject, deploy, or write caches
+- does not hide categories from operator view
 - no secrets or API keys in client-side dashboard code
-- assume GitHub-hosted page may be public unless access control is proven
 
 Full requirement doc: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md)
+
+Admin page: [NYCIF Admin Dashboard](https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1)
+Admin page status: planned; documentation updated; admin UI not implemented yet
 
 ## Tests
 

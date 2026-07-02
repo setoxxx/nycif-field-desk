@@ -2,27 +2,32 @@
 
 Read-only operator visibility for NYCIF event-source and assignment-feed work. **Documentation only** — no admin UI, auth, deploy workflow, or production wiring is implemented in Event Sources v5b.
 
-## Proposed path
+## Field desk relationship
 
-Future operator/admin page: **`/admin/`** (e.g. GitHub Pages path such as `nycinfocus.com/admin/` or repo-hosted equivalent). Not implemented in v5b.
+The future admin/operator dashboard should be an **admin version of the existing NYCIF Field Desk GitHub Pages page** — same field-desk shell and map context, extended with operator-only read-only panels. It is not a separate product or a map gatekeeper.
+
+**Public field desk:**
+
+https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1
+
+**Proposed admin field desk:**
+
+https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1
+
+Not implemented in v5b. No HTML, CSS, JS, routing, auth, or deploy workflow is added by this requirement.
 
 ## Purpose
 
-Give operators a future GitHub-hosted admin/ops page to visually inspect — **all categories shown separately**, with no hidden filtering:
+The admin page **visually shows everything that is happening across the system** for operator review:
 
-- **live** — what is on the public map today
-- **candidate/staged** — dev stdout feeds under review
-- **stale** — sources or rows flagged stale by freshness/triage scripts
-- **source-health** — freshness, recommendations, empty/stale source warnings
-- **needs-review** — triage bucket `needs_review`, weak titles, missing location
-
-Also surface:
-
-- source stats and freshness/recommendations
-- TVPP triage bucket counts and per-lead labels
-- live map preview vs candidate feed preview
-- what would be added or pushed if published (informational only)
-- what is marked safe to publish elsewhere (informational only)
+- what is **live**
+- **candidate/staged** data
+- **source freshness** and recommendations
+- **TVPP assignment feed** output
+- **triage buckets and categories**
+- **warnings** and **needs-review** data
+- what has been **added or pushed** (informational)
+- **build/commit/status metadata** when available
 
 This is a **read-only visibility layer**, not an editing or publishing console.
 
@@ -30,14 +35,37 @@ This is a **read-only visibility layer**, not an editing or publishing console.
 
 ## What it is not
 
-- **Not an editor** — operators review; they do not mutate source rows or EventLead fields in-place
+- **Not a filtering system for what belongs on the map** — it does not decide public map content
+- **Not a public gatekeeper** — it does not decide what should or should not be shown publicly
+- **Not a category hider** — it does not hide categories from operator view
+- **Not an editor** — no publish, mutate, approve, reject, deploy, or cache-write actions
 - **No write buttons** — no create/update/delete controls for feeds, leads, caches, or map data
-- **No deploy buttons** — not a deploy trigger; no “publish to production” control on the page
-- **No hidden filtering logic** — all categories (live, candidate, staged, stale, source-health, needs-review) are shown separately; nothing is silently excluded from operator view
-- **Not a map gatekeeper** — does not decide what should or should not appear on the public map
-- **Not a cache/feed mutation tool** — no writes to production feed JSON, location caches, or backend promotion artifacts; does not mutate feeds, caches, map runtime, or deploy config
-- **No secrets or API keys** — dashboard consumes already-public or already-approved read-only artifacts only
-- **Assume public hosting unless proven otherwise** — a GitHub Pages admin page may be public; do not embed credentials or private tokens in client-side code
+- **No deploy buttons** — not a deploy trigger
+- **No hidden filtering logic** — nothing is silently excluded from operator view
+- **Not a cache/feed mutation tool** — does not mutate feeds, caches, map runtime, or deploy config
+- **No secrets or API keys** — consumes already-public or already-approved read-only artifacts only
+- **Assume public hosting unless proven otherwise** — GitHub Pages may be public; do not embed credentials in client-side code
+
+## Category behavior
+
+The admin page should show **everything separated into categories**, including:
+
+- live
+- candidate
+- staged
+- strong_assignment
+- possible_assignment
+- logistics_or_closure
+- low_value
+- needs_review
+- stale
+- empty
+- source-health
+- missing location
+- missing geocode
+- live vs candidate diff
+
+**Category views or toggles are allowed only for visibility and navigation.** They must not be described or implemented as deciding what appears on the public map.
 
 ## Proposed dashboard data inputs
 
@@ -56,7 +84,7 @@ Current or near-term dev script outputs (stdout JSON today; consumed by a future
 
 ## Suggested dashboard panels (future)
 
-1. **Live map preview** — embed or link to public map (read-only)
+1. **Live map preview** — embed or link to public field desk map (read-only)
 2. **Live feed stats** — counts, date range, last updated (when available)
 3. **TVPP candidate feed preview** — table/cards from assignment feed candidate JSON
 4. **Triage bucket counts** — bar or summary from `--with-triage` `bucketCounts`
@@ -74,13 +102,14 @@ v5b triage is **dashboard-ready operator metadata**:
 - Triage is **not production scoring** — `photoPriorityScore` remains `null`
 - EventLead 25-field shape is unchanged
 
-The `--with-triage` JSON can later power an admin dashboard card or table (e.g. filter by `strong_assignment`, surface `low_information_title` warnings). **No admin UI is implemented in v5b.**
+The `--with-triage` JSON can later power an admin field desk card or table. **No admin UI is implemented in v5b.**
 
 ## Warning signals operators should see (future UI)
 
 Derived from existing dev metadata:
 
 - **Missing location** — triage label `missing_location`; TVPP leads have `latitude`/`longitude` null
+- **Missing geocode** — future; location text present but no coordinates
 - **Weak title** — triage label `low_information_title`; bucket `low_value`
 - **Stale source** — freshness `stale` or recommendation `stale_or_empty` / `use_for_historical_context`
 - **Empty source** — freshness `empty` or zero rows under upcoming filter
@@ -96,3 +125,8 @@ Future dashboard work must preserve:
 - Special Traffic Updates (`dot-trafalrt`) remains `documented_only` and unfetched
 
 See `tools/event-sources/README.md` and repo root `AGENTS.md` for full agent rules.
+
+---
+
+Admin page: [NYCIF Admin Dashboard](https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1)
+Admin page status: planned; documentation updated; admin UI not implemented yet
