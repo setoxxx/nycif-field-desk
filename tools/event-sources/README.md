@@ -130,6 +130,45 @@ node tools/event-sources/sample-tvpp-assignment-feed.mjs --limit 10 --pretty
 - **no files written** — not production feed output, not map runtime wiring
 - `photoPriorityScore` remains null (scoring out of scope)
 
+## TVPP assignment triage labels (v5b, dev-only)
+
+Optional operator triage metadata for TVPP assignment feed review:
+
+```bash
+node tools/event-sources/sample-tvpp-assignment-feed.mjs --limit 10 --with-triage --pretty
+```
+
+- **stdout:** JSON report with `items: [{ lead, triage }]` when `--with-triage` is set
+- **triage:** dev/operator metadata only — does not change `EventLead`
+- **not production scoring** — `photoPriorityScore` remains null
+- without `--with-triage`, output shape unchanged (`leads` array)
+- **future admin UI:** `--with-triage` output is intended to power a read-only operator dashboard card/table later; no admin page is implemented in v5b
+
+See also: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md)
+
+## Future Operator/Admin Dashboard
+
+Planned **read-only** GitHub-hosted operator/ops page (not implemented in v5b). Purpose: visual inspection of live vs candidate state without mutating feeds, caches, or map runtime.
+
+Future dashboard should show:
+
+- **live map preview** — read-only view of what the public map displays
+- **live feed stats** — counts, freshness, last-updated metadata when available
+- **TVPP candidate feed preview** — from `sample-tvpp-assignment-feed.mjs`
+- **triage bucket counts** — from `--with-triage` (`bucketCounts`, labels, reasons)
+- **source freshness/recommendations** — from v4/v4b dev scripts
+- **warnings** — missing location, weak title, stale source, empty source
+- **live vs candidate diff** — future; what would change on publish
+- **latest commit/build metadata** — future; Git SHA, report `generatedAt`
+
+Constraints:
+
+- read-only visibility — not an editor, deploy trigger, or cache/feed mutation tool
+- no secrets or API keys in client-side dashboard code
+- assume GitHub-hosted page may be public unless access control is proven
+
+Full requirement doc: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md)
+
 ## Tests
 
 ```bash

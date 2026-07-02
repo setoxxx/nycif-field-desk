@@ -22,6 +22,7 @@ export const TVPP_FEED_ORDER = 'start_date_time ASC';
  * @property {string} fromDate YYYY-MM-DD
  * @property {string|null} borough
  * @property {string|null} eventType
+ * @property {boolean} withTriage
  */
 
 /**
@@ -74,6 +75,7 @@ export function parseTvppAssignmentFeedArgs(argv = process.argv.slice(2), contex
   let fromDate = formatDateForSoql(today);
   let borough = null;
   let eventType = null;
+  let withTriage = false;
 
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
@@ -81,6 +83,8 @@ export function parseTvppAssignmentFeedArgs(argv = process.argv.slice(2), contex
       help = true;
     } else if (arg === '--pretty') {
       pretty = true;
+    } else if (arg === '--with-triage') {
+      withTriage = true;
     } else if (arg === '--limit') {
       limit = Number(argv[++i]);
     } else if (arg.startsWith('--limit=')) {
@@ -107,7 +111,7 @@ export function parseTvppAssignmentFeedArgs(argv = process.argv.slice(2), contex
     limit = MAX_TVPP_FEED_LIMIT;
   }
 
-  return { limit, pretty, help, fromDate, borough, eventType };
+  return { limit, pretty, help, fromDate, borough, eventType, withTriage };
 }
 
 /**
@@ -174,6 +178,7 @@ Options:
   --from-date DATE   Upcoming filter start date YYYY-MM-DD (default: today)
   --borough NAME     Filter by event_borough (e.g. Manhattan)
   --event-type TYPE  Filter by event_type (e.g. "Street Event")
+  --with-triage      Include dev assignment-triage metadata per lead (items envelope)
   --help             Show this help
 
 Query:
@@ -183,6 +188,7 @@ Notes:
   - stdout is JSON only; summary logs go to stderr
   - no files, feeds, or caches are written
   - photoPriorityScore remains null (scoring out of scope)
+  - --with-triage adds operator triage metadata; does not change EventLead
   - not production feed output or map runtime wiring
 `);
 }
