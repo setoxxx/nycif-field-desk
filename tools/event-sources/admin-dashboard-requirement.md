@@ -2,25 +2,40 @@
 
 Read-only operator visibility for NYCIF event-source and assignment-feed work. **Documentation only** — no admin UI, auth, deploy workflow, or production wiring is implemented in Event Sources v5b.
 
+## Proposed path
+
+Future operator/admin page: **`/admin/`** (e.g. GitHub Pages path such as `nycinfocus.com/admin/` or repo-hosted equivalent). Not implemented in v5b.
+
 ## Purpose
 
-Give operators a future GitHub-hosted admin/ops page to visually inspect:
+Give operators a future GitHub-hosted admin/ops page to visually inspect — **all categories shown separately**, with no hidden filtering:
 
-- what is **live** on the public map
-- what is **candidate/staged** for review
+- **live** — what is on the public map today
+- **candidate/staged** — dev stdout feeds under review
+- **stale** — sources or rows flagged stale by freshness/triage scripts
+- **source-health** — freshness, recommendations, empty/stale source warnings
+- **needs-review** — triage bucket `needs_review`, weak titles, missing location
+
+Also surface:
+
 - source stats and freshness/recommendations
 - TVPP triage bucket counts and per-lead labels
 - live map preview vs candidate feed preview
-- what would be added or pushed if published
-- what is **safe to publish**
+- what would be added or pushed if published (informational only)
+- what is marked safe to publish elsewhere (informational only)
 
 This is a **read-only visibility layer**, not an editing or publishing console.
+
+**The dashboard does not decide what should or should not appear on the map.** Map publication remains a separate, explicitly approved process. The admin page only shows operator-visible state.
 
 ## What it is not
 
 - **Not an editor** — operators review; they do not mutate source rows or EventLead fields in-place
-- **Not a deploy trigger** — no “publish to production” button without a separate, explicit human approval process elsewhere
-- **Not a cache/feed mutation tool** — no writes to production feed JSON, location caches, or backend promotion artifacts
+- **No write buttons** — no create/update/delete controls for feeds, leads, caches, or map data
+- **No deploy buttons** — not a deploy trigger; no “publish to production” control on the page
+- **No hidden filtering logic** — all categories (live, candidate, staged, stale, source-health, needs-review) are shown separately; nothing is silently excluded from operator view
+- **Not a map gatekeeper** — does not decide what should or should not appear on the public map
+- **Not a cache/feed mutation tool** — no writes to production feed JSON, location caches, or backend promotion artifacts; does not mutate feeds, caches, map runtime, or deploy config
 - **No secrets or API keys** — dashboard consumes already-public or already-approved read-only artifacts only
 - **Assume public hosting unless proven otherwise** — a GitHub Pages admin page may be public; do not embed credentials or private tokens in client-side code
 

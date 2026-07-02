@@ -148,7 +148,9 @@ See also: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md)
 
 ## Future Operator/Admin Dashboard
 
-Planned **read-only** GitHub-hosted operator/ops page (not implemented in v5b). Purpose: visual inspection of live vs candidate state without mutating feeds, caches, or map runtime.
+Planned **read-only** GitHub-hosted operator/ops page at **`/admin/`** (not implemented in v5b). Purpose: visual inspection of live vs candidate state without mutating feeds, caches, map runtime, or deploys.
+
+The dashboard shows **all categories separately** (live, candidate, staged, stale, source-health, needs-review) with **no hidden filtering logic**. It **does not decide** what should or should not appear on the public map.
 
 Future dashboard should show:
 
@@ -163,7 +165,9 @@ Future dashboard should show:
 
 Constraints:
 
-- read-only visibility — not an editor, deploy trigger, or cache/feed mutation tool
+- read-only visibility — not an editor; **no write buttons**, **no deploy buttons**
+- does not decide map visibility; does not mutate feeds, caches, map runtime, or deploys
+- all categories shown separately; no hidden filtering logic
 - no secrets or API keys in client-side dashboard code
 - assume GitHub-hosted page may be public unless access control is proven
 
