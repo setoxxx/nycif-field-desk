@@ -1,7 +1,7 @@
 {
   "artifact_type": "nycif_master_projects_inventory",
-  "generated_at": "2026-07-02T18:50:00.000Z",
-  "dashboard_phase": "Master Admin Projects v1",
+  "generated_at": "2026-07-02T19:30:00.000Z",
+  "dashboard_phase": "Master Projects Status v2",
   "purpose": "Static, read-only portfolio control center for tracking NYCIF repositories as one master project.",
   "security_note": "This file is published through a public GitHub Pages site. Do not include secrets, private operational data, unpublished credentials, tokens, or sensitive private repo contents.",
   "access_policy": {
@@ -18,9 +18,11 @@
   },
   "master_project": {
     "name": "NYCIF Master Project",
-    "status": "inventory_started",
-    "completion_percent": 12,
-    "next_action": "Review repo roles, define per-project completion metrics, then decide secure hosting/auth approach.",
+    "status": "status_tracking_started",
+    "completion_percent": 22,
+    "health": "needs_status_feeds",
+    "blocker_summary": "The dashboard is static. Status is manually snapshotted until each repo publishes a safe status artifact.",
+    "next_action": "Define one safe status JSON artifact per repo, then update this master dashboard from those artifacts.",
     "public_runtime_allowed": false,
     "write_controls_allowed": false
   },
@@ -28,6 +30,9 @@
     "repo_count": 7,
     "public_repo_count": 3,
     "private_repo_count": 4,
+    "projects_with_recent_pr_history": 5,
+    "projects_with_active_tracking": 1,
+    "projects_needing_status_artifacts": 7,
     "admin_verified_by_github_connector": true
   },
   "projects": [
@@ -37,9 +42,30 @@
       "visibility": "private",
       "default_branch": "main",
       "role": "Web platform / site foundation",
-      "tracking_status": "inventory_only",
-      "completion_percent": null,
-      "next_action": "Confirm scope, live destination, build/deploy model, and status artifacts."
+      "tracking_status": "recent_pr_history_detected",
+      "current_phase": "Live execution contracts / readiness gates",
+      "completion_percent": 42,
+      "health": "yellow",
+      "blocker_summary": "Needs a safe repo-local status artifact before it can be tracked automatically.",
+      "active_prs": [],
+      "recent_prs": [
+        {
+          "number": 78,
+          "title": "Add live execution operator checklist contract",
+          "url": "https://github.com/setoxxx/nycif-web-platform/pull/78"
+        },
+        {
+          "number": 77,
+          "title": "Add live execution rollback plan contract",
+          "url": "https://github.com/setoxxx/nycif-web-platform/pull/77"
+        },
+        {
+          "number": 76,
+          "title": "Add live execution manual approval gate contract",
+          "url": "https://github.com/setoxxx/nycif-web-platform/pull/76"
+        }
+      ],
+      "next_action": "Create a public-safe status summary artifact that reports live execution readiness without exposing private internals."
     },
     {
       "name": "nycif-field-desk",
@@ -48,8 +74,35 @@
       "default_branch": "main",
       "role": "Field Desk public/admin dashboard, event-source cockpit, XRI admin surface",
       "tracking_status": "active_control_center",
-      "completion_percent": null,
-      "next_action": "Use as current master admin host while secure admin hosting is evaluated."
+      "current_phase": "Master Admin + XRI admin surfaces",
+      "completion_percent": 68,
+      "health": "green",
+      "blocker_summary": "XRI-G12 PR remains the main known follow-up unless already merged.",
+      "active_prs": [
+        {
+          "number": 79,
+          "title": "XRI-G12: Add admin review surface static prototype",
+          "url": "https://github.com/setoxxx/nycif-field-desk/pull/79"
+        }
+      ],
+      "recent_prs": [
+        {
+          "number": 81,
+          "title": "Admin: link master projects dashboard",
+          "url": "https://github.com/setoxxx/nycif-field-desk/pull/81"
+        },
+        {
+          "number": 80,
+          "title": "Admin: Add master projects dashboard v1",
+          "url": "https://github.com/setoxxx/nycif-field-desk/pull/80"
+        },
+        {
+          "number": 79,
+          "title": "XRI-G12: Add admin review surface static prototype",
+          "url": "https://github.com/setoxxx/nycif-field-desk/pull/79"
+        }
+      ],
+      "next_action": "Review/merge XRI-G12 if still open, then add one repo-status snapshot feed per project."
     },
     {
       "name": "nycif-prompt-engine",
@@ -57,9 +110,14 @@
       "visibility": "private",
       "default_branch": "main",
       "role": "Prompt/SOP engine and editorial workflow memory",
-      "tracking_status": "inventory_only",
-      "completion_percent": null,
-      "next_action": "Define which prompt packs, QA gates, and SOPs should publish safe status summaries."
+      "tracking_status": "no_recent_prs_found",
+      "current_phase": "Needs inventory",
+      "completion_percent": 10,
+      "health": "gray",
+      "blocker_summary": "No recent PRs were returned by the connector query.",
+      "active_prs": [],
+      "recent_prs": [],
+      "next_action": "Add a prompt-engine status artifact listing SOP packs, QA gates, and publication workflows."
     },
     {
       "name": "nycif-event-radar",
@@ -67,9 +125,30 @@
       "visibility": "private",
       "default_branch": "main",
       "role": "Event discovery and assignment radar",
-      "tracking_status": "inventory_only",
-      "completion_percent": null,
-      "next_action": "Define feed status, source coverage, alert surfaces, and privacy-safe summary fields."
+      "tracking_status": "recent_pr_history_detected",
+      "current_phase": "Event browser / map pipeline",
+      "completion_percent": 46,
+      "health": "yellow",
+      "blocker_summary": "Needs status artifact and clear handoff to Field Desk / live feeds.",
+      "active_prs": [],
+      "recent_prs": [
+        {
+          "number": 12,
+          "title": "Phase 2C-1: Event-browser UI for NYCIF Events Map (v0.14.0)",
+          "url": "https://github.com/setoxxx/nycif-event-radar/pull/12"
+        },
+        {
+          "number": 11,
+          "title": "WordPress plugin: support Phase 2A GeoJSON map output",
+          "url": "https://github.com/setoxxx/nycif-event-radar/pull/11"
+        },
+        {
+          "number": 10,
+          "title": "Phase 2A: NYC Permitted Events geocode/map/QA pipeline",
+          "url": "https://github.com/setoxxx/nycif-event-radar/pull/10"
+        }
+      ],
+      "next_action": "Define radar outputs, QA gates, and whether this repo still owns map/event discovery work."
     },
     {
       "name": "nycif-live-feeds",
@@ -77,9 +156,20 @@
       "visibility": "public",
       "default_branch": "main",
       "role": "Live/public feed artifacts",
-      "tracking_status": "inventory_only",
-      "completion_percent": null,
-      "next_action": "Define feed freshness, failure states, source ownership, and public/private boundaries."
+      "tracking_status": "recent_pr_history_detected",
+      "current_phase": "Public feed artifact governance",
+      "completion_percent": 28,
+      "health": "yellow",
+      "blocker_summary": "Needs feed freshness, source ownership, and approval-status reporting.",
+      "active_prs": [],
+      "recent_prs": [
+        {
+          "number": 1,
+          "title": "Publish approved Queensboro Dance Festival geocode (C5P)",
+          "url": "https://github.com/setoxxx/nycif-live-feeds/pull/1"
+        }
+      ],
+      "next_action": "Add feed-status artifact with last updated time, approved items, and safety flags."
     },
     {
       "name": "nycif-data-pipeline",
@@ -87,9 +177,25 @@
       "visibility": "private",
       "default_branch": "main",
       "role": "Data processing and pipeline orchestration",
-      "tracking_status": "inventory_only",
-      "completion_percent": null,
-      "next_action": "Define pipeline stages, test reports, source freshness metrics, and safe summary exports."
+      "tracking_status": "recent_pr_history_detected",
+      "current_phase": "API/source hardening",
+      "completion_percent": 34,
+      "health": "yellow",
+      "blocker_summary": "Needs source freshness and pipeline stage reporting.",
+      "active_prs": [],
+      "recent_prs": [
+        {
+          "number": 2,
+          "title": "Harden NYC calendar API request handling",
+          "url": "https://github.com/setoxxx/nycif-data-pipeline/pull/2"
+        },
+        {
+          "number": 1,
+          "title": "Add optional NYC Event Calendar API source lane",
+          "url": "https://github.com/setoxxx/nycif-data-pipeline/pull/1"
+        }
+      ],
+      "next_action": "Add status artifact for source freshness, pipeline stages, test status, and last successful run."
     },
     {
       "name": "nycif-open-data",
@@ -97,18 +203,24 @@
       "visibility": "public",
       "default_branch": "main",
       "role": "Open-data reference and public datasets",
-      "tracking_status": "inventory_only",
-      "completion_percent": null,
-      "next_action": "Define dataset catalog, update cadence, and public data provenance summaries."
+      "tracking_status": "no_recent_prs_found",
+      "current_phase": "Needs catalog",
+      "completion_percent": 8,
+      "health": "gray",
+      "blocker_summary": "No recent PRs were returned by the connector query.",
+      "active_prs": [],
+      "recent_prs": [],
+      "next_action": "Create dataset catalog status artifact with update cadence, source URLs, and provenance summary."
     }
   ],
-  "non_goals_v1": [
+  "non_goals_v2": [
     "No GitHub token in browser.",
     "No live GitHub API polling from public page.",
     "No private repo contents exposed.",
     "No password or secret stored in JavaScript.",
     "No write controls.",
     "No deployment controls.",
-    "No public map runtime change."
+    "No public map runtime change.",
+    "No production feed mutation."
   ]
 }
