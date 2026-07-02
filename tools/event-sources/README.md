@@ -115,6 +115,21 @@ node tools/event-sources/tune-event-source-queries.mjs --limit 3 --pretty
 - **no files written** — not production feed output, not map runtime wiring
 - Special Traffic Updates (`dot-trafalrt`) remains `documented_only` and skipped
 
+## TVPP assignment feed candidate (v5, dev-only)
+
+Dev-only stdout candidate feed using only NYC Permitted Event Information (`tvpp-9vvx`):
+
+```bash
+node tools/event-sources/sample-tvpp-assignment-feed.mjs --limit 10 --pretty
+```
+
+- **stdout:** JSON report with normalized `EventLead` objects sorted by `start_date_time`
+- **stderr:** fetch summary logs
+- **query:** `start_date_time >= from-date`, ordered `start_date_time ASC`
+- **filters:** optional `--borough`, `--event-type`, `--from-date`
+- **no files written** — not production feed output, not map runtime wiring
+- `photoPriorityScore` remains null (scoring out of scope)
+
 ## Tests
 
 ```bash
