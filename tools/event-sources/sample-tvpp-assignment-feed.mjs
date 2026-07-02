@@ -66,6 +66,8 @@ export async function runTvppAssignmentFeed(args) {
   return report;
 }
 
+import { pathToFileURL } from 'node:url';
+
 async function main() {
   const args = parseTvppAssignmentFeedArgs();
 
@@ -79,7 +81,12 @@ async function main() {
   console.log(json);
 }
 
-main().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exit(1);
-});
+const isMainProcess = process.argv[1]
+  && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isMainProcess) {
+  main().catch((error) => {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  });
+}
