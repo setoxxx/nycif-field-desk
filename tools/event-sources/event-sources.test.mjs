@@ -77,6 +77,13 @@ import {
   TVPP_FEED_ORDER,
   TVPP_SOURCE_DATASET_ID,
 } from './tvpp-assignment-feed.mjs';
+import {
+  buildTvppTriagedFeedReport,
+  classifyTvppLead,
+  classifyTvppLeads,
+  isLowInformationTitle,
+  normalizeTextForTriage,
+} from './tvpp-triage.mjs';
 
 const EXPECTED_SOURCE_IDS = [
   'tvpp-9vvx',
@@ -802,6 +809,7 @@ describe('TVPP assignment feed helpers', () => {
     assert.equal(args.fromDate, todayIso);
     assert.equal(args.borough, null);
     assert.equal(args.eventType, null);
+    assert.equal(args.withTriage, false);
   });
 
   it('parses limit, pretty, from-date, borough, and event-type', () => {
@@ -819,6 +827,12 @@ describe('TVPP assignment feed helpers', () => {
   it('caps limit at max', () => {
     const args = parseTvppAssignmentFeedArgs(['--limit=250'], { today: fixedToday });
     assert.equal(args.limit, MAX_TVPP_FEED_LIMIT);
+  });
+
+  it('parses --with-triage flag', () => {
+    const args = parseTvppAssignmentFeedArgs(['--with-triage', '--limit', '10'], { today: fixedToday });
+    assert.equal(args.withTriage, true);
+    assert.equal(args.limit, 10);
   });
 
   it('builds TVPP SoQL where clause with optional filters', () => {
@@ -885,6 +899,123 @@ describe('TVPP assignment feed helpers', () => {
     assert.deepEqual(report.dateRange, { min: '2026-07-01', max: '2026-07-15' });
     assert.equal(report.leads[0].title, 'Event A');
     assert.equal(report.leads.every((lead) => lead.photoPriorityScore === null), true);
+  });
+});
+
+describe('TVPP triage helpers', () => {
+  const streetLead = {
+    title: 'Summer Block Party',
+    eventType: 'Street Event',
+    borough: 'Brooklyn',
+    startDate: '2026-07-02',
+    locationName: 'Flatbush Avenue between Parkside Avenue and Ocean Avenue',
+    address: 'Flatbush Avenue between Parkside Avenue and Ocean Avenue',
+    description: 'Partial',
+    photoPriorityScore: null,
+  };
+
+  const specialLead = {
+    title: 'Neighborhood Outreach Day',
+    eventType: 'Special Event',
+    borough: 'Manhattan',
+    startDate: '2026-07-02',
+    locationName: 'Central Park Great Lawn',
+    address: 'Central Park Great Lawn',
+    description: 'N/A',
+    photoPriorityScore: null,
+  };
+
+  it('classifies Street Event as strong_assignment with street_event label', () => {
+    const triage = classifyTvppLead(streetLead);
+    assert.equal(triage.bucket, 'strong_assignment');
+    assert.ok(triage.labels.includes('street_event'));
+    assert.equal(triage.confidence, 'high');
+  });
+
+  it('classifies Special Event with meaningful detail as possible_assignment', () => {
+    const triage = classifyTvppLead(specialLead);
+    assert.equal(triage.bucket, 'possible_assignment');
+    assert.ok(triage.labels.includes('special_event'));
+  });
+
+  it('classifies title closed as logistics_or_closure', () => {
+    const triage = classifyTvppLead({
+      title: 'closed',
+      eventType: 'Special Event',
+      borough: 'Manhattan',
+      startDate: '2026-07-02',
+      locationName: 'Broadway',
+      description: 'Partial',
+      photoPriorityScore: null,
+    });
+    assert.equal(triage.bucket, 'logistics_or_closure');
+    assert.ok(triage.labels.includes('closure_or_logistics'));
+    assert.ok(triage.labels.includes('low_information_title'));
+  });
+
+  it('classifies parade/procession titles as strong_assignment', () => {
+    const triage = classifyTvppLead({
+      title: 'Annual Pride Parade',
+      eventType: 'Special Event',
+      borough: 'Manhattan',
+      startDate: '2026-07-02',
+      locationName: 'Fifth Avenue',
+      description: 'Full',
+      photoPriorityScore: null,
+    });
+    assert.equal(triage.bucket, 'strong_assignment');
+    assert.ok(triage.labels.includes('parade_or_procession'));
+  });
+
+  it('flags low-information titles and missing locations', () => {
+    assert.equal(isLowInformationTitle('closed'), true);
+    assert.equal(isLowInformationTitle('test'), true);
+    assert.equal(normalizeTextForTriage('  Parade  Day  '), 'parade day');
+
+    const triage = classifyTvppLead({
+      title: 'n/a',
+      eventType: 'Special Event',
+      borough: 'Bronx',
+      startDate: '2026-07-02',
+      locationName: null,
+      address: null,
+      photoPriorityScore: null,
+    });
+    assert.equal(triage.bucket, 'low_value');
+    assert.ok(triage.labels.includes('low_information_title'));
+    assert.ok(triage.labels.includes('missing_location'));
+  });
+
+  it('classifyTvppLeads preserves original lead shape', () => {
+    const leads = [streetLead, specialLead];
+    const items = classifyTvppLeads(leads);
+    assert.equal(items.length, 2);
+    assert.deepEqual(items[0].lead, streetLead);
+    assert.equal(items[0].triage.bucket, 'strong_assignment');
+    assert.equal(items[0].lead.photoPriorityScore, null);
+    assert.ok(!('triage' in items[0].lead));
+  });
+
+  it('builds triaged feed report with items and bucket counts', () => {
+    const report = buildTvppTriagedFeedReport({
+      generatedAt: '2026-07-02T12:00:00.000Z',
+      fromDate: '2026-07-02',
+      limit: 10,
+      rowCount: 2,
+      leads: [
+        { ...specialLead, startTime: '14:00:00' },
+        { ...streetLead, startTime: '10:00:00' },
+      ],
+    });
+
+    assert.equal(report.itemCount, 2);
+    assert.ok(Array.isArray(report.items));
+    assert.equal(report.items[0].lead.title, 'Summer Block Party');
+    assert.equal(report.items[0].triage.bucket, 'strong_assignment');
+    assert.equal(report.items.every((item) => item.lead.photoPriorityScore === null), true);
+    assert.equal(report.bucketCounts.strong_assignment, 1);
+    assert.equal(report.bucketCounts.possible_assignment, 1);
+    assert.equal(report.leads, undefined);
   });
 });
 

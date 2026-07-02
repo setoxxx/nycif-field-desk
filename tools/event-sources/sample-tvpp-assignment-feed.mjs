@@ -15,6 +15,7 @@ import {
   printTvppAssignmentFeedHelp,
   TVPP_SOURCE_DATASET_ID,
 } from './tvpp-assignment-feed.mjs';
+import { buildTvppTriagedFeedReport } from './tvpp-triage.mjs';
 
 /**
  * @param {import('./tvpp-assignment-feed.mjs').TvppAssignmentFeedArgs} args
@@ -34,21 +35,33 @@ export async function runTvppAssignmentFeed(args) {
   console.error(`  fromDate: ${args.fromDate}, limit: ${args.limit}`);
   if (args.borough) console.error(`  borough filter: ${args.borough}`);
   if (args.eventType) console.error(`  event-type filter: ${args.eventType}`);
+  if (args.withTriage) console.error('  triage: enabled (dev operator metadata only)');
 
   const leads = rows.map((row) => normalizeEventLead(TVPP_SOURCE_DATASET_ID, row, {
     lastFetchedAt: fetchedAt,
   }));
 
   const generatedAt = new Date().toISOString();
-  const report = buildTvppAssignmentFeedReport({
-    generatedAt,
-    fromDate: args.fromDate,
-    limit: args.limit,
-    rowCount: rows.length,
-    leads,
-  });
+  const report = args.withTriage
+    ? buildTvppTriagedFeedReport({
+      generatedAt,
+      fromDate: args.fromDate,
+      limit: args.limit,
+      rowCount: rows.length,
+      leads,
+    })
+    : buildTvppAssignmentFeedReport({
+      generatedAt,
+      fromDate: args.fromDate,
+      limit: args.limit,
+      rowCount: rows.length,
+      leads,
+    });
 
   console.error(`  leadCount: ${report.leadCount}, dateRange: ${report.dateRange.min ?? 'null'}..${report.dateRange.max ?? 'null'}`);
+  if (args.withTriage && report.bucketCounts) {
+    console.error(`  bucketCounts: ${JSON.stringify(report.bucketCounts)}`);
+  }
 
   return report;
 }

@@ -130,6 +130,51 @@ node tools/event-sources/sample-tvpp-assignment-feed.mjs --limit 10 --pretty
 - **no files written** — not production feed output, not map runtime wiring
 - `photoPriorityScore` remains null (scoring out of scope)
 
+## TVPP assignment triage labels (v5b, dev-only)
+
+Optional operator triage metadata for TVPP assignment feed review:
+
+```bash
+node tools/event-sources/sample-tvpp-assignment-feed.mjs --limit 10 --with-triage --pretty
+```
+
+- **stdout:** JSON report with `items: [{ lead, triage }]` when `--with-triage` is set
+- **triage:** dev/operator metadata only — does not change `EventLead`
+- **not production scoring** — `photoPriorityScore` remains null
+- without `--with-triage`, output shape unchanged (`leads` array)
+- **future admin UI:** `--with-triage` output is intended to power a read-only operator dashboard card/table later; no admin page is implemented in v5b
+
+See also: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md)
+
+## Future Operator/Admin Dashboard
+
+Planned **read-only admin/operator version of the existing NYCIF Field Desk GitHub Pages page** (not implemented in v5b).
+
+**Public field desk:** https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1
+
+**Proposed admin field desk:** https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1
+
+**Current admin status:** planned; documentation only; admin UI not implemented. The admin URL currently returns a GitHub Pages **404** until `admin/index.html` or an equivalent route exists. This is expected — it is not a production map failure and does not affect the public Field Desk page.
+
+Purpose: visually show everything happening across the system — live data, candidate/staged data, source freshness, TVPP assignment feed output, triage buckets, warnings, needs-review rows, what has been added or pushed, and build/commit/status metadata when available.
+
+The dashboard shows **all categories separately** with **no hidden filtering logic**. Category views/toggles are for visibility and navigation only; they **do not decide** what appears on the public map.
+
+Categories include: live, candidate, staged, strong_assignment, possible_assignment, logistics_or_closure, low_value, needs_review, stale, empty, source-health, missing location, missing geocode, live vs candidate diff.
+
+Constraints:
+
+- read-only visibility — **no write buttons**, **no deploy buttons**
+- not a filtering system for map content; does not publish, mutate, approve, reject, deploy, or write caches
+- does not hide categories from operator view
+- no secrets or API keys in client-side dashboard code
+
+Full requirement doc: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md) (includes [NYCIF Master Completion Tracker](./admin-dashboard-requirement.md#nycif-master-completion-tracker))
+
+Field Desk: [NYCIF Field Desk](https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1)
+Admin page: [NYCIF Admin Dashboard](https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1)
+Admin page status: planned; currently 404 until admin UI is implemented; documentation updated
+
 ## Tests
 
 ```bash
