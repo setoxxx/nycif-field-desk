@@ -18,6 +18,11 @@ import {
   normalizeTvppPermittedEvent,
 } from './normalizers/index.mjs';
 import { buildSocrataRequestUrl } from './socrata-fetch.mjs';
+import {
+  inferSimpleValueType,
+  selectFetchableSchemaSources,
+  summarizeRowsForSchema,
+} from './schema-inspect.mjs';
 
 const EXPECTED_SOURCE_IDS = [
   'tvpp-9vvx',
@@ -174,5 +179,55 @@ describe('event lead normalizers', () => {
     });
     assert.equal(lead.sourceDatasetId, 'tvpp-9vvx');
     assert.equal(lead.title, 'Test Event');
+  });
+});
+
+describe('schema inspection helpers', () => {
+  it('skips documented_only sources in schema inspector planner', () => {
+    const selected = selectFetchableSchemaSources();
+    assert.ok(!selected.some((source) => source.id === 'dot-trafalrt'));
+    assert.equal(isFetchableSocrataSource(getEventSourceById('dot-trafalrt')), false);
+  });
+
+  it('selects fetchable Socrata sources', () => {
+    const selected = selectFetchableSchemaSources();
+    assert.equal(selected.length, 10);
+    for (const source of selected) {
+      assert.equal(source.type, 'socrata_json');
+      assert.notEqual(source.status, 'documented_only');
+    }
+  });
+
+  it('summarizes empty rows', () => {
+    const summary = summarizeRowsForSchema([]);
+    assert.equal(summary.rowCount, 0);
+    assert.equal(summary.hasEmptyRows, false);
+    assert.deepEqual(summary.fieldNames, []);
+    assert.deepEqual(summary.fieldTypes, {});
+  });
+
+  it('summarizes rows with different fields', () => {
+    const summary = summarizeRowsForSchema([
+      { event_id: '1', event_name: 'A' },
+      { event_id: '2', borough: 'Manhattan' },
+      {},
+    ]);
+
+    assert.equal(summary.rowCount, 3);
+    assert.equal(summary.hasEmptyRows, true);
+    assert.deepEqual(summary.fieldNames, ['borough', 'event_id', 'event_name']);
+    assert.deepEqual(summary.fieldTypes.event_id, ['string']);
+    assert.deepEqual(summary.fieldTypes.event_name, ['string']);
+    assert.deepEqual(summary.fieldTypes.borough, ['string']);
+  });
+
+  it('infers simple value types', () => {
+    assert.equal(inferSimpleValueType(null), 'null');
+    assert.equal(inferSimpleValueType('text'), 'string');
+    assert.equal(inferSimpleValueType(42), 'integer');
+    assert.equal(inferSimpleValueType(3.14), 'number');
+    assert.equal(inferSimpleValueType(true), 'boolean');
+    assert.equal(inferSimpleValueType({ nested: true }), 'object');
+    assert.equal(inferSimpleValueType([1, 2]), 'array');
   });
 });
