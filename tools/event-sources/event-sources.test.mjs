@@ -65,6 +65,18 @@ import {
   selectTuningSourceIds,
   summarizeStrategyResult,
 } from './query-tuning.mjs';
+import {
+  buildTvppAssignmentFeedReport,
+  buildTvppFetchOptions,
+  buildTvppWhereClause,
+  DEFAULT_TVPP_FEED_LIMIT,
+  escapeSoqlString,
+  MAX_TVPP_FEED_LIMIT,
+  parseTvppAssignmentFeedArgs,
+  sortLeadsByStartDateTime,
+  TVPP_FEED_ORDER,
+  TVPP_SOURCE_DATASET_ID,
+} from './tvpp-assignment-feed.mjs';
 
 const EXPECTED_SOURCE_IDS = [
   'tvpp-9vvx',
@@ -775,6 +787,104 @@ describe('query tuning helpers', () => {
     const report = buildQueryTuningReport([entry], todayIso, '2026-07-01T12:00:00.000Z');
     assert.equal(report.today, todayIso);
     assert.equal(report.sources.length, 1);
+  });
+});
+
+describe('TVPP assignment feed helpers', () => {
+  const fixedToday = new Date('2026-07-01T12:00:00');
+  const todayIso = '2026-07-01';
+
+  it('uses default CLI limit and from-date', () => {
+    const args = parseTvppAssignmentFeedArgs([], { today: fixedToday });
+    assert.equal(args.limit, DEFAULT_TVPP_FEED_LIMIT);
+    assert.equal(args.pretty, false);
+    assert.equal(args.help, false);
+    assert.equal(args.fromDate, todayIso);
+    assert.equal(args.borough, null);
+    assert.equal(args.eventType, null);
+  });
+
+  it('parses limit, pretty, from-date, borough, and event-type', () => {
+    const args = parseTvppAssignmentFeedArgs(
+      ['--limit', '10', '--pretty', '--from-date', '2026-08-01', '--borough', 'Manhattan', '--event-type', 'Street Event'],
+      { today: fixedToday },
+    );
+    assert.equal(args.limit, 10);
+    assert.equal(args.pretty, true);
+    assert.equal(args.fromDate, '2026-08-01');
+    assert.equal(args.borough, 'Manhattan');
+    assert.equal(args.eventType, 'Street Event');
+  });
+
+  it('caps limit at max', () => {
+    const args = parseTvppAssignmentFeedArgs(['--limit=250'], { today: fixedToday });
+    assert.equal(args.limit, MAX_TVPP_FEED_LIMIT);
+  });
+
+  it('builds TVPP SoQL where clause with optional filters', () => {
+    assert.equal(
+      buildTvppWhereClause({ fromDate: todayIso }),
+      "start_date_time >= '2026-07-01T00:00:00'",
+    );
+    assert.equal(
+      buildTvppWhereClause({ fromDate: todayIso, borough: 'Manhattan' }),
+      "start_date_time >= '2026-07-01T00:00:00' AND event_borough = 'Manhattan'",
+    );
+    assert.equal(
+      buildTvppWhereClause({ fromDate: todayIso, eventType: 'Street Event' }),
+      "start_date_time >= '2026-07-01T00:00:00' AND event_type = 'Street Event'",
+    );
+    assert.equal(
+      buildTvppWhereClause({ fromDate: todayIso, borough: "O'Brien", eventType: 'Festival' }),
+      "start_date_time >= '2026-07-01T00:00:00' AND event_borough = 'O''Brien' AND event_type = 'Festival'",
+    );
+  });
+
+  it('escapes single quotes in SoQL string literals', () => {
+    assert.equal(escapeSoqlString("O'Brien"), "O''Brien");
+  });
+
+  it('builds TVPP fetch options with order and limit', () => {
+    const args = parseTvppAssignmentFeedArgs(['--limit', '50', '--borough', 'Brooklyn'], {
+      today: fixedToday,
+    });
+    const options = buildTvppFetchOptions(args);
+    assert.equal(options.limit, 50);
+    assert.equal(options.order, TVPP_FEED_ORDER);
+    assert.match(options.where, /start_date_time >= '2026-07-01T00:00:00'/);
+    assert.match(options.where, /event_borough = 'Brooklyn'/);
+  });
+
+  it('sorts leads by start date/time ascending', () => {
+    const sorted = sortLeadsByStartDateTime([
+      { startDate: '2026-08-01', startTime: '12:00:00', title: 'B' },
+      { startDate: '2026-07-01', startTime: '18:00:00', title: 'A' },
+      { startDate: '2026-07-01', startTime: '09:00:00', title: 'C' },
+    ]);
+    assert.deepEqual(sorted.map((lead) => lead.title), ['C', 'A', 'B']);
+  });
+
+  it('builds TVPP assignment feed report envelope', () => {
+    const leads = [
+      { startDate: '2026-07-01', startTime: '10:00:00', title: 'Event A', photoPriorityScore: null },
+      { startDate: '2026-07-15', startTime: '14:00:00', title: 'Event B', photoPriorityScore: null },
+    ];
+    const report = buildTvppAssignmentFeedReport({
+      generatedAt: '2026-07-01T12:00:00.000Z',
+      fromDate: todayIso,
+      limit: 25,
+      rowCount: 2,
+      leads,
+    });
+
+    assert.equal(report.sourceDatasetId, TVPP_SOURCE_DATASET_ID);
+    assert.equal(report.fromDate, todayIso);
+    assert.equal(report.limit, 25);
+    assert.equal(report.rowCount, 2);
+    assert.equal(report.leadCount, 2);
+    assert.deepEqual(report.dateRange, { min: '2026-07-01', max: '2026-07-15' });
+    assert.equal(report.leads[0].title, 'Event A');
+    assert.equal(report.leads.every((lead) => lead.photoPriorityScore === null), true);
   });
 });
 
