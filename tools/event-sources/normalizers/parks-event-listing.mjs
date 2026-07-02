@@ -9,9 +9,9 @@ import { asString, createEventLead } from '../event-lead.mjs';
  * @param {unknown} value
  * @returns {boolean|null}
  */
-function parseCostFree(value) {
-  if (value === true || value === 'true') return true;
-  if (value === false || value === 'false') return false;
+export function parseCostFree(value) {
+  if (value === true || value === 'true' || value === '1' || value === 1) return true;
+  if (value === false || value === 'false' || value === '0' || value === 0) return false;
   return null;
 }
 

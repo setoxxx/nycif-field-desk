@@ -25,12 +25,16 @@ import {
   summarizeRowsForSchema,
 } from './schema-inspect.mjs';
 import {
+  buildBaseFetchOptions,
   buildEventIdWhereClause,
+  buildUpcomingDateWhereClause,
   DEFAULT_SAMPLE_LIMIT,
+  DEFAULT_SAMPLE_ORDER,
   groupRowsByEventId,
   MAX_SAMPLE_LIMIT,
   parseSamplePipelineArgs,
 } from './parks-pipeline.mjs';
+import { parseCostFree } from './normalizers/parks-event-listing.mjs';
 
 const EXPECTED_SOURCE_IDS = [
   'tvpp-9vvx',
@@ -190,6 +194,16 @@ describe('event lead normalizers', () => {
     assert.equal(parks.eventType, null);
     assert.equal(parks.category, null);
     assert.ok(hasEventLeadShape(parks));
+  });
+
+  it('maps cost_free "1" to isFree true and "0" to false', () => {
+    const paid = normalizeParksEventListing({ event_id: '1', title: 'Paid', cost_free: '0' });
+    const free = normalizeParksEventListing({ event_id: '2', title: 'Free', cost_free: '1' });
+    const unknown = normalizeParksEventListing({ event_id: '3', title: 'Unknown', cost_free: 'maybe' });
+
+    assert.equal(paid.isFree, false);
+    assert.equal(free.isFree, true);
+    assert.equal(unknown.isFree, null);
   });
 
   it('normalizes ppd special events from date_and_time without inventing ids', () => {
@@ -380,22 +394,86 @@ describe('parks join enrichment', () => {
 });
 
 describe('parks sample pipeline helpers', () => {
-  it('uses default CLI limit', () => {
-    const args = parseSamplePipelineArgs([]);
+  const fixedToday = new Date('2026-07-01T12:00:00');
+
+  it('uses default CLI limit and enables upcoming filter by default', () => {
+    const args = parseSamplePipelineArgs([], { today: fixedToday });
     assert.equal(args.limit, DEFAULT_SAMPLE_LIMIT);
     assert.equal(args.pretty, false);
     assert.equal(args.help, false);
+    assert.equal(args.upcoming, true);
+    assert.equal(args.fromDate, '2026-07-01');
+    assert.equal(args.order, DEFAULT_SAMPLE_ORDER);
   });
 
-  it('parses custom limit and pretty flag', () => {
-    const args = parseSamplePipelineArgs(['--limit', '5', '--pretty']);
+  it('parses custom limit, pretty flag, and from-date', () => {
+    const args = parseSamplePipelineArgs(
+      ['--limit', '5', '--pretty', '--from-date', '2026-08-15'],
+      { today: fixedToday },
+    );
     assert.equal(args.limit, 5);
     assert.equal(args.pretty, true);
+    assert.equal(args.fromDate, '2026-08-15');
+    assert.equal(args.upcoming, true);
   });
 
   it('caps limit at max', () => {
-    const args = parseSamplePipelineArgs(['--limit=99']);
+    const args = parseSamplePipelineArgs(['--limit=99'], { today: fixedToday });
     assert.equal(args.limit, MAX_SAMPLE_LIMIT);
+  });
+
+  it('disables upcoming filter with --no-upcoming', () => {
+    const args = parseSamplePipelineArgs(['--no-upcoming'], { today: fixedToday });
+    assert.equal(args.upcoming, false);
+  });
+
+  it('disables upcoming filter with --all-dates alias', () => {
+    const args = parseSamplePipelineArgs(['--all-dates'], { today: fixedToday });
+    assert.equal(args.upcoming, false);
+  });
+
+  it('buildUpcomingDateWhereClause uses Parks date literal style', () => {
+    assert.equal(
+      buildUpcomingDateWhereClause('2026-07-01'),
+      "date >= '2026-07-01T00:00:00.000'",
+    );
+  });
+
+  it('buildBaseFetchOptions applies upcoming where and default order', () => {
+    const options = buildBaseFetchOptions({
+      limit: 3,
+      upcoming: true,
+      fromDate: '2026-07-01',
+      order: DEFAULT_SAMPLE_ORDER,
+      pretty: false,
+      help: false,
+    });
+
+    assert.equal(options.limit, 3);
+    assert.equal(options.where, "date >= '2026-07-01T00:00:00.000'");
+    assert.equal(options.order, 'date ASC');
+  });
+
+  it('buildBaseFetchOptions omits filter when upcoming disabled', () => {
+    const options = buildBaseFetchOptions({
+      limit: 3,
+      upcoming: false,
+      fromDate: '2026-07-01',
+      order: DEFAULT_SAMPLE_ORDER,
+      pretty: false,
+      help: false,
+    });
+
+    assert.equal(options.limit, 3);
+    assert.equal(options.where, undefined);
+    assert.equal(options.order, undefined);
+  });
+
+  it('parseCostFree handles Parks numeric string flags', () => {
+    assert.equal(parseCostFree('1'), true);
+    assert.equal(parseCostFree('0'), false);
+    assert.equal(parseCostFree('maybe'), null);
+    assert.equal(parseCostFree(null), null);
   });
 
   it('buildEventIdWhereClause escapes single quotes', () => {
