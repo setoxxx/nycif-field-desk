@@ -1,13 +1,13 @@
-# NYCIF Event Sources v0
+# NYCIF Event Sources
 
-Read-only event source inventory and adapter scaffold for NYC Open Data event feeds.
+Read-only event source inventory, normalizers, sample scripts, and admin snapshot tooling for NYC In Focus Field Desk.
 
 **This does not affect production.** It does not modify:
 
 - public map runtime
 - production feed JSON
 - WordPress
-- `data/location_cache.json` or live-feeds caches
+- `data/location_cache.json` or live-feed caches
 - deploy configuration or scheduled workflows
 
 ## Scope
@@ -15,7 +15,8 @@ Read-only event source inventory and adapter scaffold for NYC Open Data event fe
 - Typed source config for 11 NYC event-related sources
 - Normalized `EventLead` shape for future pipelines
 - Read-only Socrata fetch helper (`limit`, optional `$where` / `$order` / `$offset`)
-- Source-specific normalization for core feeds (v2 mappings aligned to live schema notes)
+- Source-specific normalization for core feeds
+- TVPP candidate feed, triage, location readiness, and location cleanup candidates
 - Node built-in tests (`node --test`)
 
 ## Sources
@@ -31,166 +32,92 @@ Read-only event source inventory and adapter scaffold for NYC Open Data event fe
 | `jk6k-yab4` | enrichment | Parks organizers; `join_key: event_id` |
 | `6v4b-5gp4` | core | Public Programs Division Special Events |
 | `3vyj-dkjt` | core | Safety Events |
-| `tg4x-b46p` | optional | Film Permits (production/permit activity, not necessarily public events) |
-| `dot-trafalrt` | later | Special Traffic Updates — **documented_only**, HTML not Socrata |
+| `tg4x-b46p` | optional | Film Permits |
+| `dot-trafalrt` | later | Special Traffic Updates — documented_only, HTML not Socrata |
 
 ## Special Traffic Updates
 
-Deferred intentionally. Source is HTML (`trafalrt.shtml`), not Socrata JSON. v0 documents it only; no scraper is implemented.
+Deferred intentionally. Source is HTML (`trafalrt.shtml`), not Socrata JSON. It is documented only; no scraper is implemented.
 
-## Parks join enrichment (v2b, fixture-only)
-
-Parks Event Listing (`fudw-fgrp`) provides base event data. Location, category, link, and organizer enrichment is done by matching `event_id` against join tables:
-
-- `cpcm-i88g` — locations (borough, address, lat/long)
-- `xtsw-fqvh` — categories
-- `ridc-7qqg` — links
-- `jk6k-yab4` — organizers
-
-Use `enrichParksEventLead(baseLead, joins)` from `normalizers/parks-joins.mjs`. This helper is **pure and fixture-only** for now — not wired into production feeds or map runtime. Image join (`6eti-k994`) is deferred.
-
-## Parks sample pipeline (v3, dev-only)
-
-Manual dev script that fetches a small Parks sample, joins matching rows by `event_id`, normalizes, enriches, and prints JSON to **stdout only**:
-
-```bash
-node tools/event-sources/sample-parks-pipeline.mjs --limit 3 --pretty
-```
-
-By default the sample applies an upcoming filter (`date >= today`, ordered by `date ASC`). Use `--no-upcoming` to disable the date filter, or `--from-date YYYY-MM-DD` to override the start date.
-
-- **stdout:** JSON array of enriched EventLead objects only
-- **stderr:** fetch summary logs
-- **no files written** — not production feed output, not map runtime wiring
-
-## Multi-source freshness report (v4, dev-only)
-
-Sample all core event sources and report whether each returns usable current/upcoming rows:
-
-```bash
-node tools/event-sources/sample-event-sources.mjs --limit 3 --pretty
-```
-
-- **stdout:** JSON report with per-source `freshness`, `dateRange`, and sample `leads`
-- **stderr:** per-source fetch summary
-- **skipped:** `dot-trafalrt` (documented_only)
-- **no files written**
-
-## Usage (read-only)
-
-```javascript
-import {
-  getEventSourceById,
-  fetchSocrataSource,
-  normalizeEventLead,
-} from './tools/event-sources/index.mjs';
-
-const source = getEventSourceById('tvpp-9vvx');
-const { rows, fetchedAt } = await fetchSocrataSource(source, { limit: 5 });
-const leads = rows.map((row) => normalizeEventLead(source.id, row, { lastFetchedAt: fetchedAt }));
-```
-
-No app token required for v0 sample fetches. Respect NYC Open Data rate limits in production use.
-
-## Live schema spot-check (v1, dev-only)
-
-Manual read-only inspection against NYC Open Data (not run in CI):
-
-```bash
-node tools/event-sources/inspect-live-schemas.mjs
-```
-
-Prints observed field names and simple value types per fetchable source. See `schema-notes.md` for findings.
-
-## Source query tuning (v4b, dev-only)
-
-Diagnostic script that tests candidate Socrata query strategies per core source and recommends whether each source is suitable for current feed use, historical context, or needs query adjustment:
-
-```bash
-node tools/event-sources/tune-event-source-queries.mjs --limit 3 --pretty
-```
-
-- **stdout:** JSON report with per-source strategy results and recommendations
-- **stderr:** fetch summary logs
-- **no files written** — not production feed output, not map runtime wiring
-- Special Traffic Updates (`dot-trafalrt`) remains `documented_only` and skipped
-
-## TVPP assignment feed candidate (v5, dev-only)
-
-Dev-only stdout candidate feed using only NYC Permitted Event Information (`tvpp-9vvx`):
+## TVPP assignment feed candidate
 
 ```bash
 node tools/event-sources/sample-tvpp-assignment-feed.mjs --limit 10 --pretty
 ```
 
-- **stdout:** JSON report with normalized `EventLead` objects sorted by `start_date_time`
-- **stderr:** fetch summary logs
-- **query:** `start_date_time >= from-date`, ordered `start_date_time ASC`
-- **filters:** optional `--borough`, `--event-type`, `--from-date`
-- **no files written** — not production feed output, not map runtime wiring
-- `photoPriorityScore` remains null (scoring out of scope)
+- stdout JSON report with normalized `EventLead` objects sorted by `start_date_time`
+- optional `--borough`, `--event-type`, and `--from-date`
+- no files written
+- not production feed output
+- not map runtime wiring
+- `photoPriorityScore` remains null unless later scoring is explicitly added
 
-## TVPP assignment triage labels (v5b, dev-only)
-
-Optional operator triage metadata for TVPP assignment feed review:
+## TVPP assignment triage labels
 
 ```bash
 node tools/event-sources/sample-tvpp-assignment-feed.mjs --limit 10 --with-triage --pretty
 ```
 
-- **stdout:** JSON report with `items: [{ lead, triage }]` when `--with-triage` is set
-- **triage:** dev/operator metadata only — does not change `EventLead`
-- **not production scoring** — `photoPriorityScore` remains null
-- without `--with-triage`, output shape unchanged (`leads` array)
-- **future admin UI:** `--with-triage` output is intended to power a read-only operator dashboard card/table later; no admin page is implemented in v5b
+- stdout JSON report with `items: [{ lead, triage }]`
+- triage is dev/operator metadata only
+- `EventLead` shape is unchanged
+- not production scoring
 
-See also: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md)
-
-## Future Operator/Admin Dashboard
-
-Planned **read-only admin/operator version of the existing NYCIF Field Desk GitHub Pages page** (not implemented in v5b).
-
-**Public field desk:** https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1
-
-**Proposed admin field desk:** https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1
-
-**Current admin status:** planned; documentation only; admin UI not implemented. The admin URL currently returns a GitHub Pages **404** until `admin/index.html` or an equivalent route exists. This is expected — it is not a production map failure and does not affect the public Field Desk page.
-
-Purpose: visually show everything happening across the system — live data, candidate/staged data, source freshness, TVPP assignment feed output, triage buckets, warnings, needs-review rows, what has been added or pushed, and build/commit/status metadata when available.
-
-The dashboard shows **all categories separately** with **no hidden filtering logic**. Category views/toggles are for visibility and navigation only; they **do not decide** what appears on the public map.
-
-Categories include: live, candidate, staged, strong_assignment, possible_assignment, logistics_or_closure, low_value, needs_review, stale, empty, source-health, missing location, missing geocode, live vs candidate diff.
-
-Constraints:
-
-- read-only visibility — **no write buttons**, **no deploy buttons**
-- not a filtering system for map content; does not publish, mutate, approve, reject, deploy, or write caches
-- does not hide categories from operator view
-- no secrets or API keys in client-side dashboard code
-
-Full requirement doc: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md) (includes [NYCIF Master Completion Tracker](./admin-dashboard-requirement.md#nycif-master-completion-tracker))
-
-Field Desk: [NYCIF Field Desk](https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1)
-Admin page: [NYCIF Admin Dashboard](https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1)
-Admin page status: planned; currently 404 until admin UI is implemented; documentation updated
-
-## TVPP location readiness audit (v6, dev-only)
-
-Read-only audit of whether TVPP candidate events have enough location text to safely geocode later:
+## TVPP location readiness audit
 
 ```bash
 node tools/event-sources/sample-tvpp-location-readiness.mjs --limit 25 --pretty
 ```
 
-- **stdout:** JSON report with `items: [{ lead, locationReadiness }]` and `locationBucketCounts`
-- **read-only** — no GPS coordinates generated
-- **no geocoding API calls** and no cache writes
-- **no production feed output** or map wiring
-- `locationReadiness` is separate metadata; EventLead 25-field shape unchanged
-- intended to decide whether a future geocoding task is safe
+- stdout JSON report with `items: [{ lead, locationReadiness }]` and `locationBucketCounts`
+- read-only audit of whether TVPP records have enough location text to safely geocode later
+- no GPS coordinates generated
+- no geocoding API calls
+- no cache writes
+- no production feed output or map wiring
+- `locationReadiness` is separate metadata; EventLead shape unchanged
 
-## Admin Data Snapshots v0
+## TVPP Location Cleanup Parser v1
+
+The TVPP Location Cleanup Parser turns messy TVPP location strings into structured, reviewable, geocode-ready candidates.
+
+Main module:
+
+```text
+ tools/event-sources/tvpp-location-cleanup.mjs
+```
+
+Admin snapshot generation command:
+
+```bash
+node tools/event-sources/build-admin-data-snapshots.mjs --limit 25 --pretty
+```
+
+Generated snapshot:
+
+```text
+admin/data/tvpp-location-cleanup.json
+```
+
+Purpose:
+
+- normalize common TVPP location text such as street segments, park areas, venue names, borough-only rows, and weak/missing locations
+- classify cleanup buckets such as `clean_address_candidate`, `park_area_candidate`, `intersection_candidate`, `route_or_multi_segment`, `borough_only`, `missing_location`, and `needs_manual_review`
+- provide display-only `candidateQuery` and `candidateDisplayLocation` fields for operator review
+- improve the Admin Dashboard unmapped queue before any future reviewed geocoding step
+
+Safety:
+
+- this is **not geocoding**
+- no GPS coordinates are created
+- no guessed coordinates are created
+- no geocoding APIs are called
+- no `location_cache.json` or geocode cache is written
+- no production feed JSON is created
+- no public Field Desk map wiring is changed
+- cleanup candidates are for operator review only
+
+## Admin Data Snapshots
 
 Generate read-only static JSON for the NYCIF Admin Dashboard under `admin/data/`:
 
@@ -205,14 +132,21 @@ Files created:
 - `admin/data/tvpp-candidates.json`
 - `admin/data/tvpp-triage.json`
 - `admin/data/tvpp-location-readiness.json`
+- `admin/data/tvpp-location-cleanup.json`
 - `admin/data/index.json`
 
-- **read-only / admin-only** — operator visibility, not production feed output
-- **no production map wiring** — public map does not consume these files
-- **no geocoding** — no GPS coordinates, geocoding API calls, or geocode cache writes
-- **no secrets** — uses public NYC Open Data sources only
-- **no approval/rejection controls** — triage and locationReadiness are separate metadata only
-- **next step:** Admin Dashboard Data Panels v1 (wire `admin/index.html` to these snapshots in a separate task)
+Guardrails:
+
+- read-only / admin-only operator visibility
+- not production feed output
+- no production map wiring
+- no geocoding
+- no GPS coordinates
+- no geocoding API calls
+- no geocode cache writes
+- no secrets
+- no approval/rejection controls
+- triage, locationReadiness, and locationCleanup are separate metadata only
 
 ## Tests
 
@@ -220,6 +154,12 @@ Files created:
 node --test tools/event-sources/event-sources.test.mjs
 ```
 
+Additional focused cleanup tests may be run with:
+
+```bash
+node --test tools/event-sources/tvpp-location-cleanup.test.mjs
+```
+
 ## Related work
 
-Separate from XRI registry phases (G0–G3). Does not implement registry extractors, reconciliation, or seed workflows.
+Separate from XRI registry phases. Does not implement registry extractors, reconciliation, seed workflows, WordPress integration, production event feed generation, or public map promotion.
