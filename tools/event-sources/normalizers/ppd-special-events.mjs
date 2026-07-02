@@ -1,39 +1,50 @@
 /**
- * Normalization stub: Public Programs Division Special Events (6v4b-5gp4).
+ * Normalizer: Public Programs Division Special Events (6v4b-5gp4).
+ * No stable event id in live schema sample — sourceRecordId/eventId remain null.
  */
 
-import { asNumber, asString, createEventLead, splitDateTime } from '../event-lead.mjs';
+import { asString, createEventLead, splitDateTime } from '../event-lead.mjs';
+
+/**
+ * @param {Record<string, unknown>} raw
+ * @returns {string|null}
+ */
+function buildPpdDescription(raw) {
+  const parts = ['audience', 'locationtype', 'unit', 'source']
+    .map((key) => asString(raw[key]))
+    .filter(Boolean);
+  return parts.length ? parts.join('; ') : null;
+}
 
 /**
  * @param {Record<string, unknown>} raw
  * @param {{ lastFetchedAt?: string|null }} [context]
  */
 export function normalizePpdSpecialEvent(raw, context = {}) {
-  const start = splitDateTime(raw.start_date_time ?? raw.startdate ?? raw.event_date);
-  const end = splitDateTime(raw.end_date_time ?? raw.enddate);
+  const parsed = splitDateTime(raw.date_and_time);
 
   return createEventLead({
     source: 'Public Programs Division Special Events',
     sourceDatasetId: '6v4b-5gp4',
-    sourceRecordId: asString(raw.event_id ?? raw.id ?? raw.objectid),
-    eventId: asString(raw.event_id ?? raw.id),
-    title: asString(raw.event_name ?? raw.name ?? raw.title),
-    eventType: asString(raw.event_type ?? raw.type),
-    category: asString(raw.category ?? raw.program),
-    startDate: start.date,
-    startTime: start.time,
-    endDate: end.date,
-    endTime: end.time,
+    sourceRecordId: null,
+    eventId: null,
+    title: asString(raw.event_name),
+    eventType: asString(raw.event_type),
+    category: asString(raw.category),
+    startDate: parsed.date ?? asString(raw.date_and_time),
+    startTime: parsed.time,
+    endDate: null,
+    endTime: null,
     borough: asString(raw.borough),
-    locationName: asString(raw.location ?? raw.event_location ?? raw.site),
-    address: asString(raw.address ?? raw.location_address),
-    latitude: asNumber(raw.latitude ?? raw.lat),
-    longitude: asNumber(raw.longitude ?? raw.long ?? raw.lng),
-    description: asString(raw.description ?? raw.event_description),
-    officialUrl: asString(raw.url ?? raw.event_url),
-    organizer: asString(raw.organizer ?? raw.agency),
-    phone: asString(raw.phone),
-    email: asString(raw.email),
+    locationName: asString(raw.location),
+    address: asString(raw.location),
+    latitude: null,
+    longitude: null,
+    description: buildPpdDescription(raw),
+    officialUrl: null,
+    organizer: asString(raw.group_name_partner) ?? asString(raw.unit) ?? asString(raw.source),
+    phone: null,
+    email: null,
     isFree: null,
     photoPriorityScore: null,
     rawRecord: raw,

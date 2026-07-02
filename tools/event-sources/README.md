@@ -15,7 +15,7 @@ Read-only event source inventory and adapter scaffold for NYC Open Data event fe
 - Typed source config for 11 NYC event-related sources
 - Normalized `EventLead` shape for future pipelines
 - Read-only Socrata fetch helper (`limit`, optional `$where` / `$order` / `$offset`)
-- Source-specific normalization **stubs** for core feeds
+- Source-specific normalization for core feeds (v2 mappings aligned to live schema notes)
 - Node built-in tests (`node --test`)
 
 ## Sources
@@ -31,7 +31,7 @@ Read-only event source inventory and adapter scaffold for NYC Open Data event fe
 | `jk6k-yab4` | enrichment | Parks organizers; `join_key: event_id` |
 | `6v4b-5gp4` | core | Public Programs Division Special Events |
 | `3vyj-dkjt` | core | Safety Events |
-| `tg4x-b46p` | optional | Film Permits |
+| `tg4x-b46p` | optional | Film Permits (production/permit activity, not necessarily public events) |
 | `dot-trafalrt` | later | Special Traffic Updates — **documented_only**, HTML not Socrata |
 
 ## Special Traffic Updates

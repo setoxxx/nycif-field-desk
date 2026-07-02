@@ -106,7 +106,7 @@ describe('event lead normalizers', () => {
     assert.ok(EVENT_LEAD_NORMALIZERS['tg4x-b46p']);
   });
 
-  it('normalizes tvpp permitted events with common lead fields', () => {
+  it('normalizes tvpp permitted events from live schema fields', () => {
     const lead = normalizeTvppPermittedEvent({
       event_id: '947413',
       event_name: 'FWC2026',
@@ -116,6 +116,11 @@ describe('event lead normalizers', () => {
       event_agency: 'Street Activity Permit Office',
       event_borough: 'Manhattan',
       event_location: 'MADISON AVENUE between EAST 51 STREET and EAST 50 STREET',
+      street_closure_type: 'Partial',
+      latitude: '40.7614',
+      lat: '40.7614',
+      longitude: '-73.9776',
+      lng: '-73.9776',
     }, { lastFetchedAt: '2026-07-01T12:00:00.000Z' });
 
     assert.equal(lead.sourceDatasetId, 'tvpp-9vvx');
@@ -124,51 +129,139 @@ describe('event lead normalizers', () => {
     assert.equal(lead.startDate, '2026-07-01');
     assert.equal(lead.startTime, '10:00:00');
     assert.equal(lead.borough, 'Manhattan');
+    assert.equal(lead.description, 'Partial');
+    assert.equal(lead.latitude, null);
+    assert.equal(lead.longitude, null);
     assert.ok(hasEventLeadShape(lead));
-    for (const field of EVENT_LEAD_FIELDS) {
-      assert.ok(Object.prototype.hasOwnProperty.call(lead, field), `missing field ${field}`);
-    }
   });
 
-  it('normalizes parks, ppd, safety, and film permit stubs', () => {
+  it('falls back to cemsid for tvpp record id when event_id absent', () => {
+    const lead = normalizeTvppPermittedEvent({
+      cemsid: 'CEMS-99',
+      event_name: 'Fallback Event',
+      start_date_time: '2026-07-02T09:00:00',
+    });
+    assert.equal(lead.sourceRecordId, 'CEMS-99');
+    assert.equal(lead.eventId, 'CEMS-99');
+    assert.ok(hasEventLeadShape(lead));
+  });
+
+  it('normalizes parks listing from live schema fields without join-table assumptions', () => {
     const parks = normalizeParksEventListing({
       event_id: '100073',
-      event_name: 'Summer Concert',
-      start_date_time: '2026-08-01T19:00:00',
+      title: 'Summer Concert',
+      date: '2026-08-01',
+      start_time: '19:00:00',
+      end_time: '21:00:00',
+      cost_free: 'true',
+      location_description: 'Prospect Park Bandshell',
+      description: 'Outdoor music',
+      url: 'https://example.com/event',
+      phone: '212-555-0100',
+      email: 'events@example.com',
       borough: 'Brooklyn',
-      location: 'Prospect Park',
+      latitude: '40.6602',
+      organizer: 'NYC Parks',
+      category: 'Music',
     });
+
     assert.equal(parks.sourceDatasetId, 'fudw-fgrp');
     assert.equal(parks.eventId, '100073');
+    assert.equal(parks.title, 'Summer Concert');
+    assert.equal(parks.startDate, '2026-08-01');
+    assert.equal(parks.startTime, '19:00:00');
+    assert.equal(parks.endDate, '2026-08-01');
+    assert.equal(parks.endTime, '21:00:00');
+    assert.equal(parks.locationName, 'Prospect Park Bandshell');
+    assert.equal(parks.isFree, true);
+    assert.equal(parks.borough, null);
+    assert.equal(parks.address, null);
+    assert.equal(parks.latitude, null);
+    assert.equal(parks.longitude, null);
+    assert.equal(parks.organizer, null);
+    assert.equal(parks.eventType, null);
+    assert.equal(parks.category, null);
+    assert.ok(hasEventLeadShape(parks));
+  });
 
+  it('normalizes ppd special events from date_and_time without inventing ids', () => {
     const ppd = normalizePpdSpecialEvent({
-      event_id: 'ppd-1',
       event_name: 'Community Day',
-      start_date_time: '2026-09-01T12:00:00',
+      event_type: 'Festival',
+      category: 'Community',
+      date_and_time: '2026-09-01T12:00:00',
       borough: 'Queens',
+      location: 'Flushing Meadows',
+      group_name_partner: 'Queens Borough President',
+      audience: 'Families',
+      locationtype: 'Park',
+      unit: 'PPD',
+      source: 'NYC Parks',
+      event_id: 'should-not-use',
+      id: 'also-ignore',
     });
+
     assert.equal(ppd.sourceDatasetId, '6v4b-5gp4');
+    assert.equal(ppd.eventId, null);
+    assert.equal(ppd.sourceRecordId, null);
+    assert.equal(ppd.title, 'Community Day');
+    assert.equal(ppd.startDate, '2026-09-01');
+    assert.equal(ppd.startTime, '12:00:00');
+    assert.equal(ppd.organizer, 'Queens Borough President');
+    assert.equal(ppd.description, 'Families; Park; PPD; NYC Parks');
+    assert.ok(hasEventLeadShape(ppd));
+  });
 
+  it('normalizes safety events from program/community_site without inventing ids', () => {
     const safety = normalizeSafetyEvent({
-      event_id: 'safe-1',
-      event_name: 'Safety Fair',
-      start_date_time: '2026-10-01T09:00:00',
+      program: 'Fire Safety Outreach',
+      community_site: 'Bronx Community Center',
+      event_date: '2026-10-01',
+      name_of_org: 'FDNY',
       borough: 'Bronx',
+      address: '123 Main St',
+      latitude: '40.8448',
+      longitude: '-73.8648',
+      served_by: 'FDNY',
+      handonsdisp1: 'Hands-on demo',
+      event_id: 'ignore-me',
+      event_name: 'ignore-me',
     });
-    assert.equal(safety.sourceDatasetId, '3vyj-dkjt');
 
+    assert.equal(safety.sourceDatasetId, '3vyj-dkjt');
+    assert.equal(safety.eventId, null);
+    assert.equal(safety.sourceRecordId, null);
+    assert.equal(safety.title, 'Fire Safety Outreach');
+    assert.equal(safety.eventType, 'Fire Safety Outreach');
+    assert.equal(safety.startDate, '2026-10-01');
+    assert.equal(safety.startTime, null);
+    assert.equal(safety.locationName, 'Bronx Community Center');
+    assert.equal(safety.latitude, 40.8448);
+    assert.equal(safety.longitude, -73.8648);
+    assert.equal(safety.organizer, 'FDNY');
+    assert.ok(hasEventLeadShape(safety));
+  });
+
+  it('normalizes film permits and maps eventagency to organizer', () => {
     const film = normalizeFilmPermit({
       eventid: 'film-1',
       category: 'Film',
       subcategoryname: 'Feature Production',
+      eventtype: 'Television',
+      eventagency: 'Mayor\'s Office of Media and Entertainment',
       borough: 'Manhattan',
       parkingheld: 'BROADWAY between W 42 STREET and W 43 STREET',
       startdatetime: '2026-11-01T06:00:00',
       enddatetime: '2026-11-01T20:00:00',
     });
+
     assert.equal(film.sourceDatasetId, 'tg4x-b46p');
+    assert.equal(film.eventId, 'film-1');
+    assert.equal(film.title, 'Feature Production');
+    assert.equal(film.organizer, 'Mayor\'s Office of Media and Entertainment');
     assert.equal(film.locationName, film.address);
     assert.equal(film.latitude, null);
+    assert.ok(hasEventLeadShape(film));
   });
 
   it('routes normalizeEventLead by source dataset id', () => {
