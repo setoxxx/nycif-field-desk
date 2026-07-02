@@ -89,6 +89,11 @@
       <div id="summary-grid" class="grid"></div>
     </section>
 
+    <section class="panel" id="artifact-source-section">
+      <h2>Artifact source status</h2>
+      <div id="artifact-source-status"></div>
+    </section>
+
     <section class="panel" id="project-table-section">
       <h2>Project status inventory</h2>
       <div id="project-table"></div>
@@ -212,13 +217,20 @@
       if (!response.ok) throw new Error(`${resource}: ${response.status} ${response.statusText}`);
       return response.json();
     }
-    async function loadJsonOptional(resource) {
+    async function loadStatusResource(resource) {
       try {
         const response = await fetch(resource);
-        if (!response.ok) return null;
-        return response.json();
+        if (!response.ok) {
+          return { resource, status: 'unreachable', detail: `${response.status} ${response.statusText}` };
+        }
+        const artifact = await response.json();
+        const project = projectFromStatusArtifact(artifact);
+        if (!project) {
+          return { resource, status: 'rejected', detail: 'Failed public-safety validation.' };
+        }
+        return { resource, status: 'loaded', detail: artifact.project || artifact.repository || resource, artifact, project };
       } catch (error) {
-        return null;
+        return { resource, status: 'unreachable', detail: error.message || 'Fetch failed.' };
       }
     }
     function projectFromStatusArtifact(artifact) {
@@ -226,6 +238,7 @@
       if (!artifact.safety || artifact.safety.safe_for_public_dashboard !== true) return null;
       if (artifact.safety.contains_secrets || artifact.safety.contains_private_repo_internals || artifact.safety.contains_tokens) return null;
       if (artifact.safety.contains_credentials || artifact.safety.browser_side_github_api_polling) return null;
+      if (artifact.safety.contains_unpublished_implementation_details || artifact.safety.contains_operational_data) return null;
       if (artifact.safety.write_controls || artifact.safety.deploy_controls) return null;
       if (artifact.safety.public_map_runtime_change || artifact.safety.production_feed_mutation || artifact.safety.wordpress_change) return null;
       return {
@@ -246,26 +259,45 @@
         data_freshness: artifact.data_freshness || null
       };
     }
-    function mergeStatusArtifacts(data, artifacts) {
+    function sourceStatusCounts(sourceResults) {
+      const counts = { loaded: 0, unreachable: 0, rejected: 0 };
+      for (const result of sourceResults) {
+        if (Object.prototype.hasOwnProperty.call(counts, result.status)) counts[result.status] += 1;
+      }
+      return counts;
+    }
+    function mergeStatusArtifacts(data, sourceResults) {
       const merged = structuredClone(data);
       const projects = Array.isArray(merged.projects) ? merged.projects.slice() : [];
       let loaded = 0;
-      for (const artifact of artifacts) {
-        const project = projectFromStatusArtifact(artifact);
-        if (!project) continue;
+      for (const result of sourceResults) {
+        if (result.status !== 'loaded' || !result.project) continue;
+        const project = result.project;
         const index = projects.findIndex((row) => row.full_name === project.full_name || row.name === project.name);
         if (index >= 0) projects[index] = { ...projects[index], ...project };
         else projects.push(project);
         loaded += 1;
       }
+      const counts = sourceStatusCounts(sourceResults);
       merged.projects = projects;
-      merged.summary = { ...(merged.summary || {}), projects_with_status_artifacts: loaded };
+      merged.artifact_source_statuses = sourceResults.map((result) => ({
+        resource: result.resource,
+        status: result.status,
+        detail: result.detail
+      }));
+      merged.summary = {
+        ...(merged.summary || {}),
+        projects_with_status_artifacts: loaded,
+        artifact_sources_loaded: counts.loaded,
+        artifact_sources_unreachable: counts.unreachable,
+        artifact_sources_rejected: counts.rejected
+      };
       return merged;
     }
     async function loadMasterProjects() {
       const manualData = await loadJsonRequired(MANUAL_RESOURCE);
-      const artifacts = await Promise.all(STATUS_RESOURCES.map(loadJsonOptional));
-      return mergeStatusArtifacts(manualData, artifacts.filter(Boolean));
+      const sourceResults = await Promise.all(STATUS_RESOURCES.map(loadStatusResource));
+      return mergeStatusArtifacts(manualData, sourceResults);
     }
     function render(data) {
       const projects = data.projects || [];
@@ -276,7 +308,14 @@
       summary.appendChild(stat('Projects with PR history', data.summary?.projects_with_recent_pr_history, 'Connector snapshot.'));
       summary.appendChild(stat('Need status artifacts', data.summary?.projects_needing_status_artifacts, 'One safe JSON status artifact per repo.'));
       summary.appendChild(stat('Loaded status artifacts', data.summary?.projects_with_status_artifacts, 'Optional static artifact readers.'));
+      summary.appendChild(stat('Artifact sources loaded', data.summary?.artifact_sources_loaded, `${text(data.summary?.artifact_sources_unreachable)} unreachable / ${text(data.summary?.artifact_sources_rejected)} rejected`));
       summary.appendChild(stat('Generated', data.generated_at, data.dashboard_phase));
+
+      clear(byId('artifact-source-status')).appendChild(table([
+        { label: 'Source', value: (row) => row.resource, className: 'truncate' },
+        { label: 'Status', value: (row) => row.status, className: 'mono' },
+        { label: 'Detail', value: (row) => row.detail, className: 'truncate' },
+      ], data.artifact_source_statuses || []));
 
       clear(byId('project-table')).appendChild(table([
         { label: 'Project', value: (row) => row.name, className: 'mono' },
