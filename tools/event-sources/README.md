@@ -38,9 +38,16 @@ Read-only event source inventory and adapter scaffold for NYC Open Data event fe
 
 Deferred intentionally. Source is HTML (`trafalrt.shtml`), not Socrata JSON. v0 documents it only; no scraper is implemented.
 
-## Parks join strategy (future)
+## Parks join enrichment (v2b, fixture-only)
 
-Enrichment tables (`cpcm-i88g`, `xtsw-fqvh`, `ridc-7qqg`, `6eti-k994`, `jk6k-yab4`) declare `joinKey: event_id`. Future work can join these to `fudw-fgrp` event rows before geocoding or registry matching.
+Parks Event Listing (`fudw-fgrp`) provides base event data. Location, category, link, and organizer enrichment is done by matching `event_id` against join tables:
+
+- `cpcm-i88g` — locations (borough, address, lat/long)
+- `xtsw-fqvh` — categories
+- `ridc-7qqg` — links
+- `jk6k-yab4` — organizers
+
+Use `enrichParksEventLead(baseLead, joins)` from `normalizers/parks-joins.mjs`. This helper is **pure and fixture-only** for now — not wired into production feeds or map runtime. Image join (`6eti-k994`) is deferred.
 
 ## Usage (read-only)
 
