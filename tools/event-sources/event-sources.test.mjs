@@ -10,6 +10,7 @@ import {
 import { EVENT_LEAD_FIELDS, hasEventLeadShape } from './event-lead.mjs';
 import {
   EVENT_LEAD_NORMALIZERS,
+  enrichParksEventLead,
   normalizeEventLead,
   normalizeFilmPermit,
   normalizeParksEventListing,
@@ -272,6 +273,102 @@ describe('event lead normalizers', () => {
     });
     assert.equal(lead.sourceDatasetId, 'tvpp-9vvx');
     assert.equal(lead.title, 'Test Event');
+  });
+});
+
+describe('parks join enrichment', () => {
+  const baseParksLead = () => normalizeParksEventListing({
+    event_id: '100073',
+    title: 'Summer Concert',
+    date: '2026-08-01',
+    start_time: '19:00:00',
+    end_time: '21:00:00',
+    location_description: 'Prospect Park Bandshell',
+    url: 'https://example.com/listing',
+  });
+
+  it('fills location fields from cpcm-i88g join rows', () => {
+    const base = baseParksLead();
+    const enriched = enrichParksEventLead(base, {
+      locations: [{
+        event_id: '100073',
+        name: 'Prospect Park Bandshell',
+        address: 'Prospect Park West',
+        borough: 'Brooklyn',
+        lat: '40.6602',
+        long: '-73.9690',
+      }],
+    });
+
+    assert.equal(enriched.borough, 'Brooklyn');
+    assert.equal(enriched.locationName, 'Prospect Park Bandshell');
+    assert.equal(enriched.address, 'Prospect Park West');
+    assert.equal(enriched.latitude, 40.6602);
+    assert.equal(enriched.longitude, -73.969);
+    assert.ok(hasEventLeadShape(enriched));
+  });
+
+  it('fills category from xtsw-fqvh join rows', () => {
+    const enriched = enrichParksEventLead(baseParksLead(), {
+      categories: [
+        { event_id: '100073', name: 'Music' },
+        { event_id: '100073', name: 'Outdoor' },
+      ],
+    });
+
+    assert.equal(enriched.category, 'Music, Outdoor');
+    assert.equal(enriched.eventType, null);
+    assert.ok(hasEventLeadShape(enriched));
+  });
+
+  it('fills officialUrl from ridc-7qqg join rows', () => {
+    const enriched = enrichParksEventLead(baseParksLead(), {
+      links: [
+        { event_id: '100073', link_name: 'Tickets', link_url: 'https://example.com/tickets' },
+        { event_id: '100073', link_name: 'More Info', link_url: 'https://example.com/info' },
+      ],
+    });
+
+    assert.equal(enriched.officialUrl, 'https://example.com/info');
+    assert.ok(hasEventLeadShape(enriched));
+  });
+
+  it('fills organizer from jk6k-yab4 join rows', () => {
+    const enriched = enrichParksEventLead(baseParksLead(), {
+      organizers: [{ event_id: '100073', event_organizer: 'NYC Parks' }],
+    });
+
+    assert.equal(enriched.organizer, 'NYC Parks');
+    assert.ok(hasEventLeadShape(enriched));
+  });
+
+  it('leaves base lead unchanged when join rows are missing', () => {
+    const base = baseParksLead();
+    const enriched = enrichParksEventLead(base, {});
+
+    assert.equal(enriched.title, base.title);
+    assert.equal(enriched.borough, null);
+    assert.equal(enriched.category, null);
+    assert.equal(enriched.organizer, null);
+    assert.equal(enriched.officialUrl, 'https://example.com/listing');
+    assert.ok(hasEventLeadShape(enriched));
+  });
+
+  it('does not mutate the original base lead', () => {
+    const base = baseParksLead();
+    const snapshot = { ...base };
+
+    enrichParksEventLead(base, {
+      locations: [{
+        event_id: '100073',
+        name: 'Prospect Park Bandshell',
+        borough: 'Brooklyn',
+        lat: '40.6602',
+        long: '-73.9690',
+      }],
+    });
+
+    assert.deepEqual(base, snapshot);
   });
 });
 

@@ -1,4 +1,5 @@
 import { normalizeFilmPermit } from './film-permits.mjs';
+import { enrichParksEventLead } from './parks-joins.mjs';
 import { normalizeParksEventListing } from './parks-event-listing.mjs';
 import { normalizePpdSpecialEvent } from './ppd-special-events.mjs';
 import { normalizeSafetyEvent } from './safety-events.mjs';
@@ -34,6 +35,7 @@ export function normalizeEventLead(sourceDatasetId, raw, context = {}) {
 }
 
 export {
+  enrichParksEventLead,
   normalizeFilmPermit,
   normalizeParksEventListing,
   normalizePpdSpecialEvent,
