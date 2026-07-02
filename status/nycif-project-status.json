@@ -1,0 +1,63 @@
+{
+  "artifact_type": "nycif_project_status",
+  "schema_version": "1.0.0",
+  "project": "nycif-field-desk",
+  "repository": "setoxxx/nycif-field-desk",
+  "visibility": "public",
+  "current_phase": "Master Admin + XRI admin surfaces",
+  "completion_percent": 68,
+  "health": "green",
+  "status_summary": "Field Desk is the current public/admin control-center host for NYCIF Master Admin, Event Sources snapshots, and XRI admin/status surfaces. This status artifact is static and public-safe.",
+  "active_prs": [
+    {
+      "number": 79,
+      "title": "XRI-G12: Add admin review surface static prototype",
+      "url": "https://github.com/setoxxx/nycif-field-desk/pull/79",
+      "state": "unknown"
+    }
+  ],
+  "recent_prs": [
+    {
+      "number": 81,
+      "title": "Admin: link master projects dashboard",
+      "url": "https://github.com/setoxxx/nycif-field-desk/pull/81",
+      "state": "merged"
+    },
+    {
+      "number": 80,
+      "title": "Admin: Add master projects dashboard v1",
+      "url": "https://github.com/setoxxx/nycif-field-desk/pull/80",
+      "state": "merged"
+    },
+    {
+      "number": 79,
+      "title": "XRI-G12: Add admin review surface static prototype",
+      "url": "https://github.com/setoxxx/nycif-field-desk/pull/79",
+      "state": "unknown"
+    }
+  ],
+  "blockers": [
+    "Master dashboard still uses a manually curated status snapshot until every NYCIF repo publishes its own status artifact.",
+    "Private repos must only publish public-safe summaries; no private internals or operational details should be copied into the master dashboard."
+  ],
+  "next_action": "Create equivalent public-safe status artifacts for the remaining six NYCIF repos, then update the Master Projects dashboard to consume static repo status artifacts.",
+  "data_freshness": {
+    "source": "Manual ChatGPT/GitHub connector snapshot",
+    "last_verified_at": "2026-07-02T20:00:00.000Z",
+    "notes": "This file is a static artifact. It does not poll GitHub from the browser. PR states should be refreshed by future controlled updates."
+  },
+  "safety": {
+    "safe_for_public_dashboard": true,
+    "contains_secrets": false,
+    "contains_private_repo_internals": false,
+    "contains_credentials": false,
+    "contains_tokens": false,
+    "browser_side_github_api_polling": false,
+    "write_controls": false,
+    "deploy_controls": false,
+    "public_map_runtime_change": false,
+    "production_feed_mutation": false,
+    "wordpress_change": false
+  },
+  "generated_at": "2026-07-02T20:00:00.000Z"
+}
