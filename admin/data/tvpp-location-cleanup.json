@@ -9,17 +9,15 @@
   "limit": 25,
   "rowCount": 25,
   "itemCount": 25,
-  "dateRange": {
-    "min": "2026-07-02",
-    "max": "2026-07-02"
-  },
-  "locationBucketCounts": {
-    "geocode_ready": 0,
-    "needs_address_cleanup": 22,
-    "intersection_or_route": 3,
+  "bucketCounts": {
+    "clean_address_candidate": 0,
+    "clean_venue_candidate": 4,
+    "intersection_candidate": 2,
+    "route_or_multi_segment": 2,
+    "park_area_candidate": 16,
     "borough_only": 0,
     "missing_location": 0,
-    "needs_review": 0
+    "needs_manual_review": 1
   },
   "items": [
     {
@@ -63,16 +61,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "clean_venue_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Catherine Scott Promenade: Catherine Scott Promenade Event Area",
+        "cleanedLocationText": "Catherine Scott Promenade: Catherine Scott Promenade Event Area",
+        "locationKind": "venue_or_park",
+        "borough": "Bronx",
+        "candidateQuery": "Catherine Scott Promenade Catherine Scott Promenade Event Area, Bronx, NY",
+        "candidateDisplayLocation": "Catherine Scott Promenade, Catherine Scott Promenade Event Area",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -116,16 +122,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Central Park: Bethesda Fountain Terrace",
+        "cleanedLocationText": "Central Park: Bethesda Fountain Terrace",
+        "locationKind": "venue_or_park",
+        "borough": "Manhattan",
+        "candidateQuery": "Central Park Bethesda Fountain Terrace, Manhattan, NY",
+        "candidateDisplayLocation": "Central Park, Bethesda Fountain Terrace",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -169,16 +183,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "intersection_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Coffey Park: Lawn at Dwight",
+        "cleanedLocationText": "Coffey Park: Lawn at Dwight",
+        "locationKind": "intersection",
+        "borough": "Brooklyn",
+        "candidateQuery": "Coffey Park Lawn at Dwight, Brooklyn, NY",
+        "candidateDisplayLocation": "Coffey Park, Lawn at Dwight",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "intersection_text"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Intersection-style text detected."
+        ]
       }
     },
     {
@@ -222,16 +244,87 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "intersection_or_route",
+      "locationCleanup": {
+        "bucket": "route_or_multi_segment",
+        "confidence": "medium",
+        "originalLocationText": "MADISON AVENUE between EAST   51 STREET and EAST   50 STREET,  MADISON AVENUE between EAST   48 STREET and EAST   49 STREET,  EAST   50 STREET between MADISON AVENUE and PARK AVENUE,  EAST   49 STREET between PARK AVENUE and LEXINGTON AVENUE,  EAST   49 STREET between PARK AVENUE and LEXINGTON AVENUE,  LEXINGTON AVENUE between EAST   49 STREET and EAST   50 STREET,  EAST   49 STREET between LEXINGTON AVENUE and 3 AVENUE,  EAST   49 STREET between LEXINGTON AVENUE and 3 AVENUE,  EAST   49 STREET between 3 AVENUE and 2 AVENUE,  WEST   35 STREET between 8 AVENUE and 9 AVENUE",
+        "cleanedLocationText": "MADISON Ave between E 51 St and E 50 St, MADISON Ave between E 48 St and E 49 St, E 50 St between MADISON Ave and PARK Ave, E 49 St between PARK Ave and LEXINGTON Ave, E 49 St between PARK Ave and LEXINGTON Ave, LEXINGTON Ave between E 49 St and E 50 St, E 49 St between LEXINGTON Ave and 3 Ave, E 49 St between LEXINGTON Ave and 3 Ave, E 49 St between 3 Ave and 2 Ave, W 35 St between 8 Ave and 9 Ave",
+        "locationKind": "multi_segment_route",
+        "borough": "Manhattan",
+        "candidateQuery": "MADISON Ave between E 51 St and E 50 St, Manhattan, NY (first segment candidate only)",
+        "candidateDisplayLocation": "MADISON Ave between E 51 St and E 50 St",
+        "streetSide": "East",
+        "streetClosureType": "Curb Lane Only",
+        "components": {
+          "segments": [
+            {
+              "raw": "MADISON Ave between E 51 St and E 50 St",
+              "street": "MADISON Ave",
+              "from": "E 51 St",
+              "to": "E 50 St"
+            },
+            {
+              "raw": "MADISON Ave between E 48 St and E 49 St",
+              "street": "MADISON Ave",
+              "from": "E 48 St",
+              "to": "E 49 St"
+            },
+            {
+              "raw": "E 50 St between MADISON Ave and PARK Ave",
+              "street": "E 50 St",
+              "from": "MADISON Ave",
+              "to": "PARK Ave"
+            },
+            {
+              "raw": "E 49 St between PARK Ave and LEXINGTON Ave",
+              "street": "E 49 St",
+              "from": "PARK Ave",
+              "to": "LEXINGTON Ave"
+            },
+            {
+              "raw": "E 49 St between PARK Ave and LEXINGTON Ave",
+              "street": "E 49 St",
+              "from": "PARK Ave",
+              "to": "LEXINGTON Ave"
+            },
+            {
+              "raw": "LEXINGTON Ave between E 49 St and E 50 St",
+              "street": "LEXINGTON Ave",
+              "from": "E 49 St",
+              "to": "E 50 St"
+            },
+            {
+              "raw": "E 49 St between LEXINGTON Ave and 3 Ave",
+              "street": "E 49 St",
+              "from": "LEXINGTON Ave",
+              "to": "3 Ave"
+            },
+            {
+              "raw": "E 49 St between LEXINGTON Ave and 3 Ave",
+              "street": "E 49 St",
+              "from": "LEXINGTON Ave",
+              "to": "3 Ave"
+            },
+            {
+              "raw": "E 49 St between 3 Ave and 2 Ave",
+              "street": "E 49 St",
+              "from": "3 Ave",
+              "to": "2 Ave"
+            },
+            {
+              "raw": "W 35 St between 8 Ave and 9 Ave",
+              "street": "W 35 St",
+              "from": "8 Ave",
+              "to": "9 Ave"
+            }
+          ]
+        },
         "labels": [
-          "intersection_or_route",
-          "street_segment"
+          "multi_segment_route"
         ],
         "reasons": [
-          "Location appears to describe an intersection or route segment"
-        ],
-        "confidence": "high"
+          "Multiple route/intersection-style segments detected; use first segment only as a review candidate."
+        ]
       }
     },
     {
@@ -275,16 +368,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Andrew Haswell Green Park: Andrew Haswell Green Park",
+        "cleanedLocationText": "Andrew Haswell Green Park: Andrew Haswell Green Park",
+        "locationKind": "venue_or_park",
+        "borough": "Manhattan",
+        "candidateQuery": "Andrew Haswell Green Park Andrew Haswell Green Park, Manhattan, NY",
+        "candidateDisplayLocation": "Andrew Haswell Green Park, Andrew Haswell Green Park",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -328,16 +429,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "clean_venue_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Bowling Green: Subway Plaza (Cobblestone)",
+        "cleanedLocationText": "Bowling Green: Subway Plaza (Cobblestone)",
+        "locationKind": "venue_or_park",
+        "borough": "Manhattan",
+        "candidateQuery": "Bowling Green Subway Plaza (Cobblestone), Manhattan, NY",
+        "candidateDisplayLocation": "Bowling Green, Subway Plaza (Cobblestone)",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -381,16 +490,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "clean_venue_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Father Duffy Square: Father Duffy Square",
+        "cleanedLocationText": "Father Duffy Square: Father Duffy Square",
+        "locationKind": "venue_or_park",
+        "borough": "Manhattan",
+        "candidateQuery": "Father Duffy Square Father Duffy Square, Manhattan, NY",
+        "candidateDisplayLocation": "Father Duffy Square, Father Duffy Square",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -434,16 +551,39 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "intersection_or_route",
+      "locationCleanup": {
+        "bucket": "route_or_multi_segment",
+        "confidence": "medium",
+        "originalLocationText": "Manhattan Center - Hammerstein Ballroom: 311 West 34th Street , WEST   34 STREET between 8 AVENUE and 9 AVENUE,  WEST   35 STREET between 8 AVENUE and 9 AVENUE",
+        "cleanedLocationText": "Manhattan Center - Hammerstein Ballroom: 311 W 34th St, W 34 St between 8 Ave and 9 Ave, W 35 St between 8 Ave and 9 Ave",
+        "locationKind": "multi_segment_route",
+        "borough": "Manhattan",
+        "candidateQuery": "W 34 St between 8 Ave and 9 Ave, Manhattan, NY (first segment candidate only)",
+        "candidateDisplayLocation": "W 34 St between 8 Ave and 9 Ave",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": {
+          "segments": [
+            {
+              "raw": "W 34 St between 8 Ave and 9 Ave",
+              "street": "W 34 St",
+              "from": "8 Ave",
+              "to": "9 Ave"
+            },
+            {
+              "raw": "W 35 St between 8 Ave and 9 Ave",
+              "street": "W 35 St",
+              "from": "8 Ave",
+              "to": "9 Ave"
+            }
+          ]
+        },
         "labels": [
-          "intersection_or_route",
-          "street_segment"
+          "multi_segment_route"
         ],
         "reasons": [
-          "Location appears to describe an intersection or route segment"
-        ],
-        "confidence": "high"
+          "Multiple route/intersection-style segments detected; use first segment only as a review candidate."
+        ]
       }
     },
     {
@@ -487,16 +627,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Bryant Park: Lawn",
+        "cleanedLocationText": "Bryant Park: Lawn",
+        "locationKind": "venue_or_park",
+        "borough": "Manhattan",
+        "candidateQuery": "Bryant Park Lawn, Manhattan, NY",
+        "candidateDisplayLocation": "Bryant Park, Lawn",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -540,16 +688,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Cunningham Park: Soccer-05",
+        "cleanedLocationText": "Cunningham Park: Soccer-05",
+        "locationKind": "venue_or_park",
+        "borough": "Queens",
+        "candidateQuery": "Cunningham Park Soccer-05, Queens, NY",
+        "candidateDisplayLocation": "Cunningham Park, Soccer-05",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -593,16 +749,33 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "intersection_or_route",
+      "locationCleanup": {
+        "bucket": "intersection_candidate",
+        "confidence": "medium",
+        "originalLocationText": "WEST   43 STREET between 7 AVENUE and 6 AVENUE",
+        "cleanedLocationText": "W 43 St between 7 Ave and 6 Ave",
+        "locationKind": "route",
+        "borough": "Manhattan",
+        "candidateQuery": "W 43 St between 7 Ave and 6 Ave, Manhattan, NY",
+        "candidateDisplayLocation": "W 43 St between 7 Ave and 6 Ave",
+        "streetSide": "North",
+        "streetClosureType": "Curb Lane Only",
+        "components": {
+          "segments": [
+            {
+              "raw": "W 43 St between 7 Ave and 6 Ave",
+              "street": "W 43 St",
+              "from": "7 Ave",
+              "to": "6 Ave"
+            }
+          ]
+        },
         "labels": [
-          "intersection_or_route",
-          "street_segment"
+          "between_segment"
         ],
         "reasons": [
-          "Location appears to describe an intersection or route segment"
-        ],
-        "confidence": "high"
+          "Street segment between two cross streets detected."
+        ]
       }
     },
     {
@@ -646,16 +819,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Inwood Hill Park: Muscota Marsh",
+        "cleanedLocationText": "Inwood Hill Park: Muscota Marsh",
+        "locationKind": "venue_or_park",
+        "borough": "Manhattan",
+        "candidateQuery": "Inwood Hill Park Muscota Marsh, Manhattan, NY",
+        "candidateDisplayLocation": "Inwood Hill Park, Muscota Marsh",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -699,15 +880,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "needs_manual_review",
+        "confidence": "low",
+        "originalLocationText": "Mount Eden Malls: Mount Eden Malls",
+        "cleanedLocationText": "Mount Eden Malls: Mount Eden Malls",
+        "locationKind": "unknown",
+        "borough": "Bronx",
+        "candidateQuery": null,
+        "candidateDisplayLocation": "Mount Eden Malls, Mount Eden Malls",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix"
+          "needs_operator_review"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Location text is present but did not match a safe cleanup pattern."
+        ]
       }
     },
     {
@@ -751,16 +941,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Union Square Park: North Plaza   ,Union Square Park: Center Lawn",
+        "cleanedLocationText": "Union Square Park: N Plaza, Union Square Park: Center Lawn",
+        "locationKind": "venue_or_park",
+        "borough": "Manhattan",
+        "candidateQuery": "Union Square Park N Plaza Union Square Park: Center Lawn, Manhattan, NY",
+        "candidateDisplayLocation": "Union Square Park, N Plaza, Union Square Park: Center Lawn",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -804,16 +1002,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "St. Mary's Park: St Mary's Playground West",
+        "cleanedLocationText": "St. Mary's Park: St Mary's Playground W",
+        "locationKind": "venue_or_park",
+        "borough": "Bronx",
+        "candidateQuery": "St. Mary's Park St Mary's Playground W, Bronx, NY",
+        "candidateDisplayLocation": "St. Mary's Park, St Mary's Playground W",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -857,16 +1063,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Crocheron Park: Crocheron Park   ,Crocheron Park: Baseball-01 ,Crocheron Park: Baseball-02",
+        "cleanedLocationText": "Crocheron Park: Crocheron Park, Crocheron Park: Baseball-01, Crocheron Park: Baseball-02",
+        "locationKind": "venue_or_park",
+        "borough": "Queens",
+        "candidateQuery": "Crocheron Park Crocheron Park Crocheron Park: Baseball-01 Crocheron Park: Baseball-02, Queens, NY",
+        "candidateDisplayLocation": "Crocheron Park, Crocheron Park, Crocheron Park: Baseball-01, Crocheron Park: Baseball-02",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -910,16 +1124,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Brower Park (PS 289 - Playground Only): Brower Park",
+        "cleanedLocationText": "Brower Park (PS 289 - Playground Only): Brower Park",
+        "locationKind": "venue_or_park",
+        "borough": "Brooklyn",
+        "candidateQuery": "Brower Park (PS 289 - Playground Only) Brower Park, Brooklyn, NY",
+        "candidateDisplayLocation": "Brower Park (PS 289 - Playground Only), Brower Park",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -963,16 +1185,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Riverside Park: 111th St-Basketball-05",
+        "cleanedLocationText": "Riverside Park: 111th St-Basketball-05",
+        "locationKind": "venue_or_park",
+        "borough": "Manhattan",
+        "candidateQuery": "Riverside Park 111th St-Basketball-05, Manhattan, NY",
+        "candidateDisplayLocation": "Riverside Park, 111th St-Basketball-05",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -1016,15 +1246,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "clean_venue_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Fordham Landing Playground: Softball-01",
+        "cleanedLocationText": "Fordham Landing Playground: Softball-01",
+        "locationKind": "venue_or_park",
+        "borough": "Bronx",
+        "candidateQuery": "Fordham Landing Playground Softball-01, Bronx, NY",
+        "candidateDisplayLocation": "Fordham Landing Playground, Softball-01",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -1068,16 +1307,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Riverside Park: 111th St-Basketball-01",
+        "cleanedLocationText": "Riverside Park: 111th St-Basketball-01",
+        "locationKind": "venue_or_park",
+        "borough": "Manhattan",
+        "candidateQuery": "Riverside Park 111th St-Basketball-01, Manhattan, NY",
+        "candidateDisplayLocation": "Riverside Park, 111th St-Basketball-01",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -1121,16 +1368,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Juniper Valley Park: Baseball-05",
+        "cleanedLocationText": "Juniper Valley Park: Baseball-05",
+        "locationKind": "venue_or_park",
+        "borough": "Queens",
+        "candidateQuery": "Juniper Valley Park Baseball-05, Queens, NY",
+        "candidateDisplayLocation": "Juniper Valley Park, Baseball-05",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -1174,16 +1429,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Marine Park: Rocco Torre-Softball-02",
+        "cleanedLocationText": "Marine Park: Rocco Torre-Softball-02",
+        "locationKind": "venue_or_park",
+        "borough": "Brooklyn",
+        "candidateQuery": "Marine Park Rocco Torre-Softball-02, Brooklyn, NY",
+        "candidateDisplayLocation": "Marine Park, Rocco Torre-Softball-02",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -1227,16 +1490,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Riverside Park: 101st St-Basketball-07",
+        "cleanedLocationText": "Riverside Park: 101st St-Basketball-07",
+        "locationKind": "venue_or_park",
+        "borough": "Manhattan",
+        "candidateQuery": "Riverside Park 101st St-Basketball-07, Manhattan, NY",
+        "candidateDisplayLocation": "Riverside Park, 101st St-Basketball-07",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -1280,16 +1551,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Baisley Pond Park: Cricket-04",
+        "cleanedLocationText": "Baisley Pond Park: Cricket-04",
+        "locationKind": "venue_or_park",
+        "borough": "Queens",
+        "candidateQuery": "Baisley Pond Park Cricket-04, Queens, NY",
+        "candidateDisplayLocation": "Baisley Pond Park, Cricket-04",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     },
     {
@@ -1333,16 +1612,24 @@
         },
         "lastFetchedAt": "2026-07-02T16:30:35.367Z"
       },
-      "locationReadiness": {
-        "bucket": "needs_address_cleanup",
+      "locationCleanup": {
+        "bucket": "park_area_candidate",
+        "confidence": "medium",
+        "originalLocationText": "Herbert Von King Park: Baseball-01",
+        "cleanedLocationText": "Herbert Von King Park: Baseball-01",
+        "locationKind": "venue_or_park",
+        "borough": "Brooklyn",
+        "candidateQuery": "Herbert Von King Park Baseball-01, Brooklyn, NY",
+        "candidateDisplayLocation": "Herbert Von King Park, Baseball-01",
+        "streetSide": null,
+        "streetClosureType": "N/A",
+        "components": null,
         "labels": [
-          "venue_prefix",
-          "venue_or_park"
+          "park_or_venue"
         ],
         "reasons": [
-          "Venue or event-area prefix should be cleaned before geocoding"
-        ],
-        "confidence": "medium"
+          "Park, venue, or named public place text detected."
+        ]
       }
     }
   ]

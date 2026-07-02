@@ -1213,7 +1213,7 @@ describe('admin data snapshots v0 helpers', () => {
       () => resolveAdminDataFilePath('../../package.json'),
       /Disallowed admin snapshot filename/,
     );
-    assert.deepEqual(ADMIN_SNAPSHOT_FILENAMES.length, 6);
+    assert.deepEqual(ADMIN_SNAPSHOT_FILENAMES.length, 7);
   });
 
   it('assertWritableAdminPath blocks paths outside admin/data', () => {

@@ -202,7 +202,7 @@
     <section class="panel" aria-label="Read-only guardrails">
       <h2>Operator guardrails</h2>
       <div class="notice ok">This page loads local static JSON snapshots only. It has no write, deploy, publish, approval, rejection, geocoding, or mutation controls.</div>
-      <div class="notice">Triage and location-readiness categories are displayed only for visibility and navigation. They do not approve, reject, publish, hide, or place anything on the public map.</div>
+      <div class="notice">Triage, location-readiness, and location-cleanup categories are displayed only for visibility and navigation. They do not approve, reject, publish, hide, geocode, or place anything on the public map.</div>
     </section>
 
     <section class="panel" id="load-errors-panel" hidden aria-label="Snapshot loading errors">
@@ -218,7 +218,7 @@
 
     <section class="panel" aria-label="All-data admin map">
       <h2>All-Data Admin Map</h2>
-      <div class="notice">Admin map is read-only. Mapped points are shown only when existing coordinates are present. Unmapped records are listed below and are not geocoded here.</div>
+      <div class="notice">Admin map is read-only. Mapped points are shown only when existing coordinates are present. Cleanup candidates are listed below and are not geocoded here.</div>
       <div id="admin-map-counts" class="grid"></div>
       <div id="admin-map" class="admin-map" role="application" aria-label="Read-only all-data admin map"></div>
       <div id="admin-map-status" class="map-note"></div>
@@ -251,6 +251,11 @@
       <div id="tvpp-location-readiness"></div>
     </section>
 
+    <section class="panel" aria-label="TVPP location cleanup">
+      <h2>TVPP Location Cleanup</h2>
+      <div id="tvpp-location-cleanup"></div>
+    </section>
+
     <section class="panel" aria-label="Warnings and operator notes">
       <h2>Warnings / Operator Notes</h2>
       <div id="operator-notes"></div>
@@ -273,6 +278,7 @@
       { key: 'tvppCandidates', path: './data/tvpp-candidates.json' },
       { key: 'tvppTriage', path: './data/tvpp-triage.json' },
       { key: 'tvppLocationReadiness', path: './data/tvpp-location-readiness.json' },
+      { key: 'tvppLocationCleanup', path: './data/tvpp-location-cleanup.json' },
     ];
 
     const TRIAGE_BUCKETS = [
@@ -290,6 +296,17 @@
       'borough_only',
       'missing_location',
       'needs_review',
+    ];
+
+    const CLEANUP_BUCKETS = [
+      'clean_address_candidate',
+      'clean_venue_candidate',
+      'intersection_candidate',
+      'route_or_multi_segment',
+      'park_area_candidate',
+      'borough_only',
+      'missing_location',
+      'needs_manual_review',
     ];
 
     const NYC_CENTER = [40.7128, -74.0060];
@@ -579,6 +596,36 @@
       }
     }
 
+    function renderLocationCleanup(locationCleanup) {
+      const target = clear(byId('tvpp-location-cleanup'));
+      if (!locationCleanup) {
+        target.appendChild(el('div', 'empty', 'tvpp-location-cleanup.json did not load.'));
+        return;
+      }
+      renderBucketCounts(target, locationCleanup.bucketCounts, CLEANUP_BUCKETS);
+      const groups = groupBy(locationCleanup.items, (item) => item.locationCleanup?.bucket, CLEANUP_BUCKETS);
+      for (const bucket of CLEANUP_BUCKETS) {
+        const details = document.createElement('details');
+        details.open = bucket === 'park_area_candidate' || bucket === 'route_or_multi_segment' || bucket === 'intersection_candidate';
+        details.appendChild(el('summary', null, `${bucket} (${groups.get(bucket).length})`));
+        const body = el('div', 'detail-body');
+        body.appendChild(table([
+          { label: 'Title', value: (item) => item.lead?.title },
+          { label: 'Original', value: (item) => item.locationCleanup?.originalLocationText },
+          { label: 'Cleaned', value: (item) => item.locationCleanup?.cleanedLocationText },
+          { label: 'Candidate display', value: (item) => item.locationCleanup?.candidateDisplayLocation },
+          { label: 'Candidate query', value: (item) => item.locationCleanup?.candidateQuery },
+          { label: 'Kind', value: (item) => item.locationCleanup?.locationKind },
+          { label: 'Borough', value: (item) => item.locationCleanup?.borough },
+          { label: 'Labels', value: (item) => chips(item.locationCleanup?.labels) },
+          { label: 'Reasons', value: (item) => chips(item.locationCleanup?.reasons) },
+          { label: 'Confidence', value: (item) => item.locationCleanup?.confidence },
+        ], groups.get(bucket)));
+        details.appendChild(body);
+        target.appendChild(details);
+      }
+    }
+
     function identityKeys(lead) {
       const keys = [];
       const source = text(lead?.sourceDatasetId);
@@ -622,13 +669,15 @@
       const reasons = [];
       if (!Number.isFinite(record.latitude) || !Number.isFinite(record.longitude)) reasons.push('missing latitude/longitude');
       if (record.locationReadiness?.bucket) reasons.push(record.locationReadiness.bucket);
-      if (!record.locationReadiness?.bucket) reasons.push('no existing GPS');
+      if (record.locationCleanup?.bucket) reasons.push(record.locationCleanup.bucket);
+      if (!record.locationReadiness?.bucket && !record.locationCleanup?.bucket) reasons.push('no existing GPS');
       return [...new Set(reasons)].join('; ');
     }
 
     function buildAdminMapRecords(data) {
       const triageByKey = metadataMap(data.tvppTriage?.items || [], 'triage');
       const locationByKey = metadataMap(data.tvppLocationReadiness?.items || [], 'locationReadiness');
+      const cleanupByKey = metadataMap(data.tvppLocationCleanup?.items || [], 'locationCleanup');
       const leads = data.tvppCandidates?.leads || [];
       return leads.map((lead, index) => ({
         source: lead.source || lead.sourceDatasetId || 'Unknown source',
@@ -648,6 +697,7 @@
         longitude: toNumber(lead.longitude),
         triage: findMetadata(lead, triageByKey),
         locationReadiness: findMetadata(lead, locationByKey),
+        locationCleanup: findMetadata(lead, cleanupByKey),
       }));
     }
 
@@ -677,6 +727,7 @@
         ['Location', record.locationName || record.address],
         ['Triage', record.triage?.bucket],
         ['Location readiness', record.locationReadiness?.bucket],
+        ['Location cleanup', record.locationCleanup?.bucket],
       ];
       return `<div class="popup-title">${esc(record.title)}</div>${lines.map(([label, value]) => `<div class="popup-line"><strong>${esc(label)}:</strong> ${esc(text(value))}</div>`).join('')}`;
     }
@@ -723,6 +774,7 @@
       renderCountCards(countsTarget, 'By source', countBy(records, (record) => record.source), null);
       renderCountCards(countsTarget, 'By triage bucket', countBy(records, (record) => record.triage?.bucket || 'no_triage'), [...TRIAGE_BUCKETS, 'no_triage']);
       renderCountCards(countsTarget, 'By location-readiness bucket', countBy(records, (record) => record.locationReadiness?.bucket || 'no_location_readiness'), [...LOCATION_BUCKETS, 'no_location_readiness']);
+      renderCountCards(countsTarget, 'By location-cleanup bucket', countBy(records, (record) => record.locationCleanup?.bucket || 'no_location_cleanup'), [...CLEANUP_BUCKETS, 'no_location_cleanup']);
       initializeAdminMap(mappedRecords);
       clear(byId('unmapped-records')).appendChild(table([
         { label: 'Title', value: (record) => record.title },
@@ -734,6 +786,9 @@
         { label: 'Address', value: (record) => record.address },
         { label: 'Triage', value: (record) => record.triage?.bucket },
         { label: 'Location readiness', value: (record) => record.locationReadiness?.bucket },
+        { label: 'Cleanup', value: (record) => record.locationCleanup?.bucket },
+        { label: 'Candidate display', value: (record) => record.locationCleanup?.candidateDisplayLocation },
+        { label: 'Candidate query', value: (record) => record.locationCleanup?.candidateQuery },
         { label: 'Reason', value: reasonForUnmapped },
       ], unmappedRecords));
     }
@@ -745,6 +800,7 @@
         'Data panels are visibility-only and do not decide map visibility.',
         'Admin map records are plotted only when existing valid coordinates are present.',
         'Missing geocode: TVPP snapshot rows currently show latitude/longitude as null unless future reviewed geocoding is added.',
+        'TVPP location cleanup candidates are display-only and are not geocoded.',
       ];
 
       const sourceWarnings = data.sourceFreshness?.sources || [];
@@ -777,6 +833,7 @@
       renderCandidates(data.tvppCandidates);
       renderTriage(data.tvppTriage);
       renderLocationReadiness(data.tvppLocationReadiness);
+      renderLocationCleanup(data.tvppLocationCleanup);
       renderOperatorNotes(data);
     }
 
