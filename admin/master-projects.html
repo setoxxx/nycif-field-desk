@@ -110,7 +110,8 @@
   </div>
 
   <script>
-    const RESOURCE = './data/master-projects.json';
+    const MANUAL_RESOURCE = './data/master-projects.json';
+    const FIELD_DESK_STATUS_RESOURCE = './../status/nycif-project-status.json';
 
     function byId(id) { return document.getElementById(id); }
     function text(value) {
@@ -201,10 +202,64 @@
       wrap.appendChild(tableNode);
       return wrap;
     }
-    async function loadMasterProjects() {
-      const response = await fetch(RESOURCE);
+    async function loadJsonRequired(resource) {
+      const response = await fetch(resource);
       if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
       return response.json();
+    }
+    async function loadJsonOptional(resource) {
+      try {
+        const response = await fetch(resource);
+        if (!response.ok) return null;
+        return response.json();
+      } catch (error) {
+        return null;
+      }
+    }
+    function projectFromStatusArtifact(artifact) {
+      if (!artifact || artifact.artifact_type !== 'nycif_project_status') return null;
+      if (!artifact.safety || artifact.safety.safe_for_public_dashboard !== true) return null;
+      if (artifact.safety.contains_secrets || artifact.safety.contains_private_repo_internals || artifact.safety.contains_tokens) return null;
+      if (artifact.safety.browser_side_github_api_polling || artifact.safety.write_controls || artifact.safety.deploy_controls) return null;
+      if (artifact.safety.public_map_runtime_change || artifact.safety.production_feed_mutation || artifact.safety.wordpress_change) return null;
+      return {
+        name: artifact.project,
+        full_name: artifact.repository,
+        visibility: artifact.visibility,
+        default_branch: 'main',
+        role: 'Field Desk public/admin dashboard, event-source cockpit, XRI admin surface',
+        tracking_status: 'status_artifact_loaded',
+        current_phase: artifact.current_phase,
+        completion_percent: artifact.completion_percent,
+        health: artifact.health,
+        blocker_summary: Array.isArray(artifact.blockers) ? artifact.blockers.join(' ') : '',
+        active_prs: artifact.active_prs || [],
+        recent_prs: artifact.recent_prs || [],
+        next_action: artifact.next_action,
+        status_summary: artifact.status_summary,
+        data_freshness: artifact.data_freshness || null
+      };
+    }
+    function mergeStatusArtifacts(data, artifacts) {
+      const merged = structuredClone(data);
+      const projects = Array.isArray(merged.projects) ? merged.projects.slice() : [];
+      let loaded = 0;
+      for (const artifact of artifacts) {
+        const project = projectFromStatusArtifact(artifact);
+        if (!project) continue;
+        const index = projects.findIndex((row) => row.full_name === project.full_name || row.name === project.name);
+        if (index >= 0) projects[index] = { ...projects[index], ...project };
+        else projects.push(project);
+        loaded += 1;
+      }
+      merged.projects = projects;
+      merged.summary = { ...(merged.summary || {}), projects_with_status_artifacts: loaded };
+      return merged;
+    }
+    async function loadMasterProjects() {
+      const manualData = await loadJsonRequired(MANUAL_RESOURCE);
+      const fieldDeskStatus = await loadJsonOptional(FIELD_DESK_STATUS_RESOURCE);
+      return mergeStatusArtifacts(manualData, [fieldDeskStatus].filter(Boolean));
     }
     function render(data) {
       const projects = data.projects || [];
@@ -214,6 +269,7 @@
       summary.appendChild(stat('Repositories', data.summary?.repo_count, `${text(data.summary?.public_repo_count)} public / ${text(data.summary?.private_repo_count)} private`));
       summary.appendChild(stat('Projects with PR history', data.summary?.projects_with_recent_pr_history, 'Connector snapshot.'));
       summary.appendChild(stat('Need status artifacts', data.summary?.projects_needing_status_artifacts, 'One safe JSON status artifact per repo.'));
+      summary.appendChild(stat('Loaded status artifacts', data.summary?.projects_with_status_artifacts, 'Optional local artifact reader.'));
       summary.appendChild(stat('Generated', data.generated_at, data.dashboard_phase));
 
       clear(byId('project-table')).appendChild(table([
