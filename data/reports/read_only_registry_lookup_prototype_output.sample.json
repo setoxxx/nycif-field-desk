@@ -1,0 +1,92 @@
+{
+  "phase": "XRI-G10",
+  "prototype": "read_only_registry_lookup_prototype",
+  "seed_artifact_type": "xri_registry_seed_sample",
+  "seed_record_count": 1,
+  "lookup_results": [
+    {
+      "query": "Sample Seed-Ready Location",
+      "normalized_query": "sample seed ready location",
+      "outcome": "exact_registry_match",
+      "match_count": 1,
+      "matches": [
+        {
+          "registry_seed_id": "xri-g9-seed-sample-001",
+          "canonical_name": "Sample Seed-Ready Location",
+          "normalized_location_key": "sample_seed_ready_location",
+          "borough": "Brooklyn",
+          "seed_status": "offline_seed_candidate_only",
+          "production_allowed": false,
+          "public_map_allowed": false,
+          "runtime_wiring_allowed": false,
+          "next_allowed_step": "xri_g10_read_only_lookup_prototype_only"
+        }
+      ],
+      "production_allowed": false,
+      "public_map_allowed": false,
+      "runtime_wiring_allowed": false
+    },
+    {
+      "query": "sample seed ready",
+      "normalized_query": "sample seed ready",
+      "outcome": "manual_review_required",
+      "match_count": 1,
+      "matches": [
+        {
+          "registry_seed_id": "xri-g9-seed-sample-001",
+          "canonical_name": "Sample Seed-Ready Location",
+          "normalized_location_key": "sample_seed_ready_location",
+          "borough": "Brooklyn",
+          "seed_status": "offline_seed_candidate_only",
+          "production_allowed": false,
+          "public_map_allowed": false,
+          "runtime_wiring_allowed": false,
+          "next_allowed_step": "xri_g10_read_only_lookup_prototype_only"
+        }
+      ],
+      "production_allowed": false,
+      "public_map_allowed": false,
+      "runtime_wiring_allowed": false
+    },
+    {
+      "query": "Unknown Location",
+      "normalized_query": "unknown location",
+      "outcome": "no_match",
+      "match_count": 0,
+      "matches": [],
+      "production_allowed": false,
+      "public_map_allowed": false,
+      "runtime_wiring_allowed": false
+    }
+  ],
+  "blocked_review_examples": [
+    {
+      "source_review_id": "xri-g8-review-duplicate-001",
+      "source_candidate_id": "xri-g6-preview-conflict-duplicate-001",
+      "review_state": "duplicate_hold",
+      "reason": "duplicate hold remains unresolved",
+      "lookup_outcome": "manual_review_required",
+      "production_allowed": false,
+      "public_map_allowed": false
+    },
+    {
+      "source_review_id": "xri-g8-review-coordinate-001",
+      "source_candidate_id": "xri-g6-preview-conflict-coordinate-001",
+      "review_state": "coordinate_conflict_hold",
+      "reason": "coordinate conflict and missing coordinate provenance remain unresolved",
+      "lookup_outcome": "manual_review_required",
+      "production_allowed": false,
+      "public_map_allowed": false
+    }
+  ],
+  "supported_outcomes": [
+    "exact_registry_match",
+    "no_match",
+    "manual_review_required",
+    "seed_record_available_offline_only"
+  ],
+  "production_allowed": false,
+  "public_map_allowed": false,
+  "runtime_wiring_allowed": false,
+  "writes_performed": false
+}
