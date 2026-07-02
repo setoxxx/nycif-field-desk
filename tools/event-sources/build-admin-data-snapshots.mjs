@@ -21,6 +21,7 @@ import {
   parseTvppAssignmentFeedArgs,
   TVPP_SOURCE_DATASET_ID,
 } from './tvpp-assignment-feed.mjs';
+import { buildTvppLocationCleanupReport } from './tvpp-location-cleanup.mjs';
 import { buildTvppLocationReadinessReport } from './tvpp-location-readiness.mjs';
 import { buildTvppTriagedFeedReport } from './tvpp-triage.mjs';
 
@@ -37,6 +38,7 @@ export const ADMIN_SNAPSHOT_FILENAMES = [
   'tvpp-candidates.json',
   'tvpp-triage.json',
   'tvpp-location-readiness.json',
+  'tvpp-location-cleanup.json',
   'index.json',
 ];
 
@@ -363,6 +365,27 @@ export function buildTvppLocationReadinessSnapshot(report) {
 }
 
 /**
+ * @param {Object} report
+ * @returns {Object}
+ */
+export function buildTvppLocationCleanupSnapshot(report) {
+  return {
+    generatedAt: report.generatedAt,
+    tool: SNAPSHOT_TOOL,
+    version: SNAPSHOT_VERSION,
+    purpose: 'admin_visibility_only',
+    sourceDatasetId: report.sourceDatasetId,
+    source: report.source,
+    fromDate: report.fromDate,
+    limit: report.limit,
+    rowCount: report.rowCount,
+    itemCount: report.itemCount,
+    bucketCounts: report.bucketCounts,
+    items: report.items,
+  };
+}
+
+/**
  * @param {string} generatedAt
  * @param {Record<string, string>} files
  * @returns {Object}
@@ -426,6 +449,7 @@ export async function buildAdminDataSnapshots(args, context = {}) {
   const candidatesReport = buildTvppAssignmentFeedReport(tvppBase);
   const triageReport = buildTvppTriagedFeedReport(tvppBase);
   const locationReport = buildTvppLocationReadinessReport(tvppBase);
+  const cleanupReport = buildTvppLocationCleanupReport(tvppBase);
 
   const snapshots = {
     'project-status.json': buildProjectStatusSnapshot(generatedAt),
@@ -437,6 +461,7 @@ export async function buildAdminDataSnapshots(args, context = {}) {
     'tvpp-candidates.json': buildTvppCandidatesSnapshot(candidatesReport),
     'tvpp-triage.json': buildTvppTriageSnapshot(triageReport),
     'tvpp-location-readiness.json': buildTvppLocationReadinessSnapshot(locationReport),
+    'tvpp-location-cleanup.json': buildTvppLocationCleanupSnapshot(cleanupReport),
   };
 
   validateAdminSnapshots(snapshots);
@@ -478,8 +503,8 @@ export function validateAdminSnapshots(snapshots) {
     if (!hasEventLeadShape(lead)) {
       throw new Error('TVPP candidate lead failed EventLead shape validation');
     }
-    if ('triage' in lead || 'locationReadiness' in lead) {
-      throw new Error('TVPP candidate lead must not include triage or locationReadiness');
+    if ('triage' in lead || 'locationReadiness' in lead || 'locationCleanup' in lead) {
+      throw new Error('TVPP candidate lead must not include triage, locationReadiness, or locationCleanup');
     }
     if (lead.latitude != null || lead.longitude != null) {
       throw new Error('TVPP candidate leads must not receive GPS coordinates in snapshots');
@@ -487,7 +512,7 @@ export function validateAdminSnapshots(snapshots) {
   }
 
   for (const item of snapshots['tvpp-triage.json']?.items ?? []) {
-    if ('triage' in item.lead || 'locationReadiness' in item.lead) {
+    if ('triage' in item.lead || 'locationReadiness' in item.lead || 'locationCleanup' in item.lead) {
       throw new Error('Triage snapshot must keep triage separate from lead');
     }
     if (!item.triage) {
@@ -496,7 +521,7 @@ export function validateAdminSnapshots(snapshots) {
   }
 
   for (const item of snapshots['tvpp-location-readiness.json']?.items ?? []) {
-    if ('locationReadiness' in item.lead || 'triage' in item.lead) {
+    if ('locationReadiness' in item.lead || 'triage' in item.lead || 'locationCleanup' in item.lead) {
       throw new Error('Location readiness snapshot must keep locationReadiness separate from lead');
     }
     if (item.lead.latitude != null || item.lead.longitude != null) {
@@ -504,6 +529,21 @@ export function validateAdminSnapshots(snapshots) {
     }
     if (!item.locationReadiness) {
       throw new Error('Location readiness snapshot item missing locationReadiness metadata');
+    }
+  }
+
+  for (const item of snapshots['tvpp-location-cleanup.json']?.items ?? []) {
+    if ('locationCleanup' in item.lead || 'locationReadiness' in item.lead || 'triage' in item.lead) {
+      throw new Error('Location cleanup snapshot must keep locationCleanup separate from lead');
+    }
+    if (item.lead.latitude != null || item.lead.longitude != null) {
+      throw new Error('Location cleanup snapshot must not create GPS coordinates');
+    }
+    if (!item.locationCleanup) {
+      throw new Error('Location cleanup snapshot item missing locationCleanup metadata');
+    }
+    if ('latitude' in item.locationCleanup || 'longitude' in item.locationCleanup) {
+      throw new Error('locationCleanup metadata must not contain GPS coordinates');
     }
   }
 }
@@ -584,13 +624,14 @@ Files written:
   admin/data/tvpp-candidates.json
   admin/data/tvpp-triage.json
   admin/data/tvpp-location-readiness.json
+  admin/data/tvpp-location-cleanup.json
   admin/data/index.json
 
 Notes:
   - read-only admin visibility only; not production feed output
   - no GPS coordinates, geocoding APIs, or geocode cache writes
   - no map runtime, service worker, deploy config, WordPress, or XRI changes
-  - triage and locationReadiness remain separate metadata
+  - triage, locationReadiness, and locationCleanup remain separate metadata
   - admin/index.html is not wired by this script
 `);
 }
