@@ -35,6 +35,16 @@ import {
   parseSamplePipelineArgs,
 } from './parks-pipeline.mjs';
 import { parseCostFree } from './normalizers/parks-event-listing.mjs';
+import {
+  buildMultiSourceFreshnessReport,
+  buildSourceFetchOptions,
+  buildSourceFreshnessEntry,
+  classifyFreshness,
+  computeDateRange,
+  CORE_SAMPLE_SOURCE_IDS,
+  parseMultiSourceFreshnessArgs,
+  selectSampleSourceIds,
+} from './source-freshness.mjs';
 
 const EXPECTED_SOURCE_IDS = [
   'tvpp-9vvx',
@@ -499,6 +509,90 @@ describe('parks sample pipeline helpers', () => {
     assert.equal(grouped['2'].length, 1);
     assert.equal(grouped['1'][0].name, 'A');
     assert.equal(grouped['1'][1].name, 'C');
+  });
+});
+
+describe('multi-source freshness helpers', () => {
+  const fixedToday = new Date('2026-07-01T12:00:00');
+  const todayIso = '2026-07-01';
+
+  it('classifies freshness as empty, current, stale, and unknown', () => {
+    assert.equal(classifyFreshness([], todayIso), 'empty');
+    assert.equal(classifyFreshness([{ startDate: '2026-08-01' }], todayIso), 'current');
+    assert.equal(classifyFreshness([{ startDate: '2025-01-01' }], todayIso), 'stale');
+    assert.equal(classifyFreshness([{ startDate: null }], todayIso), 'unknown');
+  });
+
+  it('computes date range from lead startDate values', () => {
+    assert.deepEqual(
+      computeDateRange([
+        { startDate: '2026-08-01' },
+        { startDate: '2026-10-21T00:00:00.000' },
+        { startDate: '2026-09-15' },
+      ]),
+      { min: '2026-08-01', max: '2026-10-21' },
+    );
+  });
+
+  it('builds source freshness entry and multi-source report shape', () => {
+    const leads = [{ startDate: '2026-08-01', title: 'A' }];
+    const entry = buildSourceFreshnessEntry({
+      sourceDatasetId: 'tvpp-9vvx',
+      source: 'NYC Permitted Event Information',
+      rowCount: 1,
+      leads,
+      todayIso,
+    });
+
+    assert.equal(entry.sourceDatasetId, 'tvpp-9vvx');
+    assert.equal(entry.leadCount, 1);
+    assert.equal(entry.freshness, 'current');
+    assert.deepEqual(entry.dateRange, { min: '2026-08-01', max: '2026-08-01' });
+
+    const report = buildMultiSourceFreshnessReport([entry], 3, '2026-07-01T00:00:00.000Z');
+    assert.equal(report.limit, 3);
+    assert.equal(report.sources.length, 1);
+    assert.equal(report.generatedAt, '2026-07-01T00:00:00.000Z');
+  });
+
+  it('filters sample sources by dataset id', () => {
+    const args = parseMultiSourceFreshnessArgs(['--source', '3vyj-dkjt'], { today: fixedToday });
+    assert.deepEqual(selectSampleSourceIds(args), ['3vyj-dkjt']);
+  });
+
+  it('caps CLI limit via shared parser', () => {
+    const args = parseMultiSourceFreshnessArgs(['--limit=99'], { today: fixedToday });
+    assert.equal(args.limit, MAX_SAMPLE_LIMIT);
+  });
+
+  it('buildSourceFetchOptions applies source-specific upcoming filters', () => {
+    const args = parseMultiSourceFreshnessArgs(['--from-date', '2026-07-01'], { today: fixedToday });
+
+    const tvpp = buildSourceFetchOptions('tvpp-9vvx', args);
+    assert.match(tvpp.where ?? '', /start_date_time >= '2026-07-01T00:00:00'/);
+    assert.equal(tvpp.order, 'start_date_time ASC');
+
+    const safety = buildSourceFetchOptions('3vyj-dkjt', args);
+    assert.equal(safety.where, "event_date >= '2026-07-01'");
+
+    const ppd = buildSourceFetchOptions('6v4b-5gp4', args);
+    assert.equal(ppd.where, undefined);
+
+    const allDates = buildSourceFetchOptions('tvpp-9vvx', {
+      ...args,
+      upcoming: false,
+    });
+    assert.equal(allDates.where, undefined);
+  });
+
+  it('lists all core sample source ids', () => {
+    assert.deepEqual(CORE_SAMPLE_SOURCE_IDS, [
+      'tvpp-9vvx',
+      'fudw-fgrp',
+      '6v4b-5gp4',
+      '3vyj-dkjt',
+      'tg4x-b46p',
+    ]);
   });
 });
 
