@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nycinfocus.local/schemas/registry_candidate_review.schema.json",
+  "title": "NYCIF XRI Registry Candidate Review Artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_type",
+    "phase",
+    "production_allowed",
+    "public_map_allowed",
+    "records"
+  ],
+  "properties": {
+    "artifact_type": {
+      "const": "xri_registry_candidate_review_fixture"
+    },
+    "phase": {
+      "const": "XRI-G8"
+    },
+    "description": {
+      "type": "string"
+    },
+    "production_allowed": {
+      "const": false
+    },
+    "public_map_allowed": {
+      "const": false
+    },
+    "runtime_wiring_allowed": {
+      "const": false
+    },
+    "source_preview_artifact": {
+      "type": "string"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/reviewRecord"
+      }
+    }
+  },
+  "$defs": {
+    "reviewRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "review_id",
+        "candidate_id",
+        "preview_group",
+        "review_state",
+        "operator_action",
+        "evidence",
+        "hard_blocks",
+        "soft_warnings",
+        "decision",
+        "production_allowed",
+        "public_map_allowed",
+        "next_allowed_step"
+      ],
+      "properties": {
+        "review_id": {
+          "type": "string",
+          "pattern": "^xri-g8-review-[a-z0-9-]+$"
+        },
+        "candidate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "preview_group": {
+          "type": "string",
+          "enum": [
+            "seed_ready_preview",
+            "needs_review_preview",
+            "conflict_hold_preview",
+            "rejected_or_excluded_preview"
+          ]
+        },
+        "review_state": {
+          "type": "string",
+          "enum": [
+            "pending_review",
+            "needs_more_evidence",
+            "conflict_hold",
+            "duplicate_hold",
+            "borough_mismatch_hold",
+            "coordinate_conflict_hold",
+            "rejected",
+            "excluded",
+            "seed_eligible_pending_final_gate"
+          ]
+        },
+        "operator_action": {
+          "type": "string",
+          "enum": [
+            "mark_needs_more_evidence",
+            "mark_duplicate_hold",
+            "mark_conflict_hold",
+            "mark_borough_mismatch_hold",
+            "mark_coordinate_conflict_hold",
+            "mark_rejected",
+            "mark_excluded",
+            "mark_seed_eligible_pending_final_gate"
+          ]
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source_identity_present",
+            "source_path_present",
+            "normalized_name_present",
+            "borough_confidence_present",
+            "location_confidence_present",
+            "coordinate_provenance_present",
+            "duplicate_check_complete",
+            "conflict_check_complete",
+            "operator_note_present"
+          ],
+          "properties": {
+            "source_identity_present": { "type": "boolean" },
+            "source_path_present": { "type": "boolean" },
+            "normalized_name_present": { "type": "boolean" },
+            "borough_confidence_present": { "type": "boolean" },
+            "location_confidence_present": { "type": "boolean" },
+            "coordinate_provenance_present": { "type": "boolean" },
+            "duplicate_check_complete": { "type": "boolean" },
+            "conflict_check_complete": { "type": "boolean" },
+            "operator_note_present": { "type": "boolean" }
+          }
+        },
+        "hard_blocks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "coordinate_conflict",
+              "duplicate_conflict",
+              "borough_mismatch",
+              "missing_source_identity",
+              "missing_provenance",
+              "rejected_or_excluded_source",
+              "unclear_location_text",
+              "public_map_flag_true_before_final_gate"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "soft_warnings": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "weak_name_match",
+              "approximate_location_text",
+              "source_age_unknown",
+              "borough_inferred",
+              "coordinate_precision_low",
+              "manual_review_recommended"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "decision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["operator", "timestamp", "note"],
+          "properties": {
+            "operator": { "type": "string" },
+            "timestamp": { "type": "string" },
+            "note": { "type": "string" }
+          }
+        },
+        "production_allowed": {
+          "const": false
+        },
+        "public_map_allowed": {
+          "const": false
+        },
+        "next_allowed_step": {
+          "type": "string",
+          "enum": [
+            "hold_for_more_evidence",
+            "hold_for_duplicate_resolution",
+            "hold_for_coordinate_resolution",
+            "hold_for_borough_resolution",
+            "exclude_from_seed",
+            "reject_candidate",
+            "eligible_for_future_seed_artifact_only"
+          ]
+        }
+      }
+    }
+  }
+}
