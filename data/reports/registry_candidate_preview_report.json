@@ -1,0 +1,70 @@
+{
+  "phase": "XRI-G6",
+  "phase_title": "Registry Candidate Preview Artifact",
+  "mode": "open_only_preview_artifact_not_production",
+  "merge_permission": false,
+  "completion_percent_before": 55,
+  "expected_completion_percent_after_merge": 65,
+  "production_allowed_from_g6": false,
+  "generated_at": "2026-07-02T18:00:00.000Z",
+  "prior_phase": "XRI-G5",
+  "changed_files": [
+    "docs/registry-candidate-preview-artifact.md",
+    "data/reports/registry_candidate_preview_report.json",
+    "data/previews/registry_candidate_preview.sample.json",
+    "data/reports/xri_project_status.json"
+  ],
+  "prohibited_files_touched": [],
+  "wordpress_touched": false,
+  "production_feed_touched": false,
+  "public_map_runtime_touched": false,
+  "iframe_embed_touched": false,
+  "scheduled_workflows_touched": false,
+  "location_cache_modified": false,
+  "location_cache_read_for_analysis": false,
+  "live_staging_executed": false,
+  "registry_database_created": false,
+  "importer_implemented": false,
+  "production_extractor_implemented": false,
+  "cache_merge_executed": false,
+  "merged_cache_created": false,
+  "geocodes_approved": false,
+  "candidates_promoted": false,
+  "external_api_called": false,
+  "soda_fetched": false,
+  "preview_artifact_created": true,
+  "preview_artifact_path": "data/previews/registry_candidate_preview.sample.json",
+  "preview_groups": [
+    "seed_ready_preview",
+    "needs_review_preview",
+    "conflict_hold_preview",
+    "rejected_or_excluded_preview"
+  ],
+  "preview_record_count": 11,
+  "blocked_preview_count": 3,
+  "rejected_preview_count": 4,
+  "admin_page_candidates_found": [
+    "admin/data/project-status.json",
+    "admin/index.html",
+    "data/reports/xri_project_status.json"
+  ],
+  "admin_page_updated": true,
+  "admin_page_reason": "updated_safe_non_public_status_json_at_data/reports/xri_project_status.json",
+  "qa_agent_found": true,
+  "qa_agent_command": "python3 tools/xri/read_only_candidate_extractor_prototype.py",
+  "qa_agent_result": "pass",
+  "qa_agent_warnings": [
+    "G4 prototype validates G3 fixtures only; preview artifact is not yet wired to automated validation",
+    "3 accepted_candidates, 23 validation_errors, 4 warnings on fixture run (expected G3 negative examples)"
+  ],
+  "what_this_unlocks": [
+    "First concrete candidate-preview layer for the registry",
+    "Howard can see what candidate records will look like before they become registry seed records",
+    "Improved reviewability via four preview groups",
+    "Blocked/conflict visibility via conflict_hold_preview group",
+    "Rejected/excluded visibility via rejected_or_excluded_preview group",
+    "Next-step clarity for XRI-G7 operator decision model"
+  ],
+  "next_recommended_phase": "XRI-G7 — Candidate Review Rules + Operator Decision Model",
+  "next_phase_authorized": false
+}

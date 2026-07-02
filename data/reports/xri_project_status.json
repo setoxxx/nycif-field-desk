@@ -1,0 +1,29 @@
+{
+  "project": "NYCIF XRI Master Location Registry",
+  "completion_percent": 55,
+  "expected_completion_after_merge": 65,
+  "current_phase": "XRI-G6",
+  "current_phase_title": "Registry Candidate Preview Artifact",
+  "phase_mode": "OPEN ONLY",
+  "phase_status": "open_pr",
+  "merged_phases": ["XRI-G0", "XRI-G1", "XRI-G2", "XRI-G3", "XRI-G4", "XRI-G5"],
+  "active_pr": null,
+  "active_branch": "cursor/xri-g6-registry-candidate-preview-artifact",
+  "last_merged_pr": 67,
+  "last_merge_sha": "3f78dfc18086f94b78792dc20ad6deee8e75536f",
+  "qa_agent_found": true,
+  "qa_agent_result": "pass",
+  "qa_agent_warnings": [
+    "G4 prototype validates G3 fixtures only; preview artifact not wired to automated validation"
+  ],
+  "production_allowed": false,
+  "public_map_touched": false,
+  "wordpress_touched": false,
+  "production_feed_touched": false,
+  "location_cache_modified": false,
+  "live_staging_executed": false,
+  "manual_action_needed": null,
+  "next_recommended_phase": "XRI-G7 — Candidate Review Rules + Operator Decision Model",
+  "next_phase_authorized": false,
+  "last_updated": "2026-07-02T18:00:00.000Z"
+}
