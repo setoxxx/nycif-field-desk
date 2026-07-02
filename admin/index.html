@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>NYCIF Admin Dashboard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root {
       color-scheme: dark;
@@ -108,7 +109,7 @@
     .label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
     .value { font-size: 18px; font-weight: 750; word-break: break-word; }
     .detail { color: var(--muted); font-size: 12px; margin-top: 6px; }
-    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-3); }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-3); margin-top: 10px; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 760px; }
     th, td {
       text-align: left;
@@ -151,10 +152,32 @@
     }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
     .footer-note { color: var(--muted); font-size: 12px; margin-top: 20px; }
+    .admin-map {
+      min-height: 420px;
+      height: 56vh;
+      max-height: 640px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #0f172a;
+      margin-top: 12px;
+    }
+    .admin-map .leaflet-popup-content-wrapper,
+    .admin-map .leaflet-popup-tip {
+      background: #0f172a;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    .admin-map .leaflet-popup-content { min-width: 220px; }
+    .popup-title { font-weight: 800; margin-bottom: 6px; }
+    .popup-line { margin: 3px 0; color: #cbd5e1; }
+    .map-layout { display: grid; gap: 12px; }
+    .map-note { margin-top: 12px; }
     @media (max-width: 760px) {
       .wrap { padding: 16px 10px 40px; }
       .panel { padding: 14px; border-radius: 14px; }
       table { min-width: 680px; }
+      .admin-map { min-height: 360px; height: 52vh; }
     }
   </style>
 </head>
@@ -193,6 +216,16 @@
       <div id="admin-warnings"></div>
     </section>
 
+    <section class="panel" aria-label="All-data admin map">
+      <h2>All-Data Admin Map</h2>
+      <div class="notice">Admin map is read-only. Mapped points are shown only when existing coordinates are present. Unmapped records are listed below and are not geocoded here.</div>
+      <div id="admin-map-counts" class="grid"></div>
+      <div id="admin-map" class="admin-map" role="application" aria-label="Read-only all-data admin map"></div>
+      <div id="admin-map-status" class="map-note"></div>
+      <h3>Unmapped / Needs Location Work</h3>
+      <div id="unmapped-records"></div>
+    </section>
+
     <section class="panel" aria-label="Master completion tracker">
       <h2>Master Completion Tracker</h2>
       <div id="completion-tracker"></div>
@@ -228,9 +261,10 @@
       <div class="notice">Current public map feed is not connected to Event Sources snapshots. This dashboard does not decide map visibility. Future work may compare the current live feed against candidate event snapshots.</div>
     </section>
 
-    <p class="footer-note">Admin Dashboard Data Panels v1. Visibility-only static snapshot display. No public map runtime, production feed, service worker, deploy config, WordPress, XRI, geocoding, cache, auth, secret, cookie, or localStorage workflow is implemented here.</p>
+    <p class="footer-note">Admin All-Data Map Preview v1. Visibility-only static snapshot display. No public map runtime, production feed, service worker, deploy config, WordPress, XRI, geocoding, cache, auth, secret, cookie, or localStorage workflow is implemented here.</p>
   </div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const SNAPSHOT_RESOURCES = [
       { key: 'index', path: './data/index.json' },
@@ -258,6 +292,10 @@
       'needs_review',
     ];
 
+    const NYC_CENTER = [40.7128, -74.0060];
+    let adminMap = null;
+    let adminMarkers = null;
+
     function text(value) {
       if (value === null || value === undefined || value === '') return '—';
       if (Array.isArray(value)) return value.length ? value.join(', ') : '—';
@@ -279,6 +317,10 @@
     function clear(node) {
       node.replaceChildren();
       return node;
+    }
+
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
     }
 
     function appendList(parent, items) {
@@ -537,11 +579,171 @@
       }
     }
 
+    function identityKeys(lead) {
+      const keys = [];
+      const source = text(lead?.sourceDatasetId);
+      for (const id of [lead?.eventId, lead?.sourceRecordId]) {
+        const value = String(id || '').trim();
+        if (value) keys.push(`${source}|${value}`);
+      }
+      for (const id of [lead?.eventId, lead?.sourceRecordId]) {
+        const value = String(id || '').trim();
+        if (value) keys.push(value);
+      }
+      return keys;
+    }
+
+    function metadataMap(items, keyName) {
+      const map = new Map();
+      for (const item of items || []) {
+        const lead = item.lead || {};
+        for (const key of identityKeys(lead)) map.set(key, item[keyName]);
+      }
+      return map;
+    }
+
+    function findMetadata(lead, map) {
+      for (const key of identityKeys(lead)) {
+        if (map.has(key)) return map.get(key);
+      }
+      return null;
+    }
+
+    function toNumber(value) {
+      const numeric = Number.parseFloat(value);
+      return Number.isFinite(numeric) ? numeric : null;
+    }
+
+    function hasValidCoordinates(record) {
+      return Number.isFinite(record.latitude) && Number.isFinite(record.longitude);
+    }
+
+    function reasonForUnmapped(record) {
+      const reasons = [];
+      if (!Number.isFinite(record.latitude) || !Number.isFinite(record.longitude)) reasons.push('missing latitude/longitude');
+      if (record.locationReadiness?.bucket) reasons.push(record.locationReadiness.bucket);
+      if (!record.locationReadiness?.bucket) reasons.push('no existing GPS');
+      return [...new Set(reasons)].join('; ');
+    }
+
+    function buildAdminMapRecords(data) {
+      const triageByKey = metadataMap(data.tvppTriage?.items || [], 'triage');
+      const locationByKey = metadataMap(data.tvppLocationReadiness?.items || [], 'locationReadiness');
+      const leads = data.tvppCandidates?.leads || [];
+      return leads.map((lead, index) => ({
+        source: lead.source || lead.sourceDatasetId || 'Unknown source',
+        sourceDatasetId: lead.sourceDatasetId || '',
+        eventId: lead.eventId || lead.sourceRecordId || `snapshot-${index}`,
+        title: lead.title || 'Untitled event',
+        eventType: lead.eventType || '',
+        category: lead.category || '',
+        startDate: lead.startDate || '',
+        startTime: lead.startTime || '',
+        endDate: lead.endDate || '',
+        endTime: lead.endTime || '',
+        borough: lead.borough || '',
+        locationName: lead.locationName || '',
+        address: lead.address || '',
+        latitude: toNumber(lead.latitude),
+        longitude: toNumber(lead.longitude),
+        triage: findMetadata(lead, triageByKey),
+        locationReadiness: findMetadata(lead, locationByKey),
+      }));
+    }
+
+    function countBy(records, getter) {
+      return records.reduce((counts, record) => {
+        const key = getter(record) || 'unknown';
+        counts[key] = (counts[key] || 0) + 1;
+        return counts;
+      }, {});
+    }
+
+    function renderCountCards(parent, title, counts, order) {
+      const box = el('div', 'card');
+      box.appendChild(el('div', 'label', title));
+      const values = order || Object.keys(counts).sort();
+      if (!values.length) box.appendChild(el('div', 'empty', 'No records.'));
+      else box.appendChild(chips(values.map((key) => `${key}: ${counts[key] || 0}`)));
+      parent.appendChild(box);
+    }
+
+    function popupHtml(record) {
+      const lines = [
+        ['Source', record.source],
+        ['Type/category', [record.eventType, record.category].filter(Boolean).join(' / ')],
+        ['Date/time', `${text(record.startDate)} ${text(record.startTime)} to ${text(record.endDate)} ${text(record.endTime)}`],
+        ['Borough', record.borough],
+        ['Location', record.locationName || record.address],
+        ['Triage', record.triage?.bucket],
+        ['Location readiness', record.locationReadiness?.bucket],
+      ];
+      return `<div class="popup-title">${esc(record.title)}</div>${lines.map(([label, value]) => `<div class="popup-line"><strong>${esc(label)}:</strong> ${esc(text(value))}</div>`).join('')}`;
+    }
+
+    function initializeAdminMap(mappedRecords) {
+      const status = clear(byId('admin-map-status'));
+      if (!window.L) {
+        status.appendChild(el('div', 'notice danger', 'Leaflet failed to load, so the admin map cannot render. Snapshot tables are still available.'));
+        return;
+      }
+      if (!adminMap) {
+        adminMap = L.map('admin-map', { zoomControl: true, closePopupOnClick: false, tap: false }).setView(NYC_CENTER, 11);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors',
+        }).addTo(adminMap);
+        adminMarkers = L.layerGroup().addTo(adminMap);
+      }
+      adminMarkers.clearLayers();
+      if (!mappedRecords.length) {
+        adminMap.setView(NYC_CENTER, 11);
+        status.appendChild(el('div', 'notice', 'No mappable records yet. Existing admin snapshot records do not currently include valid coordinates.'));
+        setTimeout(() => adminMap.invalidateSize(), 100);
+        return;
+      }
+      const bounds = [];
+      for (const record of mappedRecords) {
+        const latLng = [record.latitude, record.longitude];
+        bounds.push(latLng);
+        L.marker(latLng, { title: record.title }).bindPopup(popupHtml(record)).addTo(adminMarkers);
+      }
+      adminMap.fitBounds(bounds, { padding: [36, 36], maxZoom: 13 });
+      status.appendChild(el('div', 'notice ok', `${mappedRecords.length} existing coordinate-backed record${mappedRecords.length === 1 ? '' : 's'} shown on the admin map.`));
+      setTimeout(() => adminMap.invalidateSize(), 100);
+    }
+
+    function renderAllDataAdminMap(data) {
+      const records = buildAdminMapRecords(data);
+      const mappedRecords = records.filter(hasValidCoordinates);
+      const unmappedRecords = records.filter((record) => !hasValidCoordinates(record));
+      const countsTarget = clear(byId('admin-map-counts'));
+      countsTarget.appendChild(statCard('Total records loaded', records.length, 'From local admin snapshots only.'));
+      countsTarget.appendChild(statCard('Mapped records', mappedRecords.length, 'Existing valid coordinates only.'));
+      countsTarget.appendChild(statCard('Unmapped records', unmappedRecords.length, 'Listed below; no geocoding here.'));
+      renderCountCards(countsTarget, 'By source', countBy(records, (record) => record.source), null);
+      renderCountCards(countsTarget, 'By triage bucket', countBy(records, (record) => record.triage?.bucket || 'no_triage'), [...TRIAGE_BUCKETS, 'no_triage']);
+      renderCountCards(countsTarget, 'By location-readiness bucket', countBy(records, (record) => record.locationReadiness?.bucket || 'no_location_readiness'), [...LOCATION_BUCKETS, 'no_location_readiness']);
+      initializeAdminMap(mappedRecords);
+      clear(byId('unmapped-records')).appendChild(table([
+        { label: 'Title', value: (record) => record.title },
+        { label: 'Source', value: (record) => record.source },
+        { label: 'Type/category', value: (record) => [record.eventType, record.category].filter(Boolean).join(' / ') },
+        { label: 'Date/time', value: (record) => `${text(record.startDate)} ${text(record.startTime)} to ${text(record.endDate)} ${text(record.endTime)}` },
+        { label: 'Borough', value: (record) => record.borough },
+        { label: 'Location', value: (record) => record.locationName },
+        { label: 'Address', value: (record) => record.address },
+        { label: 'Triage', value: (record) => record.triage?.bucket },
+        { label: 'Location readiness', value: (record) => record.locationReadiness?.bucket },
+        { label: 'Reason', value: reasonForUnmapped },
+      ], unmappedRecords));
+    }
+
     function renderOperatorNotes(data) {
       const target = clear(byId('operator-notes'));
       const notes = [
         'Admin snapshots are not production feed JSON.',
         'Data panels are visibility-only and do not decide map visibility.',
+        'Admin map records are plotted only when existing valid coordinates are present.',
         'Missing geocode: TVPP snapshot rows currently show latitude/longitude as null unless future reviewed geocoding is added.',
       ];
 
@@ -569,6 +771,7 @@
       const data = Object.fromEntries(results.map((result) => [result.key, result.data]));
       updateTimestamp(data);
       renderAdminStatus(data.projectStatus);
+      renderAllDataAdminMap(data);
       renderCompletionTracker(data.projectStatus);
       renderSourceFreshness(data.sourceFreshness);
       renderCandidates(data.tvppCandidates);
