@@ -1,0 +1,40 @@
+{
+  "artifact_type": "nycif_project_status",
+  "schema_version": "1.0.0",
+  "project": "nycif-event-radar",
+  "repository": "setoxxx/nycif-event-radar",
+  "visibility": "private",
+  "public_summary_scope": "public_safe_high_level_only",
+  "current_phase": "Event discovery and assignment radar summary",
+  "completion_percent": 46,
+  "health": "yellow",
+  "status_summary": "Event Radar is a private NYCIF repository. This mirrored artifact provides only a high-level public-safe summary of event discovery and assignment-radar readiness and intentionally omits private implementation details, operational data, credentials, secrets, tokens, private file paths, source URLs, PR titles, and unpublished internals.",
+  "active_prs": [],
+  "recent_prs": [],
+  "blockers": [
+    "Keep private implementation details out of any public dashboard artifact.",
+    "Define the public-safe handoff boundary between event discovery, Field Desk, and live feed artifacts."
+  ],
+  "next_action": "Use this public-safe mirror for dashboard tracking while keeping private Event Radar implementation details out of the public dashboard.",
+  "data_freshness": {
+    "source": "Manual public-safe mirror based on the Master Projects inventory snapshot",
+    "last_verified_at": "2026-07-02T19:30:00.000Z",
+    "notes": "Private repository details are intentionally omitted. This file is static, public-safe, and does not poll GitHub from the browser."
+  },
+  "safety": {
+    "safe_for_public_dashboard": true,
+    "contains_secrets": false,
+    "contains_private_repo_internals": false,
+    "contains_unpublished_implementation_details": false,
+    "contains_operational_data": false,
+    "contains_credentials": false,
+    "contains_tokens": false,
+    "browser_side_github_api_polling": false,
+    "write_controls": false,
+    "deploy_controls": false,
+    "public_map_runtime_change": false,
+    "production_feed_mutation": false,
+    "wordpress_change": false
+  },
+  "generated_at": "2026-07-02T22:45:00.000Z"
+}
