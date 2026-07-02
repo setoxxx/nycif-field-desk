@@ -1,0 +1,40 @@
+{
+  "artifact_type": "nycif_project_status",
+  "schema_version": "1.0.0",
+  "project": "nycif-web-platform",
+  "repository": "setoxxx/nycif-web-platform",
+  "visibility": "private",
+  "public_summary_scope": "public_safe_high_level_only",
+  "current_phase": "Public-safe platform readiness summary",
+  "completion_percent": 42,
+  "health": "yellow",
+  "status_summary": "Web Platform is a private NYCIF repository. This mirrored artifact provides only a high-level public-safe readiness summary and intentionally omits private implementation details, operational data, credentials, secrets, tokens, private file paths, source URLs, PR titles, and unpublished internals.",
+  "active_prs": [],
+  "recent_prs": [],
+  "blockers": [
+    "Keep private implementation details out of any public dashboard artifact.",
+    "Use only public-safe mirrored status fields for public dashboard consumption."
+  ],
+  "next_action": "Use this public-safe mirror as the dashboard source until a controlled authenticated dashboard path exists.",
+  "data_freshness": {
+    "source": "Public-safe mirror of the approved Web Platform status artifact",
+    "last_verified_at": "2026-07-02T20:55:00.000Z",
+    "notes": "Private repository details are intentionally omitted. This file is static, public-safe, and does not poll GitHub from the browser."
+  },
+  "safety": {
+    "safe_for_public_dashboard": true,
+    "contains_secrets": false,
+    "contains_private_repo_internals": false,
+    "contains_unpublished_implementation_details": false,
+    "contains_operational_data": false,
+    "contains_credentials": false,
+    "contains_tokens": false,
+    "browser_side_github_api_polling": false,
+    "write_controls": false,
+    "deploy_controls": false,
+    "public_map_runtime_change": false,
+    "production_feed_mutation": false,
+    "wordpress_change": false
+  },
+  "generated_at": "2026-07-02T20:55:00.000Z"
+}
