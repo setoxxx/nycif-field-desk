@@ -190,6 +190,30 @@ node tools/event-sources/sample-tvpp-location-readiness.mjs --limit 25 --pretty
 - `locationReadiness` is separate metadata; EventLead 25-field shape unchanged
 - intended to decide whether a future geocoding task is safe
 
+## Admin Data Snapshots v0
+
+Generate read-only static JSON for the NYCIF Admin Dashboard under `admin/data/`:
+
+```bash
+node tools/event-sources/build-admin-data-snapshots.mjs --limit 25 --pretty
+```
+
+Files created:
+
+- `admin/data/project-status.json`
+- `admin/data/source-freshness.json`
+- `admin/data/tvpp-candidates.json`
+- `admin/data/tvpp-triage.json`
+- `admin/data/tvpp-location-readiness.json`
+- `admin/data/index.json`
+
+- **read-only / admin-only** — operator visibility, not production feed output
+- **no production map wiring** — public map does not consume these files
+- **no geocoding** — no GPS coordinates, geocoding API calls, or geocode cache writes
+- **no secrets** — uses public NYC Open Data sources only
+- **no approval/rejection controls** — triage and locationReadiness are separate metadata only
+- **next step:** Admin Dashboard Data Panels v1 (wire `admin/index.html` to these snapshots in a separate task)
+
 ## Tests
 
 ```bash

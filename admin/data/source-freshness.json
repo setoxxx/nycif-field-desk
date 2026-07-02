@@ -1,0 +1,107 @@
+{
+  "generatedAt": "2026-07-02T13:41:48.626Z",
+  "tool": "build-admin-data-snapshots",
+  "version": "v0",
+  "purpose": "admin_visibility_only",
+  "limit": 3,
+  "sources": [
+    {
+      "sourceDatasetId": "tvpp-9vvx",
+      "source": "NYC Permitted Event Information",
+      "url": "https://data.cityofnewyork.us/resource/tvpp-9vvx.json",
+      "rowCount": 3,
+      "leadCount": 3,
+      "freshness": "current",
+      "dateRange": {
+        "min": "2026-07-02",
+        "max": "2026-07-02"
+      },
+      "recommendation": "use_for_current_feed",
+      "warnings": []
+    },
+    {
+      "sourceDatasetId": "fudw-fgrp",
+      "source": "NYC Parks Events Listing – Event Listing",
+      "url": "https://data.cityofnewyork.us/resource/fudw-fgrp.json",
+      "rowCount": 0,
+      "leadCount": 0,
+      "freshness": "empty",
+      "dateRange": {
+        "min": null,
+        "max": null
+      },
+      "recommendation": "stale_or_empty",
+      "warnings": [
+        "No rows returned under the upcoming sample filter.",
+        "Zero rows fetched."
+      ]
+    },
+    {
+      "sourceDatasetId": "6v4b-5gp4",
+      "source": "Public Programs Division Special Events",
+      "url": "https://data.cityofnewyork.us/resource/6v4b-5gp4.json",
+      "rowCount": 3,
+      "leadCount": 3,
+      "freshness": "stale",
+      "dateRange": {
+        "min": "2019-10-12",
+        "max": "2019-12-19"
+      },
+      "recommendation": "stale_or_empty — PPD date_and_time is free-text; sampled dates may be old",
+      "warnings": [
+        "Sampled dates appear older than today under the current filter."
+      ]
+    },
+    {
+      "sourceDatasetId": "3vyj-dkjt",
+      "source": "Safety Events",
+      "url": "https://data.cityofnewyork.us/resource/3vyj-dkjt.json",
+      "rowCount": 0,
+      "leadCount": 0,
+      "freshness": "empty",
+      "dateRange": {
+        "min": null,
+        "max": null
+      },
+      "recommendation": "stale_or_empty",
+      "warnings": [
+        "No rows returned under the upcoming sample filter.",
+        "Zero rows fetched."
+      ]
+    },
+    {
+      "sourceDatasetId": "tg4x-b46p",
+      "source": "Film Permits",
+      "url": "https://data.cityofnewyork.us/resource/tg4x-b46p.json",
+      "rowCount": 0,
+      "leadCount": 0,
+      "freshness": "empty",
+      "dateRange": {
+        "min": null,
+        "max": null
+      },
+      "recommendation": "stale_or_empty",
+      "warnings": [
+        "No rows returned under the upcoming sample filter.",
+        "Zero rows fetched."
+      ]
+    }
+  ],
+  "documentedOnlySources": [
+    {
+      "sourceDatasetId": "dot-trafalrt",
+      "source": "Special Traffic Updates",
+      "url": "https://www.nyc.gov/html/dot/html/motorist/trafalrt.shtml",
+      "status": "documented_only",
+      "freshness": "skipped",
+      "recommendation": "skip_for_now — HTML source; not scraped in Event Sources v0",
+      "warnings": [
+        "Special Traffic Updates is HTML-only; Event Sources v0 does not scrape it."
+      ]
+    }
+  ],
+  "warnings": [
+    "Not production feed output.",
+    "documented_only sources are listed but not fetched."
+  ]
+}
