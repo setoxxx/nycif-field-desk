@@ -1,39 +1,37 @@
 /**
- * Normalization stub: Safety Events (3vyj-dkjt).
+ * Normalizer: Safety Events (3vyj-dkjt).
+ * Outreach/site visit records — no stable event id in live schema sample.
  */
 
-import { asNumber, asString, createEventLead, splitDateTime } from '../event-lead.mjs';
+import { asNumber, asString, createEventLead } from '../event-lead.mjs';
 
 /**
  * @param {Record<string, unknown>} raw
  * @param {{ lastFetchedAt?: string|null }} [context]
  */
 export function normalizeSafetyEvent(raw, context = {}) {
-  const start = splitDateTime(raw.start_date_time ?? raw.startdate ?? raw.event_date);
-  const end = splitDateTime(raw.end_date_time ?? raw.enddate);
-
   return createEventLead({
     source: 'Safety Events',
     sourceDatasetId: '3vyj-dkjt',
-    sourceRecordId: asString(raw.event_id ?? raw.id ?? raw.objectid),
-    eventId: asString(raw.event_id ?? raw.id),
-    title: asString(raw.event_name ?? raw.name ?? raw.title),
-    eventType: asString(raw.event_type ?? raw.type),
-    category: asString(raw.category),
-    startDate: start.date,
-    startTime: start.time,
-    endDate: end.date,
-    endTime: end.time,
+    sourceRecordId: null,
+    eventId: null,
+    title: asString(raw.program) ?? asString(raw.community_site) ?? asString(raw.name_of_org),
+    eventType: asString(raw.program),
+    category: asString(raw.served_by) ?? asString(raw.citywide_outreach),
+    startDate: asString(raw.event_date),
+    startTime: null,
+    endDate: null,
+    endTime: null,
     borough: asString(raw.borough),
-    locationName: asString(raw.location ?? raw.event_location),
+    locationName: asString(raw.community_site) ?? asString(raw.name_of_org),
     address: asString(raw.address),
-    latitude: asNumber(raw.latitude ?? raw.lat),
-    longitude: asNumber(raw.longitude ?? raw.long ?? raw.lng),
-    description: asString(raw.description ?? raw.event_description),
-    officialUrl: asString(raw.url),
-    organizer: asString(raw.organizer ?? raw.agency),
-    phone: asString(raw.phone),
-    email: asString(raw.email),
+    latitude: asNumber(raw.latitude),
+    longitude: asNumber(raw.longitude),
+    description: asString(raw.handonsdisp1) ?? asString(raw.agedisp),
+    officialUrl: null,
+    organizer: asString(raw.name_of_org) ?? asString(raw.served_by),
+    phone: null,
+    email: null,
     isFree: null,
     photoPriorityScore: null,
     rawRecord: raw,

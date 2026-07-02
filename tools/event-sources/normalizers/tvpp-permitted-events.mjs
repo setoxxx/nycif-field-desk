@@ -1,8 +1,9 @@
 /**
- * Normalization stub: NYC Permitted Event Information (tvpp-9vvx).
+ * Normalizer: NYC Permitted Event Information (tvpp-9vvx).
+ * Live schema: no latitude/longitude fields — geocode from event_location text.
  */
 
-import { asNumber, asString, createEventLead, splitDateTime } from '../event-lead.mjs';
+import { asString, createEventLead, splitDateTime } from '../event-lead.mjs';
 
 /**
  * @param {Record<string, unknown>} raw
@@ -11,12 +12,13 @@ import { asNumber, asString, createEventLead, splitDateTime } from '../event-lea
 export function normalizeTvppPermittedEvent(raw, context = {}) {
   const start = splitDateTime(raw.start_date_time);
   const end = splitDateTime(raw.end_date_time);
+  const recordId = asString(raw.event_id) ?? asString(raw.cemsid);
 
   return createEventLead({
     source: 'NYC Permitted Event Information',
     sourceDatasetId: 'tvpp-9vvx',
-    sourceRecordId: asString(raw.event_id),
-    eventId: asString(raw.event_id),
+    sourceRecordId: recordId,
+    eventId: recordId,
     title: asString(raw.event_name),
     eventType: asString(raw.event_type),
     category: asString(raw.event_agency),
@@ -27,8 +29,8 @@ export function normalizeTvppPermittedEvent(raw, context = {}) {
     borough: asString(raw.event_borough),
     locationName: asString(raw.event_location),
     address: asString(raw.event_location),
-    latitude: asNumber(raw.latitude ?? raw.lat),
-    longitude: asNumber(raw.longitude ?? raw.long ?? raw.lng),
+    latitude: null,
+    longitude: null,
     description: asString(raw.street_closure_type),
     officialUrl: null,
     organizer: asString(raw.event_agency),

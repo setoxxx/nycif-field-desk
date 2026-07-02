@@ -1,5 +1,6 @@
 /**
- * Normalization stub: Film Permits (tg4x-b46p).
+ * Normalizer: Film Permits (tg4x-b46p).
+ * Film permits are production/permit street-closure activity, not necessarily public events.
  */
 
 import { asString, createEventLead, splitDateTime } from '../event-lead.mjs';
@@ -9,17 +10,17 @@ import { asString, createEventLead, splitDateTime } from '../event-lead.mjs';
  * @param {{ lastFetchedAt?: string|null }} [context]
  */
 export function normalizeFilmPermit(raw, context = {}) {
-  const start = splitDateTime(raw.startdatetime ?? raw.start_date_time);
-  const end = splitDateTime(raw.enddatetime ?? raw.end_date_time);
+  const start = splitDateTime(raw.startdatetime);
+  const end = splitDateTime(raw.enddatetime);
 
   return createEventLead({
     source: 'Film Permits',
     sourceDatasetId: 'tg4x-b46p',
-    sourceRecordId: asString(raw.eventid ?? raw.event_id),
-    eventId: asString(raw.eventid ?? raw.event_id),
-    title: asString(raw.subcategoryname ?? raw.eventtype ?? raw.category),
+    sourceRecordId: asString(raw.eventid),
+    eventId: asString(raw.eventid),
+    title: asString(raw.subcategoryname) ?? asString(raw.eventtype) ?? asString(raw.category) ?? 'Film Permit',
     eventType: asString(raw.eventtype),
-    category: asString(raw.category),
+    category: asString(raw.category) ?? asString(raw.subcategoryname),
     startDate: start.date,
     startTime: start.time,
     endDate: end.date,
@@ -31,7 +32,7 @@ export function normalizeFilmPermit(raw, context = {}) {
     longitude: null,
     description: asString(raw.parkingheld),
     officialUrl: null,
-    organizer: null,
+    organizer: asString(raw.eventagency),
     phone: null,
     email: null,
     isFree: null,
