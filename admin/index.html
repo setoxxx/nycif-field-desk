@@ -59,8 +59,8 @@
     .badge.strong { color: #a7f3d0; border-color: rgba(52, 211, 153, 0.35); background: rgba(52, 211, 153, 0.08); }
     .badge.warn { color: #fde68a; border-color: rgba(251, 191, 36, 0.35); background: rgba(251, 191, 36, 0.08); }
     .badge.danger { color: #fecdd3; border-color: rgba(251, 113, 133, 0.35); background: rgba(251, 113, 133, 0.08); }
-    .links { display: flex; flex-wrap: wrap; gap: 10px; }
-    .links a {
+    .links, .jump-links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .links a, .jump-links a {
       color: var(--accent);
       text-decoration: none;
       border: 1px solid var(--line);
@@ -68,7 +68,7 @@
       padding: 8px 14px;
       background: var(--panel-2);
     }
-    .links a:hover { border-color: rgba(96, 165, 250, 0.45); }
+    .links a:hover, .jump-links a:hover { border-color: rgba(96, 165, 250, 0.45); }
     .panel {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -151,6 +151,7 @@
       white-space: nowrap;
     }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .truncate { max-width: 320px; overflow-wrap: anywhere; }
     .footer-note { color: var(--muted); font-size: 12px; margin-top: 20px; }
     .admin-map {
       min-height: 420px;
@@ -178,6 +179,7 @@
       .panel { padding: 14px; border-radius: 14px; }
       table { min-width: 680px; }
       .admin-map { min-height: 360px; height: 52vh; }
+      .truncate { max-width: 240px; }
     }
   </style>
 </head>
@@ -199,6 +201,22 @@
       </nav>
     </header>
 
+    <section class="panel" aria-label="Panel navigation">
+      <h2>Project cockpit navigation</h2>
+      <nav class="jump-links" aria-label="Admin dashboard panel links">
+        <a href="#admin-status-section">Admin Status</a>
+        <a href="#admin-map-section">All-Data Admin Map</a>
+        <a href="#completion-section">Master Completion Tracker</a>
+        <a href="#source-freshness-section">Source Freshness</a>
+        <a href="#tvpp-candidates-section">TVPP Candidate Summary</a>
+        <a href="#tvpp-triage-section">TVPP Triage</a>
+        <a href="#tvpp-location-readiness-section">TVPP Location Readiness</a>
+        <a href="#tvpp-location-cleanup-section">TVPP Location Cleanup</a>
+        <a href="#xri-status-section">XRI Status</a>
+        <a href="#operator-notes-section">Operator Notes</a>
+      </nav>
+    </section>
+
     <section class="panel" aria-label="Read-only guardrails">
       <h2>Operator guardrails</h2>
       <div class="notice ok">This page loads local static JSON snapshots only. It has no write, deploy, publish, approval, rejection, geocoding, or mutation controls.</div>
@@ -210,13 +228,26 @@
       <div id="load-errors"></div>
     </section>
 
-    <section class="panel" aria-label="Admin status">
+    <section class="panel" id="admin-status-section" aria-label="Admin status">
       <h2>Admin Status</h2>
       <div id="admin-status" class="grid"></div>
       <div id="admin-warnings"></div>
     </section>
 
-    <section class="panel" aria-label="All-data admin map">
+    <section class="panel" id="snapshot-overview-section" aria-label="Snapshot overview">
+      <h2>Snapshot Overview</h2>
+      <div id="snapshot-overview" class="grid"></div>
+      <div id="stale-data-warning"></div>
+    </section>
+
+    <section class="panel" id="xri-status-section" aria-label="XRI status">
+      <h2>XRI Status</h2>
+      <div class="notice">XRI-G8 is not authorized unless Howard explicitly approves it. This panel is display-only and does not create XRI contracts or runtime wiring.</div>
+      <div id="xri-status" class="grid"></div>
+      <div id="xri-safety"></div>
+    </section>
+
+    <section class="panel" id="admin-map-section" aria-label="All-data admin map">
       <h2>All-Data Admin Map</h2>
       <div class="notice">Admin map is read-only. Mapped points are shown only when existing coordinates are present. Cleanup candidates are listed below and are not geocoded here.</div>
       <div id="admin-map-counts" class="grid"></div>
@@ -226,37 +257,37 @@
       <div id="unmapped-records"></div>
     </section>
 
-    <section class="panel" aria-label="Master completion tracker">
+    <section class="panel" id="completion-section" aria-label="Master completion tracker">
       <h2>Master Completion Tracker</h2>
       <div id="completion-tracker"></div>
     </section>
 
-    <section class="panel" aria-label="Source freshness">
+    <section class="panel" id="source-freshness-section" aria-label="Source freshness">
       <h2>Source Freshness</h2>
       <div id="source-freshness"></div>
     </section>
 
-    <section class="panel" aria-label="TVPP candidate summary">
+    <section class="panel" id="tvpp-candidates-section" aria-label="TVPP candidate summary">
       <h2>TVPP Candidate Summary</h2>
       <div id="tvpp-candidates"></div>
     </section>
 
-    <section class="panel" aria-label="TVPP triage">
+    <section class="panel" id="tvpp-triage-section" aria-label="TVPP triage">
       <h2>TVPP Triage</h2>
       <div id="tvpp-triage"></div>
     </section>
 
-    <section class="panel" aria-label="TVPP location readiness">
+    <section class="panel" id="tvpp-location-readiness-section" aria-label="TVPP location readiness">
       <h2>TVPP Location Readiness</h2>
       <div id="tvpp-location-readiness"></div>
     </section>
 
-    <section class="panel" aria-label="TVPP location cleanup">
+    <section class="panel" id="tvpp-location-cleanup-section" aria-label="TVPP location cleanup">
       <h2>TVPP Location Cleanup</h2>
       <div id="tvpp-location-cleanup"></div>
     </section>
 
-    <section class="panel" aria-label="Warnings and operator notes">
+    <section class="panel" id="operator-notes-section" aria-label="Warnings and operator notes">
       <h2>Warnings / Operator Notes</h2>
       <div id="operator-notes"></div>
     </section>
@@ -279,6 +310,7 @@
       { key: 'tvppTriage', path: './data/tvpp-triage.json' },
       { key: 'tvppLocationReadiness', path: './data/tvpp-location-readiness.json' },
       { key: 'tvppLocationCleanup', path: './data/tvpp-location-cleanup.json' },
+      { key: 'xriStatus', path: '../data/reports/xri_project_status.json' },
     ];
 
     const TRIAGE_BUCKETS = [
@@ -308,6 +340,25 @@
       'missing_location',
       'needs_manual_review',
     ];
+
+    const SAFETY_FLAGS = [
+      'production_allowed',
+      'public_map_touched',
+      'wordpress_touched',
+      'production_feed_touched',
+      'location_cache_modified',
+      'live_staging_executed',
+      'production_public_map_changed',
+      'feed_url_changed',
+      'backend_public_gps_changed',
+      'external_apis_or_soda_called',
+      'geocodes_approved',
+      'candidates_promoted',
+      'runtime_wiring_added',
+    ];
+
+    // Display-only stale warning threshold. The browser does not fetch external event APIs.
+    const STALE_SNAPSHOT_HOURS = 24;
 
     const NYC_CENTER = [40.7128, -74.0060];
     let adminMap = null;
@@ -391,6 +442,7 @@
           const row = document.createElement('tr');
           for (const column of columns) {
             const cell = document.createElement('td');
+            if (column.className) cell.className = column.className;
             const value = column.value(item);
             if (value instanceof Node) cell.appendChild(value);
             else cell.textContent = text(value);
@@ -426,11 +478,58 @@
       const target = clear(byId('load-errors'));
       panel.hidden = failures.length === 0;
       if (!failures.length) return;
+      target.appendChild(el('div', 'notice danger', 'One or more static snapshots failed to load. Available files still render below.'));
       for (const failure of failures) {
         const notice = el('div', 'notice danger');
         notice.appendChild(el('div', null, `${failure.path}: ${failure.error}`));
         target.appendChild(notice);
       }
+    }
+
+
+    function parseDate(value) {
+      const date = value ? new Date(value) : null;
+      return date && Number.isFinite(date.getTime()) ? date : null;
+    }
+
+    function staleMessage(generatedAt) {
+      const date = parseDate(generatedAt);
+      if (!date) return null;
+      const hoursOld = (Date.now() - date.getTime()) / 36e5;
+      return hoursOld > STALE_SNAPSHOT_HOURS ? `Snapshot appears stale: ${Math.round(hoursOld)} hours old.` : null;
+    }
+
+    function renderSnapshotOverview(data) {
+      const target = clear(byId('snapshot-overview'));
+      const warnings = clear(byId('stale-data-warning'));
+      const generatedAt = data.projectStatus?.generatedAt || data.index?.generatedAt || 'unavailable';
+      target.appendChild(statCard('Snapshot generated', generatedAt, 'Static admin snapshot timestamp.'));
+      target.appendChild(statCard('TVPP candidates', data.tvppCandidates?.itemCount ?? data.tvppCandidates?.leads?.length ?? '—', 'Candidate rows loaded.'));
+      target.appendChild(statCard('Triage buckets', Object.keys(data.tvppTriage?.bucketCounts || {}).length, 'Bucket categories visible.'));
+      target.appendChild(statCard('Location readiness buckets', Object.keys(data.tvppLocationReadiness?.locationBucketCounts || {}).length, 'Readiness categories visible.'));
+      target.appendChild(statCard('Location cleanup buckets', Object.keys(data.tvppLocationCleanup?.bucketCounts || {}).length, 'Cleanup categories visible.'));
+      target.appendChild(statCard('XRI completion', data.xriStatus?.completion_percent ?? '—', 'Display-only status report.'));
+      const stale = staleMessage(generatedAt);
+      if (stale) warnings.appendChild(el('div', 'notice', stale));
+    }
+
+    function renderXriStatus(xriStatus) {
+      const target = clear(byId('xri-status'));
+      const safety = clear(byId('xri-safety'));
+      if (!xriStatus) {
+        target.appendChild(el('div', 'empty', 'xri_project_status.json did not load.'));
+        return;
+      }
+      target.appendChild(statCard('Completion percent', xriStatus.completion_percent, 'XRI status report only.'));
+      target.appendChild(statCard('Current phase', xriStatus.current_phase, xriStatus.current_phase_title));
+      target.appendChild(statCard('Phase status', xriStatus.phase_status, xriStatus.phase_mode));
+      target.appendChild(statCard('Last merged PR', xriStatus.last_merged_pr, xriStatus.last_merge_sha));
+      target.appendChild(statCard('Next recommended phase', xriStatus.next_recommended_phase, `Authorized: ${text(xriStatus.next_phase_authorized)}`));
+      target.appendChild(statCard('Manual action', xriStatus.manual_action_needed, 'No automatic XRI phase transition.'));
+      const enabled = SAFETY_FLAGS.filter((flag) => xriStatus[flag]);
+      safety.appendChild(el('h3', null, 'Safety flags'));
+      safety.appendChild(enabled.length ? el('div', 'notice danger', `Unexpected enabled flags: ${enabled.join(', ')}`) : el('div', 'notice ok', 'All public map/feed/geocode/WordPress/runtime safety flags remain false.'));
+      safety.appendChild(chips(SAFETY_FLAGS.map((flag) => `${flag}: ${text(xriStatus[flag])}`)));
     }
 
     function renderAdminStatus(projectStatus) {
@@ -513,9 +612,9 @@
         { label: 'Start', value: (lead) => `${text(lead.startDate)} ${text(lead.startTime)}` },
         { label: 'End', value: (lead) => `${text(lead.endDate)} ${text(lead.endTime)}` },
         { label: 'Borough', value: (lead) => lead.borough },
-        { label: 'Location', value: (lead) => lead.locationName },
-        { label: 'Description', value: (lead) => lead.description },
-        { label: 'Organizer', value: (lead) => lead.organizer },
+        { label: 'Location', value: (lead) => lead.locationName, className: 'truncate' },
+        { label: 'Description', value: (lead) => lead.description, className: 'truncate' },
+        { label: 'Organizer', value: (lead) => lead.organizer, className: 'truncate' },
         { label: 'Latitude', value: (lead) => lead.latitude },
         { label: 'Longitude', value: (lead) => lead.longitude },
         { label: 'Photo priority', value: (lead) => lead.photoPriorityScore },
@@ -613,8 +712,8 @@
           { label: 'Title', value: (item) => item.lead?.title },
           { label: 'Original', value: (item) => item.locationCleanup?.originalLocationText },
           { label: 'Cleaned', value: (item) => item.locationCleanup?.cleanedLocationText },
-          { label: 'Candidate display', value: (item) => item.locationCleanup?.candidateDisplayLocation },
-          { label: 'Candidate query', value: (item) => item.locationCleanup?.candidateQuery },
+          { label: 'Candidate display', value: (item) => item.locationCleanup?.candidateDisplayLocation, className: 'truncate' },
+          { label: 'Candidate query', value: (item) => item.locationCleanup?.candidateQuery, className: 'truncate mono' },
           { label: 'Kind', value: (item) => item.locationCleanup?.locationKind },
           { label: 'Borough', value: (item) => item.locationCleanup?.borough },
           { label: 'Labels', value: (item) => chips(item.locationCleanup?.labels) },
@@ -787,8 +886,8 @@
         { label: 'Triage', value: (record) => record.triage?.bucket },
         { label: 'Location readiness', value: (record) => record.locationReadiness?.bucket },
         { label: 'Cleanup', value: (record) => record.locationCleanup?.bucket },
-        { label: 'Candidate display', value: (record) => record.locationCleanup?.candidateDisplayLocation },
-        { label: 'Candidate query', value: (record) => record.locationCleanup?.candidateQuery },
+        { label: 'Candidate display', value: (record) => record.locationCleanup?.candidateDisplayLocation, className: 'truncate' },
+        { label: 'Candidate query', value: (record) => record.locationCleanup?.candidateQuery, className: 'truncate mono' },
         { label: 'Reason', value: reasonForUnmapped },
       ], unmappedRecords));
     }
@@ -801,6 +900,7 @@
         'Admin map records are plotted only when existing valid coordinates are present.',
         'Missing geocode: TVPP snapshot rows currently show latitude/longitude as null unless future reviewed geocoding is added.',
         'TVPP location cleanup candidates are display-only and are not geocoded.',
+        'XRI-G8 remains not authorized unless Howard explicitly approves it.',
       ];
 
       const sourceWarnings = data.sourceFreshness?.sources || [];
@@ -827,6 +927,8 @@
       const data = Object.fromEntries(results.map((result) => [result.key, result.data]));
       updateTimestamp(data);
       renderAdminStatus(data.projectStatus);
+      renderSnapshotOverview(data);
+      renderXriStatus(data.xriStatus);
       renderAllDataAdminMap(data);
       renderCompletionTracker(data.projectStatus);
       renderSourceFreshness(data.sourceFreshness);
