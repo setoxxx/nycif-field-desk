@@ -24,6 +24,13 @@ import {
   selectFetchableSchemaSources,
   summarizeRowsForSchema,
 } from './schema-inspect.mjs';
+import {
+  buildEventIdWhereClause,
+  DEFAULT_SAMPLE_LIMIT,
+  groupRowsByEventId,
+  MAX_SAMPLE_LIMIT,
+  parseSamplePipelineArgs,
+} from './parks-pipeline.mjs';
 
 const EXPECTED_SOURCE_IDS = [
   'tvpp-9vvx',
@@ -369,6 +376,51 @@ describe('parks join enrichment', () => {
     });
 
     assert.deepEqual(base, snapshot);
+  });
+});
+
+describe('parks sample pipeline helpers', () => {
+  it('uses default CLI limit', () => {
+    const args = parseSamplePipelineArgs([]);
+    assert.equal(args.limit, DEFAULT_SAMPLE_LIMIT);
+    assert.equal(args.pretty, false);
+    assert.equal(args.help, false);
+  });
+
+  it('parses custom limit and pretty flag', () => {
+    const args = parseSamplePipelineArgs(['--limit', '5', '--pretty']);
+    assert.equal(args.limit, 5);
+    assert.equal(args.pretty, true);
+  });
+
+  it('caps limit at max', () => {
+    const args = parseSamplePipelineArgs(['--limit=99']);
+    assert.equal(args.limit, MAX_SAMPLE_LIMIT);
+  });
+
+  it('buildEventIdWhereClause escapes single quotes', () => {
+    assert.equal(
+      buildEventIdWhereClause(['100073', "O'Brien"]),
+      "event_id in ('100073','O''Brien')",
+    );
+  });
+
+  it('buildEventIdWhereClause returns null for empty ids', () => {
+    assert.equal(buildEventIdWhereClause([]), null);
+  });
+
+  it('groupRowsByEventId groups rows correctly', () => {
+    const grouped = groupRowsByEventId([
+      { event_id: '1', name: 'A' },
+      { event_id: '2', name: 'B' },
+      { event_id: '1', name: 'C' },
+      { title: 'missing id' },
+    ]);
+
+    assert.equal(grouped['1'].length, 2);
+    assert.equal(grouped['2'].length, 1);
+    assert.equal(grouped['1'][0].name, 'A');
+    assert.equal(grouped['1'][1].name, 'C');
   });
 });
 
