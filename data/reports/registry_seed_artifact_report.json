@@ -1,0 +1,69 @@
+{
+  "phase": "XRI-G9",
+  "phase_title": "Registry Seed Artifact, Not Runtime",
+  "mode": "offline_registry_seed_sample_not_runtime",
+  "completion_percent_before": 78,
+  "expected_completion_percent_after_merge": 88,
+  "production_allowed_from_g9": false,
+  "generated_at": "2026-07-02T17:30:00Z",
+  "prior_phase": "XRI-G8",
+  "changed_files": [
+    "docs/registry-seed-artifact.md",
+    "data/registry/registry_seed.sample.json",
+    "tools/xri/validate_registry_seed_sample.py",
+    "data/reports/registry_seed_artifact_report.json",
+    "data/reports/xri_project_status.json"
+  ],
+  "prohibited_files_touched": [],
+  "wordpress_touched": false,
+  "production_feed_touched": false,
+  "public_map_runtime_touched": false,
+  "iframe_embed_touched": false,
+  "scheduled_workflows_touched": false,
+  "location_cache_modified": false,
+  "location_cache_read_for_analysis": false,
+  "live_staging_executed": false,
+  "registry_database_created": false,
+  "importer_implemented": false,
+  "production_extractor_implemented": false,
+  "cache_merge_executed": false,
+  "merged_cache_created": false,
+  "geocodes_approved": false,
+  "candidates_promoted": false,
+  "external_api_called": false,
+  "soda_fetched": false,
+  "runtime_wiring_added": false,
+  "seed_artifact_created": true,
+  "seed_artifact_path": "data/registry/registry_seed.sample.json",
+  "seed_validator_created": true,
+  "seed_validator_path": "tools/xri/validate_registry_seed_sample.py",
+  "seed_record_count": 1,
+  "excluded_review_record_count": 4,
+  "seed_inclusion_policy": {
+    "review_state_required": "seed_eligible_pending_final_gate",
+    "hard_blocks_must_be_empty": true,
+    "required_evidence_all_true": true,
+    "production_allowed_must_be_false": true,
+    "public_map_allowed_must_be_false": true,
+    "runtime_wiring_allowed_must_be_false": true
+  },
+  "qa_agent_found": true,
+  "qa_agent_command": "python3 tools/xri/validate_registry_seed_sample.py",
+  "qa_agent_result": "offline_seed_validator_created",
+  "qa_agent_warnings": [
+    "Validator is offline-only and not wired to runtime.",
+    "G9 does not authorize public map use, production feeds, WordPress output, geocode approval, or automated promotion."
+  ],
+  "admin_page_candidates_found": [
+    "data/reports/xri_project_status.json"
+  ],
+  "admin_page_updated": true,
+  "admin_page_reason": "updated safe non-public data/reports/xri_project_status.json only",
+  "what_this_unlocks": [
+    "First offline registry seed sample artifact",
+    "Positive lookup example for XRI-G10",
+    "Auditable excluded-review-record list for blocked candidates"
+  ],
+  "next_recommended_phase": "XRI-G10 — Read-Only Registry Lookup Prototype",
+  "next_phase_authorized": false
+}
