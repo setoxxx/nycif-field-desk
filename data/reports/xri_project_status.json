@@ -1,11 +1,11 @@
 {
   "project": "NYCIF XRI Master Location Registry",
-  "completion_percent": 78,
-  "expected_completion_after_merge": 88,
-  "current_phase": "XRI-G9",
-  "current_phase_title": "Registry Seed Artifact, Not Runtime",
-  "previous_phase": "XRI-G8 — Review Artifact Schema + Fixture Validator",
-  "phase_mode": "OFFLINE REGISTRY SEED SAMPLE",
+  "completion_percent": 88,
+  "expected_completion_after_merge": 94,
+  "current_phase": "XRI-G10",
+  "current_phase_title": "Read-Only Registry Lookup Prototype",
+  "previous_phase": "XRI-G9 — Registry Seed Artifact, Not Runtime",
+  "phase_mode": "OFFLINE READ-ONLY LOOKUP PROTOTYPE",
   "phase_status": "open_pr",
   "merged_phases": [
     "XRI-G0",
@@ -16,18 +16,19 @@
     "XRI-G5",
     "XRI-G6",
     "XRI-G7",
-    "XRI-G8"
+    "XRI-G8",
+    "XRI-G9"
   ],
   "active_pr": null,
-  "active_branch": "chatgpt/xri-g9-registry-seed-artifact",
-  "last_merged_pr": 72,
-  "last_merge_sha": "2e81fabf60a689035b35f0bd59d89a5d02deab40",
+  "active_branch": "chatgpt/xri-g10-read-only-registry-lookup-prototype",
+  "last_merged_pr": 73,
+  "last_merge_sha": "dd2d5055bc781fbedf5960122dbf509a6c2d76cf",
   "qa_agent_found": true,
-  "qa_agent_result": "offline_seed_validator_created",
-  "qa_agent_command": "python3 tools/xri/validate_registry_seed_sample.py",
+  "qa_agent_result": "offline_lookup_prototype_created",
+  "qa_agent_command": "python3 tools/xri/read_only_registry_lookup_prototype.py",
   "qa_agent_warnings": [
-    "Validator is offline-only and not wired to runtime.",
-    "G9 does not authorize production registry seeding, public map use, geocode approval, or automated promotion."
+    "Prototype is offline-only and not wired to runtime.",
+    "G10 does not authorize public map use, production feeds, WordPress output, geocode approval, or automated promotion."
   ],
   "production_allowed": false,
   "public_map_touched": false,
@@ -43,7 +44,7 @@
   "candidates_promoted": false,
   "runtime_wiring_added": false,
   "manual_action_needed": "none unless GitHub requires ready-for-review click",
-  "next_recommended_phase": "XRI-G10 — Read-Only Registry Lookup Prototype",
+  "next_recommended_phase": "XRI-G11 — Internal Registry Review Surface / Admin Status Integration Plan",
   "next_phase_authorized": false,
-  "last_updated": "2026-07-02T17:30:00.000Z"
+  "last_updated": "2026-07-02T17:50:00.000Z"
 }
