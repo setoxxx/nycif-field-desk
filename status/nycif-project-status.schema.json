@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nycinfocus.com/schemas/nycif-project-status.schema.json",
+  "title": "NYCIF Project Status Artifact",
+  "description": "Public-safe static status artifact for one NYCIF repository. This schema is designed for GitHub Pages/static dashboard consumption without browser-side GitHub API polling or secrets.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_type",
+    "schema_version",
+    "project",
+    "repository",
+    "visibility",
+    "current_phase",
+    "completion_percent",
+    "health",
+    "active_prs",
+    "recent_prs",
+    "blockers",
+    "next_action",
+    "safety",
+    "generated_at"
+  ],
+  "properties": {
+    "artifact_type": {
+      "const": "nycif_project_status"
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^1\\.0\\.0$"
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repository": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+    },
+    "visibility": {
+      "enum": ["public", "private", "internal"]
+    },
+    "current_phase": {
+      "type": "string",
+      "minLength": 1
+    },
+    "completion_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "health": {
+      "enum": ["green", "yellow", "red", "gray"]
+    },
+    "status_summary": {
+      "type": "string"
+    },
+    "active_prs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/pr_reference"
+      }
+    },
+    "recent_prs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/pr_reference"
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_action": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data_freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "last_verified_at": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "safe_for_public_dashboard",
+        "contains_secrets",
+        "contains_private_repo_internals",
+        "contains_credentials",
+        "contains_tokens",
+        "browser_side_github_api_polling",
+        "write_controls",
+        "deploy_controls",
+        "public_map_runtime_change",
+        "production_feed_mutation",
+        "wordpress_change"
+      ],
+      "properties": {
+        "safe_for_public_dashboard": {
+          "const": true
+        },
+        "contains_secrets": {
+          "const": false
+        },
+        "contains_private_repo_internals": {
+          "const": false
+        },
+        "contains_credentials": {
+          "const": false
+        },
+        "contains_tokens": {
+          "const": false
+        },
+        "browser_side_github_api_polling": {
+          "const": false
+        },
+        "write_controls": {
+          "const": false
+        },
+        "deploy_controls": {
+          "const": false
+        },
+        "public_map_runtime_change": {
+          "const": false
+        },
+        "production_feed_mutation": {
+          "const": false
+        },
+        "wordpress_change": {
+          "const": false
+        }
+      }
+    },
+    "generated_at": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "pr_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["number", "title", "url", "state"],
+      "properties": {
+        "number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "state": {
+          "enum": ["open", "merged", "closed", "draft", "unknown"]
+        }
+      }
+    }
+  }
+}
