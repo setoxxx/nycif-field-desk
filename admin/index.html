@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>NYCIF Admin Dashboard</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --panel: #121a2b;
+      --panel-2: #182235;
+      --line: rgba(255, 255, 255, 0.08);
+      --text: #eef2ff;
+      --muted: #9aa7c0;
+      --warn: #fbbf24;
+      --ok: #34d399;
+      --accent: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #0a0f1a, #111827 240px, var(--bg));
+      color: var(--text);
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 20px 16px 48px; }
+    h1 { margin: 0 0 6px; font-size: 24px; }
+    .sub { color: var(--muted); margin: 0 0 18px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .panel h2 { margin: 0 0 12px; font-size: 16px; }
+    .notice {
+      border-left: 4px solid var(--warn);
+      background: rgba(251, 191, 36, 0.08);
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #fde68a;
+      margin-bottom: 12px;
+    }
+    .notice.ok {
+      border-left-color: var(--ok);
+      background: rgba(52, 211, 153, 0.08);
+      color: #a7f3d0;
+    }
+    .links { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 0; }
+    .links a {
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: var(--panel-2);
+    }
+    .links a:hover { border-color: rgba(96, 165, 250, 0.45); }
+    .stat-grid, .tracker-grid, .future-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    .stat, .tracker, .future {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .value { font-size: 18px; font-weight: 700; }
+    .detail { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th { color: var(--muted); font-weight: 600; }
+    .placeholder { color: var(--muted); font-style: italic; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>NYCIF Admin Dashboard</h1>
+    <p class="sub">Status: Admin UI skeleton live / read-only</p>
+
+    <section class="panel" aria-label="Navigation links">
+      <h2>Links</h2>
+      <div class="links">
+        <a href="../?v=c5p-postpublish-02&amp;resetFilters=1">NYCIF Field Desk (public)</a>
+        <a href="./?v=c5p-postpublish-02&amp;resetFilters=1">NYCIF Admin Dashboard</a>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Read-only notices">
+      <h2>Operator notices</h2>
+      <div class="notice ok">This page is read-only. It does not decide what appears on the public map.</div>
+      <div class="notice">Categories are shown separately for visibility and navigation only. No write controls, deploy buttons, approval/rejection, or hidden filtering logic are implemented.</div>
+    </section>
+
+    <section class="panel" aria-label="Admin page status">
+      <h2>Admin page status</h2>
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="label">Current status</div>
+          <div class="value">Skeleton v0</div>
+          <div class="detail">Read-only static page</div>
+        </div>
+        <div class="stat">
+          <div class="label">404 removal</div>
+          <div class="value">After deploy</div>
+          <div class="detail">This file should serve `/admin/` once merged to `main` and GitHub Pages deploys</div>
+        </div>
+        <div class="stat">
+          <div class="label">Latest commit</div>
+          <div class="value placeholder">Placeholder</div>
+          <div class="detail">Build metadata panel comes later</div>
+        </div>
+        <div class="stat">
+          <div class="label">Data status</div>
+          <div class="value placeholder">Placeholder only</div>
+          <div class="detail">No live event data loaded in v0</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="NYCIF master completion tracker">
+      <h2>NYCIF Master Completion Tracker</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Area</th>
+            <th>Completion</th>
+            <th>Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Production map current scope</td>
+            <td>85–90%</td>
+            <td>Existing map/feeds are operational and gated. Remaining work is mostly geocodes, QA, more sources, and controlled promotion.</td>
+          </tr>
+          <tr>
+            <td>Event Sources dev tooling</td>
+            <td>90–95%</td>
+            <td>Source inventory, schema inspection, normalizers, sample pipelines, freshness reports, query tuning, TVPP candidate feed, and TVPP triage are built.</td>
+          </tr>
+          <tr>
+            <td>TVPP assignment-feed candidate</td>
+            <td>85–90%</td>
+            <td>TVPP is proven current, normalized, sampled, and triaged. Still no geocoding, production feed file, scoring, or map wiring.</td>
+          </tr>
+          <tr>
+            <td>Event API pipeline overall</td>
+            <td>80–85% dev-side / 0% production-side</td>
+            <td>Dev proof is strong. Production output, scheduled generation, cache/feed writes, map integration, and promotion gates are intentionally not done.</td>
+          </tr>
+          <tr>
+            <td>Admin / Operator dashboard</td>
+            <td>Skeleton in progress</td>
+            <td>Static `/admin/` page removes the planned 404. Real data panels come in later PRs.</td>
+          </tr>
+          <tr>
+            <td>XRI registry roadmap</td>
+            <td>33%</td>
+            <td>G0–G3 are merged. G4–G11 are not started.</td>
+          </tr>
+          <tr>
+            <td>XRI registry implementation</td>
+            <td>0%</td>
+            <td>No extractor, registry DB, reconciliation, seed workflow, UI, feeds, or WordPress integration.</td>
+          </tr>
+          <tr>
+            <td>WordPress / nycinfocus.com integration</td>
+            <td>0%</td>
+            <td>Intentionally untouched.</td>
+          </tr>
+          <tr>
+            <td>Full NYCIF platform vision</td>
+            <td>55–65%</td>
+            <td>Production map exists and Event Sources intelligence is stronger, but admin dashboard, XRI, WordPress, production event feed integration, and automation remain incomplete.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel" aria-label="Future data panels">
+      <h2>Future data panels (placeholder v0)</h2>
+      <div class="future-grid">
+        <div class="future"><div class="label">Live feed</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
+        <div class="future"><div class="label">Candidate feed</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
+        <div class="future"><div class="label">TVPP triage buckets</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
+        <div class="future"><div class="label">Source freshness</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
+        <div class="future"><div class="label">Needs review</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
+        <div class="future"><div class="label">Missing location / geocode</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
+        <div class="future"><div class="label">Live vs candidate diff</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
