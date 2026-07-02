@@ -1,0 +1,114 @@
+{
+  "artifact_type": "nycif_master_projects_inventory",
+  "generated_at": "2026-07-02T18:50:00.000Z",
+  "dashboard_phase": "Master Admin Projects v1",
+  "purpose": "Static, read-only portfolio control center for tracking NYCIF repositories as one master project.",
+  "security_note": "This file is published through a public GitHub Pages site. Do not include secrets, private operational data, unpublished credentials, tokens, or sensitive private repo contents.",
+  "access_policy": {
+    "current_hosting": "GitHub Pages public static site",
+    "real_password_supported_here": false,
+    "soft_client_gate_supported": true,
+    "recommended_secure_options": [
+      "Cloudflare Access in front of a custom admin domain",
+      "Cloudflare Pages with Access policy",
+      "Netlify password protection or identity gate",
+      "Vercel deployment with authentication middleware",
+      "Private internal dashboard outside GitHub Pages"
+    ]
+  },
+  "master_project": {
+    "name": "NYCIF Master Project",
+    "status": "inventory_started",
+    "completion_percent": 12,
+    "next_action": "Review repo roles, define per-project completion metrics, then decide secure hosting/auth approach.",
+    "public_runtime_allowed": false,
+    "write_controls_allowed": false
+  },
+  "summary": {
+    "repo_count": 7,
+    "public_repo_count": 3,
+    "private_repo_count": 4,
+    "admin_verified_by_github_connector": true
+  },
+  "projects": [
+    {
+      "name": "nycif-web-platform",
+      "full_name": "setoxxx/nycif-web-platform",
+      "visibility": "private",
+      "default_branch": "main",
+      "role": "Web platform / site foundation",
+      "tracking_status": "inventory_only",
+      "completion_percent": null,
+      "next_action": "Confirm scope, live destination, build/deploy model, and status artifacts."
+    },
+    {
+      "name": "nycif-field-desk",
+      "full_name": "setoxxx/nycif-field-desk",
+      "visibility": "public",
+      "default_branch": "main",
+      "role": "Field Desk public/admin dashboard, event-source cockpit, XRI admin surface",
+      "tracking_status": "active_control_center",
+      "completion_percent": null,
+      "next_action": "Use as current master admin host while secure admin hosting is evaluated."
+    },
+    {
+      "name": "nycif-prompt-engine",
+      "full_name": "setoxxx/nycif-prompt-engine",
+      "visibility": "private",
+      "default_branch": "main",
+      "role": "Prompt/SOP engine and editorial workflow memory",
+      "tracking_status": "inventory_only",
+      "completion_percent": null,
+      "next_action": "Define which prompt packs, QA gates, and SOPs should publish safe status summaries."
+    },
+    {
+      "name": "nycif-event-radar",
+      "full_name": "setoxxx/nycif-event-radar",
+      "visibility": "private",
+      "default_branch": "main",
+      "role": "Event discovery and assignment radar",
+      "tracking_status": "inventory_only",
+      "completion_percent": null,
+      "next_action": "Define feed status, source coverage, alert surfaces, and privacy-safe summary fields."
+    },
+    {
+      "name": "nycif-live-feeds",
+      "full_name": "setoxxx/nycif-live-feeds",
+      "visibility": "public",
+      "default_branch": "main",
+      "role": "Live/public feed artifacts",
+      "tracking_status": "inventory_only",
+      "completion_percent": null,
+      "next_action": "Define feed freshness, failure states, source ownership, and public/private boundaries."
+    },
+    {
+      "name": "nycif-data-pipeline",
+      "full_name": "setoxxx/nycif-data-pipeline",
+      "visibility": "private",
+      "default_branch": "main",
+      "role": "Data processing and pipeline orchestration",
+      "tracking_status": "inventory_only",
+      "completion_percent": null,
+      "next_action": "Define pipeline stages, test reports, source freshness metrics, and safe summary exports."
+    },
+    {
+      "name": "nycif-open-data",
+      "full_name": "setoxxx/nycif-open-data",
+      "visibility": "public",
+      "default_branch": "main",
+      "role": "Open-data reference and public datasets",
+      "tracking_status": "inventory_only",
+      "completion_percent": null,
+      "next_action": "Define dataset catalog, update cadence, and public data provenance summaries."
+    }
+  ],
+  "non_goals_v1": [
+    "No GitHub token in browser.",
+    "No live GitHub API polling from public page.",
+    "No private repo contents exposed.",
+    "No password or secret stored in JavaScript.",
+    "No write controls.",
+    "No deployment controls.",
+    "No public map runtime change."
+  ]
+}
