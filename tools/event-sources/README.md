@@ -175,6 +175,21 @@ Field Desk: [NYCIF Field Desk](https://setoxxx.github.io/nycif-field-desk/?v=c5p
 Admin page: [NYCIF Admin Dashboard](https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1)
 Admin page status: planned; currently 404 until admin UI is implemented; documentation updated
 
+## TVPP location readiness audit (v6, dev-only)
+
+Read-only audit of whether TVPP candidate events have enough location text to safely geocode later:
+
+```bash
+node tools/event-sources/sample-tvpp-location-readiness.mjs --limit 25 --pretty
+```
+
+- **stdout:** JSON report with `items: [{ lead, locationReadiness }]` and `locationBucketCounts`
+- **read-only** — no GPS coordinates generated
+- **no geocoding API calls** and no cache writes
+- **no production feed output** or map wiring
+- `locationReadiness` is separate metadata; EventLead 25-field shape unchanged
+- intended to decide whether a future geocoding task is safe
+
 ## Tests
 
 ```bash

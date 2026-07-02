@@ -84,6 +84,14 @@ import {
   isLowInformationTitle,
   normalizeTextForTriage,
 } from './tvpp-triage.mjs';
+import {
+  buildTvppLocationReadinessReport,
+  classifyTvppLocationReadiness,
+  classifyTvppLocationReadinessLeads,
+  countLocationReadinessBuckets,
+  getLeadLocationText,
+  isIntersectionOrRouteText,
+} from './tvpp-location-readiness.mjs';
 
 const EXPECTED_SOURCE_IDS = [
   'tvpp-9vvx',
@@ -1016,6 +1024,124 @@ describe('TVPP triage helpers', () => {
     assert.equal(report.bucketCounts.strong_assignment, 1);
     assert.equal(report.bucketCounts.possible_assignment, 1);
     assert.equal(report.leads, undefined);
+  });
+});
+
+describe('TVPP location readiness helpers', () => {
+  const addressLead = {
+    title: 'Street Fair',
+    borough: 'Brooklyn',
+    locationName: '123 Flatbush Avenue',
+    address: '123 Flatbush Avenue',
+    latitude: null,
+    longitude: null,
+    photoPriorityScore: null,
+  };
+
+  const intersectionLead = {
+    title: 'Parade Route',
+    borough: 'Brooklyn',
+    locationName: 'Flatbush Avenue between Parkside Avenue and Ocean Avenue',
+    address: 'Flatbush Avenue between Parkside Avenue and Ocean Avenue',
+    latitude: null,
+    longitude: null,
+    photoPriorityScore: null,
+  };
+
+  it('classifies missing location when no location text or borough', () => {
+    const readiness = classifyTvppLocationReadiness({
+      title: 'Event',
+      locationName: null,
+      address: null,
+      borough: null,
+      latitude: null,
+      longitude: null,
+      photoPriorityScore: null,
+    });
+    assert.equal(readiness.bucket, 'missing_location');
+    assert.ok(readiness.labels.includes('missing_location'));
+  });
+
+  it('classifies borough-only location', () => {
+    const readiness = classifyTvppLocationReadiness({
+      title: 'Event',
+      locationName: 'Manhattan',
+      address: 'Manhattan',
+      borough: 'Manhattan',
+      latitude: null,
+      longitude: null,
+      photoPriorityScore: null,
+    });
+    assert.equal(readiness.bucket, 'borough_only');
+  });
+
+  it('classifies usable street address as geocode_ready', () => {
+    const readiness = classifyTvppLocationReadiness(addressLead);
+    assert.equal(readiness.bucket, 'geocode_ready');
+    assert.ok(readiness.labels.includes('street_address'));
+    assert.equal(readiness.confidence, 'high');
+  });
+
+  it('classifies intersection-style location text', () => {
+    assert.equal(isIntersectionOrRouteText(intersectionLead.locationName), true);
+    const readiness = classifyTvppLocationReadiness(intersectionLead);
+    assert.equal(readiness.bucket, 'intersection_or_route');
+    assert.ok(readiness.labels.includes('intersection_or_route'));
+  });
+
+  it('classifies park or venue text as needs_review or cleanup', () => {
+    const parkReview = classifyTvppLocationReadiness({
+      title: 'Concert',
+      borough: 'Manhattan',
+      locationName: 'Central Park Great Lawn',
+      address: 'Central Park Great Lawn',
+      latitude: null,
+      longitude: null,
+      photoPriorityScore: null,
+    });
+    assert.equal(parkReview.bucket, 'needs_review');
+
+    const promenadeCleanup = classifyTvppLocationReadiness({
+      title: 'Flags',
+      borough: 'Bronx',
+      locationName: 'Catherine Scott Promenade: Catherine Scott Promenade Event Area',
+      address: 'Catherine Scott Promenade: Catherine Scott Promenade Event Area',
+      latitude: null,
+      longitude: null,
+      photoPriorityScore: null,
+    });
+    assert.equal(promenadeCleanup.bucket, 'needs_address_cleanup');
+  });
+
+  it('classifyTvppLocationReadinessLeads preserves EventLead shape and separate metadata', () => {
+    const leads = [addressLead, intersectionLead];
+    const items = classifyTvppLocationReadinessLeads(leads);
+    assert.equal(items.length, 2);
+    assert.deepEqual(items[0].lead, addressLead);
+    assert.ok(items[0].locationReadiness);
+    assert.ok(!('locationReadiness' in items[0].lead));
+    assert.equal(items[0].lead.latitude, null);
+    assert.equal(items[0].lead.longitude, null);
+  });
+
+  it('builds location readiness report with bucket counts and no cache writes', () => {
+    const report = buildTvppLocationReadinessReport({
+      generatedAt: '2026-07-02T12:00:00.000Z',
+      fromDate: '2026-07-02',
+      limit: 25,
+      rowCount: 2,
+      leads: [addressLead, intersectionLead],
+    });
+
+    assert.equal(report.itemCount, 2);
+    assert.equal(report.locationBucketCounts.geocode_ready, 1);
+    assert.equal(report.locationBucketCounts.intersection_or_route, 1);
+    assert.equal(getLeadLocationText(addressLead), '123 Flatbush Avenue');
+    assert.equal(
+      countLocationReadinessBuckets(report.items).geocode_ready,
+      1,
+    );
+    assert.equal(report.items.every((item) => item.lead.latitude == null), true);
   });
 });
 
