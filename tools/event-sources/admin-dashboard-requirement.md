@@ -104,6 +104,22 @@ v5b triage is **dashboard-ready operator metadata**:
 
 The `--with-triage` JSON can later power an admin field desk card or table. **No admin UI is implemented in v5b.**
 
+## NYCIF Master Completion Tracker
+
+Cross-project completion snapshot. **Not Event Sources only** — every future operator/admin/dashboard status report should include this master tracker or a current version of it. The tracker must not omit XRI, WordPress, production map status, admin dashboard status, or full-platform completion.
+
+| Area | Completion | Why |
+|---|---:|---|
+| Production map current scope | 85–90% | Existing map/feeds are operational and gated. Current Event Sources work has not modified production runtime. Remaining work is mostly geocodes, QA, more sources, and controlled promotion. |
+| Event Sources dev tooling | 90–95% | Source inventory, schema inspection, normalizers, Parks joins, sample pipelines, freshness reports, query tuning, TVPP candidate feed, and TVPP triage are built or in PR. |
+| TVPP assignment-feed candidate | 85–90% | TVPP is proven current, normalized, sampled, and triaged. Still no geocoding, no production feed file, no scoring, and no map wiring. |
+| Event API pipeline overall | 80–85% dev-side / 0% production-side | Dev proof is strong. Production output, scheduled generation, cache/feed writes, map integration, and promotion gates are intentionally not done. |
+| Admin / Operator dashboard | 10–15% | Requirement is documented. No admin UI exists yet. Future target is an admin version of the Field Desk page. |
+| XRI registry roadmap | 33% | G0–G3 are merged. G4–G11 are not started. |
+| XRI registry implementation | 0% | No extractor, registry DB, reconciliation, seed workflow, UI, feeds, or WordPress integration. |
+| WordPress / nycinfocus.com integration | 0% | Intentionally untouched. |
+| Full NYCIF platform vision | 55–65% | Production map exists and Event Sources intelligence is much stronger, but admin dashboard, XRI implementation, WordPress, production event feed integration, and automation remain incomplete. |
+
 ## Warning signals operators should see (future UI)
 
 Derived from existing dev metadata:

@@ -167,7 +167,7 @@ Constraints:
 - does not hide categories from operator view
 - no secrets or API keys in client-side dashboard code
 
-Full requirement doc: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md)
+Full requirement doc: [admin-dashboard-requirement.md](./admin-dashboard-requirement.md) (includes [NYCIF Master Completion Tracker](./admin-dashboard-requirement.md#nycif-master-completion-tracker))
 
 Admin page: [NYCIF Admin Dashboard](https://setoxxx.github.io/nycif-field-desk/admin/?v=c5p-postpublish-02&resetFilters=1)
 Admin page status: planned; documentation updated; admin UI not implemented yet
