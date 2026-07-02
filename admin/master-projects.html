@@ -23,12 +23,12 @@
     }
     * { box-sizing: border-box; }
     body { margin: 0; font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(180deg, #0a0f1a, #111827 240px, var(--bg)); color: var(--text); }
-    .wrap { max-width: 1280px; margin: 0 auto; padding: 20px 16px 48px; }
+    .wrap { max-width: 1320px; margin: 0 auto; padding: 20px 16px 48px; }
     .topbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
     h1 { margin: 0 0 6px; font-size: clamp(24px, 4vw, 34px); letter-spacing: -.03em; }
     h2 { margin: 0 0 12px; font-size: 17px; }
     h3 { margin: 0 0 8px; font-size: 14px; }
-    .sub { color: var(--muted); margin: 0; max-width: 860px; }
+    .sub { color: var(--muted); margin: 0; max-width: 900px; }
     .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 12px 30px rgba(0,0,0,.16); }
     .notice { border-left: 4px solid var(--warn); background: rgba(251,191,36,.08); color: #fde68a; border-radius: 12px; padding: 12px 14px; margin: 10px 0; }
     .notice.ok { border-left-color: var(--ok); background: rgba(52,211,153,.08); color: #a7f3d0; }
@@ -42,16 +42,20 @@
     .value { font-size: 18px; font-weight: 750; word-break: break-word; }
     .detail { color: var(--muted); font-size: 12px; margin-top: 6px; }
     .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-3); margin-top: 10px; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 1120px; }
     th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
     th { color: var(--muted); font-weight: 700; background: rgba(255,255,255,.03); }
     tr:last-child td { border-bottom: 0; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
-    .truncate { max-width: 340px; overflow-wrap: anywhere; }
+    .truncate { max-width: 360px; overflow-wrap: anywhere; }
     .empty { color: var(--muted); font-style: italic; }
     .progress { height: 8px; border-radius: 999px; background: #0f172a; border: 1px solid var(--line); overflow: hidden; margin-top: 8px; }
     .progress > span { display: block; height: 100%; background: linear-gradient(90deg, #60a5fa, #34d399); width: 0%; }
-    @media (max-width: 760px) { .wrap { padding: 16px 10px 40px; } .panel { padding: 14px; border-radius: 14px; } table { min-width: 820px; } .truncate { max-width: 240px; } }
+    .health { font-weight: 800; text-transform: uppercase; font-size: 12px; }
+    .health.green { color: #a7f3d0; }
+    .health.yellow { color: #fde68a; }
+    .health.gray { color: #cbd5e1; }
+    @media (max-width: 760px) { .wrap { padding: 16px 10px 40px; } .panel { padding: 14px; border-radius: 14px; } table { min-width: 1020px; } .truncate { max-width: 240px; } }
   </style>
 </head>
 <body>
@@ -71,7 +75,7 @@
     <section class="panel" aria-label="Security notice">
       <h2>Security / access reality check</h2>
       <div class="notice danger">GitHub Pages is static public hosting for this project page. A JavaScript password box would only hide content cosmetically; it would not secure the data.</div>
-      <div class="notice ok">Safe v1 approach: publish only project names, repo visibility, high-level status, and next-action placeholders. Use Cloudflare Access, Netlify, Vercel, or private hosting for real password protection.</div>
+      <div class="notice ok">Safe v2 approach: publish only project names, repo visibility, high-level status, PR titles/links, and next-action placeholders. Use Cloudflare Access, Netlify, Vercel, or private hosting for real password protection.</div>
     </section>
 
     <section class="panel" id="load-errors-panel" hidden>
@@ -85,8 +89,18 @@
     </section>
 
     <section class="panel" id="project-table-section">
-      <h2>Project inventory</h2>
+      <h2>Project status inventory</h2>
       <div id="project-table"></div>
+    </section>
+
+    <section class="panel" id="active-pr-section">
+      <h2>Active / recent PR visibility</h2>
+      <div id="pr-table"></div>
+    </section>
+
+    <section class="panel" id="blockers-section">
+      <h2>Blockers and next actions</h2>
+      <div id="blocker-table"></div>
     </section>
 
     <section class="panel" id="security-plan">
@@ -126,12 +140,33 @@
       }
       return card;
     }
+    function linkList(items) {
+      const wrap = el('div', 'chips');
+      if (!items || !items.length) {
+        wrap.appendChild(el('span', 'empty', '—'));
+        return wrap;
+      }
+      for (const item of items) {
+        const a = document.createElement('a');
+        a.className = 'chip';
+        a.href = item.url;
+        a.textContent = item.number ? `#${item.number} ${item.title}` : item.title;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        wrap.appendChild(a);
+      }
+      return wrap;
+    }
     function chips(values) {
       const wrap = el('div', 'chips');
       const list = Array.isArray(values) ? values : [values];
       if (!list.filter(Boolean).length) wrap.appendChild(el('span', 'empty', '—'));
       for (const value of list.filter(Boolean)) wrap.appendChild(el('span', 'chip', value));
       return wrap;
+    }
+    function health(value) {
+      const node = el('span', `health ${value || 'gray'}`, value || 'gray');
+      return node;
     }
     function table(columns, rows) {
       const wrap = el('div', 'table-wrap');
@@ -172,24 +207,36 @@
       return response.json();
     }
     function render(data) {
+      const projects = data.projects || [];
       const summary = clear(byId('summary-grid'));
       summary.appendChild(stat('Master project', data.master_project?.name, data.master_project?.status));
       summary.appendChild(stat('Overall completion', data.master_project?.completion_percent, data.master_project?.next_action));
       summary.appendChild(stat('Repositories', data.summary?.repo_count, `${text(data.summary?.public_repo_count)} public / ${text(data.summary?.private_repo_count)} private`));
+      summary.appendChild(stat('Projects with PR history', data.summary?.projects_with_recent_pr_history, 'Connector snapshot.'));
+      summary.appendChild(stat('Need status artifacts', data.summary?.projects_needing_status_artifacts, 'One safe JSON status artifact per repo.'));
       summary.appendChild(stat('Generated', data.generated_at, data.dashboard_phase));
-      summary.appendChild(stat('Write controls', data.master_project?.write_controls_allowed, 'Must remain false on public static admin.'));
-      summary.appendChild(stat('Public runtime allowed', data.master_project?.public_runtime_allowed, 'Must remain false.'));
 
       clear(byId('project-table')).appendChild(table([
         { label: 'Project', value: (row) => row.name, className: 'mono' },
-        { label: 'Repo', value: (row) => row.full_name, className: 'mono truncate' },
         { label: 'Visibility', value: (row) => row.visibility },
-        { label: 'Branch', value: (row) => row.default_branch },
-        { label: 'Role', value: (row) => row.role, className: 'truncate' },
-        { label: 'Tracking status', value: (row) => row.tracking_status },
+        { label: 'Health', value: (row) => health(row.health) },
+        { label: 'Phase', value: (row) => row.current_phase, className: 'truncate' },
         { label: 'Completion', value: (row) => row.completion_percent },
+        { label: 'Tracking status', value: (row) => row.tracking_status },
+        { label: 'Role', value: (row) => row.role, className: 'truncate' },
+      ], projects));
+
+      clear(byId('pr-table')).appendChild(table([
+        { label: 'Project', value: (row) => row.name, className: 'mono' },
+        { label: 'Active PRs', value: (row) => linkList(row.active_prs) },
+        { label: 'Recent PRs', value: (row) => linkList(row.recent_prs) },
+      ], projects));
+
+      clear(byId('blocker-table')).appendChild(table([
+        { label: 'Project', value: (row) => row.name, className: 'mono' },
+        { label: 'Blocker / gap', value: (row) => row.blocker_summary, className: 'truncate' },
         { label: 'Next action', value: (row) => row.next_action, className: 'truncate' },
-      ], data.projects || []));
+      ], projects));
 
       const policy = clear(byId('access-policy'));
       policy.appendChild(stat('Current hosting', data.access_policy?.current_hosting, data.security_note));
