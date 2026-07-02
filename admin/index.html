@@ -7,178 +7,34 @@
   <title>NYCIF Admin Dashboard</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b1020;
-      --panel: #121a2b;
-      --panel-2: #182235;
-      --panel-3: #0f172a;
-      --line: rgba(255, 255, 255, 0.1);
-      --text: #eef2ff;
-      --muted: #9aa7c0;
-      --warn: #fbbf24;
-      --danger: #fb7185;
-      --ok: #34d399;
-      --accent: #60a5fa;
-      --chip: rgba(96, 165, 250, 0.12);
-    }
+    :root { color-scheme: dark; --bg:#0b1020; --panel:#121a2b; --panel2:#182235; --panel3:#0f172a; --line:rgba(255,255,255,.1); --text:#eef2ff; --muted:#9aa7c0; --warn:#fbbf24; --danger:#fb7185; --ok:#34d399; --accent:#60a5fa; --chip:rgba(96,165,250,.12); }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #0a0f1a, #111827 240px, var(--bg));
-      color: var(--text);
-    }
+    body { margin: 0; font: 14px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background: linear-gradient(180deg,#0a0f1a,#111827 240px,var(--bg)); color: var(--text); }
     .wrap { max-width: 1280px; margin: 0 auto; padding: 20px 16px 48px; }
-    .topbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    h1 { margin: 0 0 6px; font-size: clamp(24px, 4vw, 34px); letter-spacing: -0.03em; }
-    h2 { margin: 0 0 12px; font-size: 17px; }
-    h3 { margin: 0 0 10px; font-size: 14px; color: var(--text); }
-    .sub { color: var(--muted); margin: 0; max-width: 780px; }
-    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 6px 10px;
-      background: var(--panel-2);
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 650;
-      letter-spacing: 0.01em;
-    }
-    .badge.strong { color: #a7f3d0; border-color: rgba(52, 211, 153, 0.35); background: rgba(52, 211, 153, 0.08); }
-    .badge.warn { color: #fde68a; border-color: rgba(251, 191, 36, 0.35); background: rgba(251, 191, 36, 0.08); }
-    .badge.danger { color: #fecdd3; border-color: rgba(251, 113, 133, 0.35); background: rgba(251, 113, 133, 0.08); }
-    .links { display: flex; flex-wrap: wrap; gap: 10px; }
-    .links a {
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 14px;
-      background: var(--panel-2);
-    }
-    .links a:hover { border-color: rgba(96, 165, 250, 0.45); }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
-    }
-    .notice {
-      border-left: 4px solid var(--warn);
-      background: rgba(251, 191, 36, 0.08);
-      padding: 12px 14px;
-      border-radius: 12px;
-      color: #fde68a;
-      margin: 10px 0;
-    }
-    .notice.ok {
-      border-left-color: var(--ok);
-      background: rgba(52, 211, 153, 0.08);
-      color: #a7f3d0;
-    }
-    .notice.danger {
-      border-left-color: var(--danger);
-      background: rgba(251, 113, 133, 0.08);
-      color: #fecdd3;
-    }
-    .grid {
-      display: grid;
-      gap: 10px;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    }
-    .stat, .card {
-      background: var(--panel-2);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 12px;
-    }
-    .label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
-    .value { font-size: 18px; font-weight: 750; word-break: break-word; }
-    .detail { color: var(--muted); font-size: 12px; margin-top: 6px; }
-    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-3); margin-top: 10px; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 760px; }
-    th, td {
-      text-align: left;
-      padding: 10px 8px;
-      border-bottom: 1px solid var(--line);
-      vertical-align: top;
-    }
-    th { color: var(--muted); font-weight: 700; background: rgba(255, 255, 255, 0.03); position: sticky; top: 0; }
-    tr:last-child td { border-bottom: 0; }
-    td { color: var(--text); }
-    .muted { color: var(--muted); }
-    .empty { color: var(--muted); font-style: italic; padding: 10px 0; }
-    .list { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
-    .list li { margin: 4px 0; }
-    details {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--panel-2);
-      margin-top: 10px;
-      overflow: hidden;
-    }
-    summary {
-      cursor: pointer;
-      padding: 12px 14px;
-      font-weight: 750;
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.03);
-    }
-    details > .detail-body { padding: 12px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-    .chip {
-      display: inline-flex;
-      border: 1px solid rgba(96, 165, 250, 0.22);
-      border-radius: 999px;
-      background: var(--chip);
-      color: #bfdbfe;
-      padding: 3px 7px;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
-    .footer-note { color: var(--muted); font-size: 12px; margin-top: 20px; }
-    .admin-map {
-      min-height: 420px;
-      height: 56vh;
-      max-height: 640px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      overflow: hidden;
-      background: #0f172a;
-      margin-top: 12px;
-    }
-    .admin-map .leaflet-popup-content-wrapper,
-    .admin-map .leaflet-popup-tip {
-      background: #0f172a;
-      color: var(--text);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-    }
-    .admin-map .leaflet-popup-content { min-width: 220px; }
-    .popup-title { font-weight: 800; margin-bottom: 6px; }
-    .popup-line { margin: 3px 0; color: #cbd5e1; }
-    .map-layout { display: grid; gap: 12px; }
-    .map-note { margin-top: 12px; }
-    @media (max-width: 760px) {
-      .wrap { padding: 16px 10px 40px; }
-      .panel { padding: 14px; border-radius: 14px; }
-      table { min-width: 680px; }
-      .admin-map { min-height: 360px; height: 52vh; }
-    }
+    .topbar { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px; }
+    h1 { margin:0 0 6px; font-size:clamp(24px,4vw,34px); letter-spacing:-.03em; }
+    h2 { margin:0 0 12px; font-size:17px; } h3 { margin:16px 0 10px; font-size:14px; }
+    .sub,.muted,.detail { color:var(--muted); } .sub { margin:0; max-width:780px; }
+    .badge-row,.links,.chips { display:flex; flex-wrap:wrap; gap:8px; } .badge-row { margin-top:12px; }
+    .badge,.chip { display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:999px; background:var(--panel2); color:var(--muted); font-size:12px; }
+    .badge { padding:6px 10px; font-weight:650; } .chip { padding:3px 7px; color:#bfdbfe; border-color:rgba(96,165,250,.22); background:var(--chip); }
+    .badge.strong { color:#a7f3d0; border-color:rgba(52,211,153,.35); background:rgba(52,211,153,.08); }
+    .badge.warn { color:#fde68a; border-color:rgba(251,191,36,.35); background:rgba(251,191,36,.08); }
+    .links a { color:var(--accent); text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:8px 14px; background:var(--panel2); }
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:16px; box-shadow:0 12px 30px rgba(0,0,0,.16); }
+    .notice { border-left:4px solid var(--warn); background:rgba(251,191,36,.08); padding:12px 14px; border-radius:12px; color:#fde68a; margin:10px 0; }
+    .notice.ok { border-left-color:var(--ok); background:rgba(52,211,153,.08); color:#a7f3d0; } .notice.danger { border-left-color:var(--danger); background:rgba(251,113,133,.08); color:#fecdd3; }
+    .grid { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); }
+    .stat,.card { background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:12px; }
+    .label { color:var(--muted); font-size:12px; margin-bottom:4px; } .value { font-size:18px; font-weight:750; word-break:break-word; } .detail { font-size:12px; margin-top:6px; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--panel3); margin-top:10px; }
+    table { width:100%; border-collapse:collapse; font-size:13px; min-width:760px; } th,td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:top; } th { color:var(--muted); font-weight:700; background:rgba(255,255,255,.03); position:sticky; top:0; } tr:last-child td { border-bottom:0; }
+    .empty { color:var(--muted); font-style:italic; padding:10px 0; } .list { margin:8px 0 0; padding-left:18px; color:var(--muted); }
+    details { border:1px solid var(--line); border-radius:12px; background:var(--panel2); margin-top:10px; overflow:hidden; } summary { cursor:pointer; padding:12px 14px; font-weight:750; background:rgba(255,255,255,.03); } details>.detail-body { padding:12px; }
+    .admin-map { min-height:420px; height:56vh; max-height:640px; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:#0f172a; margin-top:12px; }
+    .admin-map .leaflet-popup-content-wrapper,.admin-map .leaflet-popup-tip { background:#0f172a; color:var(--text); border:1px solid rgba(255,255,255,.14); }
+    .popup-title { font-weight:800; margin-bottom:6px; } .popup-line { margin:3px 0; color:#cbd5e1; }
+    @media (max-width:760px) { .wrap{padding:16px 10px 40px;} .panel{padding:14px;border-radius:14px;} table{min-width:680px;} .admin-map{min-height:360px;height:52vh;} }
   </style>
 </head>
 <body>
@@ -187,81 +43,34 @@
       <div>
         <h1>NYCIF Admin Dashboard</h1>
         <p class="sub">Read-only operator view for static admin snapshots. This dashboard does not decide what appears on the public Field Desk map.</p>
-        <div class="badge-row" aria-label="Dashboard mode and snapshot metadata">
-          <span class="badge strong">READ-ONLY OPERATOR VIEW</span>
-          <span class="badge" id="snapshot-timestamp">Snapshot: loading</span>
-          <span class="badge warn">No production map wiring</span>
-        </div>
+        <div class="badge-row"><span class="badge strong">READ-ONLY OPERATOR VIEW</span><span class="badge" id="snapshot-timestamp">Snapshot: loading</span><span class="badge warn">No production map wiring</span></div>
       </div>
-      <nav class="links" aria-label="Navigation links">
-        <a href="https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&amp;resetFilters=1">NYCIF Field Desk</a>
-        <a href="https://setoxxx.github.io/nycif-field-desk/admin/">NYCIF Admin Dashboard</a>
-      </nav>
+      <nav class="links"><a href="https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&amp;resetFilters=1">NYCIF Field Desk</a><a href="https://setoxxx.github.io/nycif-field-desk/admin/">NYCIF Admin Dashboard</a></nav>
     </header>
 
-    <section class="panel" aria-label="Read-only guardrails">
-      <h2>Operator guardrails</h2>
-      <div class="notice ok">This page loads local static JSON snapshots only. It has no write, deploy, publish, approval, rejection, geocoding, or mutation controls.</div>
-      <div class="notice">Triage and location-readiness categories are displayed only for visibility and navigation. They do not approve, reject, publish, hide, or place anything on the public map.</div>
-    </section>
+    <section class="panel"><h2>Operator guardrails</h2><div class="notice ok">This page loads local static JSON snapshots only. It has no write, deploy, publish, approval, rejection, geocoding, or mutation controls.</div><div class="notice">Triage, location-readiness, and location-cleanup categories are displayed only for visibility and navigation. They do not approve, reject, publish, hide, geocode, or place anything on the public map.</div></section>
+    <section class="panel" id="load-errors-panel" hidden><h2>Snapshot loading errors</h2><div id="load-errors"></div></section>
+    <section class="panel"><h2>Admin Status</h2><div id="admin-status" class="grid"></div><div id="admin-warnings"></div></section>
 
-    <section class="panel" id="load-errors-panel" hidden aria-label="Snapshot loading errors">
-      <h2>Snapshot loading errors</h2>
-      <div id="load-errors"></div>
-    </section>
-
-    <section class="panel" aria-label="Admin status">
-      <h2>Admin Status</h2>
-      <div id="admin-status" class="grid"></div>
-      <div id="admin-warnings"></div>
-    </section>
-
-    <section class="panel" aria-label="All-data admin map">
+    <section class="panel">
       <h2>All-Data Admin Map</h2>
-      <div class="notice">Admin map is read-only. Mapped points are shown only when existing coordinates are present. Unmapped records are listed below and are not geocoded here.</div>
+      <div class="notice">Admin map is read-only. Mapped points are shown only when existing coordinates are present. Cleanup candidates are listed below and are not geocoded here.</div>
       <div id="admin-map-counts" class="grid"></div>
       <div id="admin-map" class="admin-map" role="application" aria-label="Read-only all-data admin map"></div>
-      <div id="admin-map-status" class="map-note"></div>
+      <div id="admin-map-status"></div>
       <h3>Unmapped / Needs Location Work</h3>
       <div id="unmapped-records"></div>
     </section>
 
-    <section class="panel" aria-label="Master completion tracker">
-      <h2>Master Completion Tracker</h2>
-      <div id="completion-tracker"></div>
-    </section>
-
-    <section class="panel" aria-label="Source freshness">
-      <h2>Source Freshness</h2>
-      <div id="source-freshness"></div>
-    </section>
-
-    <section class="panel" aria-label="TVPP candidate summary">
-      <h2>TVPP Candidate Summary</h2>
-      <div id="tvpp-candidates"></div>
-    </section>
-
-    <section class="panel" aria-label="TVPP triage">
-      <h2>TVPP Triage</h2>
-      <div id="tvpp-triage"></div>
-    </section>
-
-    <section class="panel" aria-label="TVPP location readiness">
-      <h2>TVPP Location Readiness</h2>
-      <div id="tvpp-location-readiness"></div>
-    </section>
-
-    <section class="panel" aria-label="Warnings and operator notes">
-      <h2>Warnings / Operator Notes</h2>
-      <div id="operator-notes"></div>
-    </section>
-
-    <section class="panel" aria-label="Live vs candidate diff placeholder">
-      <h2>Live vs Candidate Diff — not implemented yet</h2>
-      <div class="notice">Current public map feed is not connected to Event Sources snapshots. This dashboard does not decide map visibility. Future work may compare the current live feed against candidate event snapshots.</div>
-    </section>
-
-    <p class="footer-note">Admin All-Data Map Preview v1. Visibility-only static snapshot display. No public map runtime, production feed, service worker, deploy config, WordPress, XRI, geocoding, cache, auth, secret, cookie, or localStorage workflow is implemented here.</p>
+    <section class="panel"><h2>TVPP Location Cleanup</h2><div id="tvpp-location-cleanup"></div></section>
+    <section class="panel"><h2>Master Completion Tracker</h2><div id="completion-tracker"></div></section>
+    <section class="panel"><h2>Source Freshness</h2><div id="source-freshness"></div></section>
+    <section class="panel"><h2>TVPP Candidate Summary</h2><div id="tvpp-candidates"></div></section>
+    <section class="panel"><h2>TVPP Triage</h2><div id="tvpp-triage"></div></section>
+    <section class="panel"><h2>TVPP Location Readiness</h2><div id="tvpp-location-readiness"></div></section>
+    <section class="panel"><h2>Warnings / Operator Notes</h2><div id="operator-notes"></div></section>
+    <section class="panel"><h2>Live vs Candidate Diff — not implemented yet</h2><div class="notice">Current public map feed is not connected to Event Sources snapshots. This dashboard does not decide map visibility. Future work may compare the current live feed against candidate event snapshots.</div></section>
+    <p class="detail">TVPP Location Cleanup Parser v1. Visibility-only static snapshot display. No public map runtime, production feed, service worker, deploy config, WordPress, XRI, geocoding, cache, auth, secret, cookie, or localStorage workflow is implemented here.</p>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -273,513 +82,51 @@
       { key: 'tvppCandidates', path: './data/tvpp-candidates.json' },
       { key: 'tvppTriage', path: './data/tvpp-triage.json' },
       { key: 'tvppLocationReadiness', path: './data/tvpp-location-readiness.json' },
+      { key: 'tvppLocationCleanup', path: './data/tvpp-location-cleanup.json' },
     ];
-
-    const TRIAGE_BUCKETS = [
-      'strong_assignment',
-      'possible_assignment',
-      'logistics_or_closure',
-      'low_value',
-      'needs_review',
-    ];
-
-    const LOCATION_BUCKETS = [
-      'geocode_ready',
-      'needs_address_cleanup',
-      'intersection_or_route',
-      'borough_only',
-      'missing_location',
-      'needs_review',
-    ];
-
+    const TRIAGE_BUCKETS = ['strong_assignment','possible_assignment','logistics_or_closure','low_value','needs_review'];
+    const LOCATION_BUCKETS = ['geocode_ready','needs_address_cleanup','intersection_or_route','borough_only','missing_location','needs_review'];
+    const CLEANUP_BUCKETS = ['clean_address_candidate','clean_venue_candidate','intersection_candidate','route_or_multi_segment','park_area_candidate','borough_only','missing_location','needs_manual_review'];
     const NYC_CENTER = [40.7128, -74.0060];
-    let adminMap = null;
-    let adminMarkers = null;
+    let adminMap = null; let adminMarkers = null;
 
-    function text(value) {
-      if (value === null || value === undefined || value === '') return '—';
-      if (Array.isArray(value)) return value.length ? value.join(', ') : '—';
-      if (typeof value === 'object') return JSON.stringify(value);
-      return String(value);
-    }
+    function text(value) { if (value === null || value === undefined || value === '') return '—'; if (Array.isArray(value)) return value.length ? value.join(', ') : '—'; if (typeof value === 'object') return JSON.stringify(value); return String(value); }
+    function byId(id) { return document.getElementById(id); }
+    function el(tag, className, value) { const node = document.createElement(tag); if (className) node.className = className; if (value !== undefined) node.textContent = text(value); return node; }
+    function clear(node) { node.replaceChildren(); return node; }
+    function esc(value) { return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch])); }
+    function chips(values) { const wrap = el('div','chips'); const list = Array.isArray(values) ? values : [values]; if (!list.filter(Boolean).length) { wrap.appendChild(el('span','muted','—')); return wrap; } for (const value of list.filter(Boolean)) wrap.appendChild(el('span','chip',value)); return wrap; }
+    function appendList(parent, items) { const values = (items || []).filter(Boolean); if (!values.length) { parent.appendChild(el('div','empty','No warnings.')); return; } const list = el('ul','list'); for (const item of values) list.appendChild(el('li',null,item)); parent.appendChild(list); }
+    function statCard(label, value, detail) { const card = el('div','stat'); card.appendChild(el('div','label',label)); card.appendChild(el('div','value',value)); if (detail) card.appendChild(el('div','detail',detail)); return card; }
+    function table(columns, rows) { const wrap = el('div','table-wrap'); const tableNode = document.createElement('table'); const thead = document.createElement('thead'); const head = document.createElement('tr'); for (const c of columns) head.appendChild(el('th',null,c.label)); thead.appendChild(head); tableNode.appendChild(thead); const tbody = document.createElement('tbody'); if (!rows.length) { const row = document.createElement('tr'); const cell = el('td','empty','No rows in this snapshot section.'); cell.colSpan = columns.length; row.appendChild(cell); tbody.appendChild(row); } else { for (const item of rows) { const row = document.createElement('tr'); for (const c of columns) { const cell = document.createElement('td'); const value = c.value(item); if (value instanceof Node) cell.appendChild(value); else cell.textContent = text(value); row.appendChild(cell); } tbody.appendChild(row); } } tableNode.appendChild(tbody); wrap.appendChild(tableNode); return wrap; }
 
-    function byId(id) {
-      return document.getElementById(id);
-    }
+    async function loadJsonSnapshot(resource) { try { const response = await fetch(resource.path); if (!response.ok) throw new Error(`${response.status} ${response.statusText}`); return { key: resource.key, path: resource.path, data: await response.json(), error: null }; } catch (error) { return { key: resource.key, path: resource.path, data: null, error: error instanceof Error ? error.message : String(error) }; } }
+    function renderLoadErrors(results) { const failures = results.filter(r => r.error); const panel = byId('load-errors-panel'); const target = clear(byId('load-errors')); panel.hidden = failures.length === 0; for (const failure of failures) { const notice = el('div','notice danger'); notice.appendChild(el('div',null,`${failure.path}: ${failure.error}`)); target.appendChild(notice); } }
 
-    function el(tag, className, value) {
-      const node = document.createElement(tag);
-      if (className) node.className = className;
-      if (value !== undefined) node.textContent = text(value);
-      return node;
-    }
+    function identityKeys(lead) { const keys = []; const source = text(lead?.sourceDatasetId); for (const id of [lead?.eventId, lead?.sourceRecordId]) { const value = String(id || '').trim(); if (value) keys.push(`${source}|${value}`); } for (const id of [lead?.eventId, lead?.sourceRecordId]) { const value = String(id || '').trim(); if (value) keys.push(value); } return keys; }
+    function metadataMap(items, keyName) { const map = new Map(); for (const item of items || []) { for (const key of identityKeys(item.lead || {})) map.set(key, item[keyName]); } return map; }
+    function findMetadata(lead, map) { for (const key of identityKeys(lead)) if (map.has(key)) return map.get(key); return null; }
+    function toNumber(value) { const n = Number.parseFloat(value); return Number.isFinite(n) ? n : null; }
+    function hasValidCoordinates(record) { return Number.isFinite(record.latitude) && Number.isFinite(record.longitude); }
+    function reasonForUnmapped(record) { const reasons = []; if (!Number.isFinite(record.latitude) || !Number.isFinite(record.longitude)) reasons.push('missing latitude/longitude'); if (record.locationReadiness?.bucket) reasons.push(record.locationReadiness.bucket); if (record.locationCleanup?.bucket) reasons.push(record.locationCleanup.bucket); if (!record.locationReadiness?.bucket && !record.locationCleanup?.bucket) reasons.push('no existing GPS'); return [...new Set(reasons)].join('; '); }
+    function buildAdminMapRecords(data) { const triageByKey = metadataMap(data.tvppTriage?.items || [], 'triage'); const readinessByKey = metadataMap(data.tvppLocationReadiness?.items || [], 'locationReadiness'); const cleanupByKey = metadataMap(data.tvppLocationCleanup?.items || [], 'locationCleanup'); return (data.tvppCandidates?.leads || []).map((lead, index) => ({ source: lead.source || lead.sourceDatasetId || 'Unknown source', eventId: lead.eventId || lead.sourceRecordId || `snapshot-${index}`, title: lead.title || 'Untitled event', eventType: lead.eventType || '', category: lead.category || '', startDate: lead.startDate || '', startTime: lead.startTime || '', endDate: lead.endDate || '', endTime: lead.endTime || '', borough: lead.borough || '', locationName: lead.locationName || '', address: lead.address || '', latitude: toNumber(lead.latitude), longitude: toNumber(lead.longitude), triage: findMetadata(lead, triageByKey), locationReadiness: findMetadata(lead, readinessByKey), locationCleanup: findMetadata(lead, cleanupByKey) })); }
+    function countBy(records, getter) { return records.reduce((counts, record) => { const key = getter(record) || 'unknown'; counts[key] = (counts[key] || 0) + 1; return counts; }, {}); }
+    function renderCountCards(parent, title, counts, order) { const box = el('div','card'); box.appendChild(el('div','label',title)); const values = order || Object.keys(counts).sort(); box.appendChild(chips(values.map(key => `${key}: ${counts[key] || 0}`))); parent.appendChild(box); }
+    function popupHtml(record) { const lines = [['Source',record.source],['Type/category',[record.eventType,record.category].filter(Boolean).join(' / ')],['Date/time',`${text(record.startDate)} ${text(record.startTime)} to ${text(record.endDate)} ${text(record.endTime)}`],['Borough',record.borough],['Location',record.locationName || record.address],['Triage',record.triage?.bucket],['Location readiness',record.locationReadiness?.bucket],['Location cleanup',record.locationCleanup?.bucket]]; return `<div class="popup-title">${esc(record.title)}</div>${lines.map(([label,value]) => `<div class="popup-line"><strong>${esc(label)}:</strong> ${esc(text(value))}</div>`).join('')}`; }
+    function initializeAdminMap(mappedRecords) { const status = clear(byId('admin-map-status')); if (!window.L) { status.appendChild(el('div','notice danger','Leaflet failed to load, so the admin map cannot render. Snapshot tables are still available.')); return; } if (!adminMap) { adminMap = L.map('admin-map', { zoomControl:true, closePopupOnClick:false, tap:false }).setView(NYC_CENTER, 11); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'&copy; OpenStreetMap contributors' }).addTo(adminMap); adminMarkers = L.layerGroup().addTo(adminMap); } adminMarkers.clearLayers(); if (!mappedRecords.length) { adminMap.setView(NYC_CENTER, 11); status.appendChild(el('div','notice','No mappable records yet. Existing admin snapshot records do not currently include valid coordinates.')); setTimeout(() => adminMap.invalidateSize(), 100); return; } const bounds = []; for (const record of mappedRecords) { const latLng = [record.latitude, record.longitude]; bounds.push(latLng); L.marker(latLng, { title: record.title }).bindPopup(popupHtml(record)).addTo(adminMarkers); } adminMap.fitBounds(bounds, { padding:[36,36], maxZoom:13 }); status.appendChild(el('div','notice ok',`${mappedRecords.length} existing coordinate-backed record${mappedRecords.length === 1 ? '' : 's'} shown on the admin map.`)); setTimeout(() => adminMap.invalidateSize(), 100); }
+    function renderAllDataAdminMap(data) { const records = buildAdminMapRecords(data); const mapped = records.filter(hasValidCoordinates); const unmapped = records.filter(r => !hasValidCoordinates(r)); const counts = clear(byId('admin-map-counts')); counts.appendChild(statCard('Total records loaded', records.length, 'From local admin snapshots only.')); counts.appendChild(statCard('Mapped records', mapped.length, 'Existing valid coordinates only.')); counts.appendChild(statCard('Unmapped records', unmapped.length, 'Listed below; no geocoding here.')); renderCountCards(counts, 'By source', countBy(records, r => r.source)); renderCountCards(counts, 'By triage bucket', countBy(records, r => r.triage?.bucket || 'no_triage'), [...TRIAGE_BUCKETS,'no_triage']); renderCountCards(counts, 'By location-readiness bucket', countBy(records, r => r.locationReadiness?.bucket || 'no_location_readiness'), [...LOCATION_BUCKETS,'no_location_readiness']); renderCountCards(counts, 'By location-cleanup bucket', countBy(records, r => r.locationCleanup?.bucket || 'no_location_cleanup'), [...CLEANUP_BUCKETS,'no_location_cleanup']); initializeAdminMap(mapped); clear(byId('unmapped-records')).appendChild(table([{ label:'Title', value:r=>r.title },{ label:'Source', value:r=>r.source },{ label:'Type/category', value:r=>[r.eventType,r.category].filter(Boolean).join(' / ') },{ label:'Date/time', value:r=>`${text(r.startDate)} ${text(r.startTime)} to ${text(r.endDate)} ${text(r.endTime)}` },{ label:'Borough', value:r=>r.borough },{ label:'Location', value:r=>r.locationName },{ label:'Address', value:r=>r.address },{ label:'Readiness', value:r=>r.locationReadiness?.bucket },{ label:'Cleanup', value:r=>r.locationCleanup?.bucket },{ label:'Candidate display', value:r=>r.locationCleanup?.candidateDisplayLocation },{ label:'Candidate query', value:r=>r.locationCleanup?.candidateQuery },{ label:'Reason', value:reasonForUnmapped }], unmapped)); }
 
-    function clear(node) {
-      node.replaceChildren();
-      return node;
-    }
-
-    function esc(value) {
-      return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
-    }
-
-    function appendList(parent, items) {
-      const values = (items || []).filter(Boolean);
-      if (!values.length) {
-        parent.appendChild(el('div', 'empty', 'No warnings.'));
-        return;
-      }
-      const list = el('ul', 'list');
-      for (const item of values) list.appendChild(el('li', null, item));
-      parent.appendChild(list);
-    }
-
-    function statCard(label, value, detail) {
-      const card = el('div', 'stat');
-      card.appendChild(el('div', 'label', label));
-      card.appendChild(el('div', 'value', value));
-      if (detail) card.appendChild(el('div', 'detail', detail));
-      return card;
-    }
-
-    function chips(values) {
-      const wrap = el('div', 'chips');
-      const list = Array.isArray(values) ? values : [values];
-      if (!list.filter(Boolean).length) {
-        wrap.appendChild(el('span', 'muted', '—'));
-        return wrap;
-      }
-      for (const value of list.filter(Boolean)) wrap.appendChild(el('span', 'chip', value));
-      return wrap;
-    }
-
-    function table(columns, rows) {
-      const wrap = el('div', 'table-wrap');
-      const tableNode = document.createElement('table');
-      const thead = document.createElement('thead');
-      const trHead = document.createElement('tr');
-      for (const column of columns) trHead.appendChild(el('th', null, column.label));
-      thead.appendChild(trHead);
-      tableNode.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-      if (!rows.length) {
-        const row = document.createElement('tr');
-        const cell = el('td', 'empty', 'No rows in this snapshot section.');
-        cell.colSpan = columns.length;
-        row.appendChild(cell);
-        tbody.appendChild(row);
-      } else {
-        for (const item of rows) {
-          const row = document.createElement('tr');
-          for (const column of columns) {
-            const cell = document.createElement('td');
-            const value = column.value(item);
-            if (value instanceof Node) cell.appendChild(value);
-            else cell.textContent = text(value);
-            row.appendChild(cell);
-          }
-          tbody.appendChild(row);
-        }
-      }
-      tableNode.appendChild(tbody);
-      wrap.appendChild(tableNode);
-      return wrap;
-    }
-
-    function summaryCards(snapshot, fields) {
-      const grid = el('div', 'grid');
-      for (const field of fields) grid.appendChild(statCard(field.label, field.value(snapshot), field.detail ? field.detail(snapshot) : null));
-      return grid;
-    }
-
-    async function loadJsonSnapshot(resource) {
-      try {
-        const response = await fetch(resource.path);
-        if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-        return { key: resource.key, path: resource.path, data: await response.json(), error: null };
-      } catch (error) {
-        return { key: resource.key, path: resource.path, data: null, error: error instanceof Error ? error.message : String(error) };
-      }
-    }
-
-    function renderLoadErrors(results) {
-      const failures = results.filter((result) => result.error);
-      const panel = byId('load-errors-panel');
-      const target = clear(byId('load-errors'));
-      panel.hidden = failures.length === 0;
-      if (!failures.length) return;
-      for (const failure of failures) {
-        const notice = el('div', 'notice danger');
-        notice.appendChild(el('div', null, `${failure.path}: ${failure.error}`));
-        target.appendChild(notice);
-      }
-    }
-
-    function renderAdminStatus(projectStatus) {
-      const target = clear(byId('admin-status'));
-      const warnings = clear(byId('admin-warnings'));
-      if (!projectStatus) {
-        target.appendChild(el('div', 'empty', 'project-status.json did not load.'));
-        return;
-      }
-      target.appendChild(statCard('Project', projectStatus.projectName, projectStatus.snapshotsPurpose));
-      target.appendChild(statCard('Admin mode', projectStatus.adminMode, 'Read-only operator visibility.'));
-      target.appendChild(statCard('Public map', projectStatus.publicMapStatus?.summary, projectStatus.publicMapStatus?.note));
-      target.appendChild(statCard('Admin dashboard', projectStatus.adminDashboardStatus?.summary, `Wiring: ${text(projectStatus.adminDashboardStatus?.wiringStatus)}`));
-      target.appendChild(statCard('Production map wiring', projectStatus.productionMapWiringStatus?.summary, `Map runtime changed: ${text(projectStatus.productionMapWiringStatus?.mapRuntimeChanged)}`));
-      appendList(warnings, projectStatus.warnings || []);
-    }
-
-    function renderCompletionTracker(projectStatus) {
-      const target = clear(byId('completion-tracker'));
-      const rows = projectStatus?.masterCompletionTracker || [];
-      target.appendChild(table([
-        { label: 'Area', value: (row) => row.area },
-        { label: 'Completion', value: (row) => row.completion },
-        { label: 'Summary', value: (row) => row.summary },
-      ], rows));
-    }
-
-    function renderSourceFreshness(sourceFreshness) {
-      const target = clear(byId('source-freshness'));
-      if (!sourceFreshness) {
-        target.appendChild(el('div', 'empty', 'source-freshness.json did not load.'));
-        return;
-      }
-      target.appendChild(summaryCards(sourceFreshness, [
-        { label: 'Generated', value: (data) => data.generatedAt },
-        { label: 'Sample limit', value: (data) => data.limit },
-        { label: 'Purpose', value: (data) => data.purpose },
-      ]));
-      target.appendChild(table([
-        { label: 'Source', value: (row) => row.source },
-        { label: 'Dataset', value: (row) => row.sourceDatasetId },
-        { label: 'Freshness', value: (row) => row.freshness },
-        { label: 'Rows', value: (row) => row.rowCount },
-        { label: 'Leads', value: (row) => row.leadCount },
-        { label: 'Date range', value: (row) => `${text(row.dateRange?.min)} to ${text(row.dateRange?.max)}` },
-        { label: 'Recommendation', value: (row) => row.recommendation },
-        { label: 'Warnings', value: (row) => chips(row.warnings) },
-      ], sourceFreshness.sources || []));
-
-      const documented = el('div', null);
-      documented.appendChild(el('h3', null, 'Documented-only sources'));
-      documented.appendChild(table([
-        { label: 'Source', value: (row) => row.source },
-        { label: 'Dataset', value: (row) => row.sourceDatasetId },
-        { label: 'Status', value: (row) => row.status },
-        { label: 'Freshness', value: (row) => row.freshness },
-        { label: 'Recommendation', value: (row) => row.recommendation },
-        { label: 'Warnings', value: (row) => chips(row.warnings) },
-      ], sourceFreshness.documentedOnlySources || []));
-      target.appendChild(documented);
-    }
-
-    function renderCandidates(tvppCandidates) {
-      const target = clear(byId('tvpp-candidates'));
-      if (!tvppCandidates) {
-        target.appendChild(el('div', 'empty', 'tvpp-candidates.json did not load.'));
-        return;
-      }
-      target.appendChild(summaryCards(tvppCandidates, [
-        { label: 'Source', value: (data) => data.source },
-        { label: 'From date', value: (data) => data.fromDate },
-        { label: 'Row count', value: (data) => data.rowCount },
-        { label: 'Item count', value: (data) => data.itemCount },
-        { label: 'Date range', value: (data) => `${text(data.dateRange?.min)} to ${text(data.dateRange?.max)}` },
-      ]));
-      target.appendChild(table([
-        { label: 'Title', value: (lead) => lead.title },
-        { label: 'Event type', value: (lead) => lead.eventType },
-        { label: 'Category', value: (lead) => lead.category },
-        { label: 'Start', value: (lead) => `${text(lead.startDate)} ${text(lead.startTime)}` },
-        { label: 'End', value: (lead) => `${text(lead.endDate)} ${text(lead.endTime)}` },
-        { label: 'Borough', value: (lead) => lead.borough },
-        { label: 'Location', value: (lead) => lead.locationName },
-        { label: 'Description', value: (lead) => lead.description },
-        { label: 'Organizer', value: (lead) => lead.organizer },
-        { label: 'Latitude', value: (lead) => lead.latitude },
-        { label: 'Longitude', value: (lead) => lead.longitude },
-        { label: 'Photo priority', value: (lead) => lead.photoPriorityScore },
-      ], tvppCandidates.leads || []));
-    }
-
-    function renderBucketCounts(parent, counts, bucketOrder) {
-      const grid = el('div', 'grid');
-      for (const bucket of bucketOrder) grid.appendChild(statCard(bucket, counts?.[bucket] ?? 0, 'Snapshot count'));
-      parent.appendChild(grid);
-    }
-
-    function groupBy(items, bucketGetter, bucketOrder) {
-      const groups = new Map(bucketOrder.map((bucket) => [bucket, []]));
-      for (const item of items || []) {
-        const bucket = bucketGetter(item) || 'needs_review';
-        if (!groups.has(bucket)) groups.set(bucket, []);
-        groups.get(bucket).push(item);
-      }
-      return groups;
-    }
-
-    function renderTriage(tvppTriage) {
-      const target = clear(byId('tvpp-triage'));
-      if (!tvppTriage) {
-        target.appendChild(el('div', 'empty', 'tvpp-triage.json did not load.'));
-        return;
-      }
-      renderBucketCounts(target, tvppTriage.bucketCounts, TRIAGE_BUCKETS);
-      const groups = groupBy(tvppTriage.items, (item) => item.triage?.bucket, TRIAGE_BUCKETS);
-      for (const bucket of TRIAGE_BUCKETS) {
-        const details = document.createElement('details');
-        details.open = bucket === 'strong_assignment' || bucket === 'possible_assignment';
-        details.appendChild(el('summary', null, `${bucket} (${groups.get(bucket).length})`));
-        const body = el('div', 'detail-body');
-        body.appendChild(table([
-          { label: 'Title', value: (item) => item.lead?.title },
-          { label: 'Borough', value: (item) => item.lead?.borough },
-          { label: 'Date/time', value: (item) => `${text(item.lead?.startDate)} ${text(item.lead?.startTime)} to ${text(item.lead?.endDate)} ${text(item.lead?.endTime)}` },
-          { label: 'Location', value: (item) => item.lead?.locationName },
-          { label: 'Bucket', value: (item) => item.triage?.bucket },
-          { label: 'Labels', value: (item) => chips(item.triage?.labels) },
-          { label: 'Reasons', value: (item) => chips(item.triage?.reasons) },
-          { label: 'Confidence', value: (item) => item.triage?.confidence },
-        ], groups.get(bucket)));
-        details.appendChild(body);
-        target.appendChild(details);
-      }
-    }
-
-    function renderLocationReadiness(locationReadiness) {
-      const target = clear(byId('tvpp-location-readiness'));
-      if (!locationReadiness) {
-        target.appendChild(el('div', 'empty', 'tvpp-location-readiness.json did not load.'));
-        return;
-      }
-      renderBucketCounts(target, locationReadiness.locationBucketCounts, LOCATION_BUCKETS);
-      const groups = groupBy(locationReadiness.items, (item) => item.locationReadiness?.bucket, LOCATION_BUCKETS);
-      for (const bucket of LOCATION_BUCKETS) {
-        const details = document.createElement('details');
-        details.open = bucket === 'needs_address_cleanup' || bucket === 'intersection_or_route';
-        details.appendChild(el('summary', null, `${bucket} (${groups.get(bucket).length})`));
-        const body = el('div', 'detail-body');
-        body.appendChild(table([
-          { label: 'Title', value: (item) => item.lead?.title },
-          { label: 'Borough', value: (item) => item.lead?.borough },
-          { label: 'Location', value: (item) => item.lead?.locationName },
-          { label: 'Address', value: (item) => item.lead?.address },
-          { label: 'Latitude', value: (item) => item.lead?.latitude },
-          { label: 'Longitude', value: (item) => item.lead?.longitude },
-          { label: 'Bucket', value: (item) => item.locationReadiness?.bucket },
-          { label: 'Labels', value: (item) => chips(item.locationReadiness?.labels) },
-          { label: 'Reasons', value: (item) => chips(item.locationReadiness?.reasons) },
-          { label: 'Confidence', value: (item) => item.locationReadiness?.confidence },
-        ], groups.get(bucket)));
-        details.appendChild(body);
-        target.appendChild(details);
-      }
-    }
-
-    function identityKeys(lead) {
-      const keys = [];
-      const source = text(lead?.sourceDatasetId);
-      for (const id of [lead?.eventId, lead?.sourceRecordId]) {
-        const value = String(id || '').trim();
-        if (value) keys.push(`${source}|${value}`);
-      }
-      for (const id of [lead?.eventId, lead?.sourceRecordId]) {
-        const value = String(id || '').trim();
-        if (value) keys.push(value);
-      }
-      return keys;
-    }
-
-    function metadataMap(items, keyName) {
-      const map = new Map();
-      for (const item of items || []) {
-        const lead = item.lead || {};
-        for (const key of identityKeys(lead)) map.set(key, item[keyName]);
-      }
-      return map;
-    }
-
-    function findMetadata(lead, map) {
-      for (const key of identityKeys(lead)) {
-        if (map.has(key)) return map.get(key);
-      }
-      return null;
-    }
-
-    function toNumber(value) {
-      const numeric = Number.parseFloat(value);
-      return Number.isFinite(numeric) ? numeric : null;
-    }
-
-    function hasValidCoordinates(record) {
-      return Number.isFinite(record.latitude) && Number.isFinite(record.longitude);
-    }
-
-    function reasonForUnmapped(record) {
-      const reasons = [];
-      if (!Number.isFinite(record.latitude) || !Number.isFinite(record.longitude)) reasons.push('missing latitude/longitude');
-      if (record.locationReadiness?.bucket) reasons.push(record.locationReadiness.bucket);
-      if (!record.locationReadiness?.bucket) reasons.push('no existing GPS');
-      return [...new Set(reasons)].join('; ');
-    }
-
-    function buildAdminMapRecords(data) {
-      const triageByKey = metadataMap(data.tvppTriage?.items || [], 'triage');
-      const locationByKey = metadataMap(data.tvppLocationReadiness?.items || [], 'locationReadiness');
-      const leads = data.tvppCandidates?.leads || [];
-      return leads.map((lead, index) => ({
-        source: lead.source || lead.sourceDatasetId || 'Unknown source',
-        sourceDatasetId: lead.sourceDatasetId || '',
-        eventId: lead.eventId || lead.sourceRecordId || `snapshot-${index}`,
-        title: lead.title || 'Untitled event',
-        eventType: lead.eventType || '',
-        category: lead.category || '',
-        startDate: lead.startDate || '',
-        startTime: lead.startTime || '',
-        endDate: lead.endDate || '',
-        endTime: lead.endTime || '',
-        borough: lead.borough || '',
-        locationName: lead.locationName || '',
-        address: lead.address || '',
-        latitude: toNumber(lead.latitude),
-        longitude: toNumber(lead.longitude),
-        triage: findMetadata(lead, triageByKey),
-        locationReadiness: findMetadata(lead, locationByKey),
-      }));
-    }
-
-    function countBy(records, getter) {
-      return records.reduce((counts, record) => {
-        const key = getter(record) || 'unknown';
-        counts[key] = (counts[key] || 0) + 1;
-        return counts;
-      }, {});
-    }
-
-    function renderCountCards(parent, title, counts, order) {
-      const box = el('div', 'card');
-      box.appendChild(el('div', 'label', title));
-      const values = order || Object.keys(counts).sort();
-      if (!values.length) box.appendChild(el('div', 'empty', 'No records.'));
-      else box.appendChild(chips(values.map((key) => `${key}: ${counts[key] || 0}`)));
-      parent.appendChild(box);
-    }
-
-    function popupHtml(record) {
-      const lines = [
-        ['Source', record.source],
-        ['Type/category', [record.eventType, record.category].filter(Boolean).join(' / ')],
-        ['Date/time', `${text(record.startDate)} ${text(record.startTime)} to ${text(record.endDate)} ${text(record.endTime)}`],
-        ['Borough', record.borough],
-        ['Location', record.locationName || record.address],
-        ['Triage', record.triage?.bucket],
-        ['Location readiness', record.locationReadiness?.bucket],
-      ];
-      return `<div class="popup-title">${esc(record.title)}</div>${lines.map(([label, value]) => `<div class="popup-line"><strong>${esc(label)}:</strong> ${esc(text(value))}</div>`).join('')}`;
-    }
-
-    function initializeAdminMap(mappedRecords) {
-      const status = clear(byId('admin-map-status'));
-      if (!window.L) {
-        status.appendChild(el('div', 'notice danger', 'Leaflet failed to load, so the admin map cannot render. Snapshot tables are still available.'));
-        return;
-      }
-      if (!adminMap) {
-        adminMap = L.map('admin-map', { zoomControl: true, closePopupOnClick: false, tap: false }).setView(NYC_CENTER, 11);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap contributors',
-        }).addTo(adminMap);
-        adminMarkers = L.layerGroup().addTo(adminMap);
-      }
-      adminMarkers.clearLayers();
-      if (!mappedRecords.length) {
-        adminMap.setView(NYC_CENTER, 11);
-        status.appendChild(el('div', 'notice', 'No mappable records yet. Existing admin snapshot records do not currently include valid coordinates.'));
-        setTimeout(() => adminMap.invalidateSize(), 100);
-        return;
-      }
-      const bounds = [];
-      for (const record of mappedRecords) {
-        const latLng = [record.latitude, record.longitude];
-        bounds.push(latLng);
-        L.marker(latLng, { title: record.title }).bindPopup(popupHtml(record)).addTo(adminMarkers);
-      }
-      adminMap.fitBounds(bounds, { padding: [36, 36], maxZoom: 13 });
-      status.appendChild(el('div', 'notice ok', `${mappedRecords.length} existing coordinate-backed record${mappedRecords.length === 1 ? '' : 's'} shown on the admin map.`));
-      setTimeout(() => adminMap.invalidateSize(), 100);
-    }
-
-    function renderAllDataAdminMap(data) {
-      const records = buildAdminMapRecords(data);
-      const mappedRecords = records.filter(hasValidCoordinates);
-      const unmappedRecords = records.filter((record) => !hasValidCoordinates(record));
-      const countsTarget = clear(byId('admin-map-counts'));
-      countsTarget.appendChild(statCard('Total records loaded', records.length, 'From local admin snapshots only.'));
-      countsTarget.appendChild(statCard('Mapped records', mappedRecords.length, 'Existing valid coordinates only.'));
-      countsTarget.appendChild(statCard('Unmapped records', unmappedRecords.length, 'Listed below; no geocoding here.'));
-      renderCountCards(countsTarget, 'By source', countBy(records, (record) => record.source), null);
-      renderCountCards(countsTarget, 'By triage bucket', countBy(records, (record) => record.triage?.bucket || 'no_triage'), [...TRIAGE_BUCKETS, 'no_triage']);
-      renderCountCards(countsTarget, 'By location-readiness bucket', countBy(records, (record) => record.locationReadiness?.bucket || 'no_location_readiness'), [...LOCATION_BUCKETS, 'no_location_readiness']);
-      initializeAdminMap(mappedRecords);
-      clear(byId('unmapped-records')).appendChild(table([
-        { label: 'Title', value: (record) => record.title },
-        { label: 'Source', value: (record) => record.source },
-        { label: 'Type/category', value: (record) => [record.eventType, record.category].filter(Boolean).join(' / ') },
-        { label: 'Date/time', value: (record) => `${text(record.startDate)} ${text(record.startTime)} to ${text(record.endDate)} ${text(record.endTime)}` },
-        { label: 'Borough', value: (record) => record.borough },
-        { label: 'Location', value: (record) => record.locationName },
-        { label: 'Address', value: (record) => record.address },
-        { label: 'Triage', value: (record) => record.triage?.bucket },
-        { label: 'Location readiness', value: (record) => record.locationReadiness?.bucket },
-        { label: 'Reason', value: reasonForUnmapped },
-      ], unmappedRecords));
-    }
-
-    function renderOperatorNotes(data) {
-      const target = clear(byId('operator-notes'));
-      const notes = [
-        'Admin snapshots are not production feed JSON.',
-        'Data panels are visibility-only and do not decide map visibility.',
-        'Admin map records are plotted only when existing valid coordinates are present.',
-        'Missing geocode: TVPP snapshot rows currently show latitude/longitude as null unless future reviewed geocoding is added.',
-      ];
-
-      const sourceWarnings = data.sourceFreshness?.sources || [];
-      if (sourceWarnings.some((source) => source.freshness === 'stale')) notes.push('Stale source: one or more source samples are stale.');
-      if ((data.sourceFreshness?.documentedOnlySources || []).length) notes.push('Documented-only source: Special Traffic Updates is listed but not scraped.');
-
-      const leads = data.tvppCandidates?.leads || [];
-      if (leads.some((lead) => !lead.locationName && !lead.address)) notes.push('Missing location: one or more candidate rows lack location text.');
-      if (leads.some((lead) => lead.latitude == null || lead.longitude == null)) notes.push('Missing geocode: one or more candidate rows lack GPS coordinates.');
-
-      const triageItems = data.tvppTriage?.items || [];
-      if (triageItems.some((item) => (item.triage?.labels || []).includes('low_information_title'))) notes.push('Weak / low-info title: one or more TVPP rows have low-information title labels.');
-
-      appendList(target, notes);
-    }
-
-    function updateTimestamp(data) {
-      const timestamp = data.projectStatus?.generatedAt || data.index?.generatedAt || 'unavailable';
-      byId('snapshot-timestamp').textContent = `Snapshot: ${timestamp}`;
-    }
-
-    function render(results) {
-      renderLoadErrors(results);
-      const data = Object.fromEntries(results.map((result) => [result.key, result.data]));
-      updateTimestamp(data);
-      renderAdminStatus(data.projectStatus);
-      renderAllDataAdminMap(data);
-      renderCompletionTracker(data.projectStatus);
-      renderSourceFreshness(data.sourceFreshness);
-      renderCandidates(data.tvppCandidates);
-      renderTriage(data.tvppTriage);
-      renderLocationReadiness(data.tvppLocationReadiness);
-      renderOperatorNotes(data);
-    }
-
+    function renderAdminStatus(projectStatus) { const target = clear(byId('admin-status')); const warnings = clear(byId('admin-warnings')); if (!projectStatus) { target.appendChild(el('div','empty','project-status.json did not load.')); return; } target.appendChild(statCard('Project',projectStatus.projectName,projectStatus.snapshotsPurpose)); target.appendChild(statCard('Admin mode',projectStatus.adminMode,'Read-only operator visibility.')); target.appendChild(statCard('Public map',projectStatus.publicMapStatus?.summary,projectStatus.publicMapStatus?.note)); target.appendChild(statCard('Admin dashboard',projectStatus.adminDashboardStatus?.summary,`Wiring: ${text(projectStatus.adminDashboardStatus?.wiringStatus)}`)); target.appendChild(statCard('Production map wiring',projectStatus.productionMapWiringStatus?.summary,`Map runtime changed: ${text(projectStatus.productionMapWiringStatus?.mapRuntimeChanged)}`)); appendList(warnings, projectStatus.warnings || []); }
+    function renderTracker(projectStatus) { clear(byId('completion-tracker')).appendChild(table([{label:'Area',value:r=>r.area},{label:'Completion',value:r=>r.completion},{label:'Summary',value:r=>r.summary}], projectStatus?.masterCompletionTracker || [])); }
+    function renderSourceFreshness(data) { const target = clear(byId('source-freshness')); if (!data) { target.appendChild(el('div','empty','source-freshness.json did not load.')); return; } target.appendChild(table([{label:'Source',value:r=>r.source},{label:'Dataset',value:r=>r.sourceDatasetId},{label:'Freshness',value:r=>r.freshness},{label:'Rows',value:r=>r.rowCount},{label:'Leads',value:r=>r.leadCount},{label:'Date range',value:r=>`${text(r.dateRange?.min)} to ${text(r.dateRange?.max)}`},{label:'Recommendation',value:r=>r.recommendation},{label:'Warnings',value:r=>chips(r.warnings)}], data.sources || [])); const documented = el('div'); documented.appendChild(el('h3',null,'Documented-only sources')); documented.appendChild(table([{label:'Source',value:r=>r.source},{label:'Dataset',value:r=>r.sourceDatasetId},{label:'Status',value:r=>r.status},{label:'Freshness',value:r=>r.freshness},{label:'Recommendation',value:r=>r.recommendation},{label:'Warnings',value:r=>chips(r.warnings)}], data.documentedOnlySources || [])); target.appendChild(documented); }
+    function renderCandidates(data) { const target = clear(byId('tvpp-candidates')); if (!data) { target.appendChild(el('div','empty','tvpp-candidates.json did not load.')); return; } target.appendChild(table([{label:'Title',value:l=>l.title},{label:'Event type',value:l=>l.eventType},{label:'Category',value:l=>l.category},{label:'Start',value:l=>`${text(l.startDate)} ${text(l.startTime)}`},{label:'End',value:l=>`${text(l.endDate)} ${text(l.endTime)}`},{label:'Borough',value:l=>l.borough},{label:'Location',value:l=>l.locationName},{label:'Address',value:l=>l.address},{label:'Latitude',value:l=>l.latitude},{label:'Longitude',value:l=>l.longitude}], data.leads || [])); }
+    function renderGrouped(targetId, data, buckets, keyName, columns) { const target = clear(byId(targetId)); if (!data) { target.appendChild(el('div','empty','Snapshot did not load.')); return; } const countsName = keyName === 'locationReadiness' ? 'locationBucketCounts' : 'bucketCounts'; const counts = data[countsName] || {}; const grid = el('div','grid'); for (const bucket of buckets) grid.appendChild(statCard(bucket, counts[bucket] || 0, 'Snapshot count')); target.appendChild(grid); const groups = new Map(buckets.map(b => [b, []])); for (const item of data.items || []) { const bucket = item[keyName]?.bucket || buckets[buckets.length - 1]; if (!groups.has(bucket)) groups.set(bucket, []); groups.get(bucket).push(item); } for (const bucket of buckets) { const details = document.createElement('details'); details.open = groups.get(bucket).length > 0; details.appendChild(el('summary',null,`${bucket} (${groups.get(bucket).length})`)); const body = el('div','detail-body'); body.appendChild(table(columns, groups.get(bucket))); details.appendChild(body); target.appendChild(details); } }
+    function renderTriage(data) { renderGrouped('tvpp-triage', data, TRIAGE_BUCKETS, 'triage', [{label:'Title',value:i=>i.lead?.title},{label:'Borough',value:i=>i.lead?.borough},{label:'Date/time',value:i=>`${text(i.lead?.startDate)} ${text(i.lead?.startTime)}`},{label:'Location',value:i=>i.lead?.locationName},{label:'Bucket',value:i=>i.triage?.bucket},{label:'Labels',value:i=>chips(i.triage?.labels)},{label:'Reasons',value:i=>chips(i.triage?.reasons)},{label:'Confidence',value:i=>i.triage?.confidence}]); }
+    function renderReadiness(data) { renderGrouped('tvpp-location-readiness', data, LOCATION_BUCKETS, 'locationReadiness', [{label:'Title',value:i=>i.lead?.title},{label:'Borough',value:i=>i.lead?.borough},{label:'Location',value:i=>i.lead?.locationName},{label:'Address',value:i=>i.lead?.address},{label:'Latitude',value:i=>i.lead?.latitude},{label:'Longitude',value:i=>i.lead?.longitude},{label:'Bucket',value:i=>i.locationReadiness?.bucket},{label:'Labels',value:i=>chips(i.locationReadiness?.labels)},{label:'Reasons',value:i=>chips(i.locationReadiness?.reasons)},{label:'Confidence',value:i=>i.locationReadiness?.confidence}]); }
+    function renderCleanup(data) { renderGrouped('tvpp-location-cleanup', data, CLEANUP_BUCKETS, 'locationCleanup', [{label:'Title',value:i=>i.lead?.title},{label:'Original',value:i=>i.locationCleanup?.originalLocationText},{label:'Cleaned',value:i=>i.locationCleanup?.cleanedLocationText},{label:'Candidate display',value:i=>i.locationCleanup?.candidateDisplayLocation},{label:'Candidate query',value:i=>i.locationCleanup?.candidateQuery},{label:'Kind',value:i=>i.locationCleanup?.locationKind},{label:'Borough',value:i=>i.locationCleanup?.borough},{label:'Labels',value:i=>chips(i.locationCleanup?.labels)},{label:'Reasons',value:i=>chips(i.locationCleanup?.reasons)},{label:'Confidence',value:i=>i.locationCleanup?.confidence}]); }
+    function renderOperatorNotes(data) { const target = clear(byId('operator-notes')); const notes = ['Admin snapshots are not production feed JSON.','Data panels are visibility-only and do not decide map visibility.','Admin map records are plotted only when existing valid coordinates are present.','TVPP location cleanup candidates are display-only and are not geocoded.']; if ((data.sourceFreshness?.documentedOnlySources || []).length) notes.push('Documented-only source: Special Traffic Updates is listed but not scraped.'); if ((data.tvppCandidates?.leads || []).some(l => l.latitude == null || l.longitude == null)) notes.push('Missing geocode: one or more candidate rows lack GPS coordinates.'); appendList(target, notes); }
+    function updateTimestamp(data) { const timestamp = data.projectStatus?.generatedAt || data.index?.generatedAt || 'unavailable'; byId('snapshot-timestamp').textContent = `Snapshot: ${timestamp}`; }
+    function render(results) { renderLoadErrors(results); const data = Object.fromEntries(results.map(r => [r.key, r.data])); updateTimestamp(data); renderAdminStatus(data.projectStatus); renderAllDataAdminMap(data); renderCleanup(data.tvppLocationCleanup); renderTracker(data.projectStatus); renderSourceFreshness(data.sourceFreshness); renderCandidates(data.tvppCandidates); renderTriage(data.tvppTriage); renderReadiness(data.tvppLocationReadiness); renderOperatorNotes(data); }
     Promise.all(SNAPSHOT_RESOURCES.map(loadJsonSnapshot)).then(render);
   </script>
 </body>
