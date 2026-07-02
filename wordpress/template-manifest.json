@@ -1,0 +1,43 @@
+{
+  "site": "NYC In Focus",
+  "domain": "nycinfocus.com",
+  "updated": "2026-07-02",
+  "principle": "GitHub is the master template file system; WordPress is the publishing surface.",
+  "rules": {
+    "newsletter_active": false,
+    "avoid_public_city_record_branding": true,
+    "article_wrapper_class": "nycif-story",
+    "page_css_scope_required": true,
+    "no_h1_in_article_body": true
+  },
+  "active_public_pages": [
+    {"key":"home","title":"NYC In Focus — The City, Unfiltered","status":"publish","notes":"Live homepage. Do not rewrite unless visibly broken."},
+    {"key":"about","title":"About NYC In Focus | Visual Journalism & Civic Reporting","status":"publish"},
+    {"key":"contact","title":"Contact NYC In Focus | Tips, Licensing & Coverage","status":"publish"},
+    {"key":"editorial-standards","title":"Editorial Standards | NYC In Focus","status":"publish"},
+    {"key":"corrections-policy","title":"Corrections Policy | NYC In Focus","status":"publish"},
+    {"key":"privacy-policy","title":"Privacy Policy | NYC In Focus","status":"publish"},
+    {"key":"terms-of-service","title":"Terms of Service | NYC In Focus","status":"publish"},
+    {"key":"cookie-policy","title":"Cookie Policy | NYC In Focus","status":"publish"},
+    {"key":"photo-licensing","title":"Photo Licensing | NYC In Focus","status":"publish"},
+    {"key":"our-team","title":"Our Team | NYC In Focus","status":"publish"},
+    {"key":"nyc-civic-radar","title":"NYC Civic Radar | Public Filings, Events, 311 & City Signals","status":"publish"},
+    {"key":"nyc-civic-watch","title":"NYC Civic Watch | Public Filings, Hearings & Agency Actions","status":"publish"},
+    {"key":"nyc-events-watch","title":"NYC Events Watch | Public Events, Civic Meetings & Coverage Leads","status":"publish"},
+    {"key":"nyc-311-watch","title":"NYC 311 Watch | Quality-of-Life Complaints & City Service Signals","status":"publish"},
+    {"key":"nyc-public-safety-watch","title":"NYC Public Safety Watch | Data, Trends & Civic Context","status":"publish"},
+    {"key":"nyc-street-permit-watch","title":"NYC Street Permit Watch | Street Work, Closures & Public Space","status":"publish"}
+  ],
+  "fragile_public_pages": [
+    {"key":"map","title":"NYC In Focus Map","status":"publish","requires":"iframe/feed live check"},
+    {"key":"calendar","title":"NYC Events Calendar","status":"publish_if_live","requires":"shortcode/embed live check"},
+    {"key":"nyc-events-radar","title":"NYC Events Radar | Field Map & Coverage Leads","status":"publish_if_live","requires":"shortcode/feed live check"},
+    {"key":"things-to-do-in-nyc","title":"Things To Do in NYC | Events, Maps & Public Happenings","status":"publish_if_live","requires":"shortcode/feed freshness check"}
+  ],
+  "archive_pages": [
+    {"key":"old-newsletter-archive","title":"OLD — Newsletter Archive — Do Not Use","status":"draft"},
+    {"key":"old-newsletter-system","title":"OLD — Newsletter System — Do Not Use","status":"draft"},
+    {"key":"old-home-front-page-draft","title":"OLD — Home Front Page Draft — Do Not Use","status":"draft"},
+    {"key":"old-duplicate-map-page","title":"OLD — Duplicate Map Page — Do Not Use","status":"draft"}
+  ]
+}
