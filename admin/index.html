@@ -11,12 +11,15 @@
       --bg: #0b1020;
       --panel: #121a2b;
       --panel-2: #182235;
-      --line: rgba(255, 255, 255, 0.08);
+      --panel-3: #0f172a;
+      --line: rgba(255, 255, 255, 0.1);
       --text: #eef2ff;
       --muted: #9aa7c0;
       --warn: #fbbf24;
+      --danger: #fb7185;
       --ok: #34d399;
       --accent: #60a5fa;
+      --chip: rgba(96, 165, 250, 0.12);
     }
     * { box-sizing: border-box; }
     body {
@@ -25,31 +28,37 @@
       background: linear-gradient(180deg, #0a0f1a, #111827 240px, var(--bg));
       color: var(--text);
     }
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 20px 16px 48px; }
-    h1 { margin: 0 0 6px; font-size: 24px; }
-    .sub { color: var(--muted); margin: 0 0 18px; }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 16px;
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 20px 16px 48px; }
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
       margin-bottom: 16px;
     }
-    .panel h2 { margin: 0 0 12px; font-size: 16px; }
-    .notice {
-      border-left: 4px solid var(--warn);
-      background: rgba(251, 191, 36, 0.08);
-      padding: 12px 14px;
-      border-radius: 12px;
-      color: #fde68a;
-      margin-bottom: 12px;
+    h1 { margin: 0 0 6px; font-size: clamp(24px, 4vw, 34px); letter-spacing: -0.03em; }
+    h2 { margin: 0 0 12px; font-size: 17px; }
+    h3 { margin: 0 0 10px; font-size: 14px; color: var(--text); }
+    .sub { color: var(--muted); margin: 0; max-width: 780px; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: var(--panel-2);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: 0.01em;
     }
-    .notice.ok {
-      border-left-color: var(--ok);
-      background: rgba(52, 211, 153, 0.08);
-      color: #a7f3d0;
-    }
-    .links { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 0; }
+    .badge.strong { color: #a7f3d0; border-color: rgba(52, 211, 153, 0.35); background: rgba(52, 211, 153, 0.08); }
+    .badge.warn { color: #fde68a; border-color: rgba(251, 191, 36, 0.35); background: rgba(251, 191, 36, 0.08); }
+    .badge.danger { color: #fecdd3; border-color: rgba(251, 113, 133, 0.35); background: rgba(251, 113, 133, 0.08); }
+    .links { display: flex; flex-wrap: wrap; gap: 10px; }
     .links a {
       color: var(--accent);
       text-decoration: none;
@@ -59,148 +68,516 @@
       background: var(--panel-2);
     }
     .links a:hover { border-color: rgba(96, 165, 250, 0.45); }
-    .stat-grid, .tracker-grid, .future-grid {
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+    }
+    .notice {
+      border-left: 4px solid var(--warn);
+      background: rgba(251, 191, 36, 0.08);
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #fde68a;
+      margin: 10px 0;
+    }
+    .notice.ok {
+      border-left-color: var(--ok);
+      background: rgba(52, 211, 153, 0.08);
+      color: #a7f3d0;
+    }
+    .notice.danger {
+      border-left-color: var(--danger);
+      background: rgba(251, 113, 133, 0.08);
+      color: #fecdd3;
+    }
+    .grid {
       display: grid;
       gap: 10px;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     }
-    .stat, .tracker, .future {
+    .stat, .card {
       background: var(--panel-2);
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 12px;
     }
     .label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
-    .value { font-size: 18px; font-weight: 700; }
+    .value { font-size: 18px; font-weight: 750; word-break: break-word; }
     .detail { color: var(--muted); font-size: 12px; margin-top: 6px; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-3); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 760px; }
     th, td {
       text-align: left;
       padding: 10px 8px;
       border-bottom: 1px solid var(--line);
       vertical-align: top;
     }
-    th { color: var(--muted); font-weight: 600; }
-    .placeholder { color: var(--muted); font-style: italic; }
+    th { color: var(--muted); font-weight: 700; background: rgba(255, 255, 255, 0.03); position: sticky; top: 0; }
+    tr:last-child td { border-bottom: 0; }
+    td { color: var(--text); }
+    .muted { color: var(--muted); }
+    .empty { color: var(--muted); font-style: italic; padding: 10px 0; }
+    .list { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
+    .list li { margin: 4px 0; }
+    details {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel-2);
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    summary {
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 750;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    details > .detail-body { padding: 12px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      display: inline-flex;
+      border: 1px solid rgba(96, 165, 250, 0.22);
+      border-radius: 999px;
+      background: var(--chip);
+      color: #bfdbfe;
+      padding: 3px 7px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .footer-note { color: var(--muted); font-size: 12px; margin-top: 20px; }
+    @media (max-width: 760px) {
+      .wrap { padding: 16px 10px 40px; }
+      .panel { padding: 14px; border-radius: 14px; }
+      table { min-width: 680px; }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>NYCIF Admin Dashboard</h1>
-    <p class="sub">Status: Admin UI skeleton live / read-only</p>
-
-    <section class="panel" aria-label="Navigation links">
-      <h2>Links</h2>
-      <div class="links">
-        <a href="../?v=c5p-postpublish-02&amp;resetFilters=1">NYCIF Field Desk (public)</a>
-        <a href="./?v=c5p-postpublish-02&amp;resetFilters=1">NYCIF Admin Dashboard</a>
-      </div>
-    </section>
-
-    <section class="panel" aria-label="Read-only notices">
-      <h2>Operator notices</h2>
-      <div class="notice ok">This page is read-only. It does not decide what appears on the public map.</div>
-      <div class="notice">Categories are shown separately for visibility and navigation only. No write controls, deploy buttons, approval/rejection, or hidden filtering logic are implemented.</div>
-    </section>
-
-    <section class="panel" aria-label="Admin page status">
-      <h2>Admin page status</h2>
-      <div class="stat-grid">
-        <div class="stat">
-          <div class="label">Current status</div>
-          <div class="value">Skeleton v0</div>
-          <div class="detail">Read-only static page</div>
-        </div>
-        <div class="stat">
-          <div class="label">404 removal</div>
-          <div class="value">After deploy</div>
-          <div class="detail">This file should serve `/admin/` once merged to `main` and GitHub Pages deploys</div>
-        </div>
-        <div class="stat">
-          <div class="label">Latest commit</div>
-          <div class="value placeholder">Placeholder</div>
-          <div class="detail">Build metadata panel comes later</div>
-        </div>
-        <div class="stat">
-          <div class="label">Data status</div>
-          <div class="value placeholder">Placeholder only</div>
-          <div class="detail">No live event data loaded in v0</div>
+    <header class="topbar">
+      <div>
+        <h1>NYCIF Admin Dashboard</h1>
+        <p class="sub">Read-only operator view for static admin snapshots. This dashboard does not decide what appears on the public Field Desk map.</p>
+        <div class="badge-row" aria-label="Dashboard mode and snapshot metadata">
+          <span class="badge strong">READ-ONLY OPERATOR VIEW</span>
+          <span class="badge" id="snapshot-timestamp">Snapshot: loading</span>
+          <span class="badge warn">No production map wiring</span>
         </div>
       </div>
+      <nav class="links" aria-label="Navigation links">
+        <a href="https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&amp;resetFilters=1">NYCIF Field Desk</a>
+        <a href="https://setoxxx.github.io/nycif-field-desk/admin/">NYCIF Admin Dashboard</a>
+      </nav>
+    </header>
+
+    <section class="panel" aria-label="Read-only guardrails">
+      <h2>Operator guardrails</h2>
+      <div class="notice ok">This page loads local static JSON snapshots only. It has no write, deploy, publish, approval, rejection, geocoding, or mutation controls.</div>
+      <div class="notice">Triage and location-readiness categories are displayed only for visibility and navigation. They do not approve, reject, publish, hide, or place anything on the public map.</div>
     </section>
 
-    <section class="panel" aria-label="NYCIF master completion tracker">
-      <h2>NYCIF Master Completion Tracker</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Area</th>
-            <th>Completion</th>
-            <th>Why</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Production map current scope</td>
-            <td>85–90%</td>
-            <td>Existing map/feeds are operational and gated. Remaining work is mostly geocodes, QA, more sources, and controlled promotion.</td>
-          </tr>
-          <tr>
-            <td>Event Sources dev tooling</td>
-            <td>90–95%</td>
-            <td>Source inventory, schema inspection, normalizers, sample pipelines, freshness reports, query tuning, TVPP candidate feed, and TVPP triage are built.</td>
-          </tr>
-          <tr>
-            <td>TVPP assignment-feed candidate</td>
-            <td>85–90%</td>
-            <td>TVPP is proven current, normalized, sampled, and triaged. Still no geocoding, production feed file, scoring, or map wiring.</td>
-          </tr>
-          <tr>
-            <td>Event API pipeline overall</td>
-            <td>80–85% dev-side / 0% production-side</td>
-            <td>Dev proof is strong. Production output, scheduled generation, cache/feed writes, map integration, and promotion gates are intentionally not done.</td>
-          </tr>
-          <tr>
-            <td>Admin / Operator dashboard</td>
-            <td>Skeleton in progress</td>
-            <td>Static `/admin/` page removes the planned 404. Real data panels come in later PRs.</td>
-          </tr>
-          <tr>
-            <td>XRI registry roadmap</td>
-            <td>33%</td>
-            <td>G0–G3 are merged. G4–G11 are not started.</td>
-          </tr>
-          <tr>
-            <td>XRI registry implementation</td>
-            <td>0%</td>
-            <td>No extractor, registry DB, reconciliation, seed workflow, UI, feeds, or WordPress integration.</td>
-          </tr>
-          <tr>
-            <td>WordPress / nycinfocus.com integration</td>
-            <td>0%</td>
-            <td>Intentionally untouched.</td>
-          </tr>
-          <tr>
-            <td>Full NYCIF platform vision</td>
-            <td>55–65%</td>
-            <td>Production map exists and Event Sources intelligence is stronger, but admin dashboard, XRI, WordPress, production event feed integration, and automation remain incomplete.</td>
-          </tr>
-        </tbody>
-      </table>
+    <section class="panel" id="load-errors-panel" hidden aria-label="Snapshot loading errors">
+      <h2>Snapshot loading errors</h2>
+      <div id="load-errors"></div>
     </section>
 
-    <section class="panel" aria-label="Future data panels">
-      <h2>Future data panels (placeholder v0)</h2>
-      <div class="future-grid">
-        <div class="future"><div class="label">Live feed</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
-        <div class="future"><div class="label">Candidate feed</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
-        <div class="future"><div class="label">TVPP triage buckets</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
-        <div class="future"><div class="label">Source freshness</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
-        <div class="future"><div class="label">Needs review</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
-        <div class="future"><div class="label">Missing location / geocode</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
-        <div class="future"><div class="label">Live vs candidate diff</div><div class="detail placeholder">Placeholder — no data loaded</div></div>
-      </div>
+    <section class="panel" aria-label="Admin status">
+      <h2>Admin Status</h2>
+      <div id="admin-status" class="grid"></div>
+      <div id="admin-warnings"></div>
     </section>
+
+    <section class="panel" aria-label="Master completion tracker">
+      <h2>Master Completion Tracker</h2>
+      <div id="completion-tracker"></div>
+    </section>
+
+    <section class="panel" aria-label="Source freshness">
+      <h2>Source Freshness</h2>
+      <div id="source-freshness"></div>
+    </section>
+
+    <section class="panel" aria-label="TVPP candidate summary">
+      <h2>TVPP Candidate Summary</h2>
+      <div id="tvpp-candidates"></div>
+    </section>
+
+    <section class="panel" aria-label="TVPP triage">
+      <h2>TVPP Triage</h2>
+      <div id="tvpp-triage"></div>
+    </section>
+
+    <section class="panel" aria-label="TVPP location readiness">
+      <h2>TVPP Location Readiness</h2>
+      <div id="tvpp-location-readiness"></div>
+    </section>
+
+    <section class="panel" aria-label="Warnings and operator notes">
+      <h2>Warnings / Operator Notes</h2>
+      <div id="operator-notes"></div>
+    </section>
+
+    <section class="panel" aria-label="Live vs candidate diff placeholder">
+      <h2>Live vs Candidate Diff — not implemented yet</h2>
+      <div class="notice">Current public map feed is not connected to Event Sources snapshots. This dashboard does not decide map visibility. Future work may compare the current live feed against candidate event snapshots.</div>
+    </section>
+
+    <p class="footer-note">Admin Dashboard Data Panels v1. Visibility-only static snapshot display. No public map runtime, production feed, service worker, deploy config, WordPress, XRI, geocoding, cache, auth, secret, cookie, or localStorage workflow is implemented here.</p>
   </div>
+
+  <script>
+    const SNAPSHOT_RESOURCES = [
+      { key: 'index', path: './data/index.json' },
+      { key: 'projectStatus', path: './data/project-status.json' },
+      { key: 'sourceFreshness', path: './data/source-freshness.json' },
+      { key: 'tvppCandidates', path: './data/tvpp-candidates.json' },
+      { key: 'tvppTriage', path: './data/tvpp-triage.json' },
+      { key: 'tvppLocationReadiness', path: './data/tvpp-location-readiness.json' },
+    ];
+
+    const TRIAGE_BUCKETS = [
+      'strong_assignment',
+      'possible_assignment',
+      'logistics_or_closure',
+      'low_value',
+      'needs_review',
+    ];
+
+    const LOCATION_BUCKETS = [
+      'geocode_ready',
+      'needs_address_cleanup',
+      'intersection_or_route',
+      'borough_only',
+      'missing_location',
+      'needs_review',
+    ];
+
+    function text(value) {
+      if (value === null || value === undefined || value === '') return '—';
+      if (Array.isArray(value)) return value.length ? value.join(', ') : '—';
+      if (typeof value === 'object') return JSON.stringify(value);
+      return String(value);
+    }
+
+    function byId(id) {
+      return document.getElementById(id);
+    }
+
+    function el(tag, className, value) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (value !== undefined) node.textContent = text(value);
+      return node;
+    }
+
+    function clear(node) {
+      node.replaceChildren();
+      return node;
+    }
+
+    function appendList(parent, items) {
+      const values = (items || []).filter(Boolean);
+      if (!values.length) {
+        parent.appendChild(el('div', 'empty', 'No warnings.'));
+        return;
+      }
+      const list = el('ul', 'list');
+      for (const item of values) list.appendChild(el('li', null, item));
+      parent.appendChild(list);
+    }
+
+    function statCard(label, value, detail) {
+      const card = el('div', 'stat');
+      card.appendChild(el('div', 'label', label));
+      card.appendChild(el('div', 'value', value));
+      if (detail) card.appendChild(el('div', 'detail', detail));
+      return card;
+    }
+
+    function chips(values) {
+      const wrap = el('div', 'chips');
+      const list = Array.isArray(values) ? values : [values];
+      if (!list.filter(Boolean).length) {
+        wrap.appendChild(el('span', 'muted', '—'));
+        return wrap;
+      }
+      for (const value of list.filter(Boolean)) wrap.appendChild(el('span', 'chip', value));
+      return wrap;
+    }
+
+    function table(columns, rows) {
+      const wrap = el('div', 'table-wrap');
+      const tableNode = document.createElement('table');
+      const thead = document.createElement('thead');
+      const trHead = document.createElement('tr');
+      for (const column of columns) trHead.appendChild(el('th', null, column.label));
+      thead.appendChild(trHead);
+      tableNode.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      if (!rows.length) {
+        const row = document.createElement('tr');
+        const cell = el('td', 'empty', 'No rows in this snapshot section.');
+        cell.colSpan = columns.length;
+        row.appendChild(cell);
+        tbody.appendChild(row);
+      } else {
+        for (const item of rows) {
+          const row = document.createElement('tr');
+          for (const column of columns) {
+            const cell = document.createElement('td');
+            const value = column.value(item);
+            if (value instanceof Node) cell.appendChild(value);
+            else cell.textContent = text(value);
+            row.appendChild(cell);
+          }
+          tbody.appendChild(row);
+        }
+      }
+      tableNode.appendChild(tbody);
+      wrap.appendChild(tableNode);
+      return wrap;
+    }
+
+    function summaryCards(snapshot, fields) {
+      const grid = el('div', 'grid');
+      for (const field of fields) grid.appendChild(statCard(field.label, field.value(snapshot), field.detail ? field.detail(snapshot) : null));
+      return grid;
+    }
+
+    async function loadJsonSnapshot(resource) {
+      try {
+        const response = await fetch(resource.path);
+        if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+        return { key: resource.key, path: resource.path, data: await response.json(), error: null };
+      } catch (error) {
+        return { key: resource.key, path: resource.path, data: null, error: error instanceof Error ? error.message : String(error) };
+      }
+    }
+
+    function renderLoadErrors(results) {
+      const failures = results.filter((result) => result.error);
+      const panel = byId('load-errors-panel');
+      const target = clear(byId('load-errors'));
+      panel.hidden = failures.length === 0;
+      if (!failures.length) return;
+      for (const failure of failures) {
+        const notice = el('div', 'notice danger');
+        notice.appendChild(el('div', null, `${failure.path}: ${failure.error}`));
+        target.appendChild(notice);
+      }
+    }
+
+    function renderAdminStatus(projectStatus) {
+      const target = clear(byId('admin-status'));
+      const warnings = clear(byId('admin-warnings'));
+      if (!projectStatus) {
+        target.appendChild(el('div', 'empty', 'project-status.json did not load.'));
+        return;
+      }
+      target.appendChild(statCard('Project', projectStatus.projectName, projectStatus.snapshotsPurpose));
+      target.appendChild(statCard('Admin mode', projectStatus.adminMode, 'Read-only operator visibility.'));
+      target.appendChild(statCard('Public map', projectStatus.publicMapStatus?.summary, projectStatus.publicMapStatus?.note));
+      target.appendChild(statCard('Admin dashboard', projectStatus.adminDashboardStatus?.summary, `Wiring: ${text(projectStatus.adminDashboardStatus?.wiringStatus)}`));
+      target.appendChild(statCard('Production map wiring', projectStatus.productionMapWiringStatus?.summary, `Map runtime changed: ${text(projectStatus.productionMapWiringStatus?.mapRuntimeChanged)}`));
+      appendList(warnings, projectStatus.warnings || []);
+    }
+
+    function renderCompletionTracker(projectStatus) {
+      const target = clear(byId('completion-tracker'));
+      const rows = projectStatus?.masterCompletionTracker || [];
+      target.appendChild(table([
+        { label: 'Area', value: (row) => row.area },
+        { label: 'Completion', value: (row) => row.completion },
+        { label: 'Summary', value: (row) => row.summary },
+      ], rows));
+    }
+
+    function renderSourceFreshness(sourceFreshness) {
+      const target = clear(byId('source-freshness'));
+      if (!sourceFreshness) {
+        target.appendChild(el('div', 'empty', 'source-freshness.json did not load.'));
+        return;
+      }
+      target.appendChild(summaryCards(sourceFreshness, [
+        { label: 'Generated', value: (data) => data.generatedAt },
+        { label: 'Sample limit', value: (data) => data.limit },
+        { label: 'Purpose', value: (data) => data.purpose },
+      ]));
+      target.appendChild(table([
+        { label: 'Source', value: (row) => row.source },
+        { label: 'Dataset', value: (row) => row.sourceDatasetId },
+        { label: 'Freshness', value: (row) => row.freshness },
+        { label: 'Rows', value: (row) => row.rowCount },
+        { label: 'Leads', value: (row) => row.leadCount },
+        { label: 'Date range', value: (row) => `${text(row.dateRange?.min)} to ${text(row.dateRange?.max)}` },
+        { label: 'Recommendation', value: (row) => row.recommendation },
+        { label: 'Warnings', value: (row) => chips(row.warnings) },
+      ], sourceFreshness.sources || []));
+
+      const documented = el('div', null);
+      documented.appendChild(el('h3', null, 'Documented-only sources'));
+      documented.appendChild(table([
+        { label: 'Source', value: (row) => row.source },
+        { label: 'Dataset', value: (row) => row.sourceDatasetId },
+        { label: 'Status', value: (row) => row.status },
+        { label: 'Freshness', value: (row) => row.freshness },
+        { label: 'Recommendation', value: (row) => row.recommendation },
+        { label: 'Warnings', value: (row) => chips(row.warnings) },
+      ], sourceFreshness.documentedOnlySources || []));
+      target.appendChild(documented);
+    }
+
+    function renderCandidates(tvppCandidates) {
+      const target = clear(byId('tvpp-candidates'));
+      if (!tvppCandidates) {
+        target.appendChild(el('div', 'empty', 'tvpp-candidates.json did not load.'));
+        return;
+      }
+      target.appendChild(summaryCards(tvppCandidates, [
+        { label: 'Source', value: (data) => data.source },
+        { label: 'From date', value: (data) => data.fromDate },
+        { label: 'Row count', value: (data) => data.rowCount },
+        { label: 'Item count', value: (data) => data.itemCount },
+        { label: 'Date range', value: (data) => `${text(data.dateRange?.min)} to ${text(data.dateRange?.max)}` },
+      ]));
+      target.appendChild(table([
+        { label: 'Title', value: (lead) => lead.title },
+        { label: 'Event type', value: (lead) => lead.eventType },
+        { label: 'Category', value: (lead) => lead.category },
+        { label: 'Start', value: (lead) => `${text(lead.startDate)} ${text(lead.startTime)}` },
+        { label: 'End', value: (lead) => `${text(lead.endDate)} ${text(lead.endTime)}` },
+        { label: 'Borough', value: (lead) => lead.borough },
+        { label: 'Location', value: (lead) => lead.locationName },
+        { label: 'Description', value: (lead) => lead.description },
+        { label: 'Organizer', value: (lead) => lead.organizer },
+        { label: 'Latitude', value: (lead) => lead.latitude },
+        { label: 'Longitude', value: (lead) => lead.longitude },
+        { label: 'Photo priority', value: (lead) => lead.photoPriorityScore },
+      ], tvppCandidates.leads || []));
+    }
+
+    function renderBucketCounts(parent, counts, bucketOrder) {
+      const grid = el('div', 'grid');
+      for (const bucket of bucketOrder) grid.appendChild(statCard(bucket, counts?.[bucket] ?? 0, 'Snapshot count'));
+      parent.appendChild(grid);
+    }
+
+    function groupBy(items, bucketGetter, bucketOrder) {
+      const groups = new Map(bucketOrder.map((bucket) => [bucket, []]));
+      for (const item of items || []) {
+        const bucket = bucketGetter(item) || 'needs_review';
+        if (!groups.has(bucket)) groups.set(bucket, []);
+        groups.get(bucket).push(item);
+      }
+      return groups;
+    }
+
+    function renderTriage(tvppTriage) {
+      const target = clear(byId('tvpp-triage'));
+      if (!tvppTriage) {
+        target.appendChild(el('div', 'empty', 'tvpp-triage.json did not load.'));
+        return;
+      }
+      renderBucketCounts(target, tvppTriage.bucketCounts, TRIAGE_BUCKETS);
+      const groups = groupBy(tvppTriage.items, (item) => item.triage?.bucket, TRIAGE_BUCKETS);
+      for (const bucket of TRIAGE_BUCKETS) {
+        const details = document.createElement('details');
+        details.open = bucket === 'strong_assignment' || bucket === 'possible_assignment';
+        details.appendChild(el('summary', null, `${bucket} (${groups.get(bucket).length})`));
+        const body = el('div', 'detail-body');
+        body.appendChild(table([
+          { label: 'Title', value: (item) => item.lead?.title },
+          { label: 'Borough', value: (item) => item.lead?.borough },
+          { label: 'Date/time', value: (item) => `${text(item.lead?.startDate)} ${text(item.lead?.startTime)} to ${text(item.lead?.endDate)} ${text(item.lead?.endTime)}` },
+          { label: 'Location', value: (item) => item.lead?.locationName },
+          { label: 'Bucket', value: (item) => item.triage?.bucket },
+          { label: 'Labels', value: (item) => chips(item.triage?.labels) },
+          { label: 'Reasons', value: (item) => chips(item.triage?.reasons) },
+          { label: 'Confidence', value: (item) => item.triage?.confidence },
+        ], groups.get(bucket)));
+        details.appendChild(body);
+        target.appendChild(details);
+      }
+    }
+
+    function renderLocationReadiness(locationReadiness) {
+      const target = clear(byId('tvpp-location-readiness'));
+      if (!locationReadiness) {
+        target.appendChild(el('div', 'empty', 'tvpp-location-readiness.json did not load.'));
+        return;
+      }
+      renderBucketCounts(target, locationReadiness.locationBucketCounts, LOCATION_BUCKETS);
+      const groups = groupBy(locationReadiness.items, (item) => item.locationReadiness?.bucket, LOCATION_BUCKETS);
+      for (const bucket of LOCATION_BUCKETS) {
+        const details = document.createElement('details');
+        details.open = bucket === 'needs_address_cleanup' || bucket === 'intersection_or_route';
+        details.appendChild(el('summary', null, `${bucket} (${groups.get(bucket).length})`));
+        const body = el('div', 'detail-body');
+        body.appendChild(table([
+          { label: 'Title', value: (item) => item.lead?.title },
+          { label: 'Borough', value: (item) => item.lead?.borough },
+          { label: 'Location', value: (item) => item.lead?.locationName },
+          { label: 'Address', value: (item) => item.lead?.address },
+          { label: 'Latitude', value: (item) => item.lead?.latitude },
+          { label: 'Longitude', value: (item) => item.lead?.longitude },
+          { label: 'Bucket', value: (item) => item.locationReadiness?.bucket },
+          { label: 'Labels', value: (item) => chips(item.locationReadiness?.labels) },
+          { label: 'Reasons', value: (item) => chips(item.locationReadiness?.reasons) },
+          { label: 'Confidence', value: (item) => item.locationReadiness?.confidence },
+        ], groups.get(bucket)));
+        details.appendChild(body);
+        target.appendChild(details);
+      }
+    }
+
+    function renderOperatorNotes(data) {
+      const target = clear(byId('operator-notes'));
+      const notes = [
+        'Admin snapshots are not production feed JSON.',
+        'Data panels are visibility-only and do not decide map visibility.',
+        'Missing geocode: TVPP snapshot rows currently show latitude/longitude as null unless future reviewed geocoding is added.',
+      ];
+
+      const sourceWarnings = data.sourceFreshness?.sources || [];
+      if (sourceWarnings.some((source) => source.freshness === 'stale')) notes.push('Stale source: one or more source samples are stale.');
+      if ((data.sourceFreshness?.documentedOnlySources || []).length) notes.push('Documented-only source: Special Traffic Updates is listed but not scraped.');
+
+      const leads = data.tvppCandidates?.leads || [];
+      if (leads.some((lead) => !lead.locationName && !lead.address)) notes.push('Missing location: one or more candidate rows lack location text.');
+      if (leads.some((lead) => lead.latitude == null || lead.longitude == null)) notes.push('Missing geocode: one or more candidate rows lack GPS coordinates.');
+
+      const triageItems = data.tvppTriage?.items || [];
+      if (triageItems.some((item) => (item.triage?.labels || []).includes('low_information_title'))) notes.push('Weak / low-info title: one or more TVPP rows have low-information title labels.');
+
+      appendList(target, notes);
+    }
+
+    function updateTimestamp(data) {
+      const timestamp = data.projectStatus?.generatedAt || data.index?.generatedAt || 'unavailable';
+      byId('snapshot-timestamp').textContent = `Snapshot: ${timestamp}`;
+    }
+
+    function render(results) {
+      renderLoadErrors(results);
+      const data = Object.fromEntries(results.map((result) => [result.key, result.data]));
+      updateTimestamp(data);
+      renderAdminStatus(data.projectStatus);
+      renderCompletionTracker(data.projectStatus);
+      renderSourceFreshness(data.sourceFreshness);
+      renderCandidates(data.tvppCandidates);
+      renderTriage(data.tvppTriage);
+      renderLocationReadiness(data.tvppLocationReadiness);
+      renderOperatorNotes(data);
+    }
+
+    Promise.all(SNAPSHOT_RESOURCES.map(loadJsonSnapshot)).then(render);
+  </script>
 </body>
 </html>
