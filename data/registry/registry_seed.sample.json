@@ -1,0 +1,86 @@
+{
+  "artifact_type": "xri_registry_seed_sample",
+  "phase": "XRI-G9",
+  "description": "Offline sample registry seed artifact derived only from G8-valid review fixture shapes. This is not production, not public map data, not a production registry database, and not runtime wired.",
+  "production_allowed": false,
+  "public_map_allowed": false,
+  "runtime_wiring_allowed": false,
+  "source_review_artifact": "data/fixtures/registry_candidate_review_fixtures.sample.json",
+  "source_review_validator": "tools/xri/validate_registry_candidate_review_fixture.py",
+  "seed_policy": {
+    "only_seed_eligible_pending_final_gate_records_included": true,
+    "hard_blocks_required_empty": true,
+    "required_evidence_all_true": true,
+    "production_approval_granted": false,
+    "public_map_approval_granted": false,
+    "final_gate_required_before_any_runtime_use": true
+  },
+  "records": [
+    {
+      "registry_seed_id": "xri-g9-seed-sample-001",
+      "source_review_id": "xri-g8-review-seed-shape-001",
+      "source_candidate_id": "xri-g6-preview-seed-ready-001",
+      "registry_type": "venue_or_location",
+      "canonical_name": "Sample Seed-Ready Location",
+      "normalized_location_key": "sample_seed_ready_location",
+      "borough": "Brooklyn",
+      "address_or_location_text": "Sample location text for offline registry seed shape only",
+      "lat": 40.0,
+      "lng": -73.0,
+      "geometry_source": "g8_review_fixture_sample",
+      "coordinate_precision": "sample_only_not_approved",
+      "provenance": {
+        "source_repo": "setoxxx/nycif-field-desk",
+        "source_path": "data/fixtures/registry_candidate_review_fixtures.sample.json",
+        "source_review_id": "xri-g8-review-seed-shape-001",
+        "source_candidate_id": "xri-g6-preview-seed-ready-001",
+        "review_state": "seed_eligible_pending_final_gate",
+        "operator_action": "mark_seed_eligible_pending_final_gate",
+        "operator_note": "Fixture demonstrates the required evidence shape for future seed eligibility. It does not approve production use."
+      },
+      "evidence_summary": {
+        "source_identity_present": true,
+        "source_path_present": true,
+        "normalized_name_present": true,
+        "borough_confidence_present": true,
+        "location_confidence_present": true,
+        "coordinate_provenance_present": true,
+        "duplicate_check_complete": true,
+        "conflict_check_complete": true,
+        "operator_note_present": true,
+        "hard_blocks": []
+      },
+      "seed_status": "offline_seed_candidate_only",
+      "production_allowed": false,
+      "public_map_allowed": false,
+      "runtime_wiring_allowed": false,
+      "next_allowed_step": "xri_g10_read_only_lookup_prototype_only"
+    }
+  ],
+  "excluded_review_records": [
+    {
+      "source_review_id": "xri-g8-review-more-evidence-001",
+      "source_candidate_id": "xri-g6-preview-needs-review-001",
+      "reason": "missing provenance and incomplete review evidence",
+      "review_state": "needs_more_evidence"
+    },
+    {
+      "source_review_id": "xri-g8-review-duplicate-001",
+      "source_candidate_id": "xri-g6-preview-conflict-duplicate-001",
+      "reason": "duplicate hold remains unresolved",
+      "review_state": "duplicate_hold"
+    },
+    {
+      "source_review_id": "xri-g8-review-coordinate-001",
+      "source_candidate_id": "xri-g6-preview-conflict-coordinate-001",
+      "reason": "coordinate conflict and missing coordinate provenance remain unresolved",
+      "review_state": "coordinate_conflict_hold"
+    },
+    {
+      "source_review_id": "xri-g8-review-excluded-001",
+      "source_candidate_id": "xri-g6-preview-excluded-runtime-patch-001",
+      "reason": "record is excluded from seed scope",
+      "review_state": "excluded"
+    }
+  ]
+}
