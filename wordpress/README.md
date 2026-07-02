@@ -1,6 +1,6 @@
 # NYC In Focus WordPress Template System
 
-This directory is the source-of-truth library for NYC In Focus WordPress pages, reusable HTML templates, article wrappers, and publishing rules.
+This directory is the source-of-truth library for NYC In Focus WordPress pages, reusable HTML templates, article wrappers, SEO metadata rules, and publishing workflows.
 
 The live Field Desk PWA stays at the repository root. WordPress material belongs under `wordpress/` so template work does not interfere with the public map app.
 
@@ -11,9 +11,16 @@ wordpress/
   README.md
   PAGE_REGISTRY.md
   PUBLISHING_SOP.md
+  STORY_PUBLISHING_SYSTEM.md
+  STORY_PACKAGE_TEMPLATE.md
+  SEO_AND_INDEXING_GUIDE.md
+  CATEGORY_TAG_GUIDE.md
   QA_CHECKLIST.md
   ARTICLE_TEMPLATE.html
   PAGE_TEMPLATE_BASE.html
+  template-manifest.json
+  json-ld/
+    NewsArticle.template.json
   pages/
     active/README.md
     archive/README.md
@@ -23,7 +30,28 @@ wordpress/
 
 WordPress is the publishing surface. GitHub is the master file system.
 
-Do not rebuild major pages directly in WordPress from memory. Start from the saved template, update the template in GitHub, review the diff, then paste the approved final body into WordPress.
+Do not rebuild major pages or publish important stories directly in WordPress from memory. Start from the saved template, update the template or story package in GitHub, review the diff, then paste or create the approved final body in WordPress.
+
+## Article publishing rule
+
+For every new story, build a complete package first:
+
+1. `STORY_PACKAGE_TEMPLATE.md`
+2. `ARTICLE_TEMPLATE.html`
+3. `SEO_AND_INDEXING_GUIDE.md`
+4. `CATEGORY_TAG_GUIDE.md`
+5. `QA_CHECKLIST.md`
+
+Only after those are complete should a WordPress draft be created.
+
+## Confirmed WordPress publishing context
+
+- Post types: Posts, Pages, Attachments.
+- Post taxonomies: Categories, Tags, Formats.
+- Active theme: Creatio 2.
+- Theme content width: 620px.
+- Theme wide width: 1200px.
+- Installed SEO/measurement tools include All in One SEO, MonsterInsights, Jetpack, Redirection, and WPConsent.
 
 ## Page types
 
@@ -100,6 +128,7 @@ The newsletter system is not public-ready. Until the signup flow, archive displa
 - Do not link Newsletter Archive publicly.
 - Do not claim subscriber counts.
 - Do not put newsletter CTAs on core pages.
+- Set `_jetpack_dont_email_post_to_subs` to `true` for staged drafts.
 
 ## WordPress edit safety
 
@@ -115,4 +144,4 @@ Do not touch these without an explicit approved publishing instruction:
 - cache
 - live public pages
 
-For NYC In Focus article publishing, use `ARTICLE_TEMPLATE.html` and `QA_CHECKLIST.md` before pasting into WordPress.
+For NYC In Focus article publishing, use `STORY_PUBLISHING_SYSTEM.md`, `ARTICLE_TEMPLATE.html`, and `QA_CHECKLIST.md` before creating or updating WordPress posts.
