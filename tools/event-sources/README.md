@@ -63,6 +63,19 @@ By default the sample applies an upcoming filter (`date >= today`, ordered by `d
 - **stderr:** fetch summary logs
 - **no files written** — not production feed output, not map runtime wiring
 
+## Multi-source freshness report (v4, dev-only)
+
+Sample all core event sources and report whether each returns usable current/upcoming rows:
+
+```bash
+node tools/event-sources/sample-event-sources.mjs --limit 3 --pretty
+```
+
+- **stdout:** JSON report with per-source `freshness`, `dateRange`, and sample `leads`
+- **stderr:** per-source fetch summary
+- **skipped:** `dot-trafalrt` (documented_only)
+- **no files written**
+
 ## Usage (read-only)
 
 ```javascript
