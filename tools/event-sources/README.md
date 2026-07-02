@@ -58,6 +58,16 @@ const leads = rows.map((row) => normalizeEventLead(source.id, row, { lastFetched
 
 No app token required for v0 sample fetches. Respect NYC Open Data rate limits in production use.
 
+## Live schema spot-check (v1, dev-only)
+
+Manual read-only inspection against NYC Open Data (not run in CI):
+
+```bash
+node tools/event-sources/inspect-live-schemas.mjs
+```
+
+Prints observed field names and simple value types per fetchable source. See `schema-notes.md` for findings.
+
 ## Tests
 
 ```bash
