@@ -1,11 +1,11 @@
 {
   "project": "NYCIF XRI Master Location Registry",
-  "completion_percent": 88,
-  "expected_completion_after_merge": 94,
-  "current_phase": "XRI-G10",
-  "current_phase_title": "Read-Only Registry Lookup Prototype",
-  "previous_phase": "XRI-G9 — Registry Seed Artifact, Not Runtime",
-  "phase_mode": "OFFLINE READ-ONLY LOOKUP PROTOTYPE",
+  "completion_percent": 94,
+  "expected_completion_after_merge": 100,
+  "current_phase": "XRI-G11",
+  "current_phase_title": "Internal Registry Review Surface / Admin Status Integration Plan",
+  "previous_phase": "XRI-G10 — Read-Only Registry Lookup Prototype",
+  "phase_mode": "PLANNING ONLY",
   "phase_status": "open_pr",
   "merged_phases": [
     "XRI-G0",
@@ -17,18 +17,20 @@
     "XRI-G6",
     "XRI-G7",
     "XRI-G8",
-    "XRI-G9"
+    "XRI-G9",
+    "XRI-G10"
   ],
   "active_pr": null,
-  "active_branch": "chatgpt/xri-g10-read-only-registry-lookup-prototype",
-  "last_merged_pr": 73,
-  "last_merge_sha": "dd2d5055bc781fbedf5960122dbf509a6c2d76cf",
+  "active_branch": "chatgpt/xri-g11-internal-registry-review-surface-plan",
+  "last_merged_pr": 74,
+  "last_merge_sha": "e2310fba51f58d11f0bf3e4ff183d7a2d140093d",
   "qa_agent_found": true,
-  "qa_agent_result": "offline_lookup_prototype_created",
-  "qa_agent_command": "python3 tools/xri/read_only_registry_lookup_prototype.py",
+  "qa_agent_result": "internal_review_surface_plan_created",
+  "qa_agent_command": "n/a — planning artifact only",
   "qa_agent_warnings": [
-    "Prototype is offline-only and not wired to runtime.",
-    "G10 does not authorize public map use, production feeds, WordPress output, geocode approval, or automated promotion."
+    "G11 is planning-only and does not implement an admin review surface.",
+    "G11 does not authorize public map use, production feeds, WordPress output, geocode approval, automated promotion, or runtime wiring.",
+    "XRI-G12 is not authorized by this phase."
   ],
   "production_allowed": false,
   "public_map_touched": false,
@@ -43,8 +45,8 @@
   "geocodes_approved": false,
   "candidates_promoted": false,
   "runtime_wiring_added": false,
-  "manual_action_needed": "none unless GitHub requires ready-for-review click",
-  "next_recommended_phase": "XRI-G11 — Internal Registry Review Surface / Admin Status Integration Plan",
+  "manual_action_needed": "review and merge PR if the G11 plan is acceptable; do not start XRI-G12 without explicit Howard approval",
+  "next_recommended_phase": "XRI-G12 — Admin Review Surface Static Prototype",
   "next_phase_authorized": false,
-  "last_updated": "2026-07-02T17:50:00.000Z"
+  "last_updated": "2026-07-02T18:20:00.000Z"
 }
