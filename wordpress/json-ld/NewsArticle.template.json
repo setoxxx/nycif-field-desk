@@ -1,0 +1,35 @@
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "POST TITLE",
+  "description": "META DESCRIPTION",
+  "image": [
+    "FEATURED_IMAGE_URL"
+  ],
+  "datePublished": "YYYY-MM-DDTHH:MM:SS-04:00",
+  "dateModified": "YYYY-MM-DDTHH:MM:SS-04:00",
+  "author": {
+    "@type": "Person",
+    "name": "Howard Weiss",
+    "url": "https://nycinfocus.com/our-team/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "NYC In Focus",
+    "url": "https://nycinfocus.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "SITE_LOGO_URL"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "CANONICAL_POST_URL"
+  },
+  "articleSection": "CATEGORY NAME",
+  "keywords": [
+    "TAG 1",
+    "TAG 2",
+    "TAG 3"
+  ]
+}
