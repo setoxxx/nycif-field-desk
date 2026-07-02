@@ -1,0 +1,151 @@
+{
+  "artifact_type": "xri_registry_candidate_review_fixture",
+  "phase": "XRI-G8",
+  "description": "Preview-only review artifact fixtures for the NYCIF XRI Master Location Registry. These records are not production, not public map data, and not registry seed records.",
+  "production_allowed": false,
+  "public_map_allowed": false,
+  "runtime_wiring_allowed": false,
+  "source_preview_artifact": "data/previews/registry_candidate_preview.sample.json",
+  "records": [
+    {
+      "review_id": "xri-g8-review-seed-shape-001",
+      "candidate_id": "xri-g6-preview-seed-ready-001",
+      "preview_group": "seed_ready_preview",
+      "review_state": "seed_eligible_pending_final_gate",
+      "operator_action": "mark_seed_eligible_pending_final_gate",
+      "evidence": {
+        "source_identity_present": true,
+        "source_path_present": true,
+        "normalized_name_present": true,
+        "borough_confidence_present": true,
+        "location_confidence_present": true,
+        "coordinate_provenance_present": true,
+        "duplicate_check_complete": true,
+        "conflict_check_complete": true,
+        "operator_note_present": true
+      },
+      "hard_blocks": [],
+      "soft_warnings": [],
+      "decision": {
+        "operator": "sample_operator",
+        "timestamp": "2026-07-02T17:00:00Z",
+        "note": "Fixture demonstrates the required evidence shape for future seed eligibility. It does not approve production use."
+      },
+      "production_allowed": false,
+      "public_map_allowed": false,
+      "next_allowed_step": "eligible_for_future_seed_artifact_only"
+    },
+    {
+      "review_id": "xri-g8-review-more-evidence-001",
+      "candidate_id": "xri-g6-preview-needs-review-001",
+      "preview_group": "needs_review_preview",
+      "review_state": "needs_more_evidence",
+      "operator_action": "mark_needs_more_evidence",
+      "evidence": {
+        "source_identity_present": true,
+        "source_path_present": true,
+        "normalized_name_present": true,
+        "borough_confidence_present": false,
+        "location_confidence_present": true,
+        "coordinate_provenance_present": false,
+        "duplicate_check_complete": false,
+        "conflict_check_complete": false,
+        "operator_note_present": true
+      },
+      "hard_blocks": ["missing_provenance"],
+      "soft_warnings": ["borough_inferred", "manual_review_recommended"],
+      "decision": {
+        "operator": "sample_operator",
+        "timestamp": "2026-07-02T17:01:00Z",
+        "note": "Fixture remains blocked until provenance, duplicate review, and conflict review are completed."
+      },
+      "production_allowed": false,
+      "public_map_allowed": false,
+      "next_allowed_step": "hold_for_more_evidence"
+    },
+    {
+      "review_id": "xri-g8-review-duplicate-001",
+      "candidate_id": "xri-g6-preview-conflict-duplicate-001",
+      "preview_group": "conflict_hold_preview",
+      "review_state": "duplicate_hold",
+      "operator_action": "mark_duplicate_hold",
+      "evidence": {
+        "source_identity_present": true,
+        "source_path_present": true,
+        "normalized_name_present": true,
+        "borough_confidence_present": true,
+        "location_confidence_present": true,
+        "coordinate_provenance_present": true,
+        "duplicate_check_complete": true,
+        "conflict_check_complete": true,
+        "operator_note_present": true
+      },
+      "hard_blocks": ["duplicate_conflict"],
+      "soft_warnings": ["weak_name_match"],
+      "decision": {
+        "operator": "sample_operator",
+        "timestamp": "2026-07-02T17:02:00Z",
+        "note": "Fixture demonstrates duplicate hold behavior before any future seed artifact can include the candidate."
+      },
+      "production_allowed": false,
+      "public_map_allowed": false,
+      "next_allowed_step": "hold_for_duplicate_resolution"
+    },
+    {
+      "review_id": "xri-g8-review-coordinate-001",
+      "candidate_id": "xri-g6-preview-conflict-coordinate-001",
+      "preview_group": "conflict_hold_preview",
+      "review_state": "coordinate_conflict_hold",
+      "operator_action": "mark_coordinate_conflict_hold",
+      "evidence": {
+        "source_identity_present": true,
+        "source_path_present": true,
+        "normalized_name_present": true,
+        "borough_confidence_present": true,
+        "location_confidence_present": true,
+        "coordinate_provenance_present": false,
+        "duplicate_check_complete": true,
+        "conflict_check_complete": true,
+        "operator_note_present": true
+      },
+      "hard_blocks": ["coordinate_conflict", "missing_provenance"],
+      "soft_warnings": ["coordinate_precision_low"],
+      "decision": {
+        "operator": "sample_operator",
+        "timestamp": "2026-07-02T17:03:00Z",
+        "note": "Fixture demonstrates coordinate conflict hold. No geocode is approved."
+      },
+      "production_allowed": false,
+      "public_map_allowed": false,
+      "next_allowed_step": "hold_for_coordinate_resolution"
+    },
+    {
+      "review_id": "xri-g8-review-excluded-001",
+      "candidate_id": "xri-g6-preview-excluded-runtime-patch-001",
+      "preview_group": "rejected_or_excluded_preview",
+      "review_state": "excluded",
+      "operator_action": "mark_excluded",
+      "evidence": {
+        "source_identity_present": true,
+        "source_path_present": true,
+        "normalized_name_present": true,
+        "borough_confidence_present": true,
+        "location_confidence_present": true,
+        "coordinate_provenance_present": true,
+        "duplicate_check_complete": true,
+        "conflict_check_complete": true,
+        "operator_note_present": true
+      },
+      "hard_blocks": ["rejected_or_excluded_source"],
+      "soft_warnings": [],
+      "decision": {
+        "operator": "sample_operator",
+        "timestamp": "2026-07-02T17:04:00Z",
+        "note": "Fixture demonstrates exclusion where a source can be documented but still cannot seed the registry."
+      },
+      "production_allowed": false,
+      "public_map_allowed": false,
+      "next_allowed_step": "exclude_from_seed"
+    }
+  ]
+}
