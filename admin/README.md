@@ -2,14 +2,15 @@
 
 Read-only static admin page for operator visibility. Published at `/admin/` on GitHub Pages when deployed from repo root.
 
-## v2 scope: read-only all-data admin map preview
+## Current scope: read-only data panels, admin map, and TVPP location cleanup
 
 - Loads only local static snapshot JSON from `admin/data/`
-- Displays project status, master completion tracker, source freshness, TVPP candidates, TVPP triage, and TVPP location readiness
-- Adds an **All-Data Admin Map** panel using the same Leaflet mapping approach used by the public Field Desk
+- Displays project status, master completion tracker, source freshness, TVPP candidates, TVPP triage, TVPP location readiness, and TVPP location cleanup
+- Includes an **All-Data Admin Map** panel using the same Leaflet mapping approach used by the public Field Desk
 - Plots only records that already have valid latitude/longitude values
 - Lists records without valid coordinates in an **Unmapped / Needs Location Work** queue
-- Shows counts for total, mapped, unmapped, source, triage bucket, and location-readiness bucket
+- Shows cleanup candidate fields in the unmapped queue: cleanup bucket, candidate display location, and candidate query
+- Adds a **TVPP Location Cleanup** panel powered by `tvpp-location-cleanup.json`
 - Shows documented-only Special Traffic Updates separately; it is not scraped
 - Includes a Live vs Candidate Diff placeholder only; no comparison is implemented yet
 - Handles missing snapshot files with visible error messages
@@ -43,10 +44,11 @@ Read-only static admin page for operator visibility. Published at `/admin/` on G
 - `./data/tvpp-candidates.json`
 - `./data/tvpp-triage.json`
 - `./data/tvpp-location-readiness.json`
+- `./data/tvpp-location-cleanup.json`
 
-## Map data behavior
+## Map and cleanup behavior
 
-The admin map joins TVPP candidate, triage, and location-readiness metadata in-browser for display only, using stable record identity where available:
+The admin map joins TVPP candidate, triage, location-readiness, and location-cleanup metadata in-browser for display only, using stable record identity where available:
 
 - `sourceDatasetId + eventId`
 - `sourceDatasetId + sourceRecordId`
@@ -55,7 +57,9 @@ The admin map joins TVPP candidate, triage, and location-readiness metadata in-b
 
 No joined output file is written. The underlying snapshot JSON is not mutated.
 
-Rows with null or invalid coordinates are not mapped. They remain visible in the unmapped queue with a derived reason such as missing latitude/longitude, needs_address_cleanup, intersection_or_route, borough_only, missing_location, needs_review, or no existing GPS.
+Rows with null or invalid coordinates are not mapped. They remain visible in the unmapped queue with a derived reason and cleanup candidate fields.
+
+TVPP location cleanup candidates are display-only. They do not create coordinates, call geocoding APIs, write `location_cache.json`, or wire anything into the public Field Desk map.
 
 ## Public Field Desk
 
