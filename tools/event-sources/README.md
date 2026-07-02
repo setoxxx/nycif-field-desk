@@ -102,6 +102,19 @@ node tools/event-sources/inspect-live-schemas.mjs
 
 Prints observed field names and simple value types per fetchable source. See `schema-notes.md` for findings.
 
+## Source query tuning (v4b, dev-only)
+
+Diagnostic script that tests candidate Socrata query strategies per core source and recommends whether each source is suitable for current feed use, historical context, or needs query adjustment:
+
+```bash
+node tools/event-sources/tune-event-source-queries.mjs --limit 3 --pretty
+```
+
+- **stdout:** JSON report with per-source strategy results and recommendations
+- **stderr:** fetch summary logs
+- **no files written** — not production feed output, not map runtime wiring
+- Special Traffic Updates (`dot-trafalrt`) remains `documented_only` and skipped
+
 ## Tests
 
 ```bash
