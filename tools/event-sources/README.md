@@ -49,6 +49,18 @@ Parks Event Listing (`fudw-fgrp`) provides base event data. Location, category, 
 
 Use `enrichParksEventLead(baseLead, joins)` from `normalizers/parks-joins.mjs`. This helper is **pure and fixture-only** for now — not wired into production feeds or map runtime. Image join (`6eti-k994`) is deferred.
 
+## Parks sample pipeline (v3, dev-only)
+
+Manual dev script that fetches a small Parks sample, joins matching rows by `event_id`, normalizes, enriches, and prints JSON to **stdout only**:
+
+```bash
+node tools/event-sources/sample-parks-pipeline.mjs --limit 3 --pretty
+```
+
+- **stdout:** JSON array of enriched EventLead objects only
+- **stderr:** fetch summary logs
+- **no files written** — not production feed output, not map runtime wiring
+
 ## Usage (read-only)
 
 ```javascript
