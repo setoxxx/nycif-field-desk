@@ -1,11 +1,11 @@
 {
   "project": "NYCIF XRI Master Location Registry",
-  "completion_percent": 70,
-  "expected_completion_after_merge": 78,
-  "current_phase": "XRI-G8",
-  "current_phase_title": "Review Artifact Schema + Fixture Validator",
-  "previous_phase": "XRI-G7 — Candidate Review Rules + Operator Decision Model",
-  "phase_mode": "OFFLINE SCHEMA + FIXTURE VALIDATOR",
+  "completion_percent": 78,
+  "expected_completion_after_merge": 88,
+  "current_phase": "XRI-G9",
+  "current_phase_title": "Registry Seed Artifact, Not Runtime",
+  "previous_phase": "XRI-G8 — Review Artifact Schema + Fixture Validator",
+  "phase_mode": "OFFLINE REGISTRY SEED SAMPLE",
   "phase_status": "open_pr",
   "merged_phases": [
     "XRI-G0",
@@ -15,18 +15,19 @@
     "XRI-G4",
     "XRI-G5",
     "XRI-G6",
-    "XRI-G7"
+    "XRI-G7",
+    "XRI-G8"
   ],
   "active_pr": null,
-  "active_branch": "chatgpt/xri-g8-review-artifact-schema-fixture-validator",
-  "last_merged_pr": 69,
-  "last_merge_sha": "c060c9fee62eaa1bc7d0cd26edc46709f3657ff5",
+  "active_branch": "chatgpt/xri-g9-registry-seed-artifact",
+  "last_merged_pr": 72,
+  "last_merge_sha": "2e81fabf60a689035b35f0bd59d89a5d02deab40",
   "qa_agent_found": true,
-  "qa_agent_result": "offline_validator_created",
-  "qa_agent_command": "python3 tools/xri/validate_registry_candidate_review_fixture.py",
+  "qa_agent_result": "offline_seed_validator_created",
+  "qa_agent_command": "python3 tools/xri/validate_registry_seed_sample.py",
   "qa_agent_warnings": [
     "Validator is offline-only and not wired to runtime.",
-    "G8 does not authorize production registry seeding, public map use, geocode approval, or automated promotion."
+    "G9 does not authorize production registry seeding, public map use, geocode approval, or automated promotion."
   ],
   "production_allowed": false,
   "public_map_touched": false,
@@ -42,7 +43,7 @@
   "candidates_promoted": false,
   "runtime_wiring_added": false,
   "manual_action_needed": "none unless GitHub requires ready-for-review click",
-  "next_recommended_phase": "XRI-G9 — Registry Seed Artifact, not runtime",
+  "next_recommended_phase": "XRI-G10 — Read-Only Registry Lookup Prototype",
   "next_phase_authorized": false,
-  "last_updated": "2026-07-02T17:00:00.000Z"
+  "last_updated": "2026-07-02T17:30:00.000Z"
 }
