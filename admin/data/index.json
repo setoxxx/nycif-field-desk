@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-07-02T13:41:48.626Z",
+  "tool": "build-admin-data-snapshots",
+  "version": "v0",
+  "adminMode": "read_only",
+  "purpose": "admin_visibility_only",
+  "files": {
+    "project-status.json": "admin/data/project-status.json",
+    "source-freshness.json": "admin/data/source-freshness.json",
+    "tvpp-candidates.json": "admin/data/tvpp-candidates.json",
+    "tvpp-triage.json": "admin/data/tvpp-triage.json",
+    "tvpp-location-readiness.json": "admin/data/tvpp-location-readiness.json",
+    "index.json": "admin/data/index.json"
+  }
+}

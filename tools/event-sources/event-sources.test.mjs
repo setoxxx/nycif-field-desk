@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { rm } from 'node:fs/promises';
+import path from 'node:path';
 import { describe, it } from 'node:test';
 
 import {
@@ -92,6 +94,23 @@ import {
   getLeadLocationText,
   isIntersectionOrRouteText,
 } from './tvpp-location-readiness.mjs';
+import {
+  ADMIN_SNAPSHOT_FILENAMES,
+  assertWritableAdminPath,
+  buildAdminSnapshotIndex,
+  buildProjectStatusSnapshot,
+  buildSourceFreshnessSnapshot,
+  buildTvppCandidatesSnapshot,
+  buildTvppLocationReadinessSnapshot,
+  buildTvppTriageSnapshot,
+  deriveFreshnessRecommendation,
+  FORBIDDEN_SNAPSHOT_WRITE_PREFIXES,
+  isForbiddenSnapshotWritePath,
+  resolveAdminDataFilePath,
+  summarizeSourceFreshnessForAdmin,
+  validateAdminSnapshots,
+  writeAdminSnapshots,
+} from './build-admin-data-snapshots.mjs';
 
 const EXPECTED_SOURCE_IDS = [
   'tvpp-9vvx',
@@ -1142,6 +1161,242 @@ describe('TVPP location readiness helpers', () => {
       1,
     );
     assert.equal(report.items.every((item) => item.lead.latitude == null), true);
+  });
+});
+
+describe('admin data snapshots v0 helpers', () => {
+  const generatedAt = '2026-07-02T12:00:00.000Z';
+  const sampleLead = {
+    source: 'NYC Permitted Event Information',
+    sourceDatasetId: 'tvpp-9vvx',
+    sourceRecordId: '1',
+    eventId: '1',
+    title: 'Street Fair',
+    eventType: 'Street Event',
+    category: null,
+    startDate: '2026-07-10',
+    startTime: '10:00:00',
+    endDate: '2026-07-10',
+    endTime: '18:00:00',
+    borough: 'Brooklyn',
+    locationName: '123 Flatbush Avenue',
+    address: '123 Flatbush Avenue',
+    latitude: null,
+    longitude: null,
+    description: null,
+    officialUrl: null,
+    organizer: null,
+    phone: null,
+    email: null,
+    isFree: null,
+    photoPriorityScore: null,
+    rawRecord: null,
+    lastFetchedAt: generatedAt,
+  };
+
+  it('buildProjectStatusSnapshot includes adminMode read_only and tracker', () => {
+    const snapshot = buildProjectStatusSnapshot(generatedAt);
+    assert.equal(snapshot.adminMode, 'read_only');
+    assert.equal(snapshot.projectName, 'NYCIF Field Desk');
+    assert.ok(snapshot.masterCompletionTracker.length >= 8);
+    assert.ok(snapshot.warnings.some((warning) => warning.includes('visibility-only')));
+  });
+
+  it('resolveAdminDataFilePath restricts writes to admin/data filenames', () => {
+    const target = resolveAdminDataFilePath('project-status.json');
+    assert.match(target, /admin[\\/]data[\\/]project-status\.json$/);
+    assert.throws(
+      () => resolveAdminDataFilePath('../secrets.json'),
+      /Disallowed admin snapshot filename/,
+    );
+    assert.throws(
+      () => resolveAdminDataFilePath('../../package.json'),
+      /Disallowed admin snapshot filename/,
+    );
+    assert.deepEqual(ADMIN_SNAPSHOT_FILENAMES.length, 6);
+  });
+
+  it('assertWritableAdminPath blocks paths outside admin/data', () => {
+    const allowed = resolveAdminDataFilePath('index.json');
+    assert.doesNotThrow(() => assertWritableAdminPath(allowed));
+    assert.throws(
+      () => assertWritableAdminPath('/tmp/not-admin-data.json'),
+      /Write blocked outside admin\/data/,
+    );
+  });
+
+  it('isForbiddenSnapshotWritePath blocks production feed and runtime paths', () => {
+    assert.equal(isForbiddenSnapshotWritePath('data/nycif_staged_live_events.json'), true);
+    assert.equal(isForbiddenSnapshotWritePath('data/location_cache.json'), true);
+    assert.equal(isForbiddenSnapshotWritePath('sw.js'), true);
+    assert.equal(isForbiddenSnapshotWritePath('admin/data/project-status.json'), false);
+    for (const prefix of FORBIDDEN_SNAPSHOT_WRITE_PREFIXES) {
+      assert.equal(isForbiddenSnapshotWritePath(prefix), true);
+    }
+  });
+
+  it('buildTvppCandidatesSnapshot keeps EventLead unchanged without triage or locationReadiness', () => {
+    const report = {
+      generatedAt,
+      sourceDatasetId: 'tvpp-9vvx',
+      source: 'NYC Permitted Event Information',
+      fromDate: '2026-07-02',
+      limit: 25,
+      rowCount: 1,
+      leadCount: 1,
+      dateRange: { min: '2026-07-10', max: '2026-07-10' },
+      leads: [sampleLead],
+    };
+    const snapshot = buildTvppCandidatesSnapshot(report);
+    assert.equal(snapshot.itemCount, 1);
+    assert.deepEqual(snapshot.leads[0], sampleLead);
+    assert.ok(!('triage' in snapshot.leads[0]));
+    assert.ok(!('locationReadiness' in snapshot.leads[0]));
+    assert.equal(snapshot.leads[0].latitude, null);
+    assert.equal(snapshot.leads[0].longitude, null);
+  });
+
+  it('buildTvppTriageSnapshot keeps triage separate from lead', () => {
+    const triageReport = {
+      generatedAt,
+      sourceDatasetId: 'tvpp-9vvx',
+      source: 'NYC Permitted Event Information',
+      fromDate: '2026-07-02',
+      limit: 25,
+      rowCount: 1,
+      itemCount: 1,
+      dateRange: { min: '2026-07-10', max: '2026-07-10' },
+      bucketCounts: {
+        strong_assignment: 1,
+        possible_assignment: 0,
+        logistics_or_closure: 0,
+        low_value: 0,
+        needs_review: 0,
+      },
+      items: [{
+        lead: sampleLead,
+        triage: {
+          bucket: 'strong_assignment',
+          labels: [],
+          reasons: ['Street Event type with actionable event detail'],
+          confidence: 'high',
+        },
+      }],
+    };
+    const snapshot = buildTvppTriageSnapshot(triageReport);
+    assert.equal(snapshot.items[0].triage.bucket, 'strong_assignment');
+    assert.ok(!('triage' in snapshot.items[0].lead));
+    assert.doesNotThrow(() => validateAdminSnapshots({
+      'project-status.json': buildProjectStatusSnapshot(generatedAt),
+      'tvpp-candidates.json': buildTvppCandidatesSnapshot({
+        ...triageReport,
+        leadCount: 1,
+        leads: [sampleLead],
+      }),
+      'tvpp-triage.json': snapshot,
+      'tvpp-location-readiness.json': buildTvppLocationReadinessSnapshot({
+        generatedAt,
+        sourceDatasetId: 'tvpp-9vvx',
+        source: 'NYC Permitted Event Information',
+        fromDate: '2026-07-02',
+        limit: 25,
+        rowCount: 1,
+        itemCount: 1,
+        dateRange: { min: '2026-07-10', max: '2026-07-10' },
+        locationBucketCounts: { geocode_ready: 1, needs_address_cleanup: 0, intersection_or_route: 0, borough_only: 0, missing_location: 0, needs_review: 0 },
+        items: [{
+          lead: sampleLead,
+          locationReadiness: {
+            bucket: 'geocode_ready',
+            labels: ['street_address'],
+            reasons: ['Street address pattern detected'],
+            confidence: 'high',
+          },
+        }],
+      }),
+    }));
+  });
+
+  it('buildTvppLocationReadinessSnapshot keeps locationReadiness separate and GPS null', () => {
+    const locationReport = {
+      generatedAt,
+      sourceDatasetId: 'tvpp-9vvx',
+      source: 'NYC Permitted Event Information',
+      fromDate: '2026-07-02',
+      limit: 25,
+      rowCount: 1,
+      itemCount: 1,
+      dateRange: { min: '2026-07-10', max: '2026-07-10' },
+      locationBucketCounts: {
+        geocode_ready: 1,
+        needs_address_cleanup: 0,
+        intersection_or_route: 0,
+        borough_only: 0,
+        missing_location: 0,
+        needs_review: 0,
+      },
+      items: [{
+        lead: sampleLead,
+        locationReadiness: {
+          bucket: 'geocode_ready',
+          labels: ['street_address'],
+          reasons: ['Street address pattern detected'],
+          confidence: 'high',
+        },
+      }],
+    };
+    const snapshot = buildTvppLocationReadinessSnapshot(locationReport);
+    assert.equal(snapshot.items[0].locationReadiness.bucket, 'geocode_ready');
+    assert.ok(!('locationReadiness' in snapshot.items[0].lead));
+    assert.equal(snapshot.items[0].lead.latitude, null);
+    assert.equal(snapshot.items[0].lead.longitude, null);
+  });
+
+  it('buildSourceFreshnessSnapshot includes documented-only Special Traffic Updates entry', () => {
+    const tvppConfig = getEventSourceById('tvpp-9vvx');
+    const entry = summarizeSourceFreshnessForAdmin({
+      sourceDatasetId: 'tvpp-9vvx',
+      source: 'NYC Permitted Event Information',
+      rowCount: 3,
+      leadCount: 3,
+      freshness: 'current',
+      dateRange: { min: '2026-07-02', max: '2026-07-10' },
+      leads: [],
+    }, tvppConfig);
+    assert.match(deriveFreshnessRecommendation('current', 'tvpp-9vvx'), /^use_for_current_feed/);
+
+    const snapshot = buildSourceFreshnessSnapshot({
+      generatedAt,
+      sourceEntries: [entry],
+      limit: 3,
+    });
+    assert.equal(snapshot.sources.length, 1);
+    assert.equal(snapshot.documentedOnlySources.length, 1);
+    assert.equal(snapshot.documentedOnlySources[0].sourceDatasetId, 'dot-trafalrt');
+    assert.equal(snapshot.documentedOnlySources[0].status, 'documented_only');
+  });
+
+  it('writeAdminSnapshots writes only under a temp admin/data directory', async () => {
+    const tempAdminDataDir = path.join(process.cwd(), 'admin', 'data', '__test_snapshots__');
+    const snapshots = {
+      'project-status.json': buildProjectStatusSnapshot(generatedAt),
+      'index.json': buildAdminSnapshotIndex(generatedAt, {
+        'project-status.json': 'admin/data/project-status.json',
+      }),
+    };
+
+    const filesWritten = await writeAdminSnapshots(snapshots, {
+      pretty: true,
+      adminDataDir: tempAdminDataDir,
+    });
+
+    assert.equal(filesWritten.length, 2);
+    for (const filePath of filesWritten) {
+      assert.match(filePath, /admin[\\/]data[\\/]__test_snapshots__/);
+      assert.equal(isForbiddenSnapshotWritePath(path.relative(process.cwd(), filePath)), false);
+    }
+
+    await rm(tempAdminDataDir, { recursive: true, force: true });
   });
 });
 

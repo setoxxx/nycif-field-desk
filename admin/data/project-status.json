@@ -1,0 +1,80 @@
+{
+  "generatedAt": "2026-07-02T13:41:48.626Z",
+  "tool": "build-admin-data-snapshots",
+  "version": "v0",
+  "projectName": "NYCIF Field Desk",
+  "adminMode": "read_only",
+  "snapshotsPurpose": "visibility-only admin data for operators; not production feed output",
+  "publicMapStatus": {
+    "summary": "Production map operational and gated; Event Sources work does not modify map runtime.",
+    "productionWired": false,
+    "note": "Admin snapshots are not consumed by the public map."
+  },
+  "adminDashboardStatus": {
+    "summary": "Static admin skeleton exists; data panels not wired yet.",
+    "dataSnapshots": "v0 generated under admin/data/",
+    "wiringStatus": "not_wired"
+  },
+  "eventSourcesStatus": {
+    "summary": "Dev tooling covers inventory, normalizers, freshness, TVPP candidate feed, triage, and location readiness audit.",
+    "productionFeedWrites": false,
+    "geocoding": false
+  },
+  "productionMapWiringStatus": {
+    "summary": "No admin snapshot or Event Sources dev output is wired into the live map.",
+    "feedUrlChanged": false,
+    "mapRuntimeChanged": false
+  },
+  "warnings": [
+    "Admin data snapshots are visibility-only and must not be treated as production feed JSON.",
+    "Snapshots do not create GPS coordinates, call geocoding APIs, or write geocode caches.",
+    "Triage and locationReadiness metadata are operator hints only — not approval or map visibility controls."
+  ],
+  "masterCompletionTracker": [
+    {
+      "area": "Production map current scope",
+      "completion": "85–90%",
+      "summary": "Existing map/feeds are operational and gated. Remaining work is geocodes, QA, more sources, and controlled promotion."
+    },
+    {
+      "area": "Event Sources dev tooling",
+      "completion": "94–97%",
+      "summary": "Source inventory, normalizers, sample pipelines, freshness, query tuning, TVPP candidate feed, triage, and location readiness audit are built."
+    },
+    {
+      "area": "TVPP assignment-feed candidate",
+      "completion": "89–93%",
+      "summary": "TVPP is current, normalized, sampled, triaged, and location-audited. No geocoding, production feed file, scoring, or map wiring."
+    },
+    {
+      "area": "Event API pipeline overall",
+      "completion": "82–87% dev-side / 0% production-side",
+      "summary": "Dev proof is strong. Production output, scheduled generation, cache/feed writes, and map integration are intentionally not done."
+    },
+    {
+      "area": "Admin / Operator dashboard",
+      "completion": "35–40%",
+      "summary": "Requirement documented; static skeleton exists; admin data snapshots v0 available; data panels not wired."
+    },
+    {
+      "area": "XRI registry roadmap",
+      "completion": "33%",
+      "summary": "G0–G3 merged. G4–G11 not started."
+    },
+    {
+      "area": "XRI registry implementation",
+      "completion": "0%",
+      "summary": "No extractor, registry DB, reconciliation, seed workflow, UI, feeds, or WordPress integration."
+    },
+    {
+      "area": "WordPress / nycinfocus.com integration",
+      "completion": "0%",
+      "summary": "Intentionally untouched."
+    },
+    {
+      "area": "Full NYCIF platform vision",
+      "completion": "60–68%",
+      "summary": "Production map exists and Event Sources intelligence is stronger, but admin dashboard, XRI, WordPress, production event feed integration, and automation remain incomplete."
+    }
+  ]
+}
