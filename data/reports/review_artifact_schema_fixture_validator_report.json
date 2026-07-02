@@ -1,0 +1,72 @@
+{
+  "phase": "XRI-G8",
+  "phase_title": "Review Artifact Schema + Fixture Validator",
+  "mode": "offline_schema_fixture_validator_not_production",
+  "completion_percent_before": 70,
+  "expected_completion_percent_after_merge": 78,
+  "production_allowed_from_g8": false,
+  "generated_at": "2026-07-02T17:00:00Z",
+  "prior_phase": "XRI-G7",
+  "changed_files": [
+    "docs/review-artifact-schema-fixture-validator.md",
+    "data/schemas/registry_candidate_review.schema.json",
+    "data/fixtures/registry_candidate_review_fixtures.sample.json",
+    "tools/xri/validate_registry_candidate_review_fixture.py",
+    "data/reports/review_artifact_schema_fixture_validator_report.json",
+    "data/reports/xri_project_status.json"
+  ],
+  "prohibited_files_touched": [],
+  "wordpress_touched": false,
+  "production_feed_touched": false,
+  "public_map_runtime_touched": false,
+  "iframe_embed_touched": false,
+  "scheduled_workflows_touched": false,
+  "location_cache_modified": false,
+  "location_cache_read_for_analysis": false,
+  "live_staging_executed": false,
+  "registry_database_created": false,
+  "importer_implemented": false,
+  "production_extractor_implemented": false,
+  "cache_merge_executed": false,
+  "merged_cache_created": false,
+  "geocodes_approved": false,
+  "candidates_promoted": false,
+  "external_api_called": false,
+  "soda_fetched": false,
+  "runtime_wiring_added": false,
+  "review_schema_created": true,
+  "review_schema_path": "data/schemas/registry_candidate_review.schema.json",
+  "review_fixtures_created": true,
+  "review_fixture_path": "data/fixtures/registry_candidate_review_fixtures.sample.json",
+  "validator_created": true,
+  "validator_path": "tools/xri/validate_registry_candidate_review_fixture.py",
+  "validator_scope": "offline_fixture_only",
+  "fixture_record_count": 5,
+  "review_states_covered": [
+    "seed_eligible_pending_final_gate",
+    "needs_more_evidence",
+    "duplicate_hold",
+    "coordinate_conflict_hold",
+    "excluded"
+  ],
+  "qa_agent_found": true,
+  "qa_agent_command": "python3 tools/xri/validate_registry_candidate_review_fixture.py",
+  "qa_agent_result": "created_for_offline_fixture_validation",
+  "qa_agent_warnings": [
+    "Validator is offline-only and not wired to runtime.",
+    "This report records validator creation; runtime execution should be checked in PR/CI if available."
+  ],
+  "admin_page_candidates_found": [
+    "admin/data/project-status.json",
+    "data/reports/xri_project_status.json"
+  ],
+  "admin_page_updated": true,
+  "admin_page_reason": "updated safe non-public data/reports/xri_project_status.json only",
+  "what_this_unlocks": [
+    "Machine-checkable review artifact format",
+    "Offline fixture validation before seed creation",
+    "G9 can build a registry seed artifact from valid review artifacts only"
+  ],
+  "next_recommended_phase": "XRI-G9 — Registry Seed Artifact, not runtime",
+  "next_phase_authorized": false
+}
