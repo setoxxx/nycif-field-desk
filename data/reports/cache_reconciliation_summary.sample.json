@@ -1,0 +1,107 @@
+{
+  "_sample_metadata": {
+    "phase": "XRI-G5",
+    "mode": "sample_report_only_not_merged_cache_not_registry_not_production_not_approved",
+    "warning": "SAMPLE SUMMARY ONLY — not a merged cache, not a registry, not production, not approved geocodes, not wired into runtime.",
+    "generated_at": "2026-07-02T16:15:00.000Z",
+    "production_allowed_from_g5": false,
+    "cache_merge_executed": false,
+    "merged_cache_created": false
+  },
+  "cache_families_compared": [
+    {
+      "id": "field_desk_cache",
+      "local_status": "read_only_inspected",
+      "key_count": 11211,
+      "coordinate_records": 10606,
+      "geocode_failed_records": 605
+    },
+    {
+      "id": "live_feeds_cache",
+      "local_status": "unavailable_for_local_read",
+      "g1_approx_key_count": 43522
+    }
+  ],
+  "reconciliation_categories": {
+    "exact_key_same_coordinates": "Same cache key string and identical lat/lng across compared sources.",
+    "exact_key_different_coordinates": "Same cache key string but incompatible coordinates; coordinate_conflict candidate.",
+    "same_normalized_name_same_coordinates": "Different key encodings but normalized name + borough + coords align.",
+    "same_normalized_name_different_coordinates": "Name match with coordinate divergence; requires human adjudication.",
+    "same_coordinates_different_name": "Coordinate cluster shared by unlike names; possible duplicate or data error.",
+    "same_name_different_borough": "Name match across boroughs; borough ambiguity or bad normalization.",
+    "missing_borough_ambiguous": "Borough missing or inconsistent between key, value, and normalized fields.",
+    "source_specific_override_candidate": "Row suitable for source_specific_override registry type after review.",
+    "manual_override_candidate": "Row suitable for manual_editorial_override after Howard gate.",
+    "runtime_patch_conflict": "Coordinate traceable only to map runtime patch, not cache/feed approval chain.",
+    "public_feed_untraceable_coordinate": "Coordinate visible in production feed without Tier 0/1 provenance.",
+    "cache_only_no_provenance": "Cache row lacks extractable approval/provenance chain for registry seed.",
+    "possible_stale_key": "updated_at or source_last_seen suggests superseded entry.",
+    "possible_duplicate_key": "Multiple keys likely referring to same place after normalization.",
+    "source_missing": "Referenced source file or row absent.",
+    "excluded_from_seed": "Blocked from registry seeding by G3/G4 safety rules."
+  },
+  "field_desk_read_only_snapshot": {
+    "key_format": "normalize(location)|normalize(borough)|",
+    "provider": "nyc_geosearch",
+    "quality_distribution": {
+      "geocoded": 10606,
+      "geocode_failed": 605
+    },
+    "borough_in_key_distribution": {
+      "manhattan": 5481,
+      "brooklyn": 2582,
+      "queens": 2192,
+      "bronx": 598,
+      "staten island": 358
+    },
+    "value_fields_observed": [
+      "query",
+      "lat",
+      "lng",
+      "quality",
+      "provider",
+      "updated_at"
+    ],
+    "provenance_signals_present": [
+      "provider",
+      "quality",
+      "updated_at"
+    ],
+    "provenance_signals_absent": [
+      "registry_id",
+      "approval_status",
+      "source_tier",
+      "match_status",
+      "confidence"
+    ]
+  },
+  "overlap_analysis_status": {
+    "cross_cache_computed": false,
+    "reason": "live-feeds cache unavailable_for_local_read",
+    "recommended_next_step": "Read-only clone/sync of live-feeds cache before G6 preview artifact"
+  },
+  "conflict_analysis_status": {
+    "cross_cache_computed": false,
+    "field_desk_internal_signals": {
+      "geocode_failed_rows": 605,
+      "assigned_categories": [
+        "cache_only_no_provenance",
+        "excluded_from_seed"
+      ]
+    }
+  },
+  "sample_category_assignments_not_production": [
+    {
+      "category": "cache_only_no_provenance",
+      "example_scope": "field-desk rows with quality=geocode_failed and no coordinates",
+      "estimated_count": 605,
+      "note": "Illustrative classification only; not promoted to registry"
+    },
+    {
+      "category": "excluded_from_seed",
+      "example_scope": "runtime patch and production feed derived coords per G3 fixtures",
+      "estimated_count": null,
+      "note": "Design-time category; cross-cache counts pending live-feeds read"
+    }
+  ]
+}
