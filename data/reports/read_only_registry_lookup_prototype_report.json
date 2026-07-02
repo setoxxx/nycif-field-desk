@@ -1,0 +1,37 @@
+{
+  "phase": "XRI-G10",
+  "phase_title": "Read-Only Registry Lookup Prototype",
+  "mode": "offline_read_only_lookup_prototype",
+  "completion_percent_before": 88,
+  "expected_completion_percent_after_merge": 94,
+  "generated_at": "2026-07-02T17:50:00Z",
+  "prior_phase": "XRI-G9",
+  "changed_files": [
+    "docs/read-only-registry-lookup-prototype.md",
+    "tools/xri/read_only_registry_lookup_prototype.py",
+    "data/reports/read_only_registry_lookup_prototype_output.sample.json",
+    "data/reports/read_only_registry_lookup_prototype_report.json",
+    "data/reports/xri_project_status.json"
+  ],
+  "lookup_prototype_created": true,
+  "lookup_prototype_path": "tools/xri/read_only_registry_lookup_prototype.py",
+  "lookup_input_path": "data/registry/registry_seed.sample.json",
+  "sample_output_path": "data/reports/read_only_registry_lookup_prototype_output.sample.json",
+  "supported_outcomes": [
+    "exact_registry_match",
+    "no_match",
+    "manual_review_required",
+    "seed_record_available_offline_only"
+  ],
+  "safety_flags": {
+    "runtime_wiring_added": false,
+    "location_cache_modified": false,
+    "live_staging_executed": false,
+    "external_api_called": false,
+    "candidates_promoted": false
+  },
+  "qa_command": "python3 tools/xri/read_only_registry_lookup_prototype.py",
+  "admin_status_path": "data/reports/xri_project_status.json",
+  "next_recommended_phase": "XRI-G11 — Internal Registry Review Surface / Admin Status Integration Plan",
+  "next_phase_authorized": false
+}
