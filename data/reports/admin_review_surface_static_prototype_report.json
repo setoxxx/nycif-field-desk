@@ -1,0 +1,73 @@
+{
+  "phase": "XRI-G12",
+  "title": "Admin Review Surface Static Prototype",
+  "phase_mode": "STATIC ADMIN PROTOTYPE ONLY",
+  "status": "prototype_created",
+  "completion_before": 94,
+  "expected_completion_after_merge": 100,
+  "created_at": "2026-07-02T18:35:00.000Z",
+  "prototype_path": "admin/xri-registry-review.html",
+  "static_inputs": [
+    "data/reports/xri_project_status.json",
+    "data/registry/registry_seed.sample.json",
+    "data/reports/read_only_registry_lookup_prototype_output.sample.json",
+    "data/reports/admin_review_surface_static_prototype_report.json"
+  ],
+  "display_sections": [
+    "status",
+    "registry_seed_records",
+    "read_only_lookup_outcomes",
+    "blocked_or_excluded_review_records",
+    "safety_flags"
+  ],
+  "prototype_assertions": {
+    "admin_only_static_page": true,
+    "reads_repo_local_static_json_only": true,
+    "mutation_controls_present": false,
+    "production_authority_claimed": false,
+    "runtime_lookup_added": false,
+    "public_map_wiring_added": false,
+    "external_fetches_added": false
+  },
+  "safety_assertions": {
+    "production_allowed": false,
+    "public_map_touched": false,
+    "wordpress_touched": false,
+    "production_feed_touched": false,
+    "location_cache_modified": false,
+    "live_staging_executed": false,
+    "production_public_map_changed": false,
+    "feed_url_changed": false,
+    "backend_public_gps_changed": false,
+    "external_apis_or_soda_called": false,
+    "geocodes_approved": false,
+    "candidates_promoted": false,
+    "runtime_wiring_added": false
+  },
+  "explicit_non_goals": [
+    "No production registry database.",
+    "No public map runtime integration.",
+    "No production feed read or write.",
+    "No location_cache.json write.",
+    "No geocode approval.",
+    "No candidate promotion.",
+    "No WordPress.",
+    "No external API or SODA fetch.",
+    "No G13 work."
+  ],
+  "manual_browser_qa": {
+    "command": "python3 -m http.server 8080",
+    "path": "http://localhost:8080/admin/xri-registry-review.html",
+    "expected": [
+      "page loads without JavaScript syntax errors",
+      "status cards render",
+      "seed records table renders",
+      "lookup outcomes table renders",
+      "blocked/excluded records table renders",
+      "safety flags render false/not-present only",
+      "no mutation controls appear"
+    ]
+  },
+  "next_recommended_phase": "XRI-G13 — Admin Review Surface Navigation Link + QA Gate",
+  "next_phase_authorized": false
+}
