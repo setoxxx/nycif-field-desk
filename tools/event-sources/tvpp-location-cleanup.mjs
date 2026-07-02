@@ -1,13 +1,9 @@
 /**
  * TVPP Location Cleanup Parser v1.
- *
- * Dev-only/read-only parser for turning messy TVPP location text into
- * structured review candidates. This module does not geocode, does not
- * create coordinates, and does not write caches.
+ * Dev-only/read-only parser. It does not geocode, create coordinates, or write caches.
  */
 
 export const TVPP_LOCATION_CLEANUP_VERSION = 'v1';
-
 export const TVPP_LOCATION_CLEANUP_BUCKETS = [
   'clean_address_candidate',
   'clean_venue_candidate',
@@ -21,187 +17,66 @@ export const TVPP_LOCATION_CLEANUP_BUCKETS = [
 
 const BOROUGHS = new Set(['manhattan', 'brooklyn', 'queens', 'bronx', 'staten island']);
 const LOW_INFO = new Set(['n/a', 'na', 'none', 'null', 'unknown', 'closed', 'closure', 'celebration', 'parks event', 'event', 'tbd', 'various']);
-
 const STREET_REPLACEMENTS = [
-  [/\bEAST\b/gi, 'E'],
-  [/\bWEST\b/gi, 'W'],
-  [/\bNORTH\b/gi, 'N'],
-  [/\bSOUTH\b/gi, 'S'],
-  [/\bSTREET\b/gi, 'St'],
-  [/\bAVENUE\b/gi, 'Ave'],
-  [/\bBOULEVARD\b/gi, 'Blvd'],
-  [/\bROAD\b/gi, 'Rd'],
-  [/\bPLACE\b/gi, 'Pl'],
-  [/\bLANE\b/gi, 'Ln'],
+  [/\bEAST\b/gi, 'E'], [/\bWEST\b/gi, 'W'], [/\bNORTH\b/gi, 'N'], [/\bSOUTH\b/gi, 'S'],
+  [/\bSTREET\b/gi, 'St'], [/\bAVENUE\b/gi, 'Ave'], [/\bBOULEVARD\b/gi, 'Blvd'],
+  [/\bROAD\b/gi, 'Rd'], [/\bPLACE\b/gi, 'Pl'], [/\bLANE\b/gi, 'Ln'],
 ];
 
-/** @param {unknown} value */
 export function normalizeTvppLocationText(value) {
-  let text = String(value ?? '')
-    .replace(/\s+/g, ' ')
-    .replace(/\s*,\s*/g, ', ')
-    .replace(/\s*:\s*/g, ': ')
-    .trim();
-
-  for (const [pattern, replacement] of STREET_REPLACEMENTS) {
-    text = text.replace(pattern, replacement);
-  }
-
-  text = text
-    .replace(/\bbetween\b/gi, 'between')
-    .replace(/\band\b/gi, 'and')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-  return text;
+  let text = String(value ?? '').replace(/\s+/g, ' ').replace(/\s*,\s*/g, ', ').replace(/\s*:\s*/g, ': ').trim();
+  for (const [pattern, replacement] of STREET_REPLACEMENTS) text = text.replace(pattern, replacement);
+  return text.replace(/\bbetween\b/gi, 'between').replace(/\band\b/gi, 'and').replace(/\s+/g, ' ').trim();
 }
 
-/** @param {unknown} value */
-function normalizeForClass(value) {
-  return String(value ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
-}
-
-/** @param {unknown[]} values */
-function firstUseful(values) {
-  for (const value of values) {
-    const text = String(value ?? '').trim();
-    if (text) return text;
-  }
-  return '';
-}
-
-/** @param {string} text */
-function isLowInfoText(text) {
-  const normalized = normalizeForClass(text);
-  if (!normalized) return true;
-  if (LOW_INFO.has(normalized)) return true;
-  return normalized.length < 4;
-}
-
-/** @param {string} text */
-function looksLikeAddress(text) {
-  return /^\d+\s+[A-Za-z0-9]/.test(text) && /\b(St|Ave|Blvd|Rd|Pl|Ln|Drive|Dr|Way|Broadway)\b/i.test(text);
-}
-
-/** @param {string} text */
-function looksLikeParkOrVenue(text) {
-  return /\b(park|garden|plaza|square|promenade|terrace|field|lawn|fountain|playground|beach|pier|terminal|hall|center|centre|museum|library|school|church|theater|theatre)\b/i.test(text);
-}
-
-/** @param {string} text */
-function splitSegments(text) {
-  return text
-    .split(/\s*,\s*(?=[A-Z0-9]|E\s|W\s|N\s|S\s)/)
-    .map((segment) => segment.trim())
-    .filter(Boolean);
-}
-
-/** @param {string} segment */
+function norm(value) { return String(value ?? '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+function firstUseful(values) { for (const value of values) { const text = String(value ?? '').trim(); if (text) return text; } return ''; }
+function isLowInfoText(text) { const normalized = norm(text); return !normalized || LOW_INFO.has(normalized) || normalized.length < 4; }
+function looksLikeAddress(text) { return /^\d+\s+[A-Za-z0-9]/.test(text) && /\b(St|Ave|Blvd|Rd|Pl|Ln|Drive|Dr|Way|Broadway)\b/i.test(text); }
+function looksLikeParkOrVenue(text) { return /\b(park|garden|plaza|square|promenade|terrace|field|lawn|fountain|playground|beach|pier|terminal|hall|center|centre|museum|library|school|church|theater|theatre)\b/i.test(text); }
+function splitSegments(text) { return text.split(/\s*,\s*(?=[A-Z0-9]|E\s|W\s|N\s|S\s)/).map((segment) => segment.trim()).filter(Boolean); }
 function parseBetweenSegment(segment) {
   const match = segment.match(/^(.*?)\s+between\s+(.*?)\s+and\s+(.*?)$/i);
   if (!match) return null;
-  return {
-    raw: segment,
-    street: normalizeTvppLocationText(match[1]),
-    from: normalizeTvppLocationText(match[2]),
-    to: normalizeTvppLocationText(match[3]),
-  };
+  return { raw: segment, street: normalizeTvppLocationText(match[1]), from: normalizeTvppLocationText(match[2]), to: normalizeTvppLocationText(match[3]) };
 }
 
-/**
- * @param {Object} lead
- * @returns {Object}
- */
 export function classifyTvppLocationText(lead) {
   const raw = lead?.rawRecord || {};
-  const originalLocationText = firstUseful([
-    lead?.locationName,
-    lead?.address,
-    raw.event_location,
-    raw.location,
-  ]);
+  const originalLocationText = firstUseful([lead?.locationName, lead?.address, raw.event_location, raw.location]);
   const cleanedLocationText = normalizeTvppLocationText(originalLocationText);
   const borough = lead?.borough || raw.event_borough || null;
   const streetSide = raw.event_street_side || null;
   const streetClosureType = raw.street_closure_type || null;
-  const labels = [];
-  const reasons = [];
+  const base = { originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType };
 
   if (!cleanedLocationText) {
-    if (borough) {
-      labels.push('borough_only');
-      reasons.push('Borough exists but no useful TVPP location text was found.');
-      return { bucket: 'borough_only', locationKind: 'borough_only', confidence: 'low', originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType, labels, reasons };
-    }
-    labels.push('missing_location');
-    reasons.push('No location text or borough was available.');
-    return { bucket: 'missing_location', locationKind: 'missing', confidence: 'high', originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType, labels, reasons };
+    if (borough) return { ...base, bucket: 'borough_only', locationKind: 'borough_only', confidence: 'low', labels: ['borough_only'], reasons: ['Borough exists but no useful TVPP location text was found.'] };
+    return { ...base, bucket: 'missing_location', locationKind: 'missing', confidence: 'high', labels: ['missing_location'], reasons: ['No location text or borough was available.'] };
   }
-
-  if (isLowInfoText(cleanedLocationText)) {
-    labels.push('low_information_location');
-    reasons.push('Location text is too generic for safe location cleanup.');
-    return { bucket: 'needs_manual_review', locationKind: 'unknown', confidence: 'low', originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType, labels, reasons };
-  }
-
-  if (borough && BOROUGHS.has(normalizeForClass(cleanedLocationText)) && normalizeForClass(cleanedLocationText) === normalizeForClass(borough)) {
-    labels.push('borough_only');
-    reasons.push('Location text only repeats the borough.');
-    return { bucket: 'borough_only', locationKind: 'borough_only', confidence: 'low', originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType, labels, reasons };
-  }
+  if (isLowInfoText(cleanedLocationText)) return { ...base, bucket: 'needs_manual_review', locationKind: 'unknown', confidence: 'low', labels: ['low_information_location'], reasons: ['Location text is too generic for safe location cleanup.'] };
+  if (borough && BOROUGHS.has(norm(cleanedLocationText)) && norm(cleanedLocationText) === norm(borough)) return { ...base, bucket: 'borough_only', locationKind: 'borough_only', confidence: 'low', labels: ['borough_only'], reasons: ['Location text only repeats the borough.'] };
 
   const segments = splitSegments(cleanedLocationText).map(parseBetweenSegment).filter(Boolean);
-  if (segments.length > 1) {
-    labels.push('multi_segment_route');
-    reasons.push('Multiple route/intersection-style segments detected; use first segment only as a review candidate.');
-    return { bucket: 'route_or_multi_segment', locationKind: 'multi_segment_route', confidence: 'medium', originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType, components: { segments }, labels, reasons };
-  }
-
+  if (segments.length > 1) return { ...base, bucket: 'route_or_multi_segment', locationKind: 'multi_segment_route', confidence: 'medium', components: { segments }, labels: ['multi_segment_route'], reasons: ['Multiple route/intersection-style segments detected; use first segment only as a review candidate.'] };
   const oneSegment = parseBetweenSegment(cleanedLocationText);
-  if (oneSegment) {
-    labels.push('between_segment');
-    reasons.push('Street segment between two cross streets detected.');
-    return { bucket: 'intersection_candidate', locationKind: 'route', confidence: 'medium', originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType, components: { segments: [oneSegment] }, labels, reasons };
-  }
-
-  if (/\b(at|@)\b/i.test(cleanedLocationText) || /\b(&|and)\b/i.test(cleanedLocationText)) {
-    labels.push('intersection_text');
-    reasons.push('Intersection-style text detected.');
-    return { bucket: 'intersection_candidate', locationKind: 'intersection', confidence: 'medium', originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType, labels, reasons };
-  }
-
-  if (looksLikeAddress(cleanedLocationText)) {
-    labels.push('street_address');
-    reasons.push('Street address pattern detected.');
-    return { bucket: 'clean_address_candidate', locationKind: 'street_address', confidence: 'high', originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType, labels, reasons };
-  }
-
+  if (oneSegment) return { ...base, bucket: 'intersection_candidate', locationKind: 'route', confidence: 'medium', components: { segments: [oneSegment] }, labels: ['between_segment'], reasons: ['Street segment between two cross streets detected.'] };
+  if (/\b(at|@)\b/i.test(cleanedLocationText) || /\b(&|and)\b/i.test(cleanedLocationText)) return { ...base, bucket: 'intersection_candidate', locationKind: 'intersection', confidence: 'medium', labels: ['intersection_text'], reasons: ['Intersection-style text detected.'] };
+  if (looksLikeAddress(cleanedLocationText)) return { ...base, bucket: 'clean_address_candidate', locationKind: 'street_address', confidence: 'high', labels: ['street_address'], reasons: ['Street address pattern detected.'] };
   if (looksLikeParkOrVenue(cleanedLocationText)) {
-    labels.push('park_or_venue');
-    reasons.push('Park, venue, or named public place text detected.');
     const bucket = /\bpark\b/i.test(cleanedLocationText) ? 'park_area_candidate' : 'clean_venue_candidate';
-    return { bucket, locationKind: 'venue_or_park', confidence: 'medium', originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType, labels, reasons };
+    return { ...base, bucket, locationKind: 'venue_or_park', confidence: 'medium', labels: ['park_or_venue'], reasons: ['Park, venue, or named public place text detected.'] };
   }
-
-  labels.push('needs_operator_review');
-  reasons.push('Location text is present but did not match a safe cleanup pattern.');
-  return { bucket: 'needs_manual_review', locationKind: 'unknown', confidence: 'low', originalLocationText, cleanedLocationText, borough, streetSide, streetClosureType, labels, reasons };
+  return { ...base, bucket: 'needs_manual_review', locationKind: 'unknown', confidence: 'low', labels: ['needs_operator_review'], reasons: ['Location text is present but did not match a safe cleanup pattern.'] };
 }
 
-/** @param {Object} cleanup */
 function buildCandidateDisplayLocation(cleanup) {
   const segments = cleanup.components?.segments || [];
-  if (segments.length) {
-    const first = segments[0];
-    return `${first.street} between ${first.from} and ${first.to}`;
-  }
-  if (cleanup.cleanedLocationText.includes(':')) {
-    return cleanup.cleanedLocationText.replace(/\s*:\s*/, ', ');
-  }
+  if (segments.length) { const first = segments[0]; return `${first.street} between ${first.from} and ${first.to}`; }
+  if (cleanup.cleanedLocationText?.includes(':')) return cleanup.cleanedLocationText.replace(/\s*:\s*/, ', ');
   return cleanup.cleanedLocationText || null;
 }
 
-/** @param {Object} cleanup */
 function buildCandidateQuery(cleanup) {
   if (['missing_location', 'borough_only', 'needs_manual_review'].includes(cleanup.bucket)) return null;
   const display = buildCandidateDisplayLocation(cleanup);
@@ -211,11 +86,8 @@ function buildCandidateQuery(cleanup) {
   return `${display.replace(/,/g, ' ')}${borough}, NY${suffix}`.replace(/\s+/g, ' ').trim();
 }
 
-/** @param {Object} lead */
 export function parseTvppLocationCandidate(lead) {
   const classification = classifyTvppLocationText(lead);
-  const candidateDisplayLocation = buildCandidateDisplayLocation(classification);
-  const candidateQuery = buildCandidateQuery(classification);
   return {
     lead,
     locationCleanup: {
@@ -225,8 +97,8 @@ export function parseTvppLocationCandidate(lead) {
       cleanedLocationText: classification.cleanedLocationText || null,
       locationKind: classification.locationKind,
       borough: classification.borough || null,
-      candidateQuery,
-      candidateDisplayLocation,
+      candidateQuery: buildCandidateQuery(classification),
+      candidateDisplayLocation: buildCandidateDisplayLocation(classification),
       streetSide: classification.streetSide || null,
       streetClosureType: classification.streetClosureType || null,
       components: classification.components || null,
@@ -236,35 +108,17 @@ export function parseTvppLocationCandidate(lead) {
   };
 }
 
-/** @param {{ leads?: Object[] }} input */
-function cleanupItems(input) {
-  return (input.leads || []).map(parseTvppLocationCandidate);
-}
-
-/** @param {Array<{ locationCleanup: { bucket: string } }>} items */
 export function countLocationCleanupBuckets(items) {
-  return TVPP_LOCATION_CLEANUP_BUCKETS.reduce((counts, bucket) => {
-    counts[bucket] = 0;
-    return counts;
-  }, Object.fromEntries(TVPP_LOCATION_CLEANUP_BUCKETS.map((bucket) => [bucket, 0])));
-}
-
-/** @param {Array<{ locationCleanup: { bucket: string } }>} items */
-function buildBucketCounts(items) {
   const counts = Object.fromEntries(TVPP_LOCATION_CLEANUP_BUCKETS.map((bucket) => [bucket, 0]));
-  for (const item of items) {
+  for (const item of items || []) {
     const bucket = item.locationCleanup?.bucket || 'needs_manual_review';
     counts[bucket] = (counts[bucket] || 0) + 1;
   }
   return counts;
 }
 
-/**
- * @param {Object} input
- * @returns {Object}
- */
 export function buildTvppLocationCleanupReport(input) {
-  const items = cleanupItems(input);
+  const items = (input.leads || []).map(parseTvppLocationCandidate);
   return {
     generatedAt: input.generatedAt,
     sourceDatasetId: 'tvpp-9vvx',
@@ -273,7 +127,7 @@ export function buildTvppLocationCleanupReport(input) {
     limit: input.limit,
     rowCount: input.rowCount ?? items.length,
     itemCount: items.length,
-    bucketCounts: buildBucketCounts(items),
+    bucketCounts: countLocationCleanupBuckets(items),
     items,
   };
 }
