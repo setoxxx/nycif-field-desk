@@ -45,6 +45,26 @@ import {
   parseMultiSourceFreshnessArgs,
   selectSampleSourceIds,
 } from './source-freshness.mjs';
+import {
+  buildFilmQueryStrategies,
+  buildParksQueryStrategies,
+  buildPpdQueryStrategies,
+  buildQueryStrategiesForSource,
+  buildQueryTuningReport,
+  buildSafetyQueryStrategies,
+  buildSourceTuningEntry,
+  buildTvppQueryStrategies,
+  classifyFreshnessFromDates,
+  computeDateRangeFromDates,
+  CORE_TUNING_SOURCE_IDS,
+  extractSampleDates,
+  getDateExtractorForSource,
+  parseDatePrefix,
+  parseQueryTuningArgs,
+  recommendSourceStrategy,
+  selectTuningSourceIds,
+  summarizeStrategyResult,
+} from './query-tuning.mjs';
 
 const EXPECTED_SOURCE_IDS = [
   'tvpp-9vvx',
@@ -593,6 +613,168 @@ describe('multi-source freshness helpers', () => {
       '3vyj-dkjt',
       'tg4x-b46p',
     ]);
+  });
+});
+
+describe('query tuning helpers', () => {
+  const todayIso = '2026-07-01';
+  const parksExtract = (row) => (row.date == null ? null : String(row.date));
+
+  it('builds expected strategy sets per source', () => {
+    assert.equal(buildTvppQueryStrategies(todayIso).length, 3);
+    assert.equal(buildParksQueryStrategies(todayIso).length, 3);
+    assert.equal(buildPpdQueryStrategies().length, 1);
+    assert.equal(buildSafetyQueryStrategies(todayIso).length, 3);
+    assert.equal(buildFilmQueryStrategies(todayIso).length, 4);
+
+    const tvpp = buildQueryStrategiesForSource('tvpp-9vvx', todayIso);
+    assert.ok(tvpp.some((strategy) => strategy.name.includes('start_date_time >=')));
+    assert.ok(tvpp.some((strategy) => strategy.name.includes('end_date_time >=')));
+
+    const parks = buildQueryStrategiesForSource('fudw-fgrp', todayIso);
+    assert.ok(parks.some((strategy) => strategy.name.includes('date >=')));
+    assert.ok(parks.some((strategy) => strategy.name.includes('DESC')));
+  });
+
+  it('parses date prefixes from mixed formats', () => {
+    assert.equal(parseDatePrefix('2026-07-01T10:00:00.000'), '2026-07-01');
+    assert.equal(parseDatePrefix('2019-10-12'), '2019-10-12');
+    assert.equal(parseDatePrefix('not a date'), null);
+    assert.equal(parseDatePrefix(null), null);
+  });
+
+  it('classifies freshness from parsed dates', () => {
+    assert.equal(classifyFreshnessFromDates([], todayIso), 'unknown');
+    assert.equal(classifyFreshnessFromDates(['2026-07-01'], todayIso), 'current');
+    assert.equal(classifyFreshnessFromDates(['2019-10-12'], todayIso), 'stale');
+    assert.equal(classifyFreshnessFromDates(['2019-10-12', '2026-08-01'], todayIso), 'current');
+  });
+
+  it('computes date range from parsed dates', () => {
+    assert.deepEqual(computeDateRangeFromDates([]), { min: null, max: null });
+    assert.deepEqual(computeDateRangeFromDates(['2026-08-01', '2026-07-01']), {
+      min: '2026-07-01',
+      max: '2026-08-01',
+    });
+  });
+
+  it('summarizes empty strategy results', () => {
+    const summary = summarizeStrategyResult('test empty', [], parksExtract, todayIso);
+    assert.equal(summary.rowCount, 0);
+    assert.equal(summary.freshness, 'empty');
+    assert.equal(summary.dateRange, null);
+    assert.deepEqual(summary.sampleDates, []);
+  });
+
+  it('summarizes current and stale strategy results', () => {
+    const current = summarizeStrategyResult(
+      'current sample',
+      [{ date: '2026-07-15' }, { date: '2026-08-01' }],
+      parksExtract,
+      todayIso,
+    );
+    assert.equal(current.rowCount, 2);
+    assert.equal(current.freshness, 'current');
+    assert.deepEqual(current.dateRange, { min: '2026-07-15', max: '2026-08-01' });
+    assert.deepEqual(current.sampleDates, ['2026-07-15', '2026-08-01']);
+
+    const stale = summarizeStrategyResult(
+      'stale sample',
+      [{ date: '2019-10-12' }],
+      parksExtract,
+      todayIso,
+    );
+    assert.equal(stale.freshness, 'stale');
+  });
+
+  it('extracts sample dates from rows', () => {
+    const dates = extractSampleDates(
+      [{ date: '2026-07-01T00:00:00.000' }, { date: 'bad' }, {}],
+      parksExtract,
+    );
+    assert.deepEqual(dates, ['2026-07-01']);
+  });
+
+  it('falls back to enddatetime when film permit startdatetime is absent', () => {
+    const filmExtract = getDateExtractorForSource('tg4x-b46p');
+    const dates = extractSampleDates(
+      [{ enddatetime: '2026-03-28T04:00:00.000' }],
+      filmExtract,
+    );
+    assert.deepEqual(dates, ['2026-03-28']);
+  });
+
+  it('recommends current feed when filtered strategy is current', () => {
+    const recommendation = recommendSourceStrategy('tvpp-9vvx', [
+      { name: 'start_date_time >= today order ASC', rowCount: 3, freshness: 'current' },
+      { name: 'default (limit only)', rowCount: 3, freshness: 'current' },
+    ], todayIso);
+    assert.match(recommendation, /^use_for_current_feed/);
+  });
+
+  it('recommends needs_query_fix when unfiltered is current but filter is empty', () => {
+    const recommendation = recommendSourceStrategy('fudw-fgrp', [
+      { name: 'date >= today order ASC', rowCount: 0, freshness: 'empty' },
+      { name: 'no filter order date DESC', rowCount: 3, freshness: 'current' },
+    ], todayIso);
+    assert.match(recommendation, /^needs_query_fix/);
+  });
+
+  it('recommends stale_or_empty when all strategies have zero rows', () => {
+    const recommendation = recommendSourceStrategy('3vyj-dkjt', [
+      { name: 'event_date >= today order ASC', rowCount: 0, freshness: 'empty' },
+      { name: 'no filter order event_date DESC', rowCount: 0, freshness: 'empty' },
+    ], todayIso);
+    assert.match(recommendation, /^stale_or_empty/);
+  });
+
+  it('recommends historical context when unfiltered rows are stale', () => {
+    const recommendation = recommendSourceStrategy('3vyj-dkjt', [
+      { name: 'event_date >= today order ASC', rowCount: 0, freshness: 'empty' },
+      { name: 'no filter order event_date DESC', rowCount: 3, freshness: 'stale' },
+    ], todayIso);
+    assert.match(recommendation, /^use_for_historical_context/);
+  });
+
+  it('recommends stale_or_empty for PPD free-text stale samples', () => {
+    const recommendation = recommendSourceStrategy('6v4b-5gp4', [
+      { name: 'no filter (free-text date_and_time)', rowCount: 3, freshness: 'stale' },
+    ], todayIso);
+    assert.match(recommendation, /^stale_or_empty/);
+    assert.match(recommendation, /free-text/i);
+  });
+
+  it('parses query tuning CLI args and filters by source', () => {
+    const fixedToday = new Date('2026-07-01T12:00:00');
+    const args = parseQueryTuningArgs(['--limit', '5', '--pretty', '--source', 'tvpp-9vvx'], {
+      today: fixedToday,
+    });
+    assert.equal(args.limit, 5);
+    assert.equal(args.pretty, true);
+    assert.equal(args.sourceFilter, 'tvpp-9vvx');
+    assert.deepEqual(selectTuningSourceIds(args), ['tvpp-9vvx']);
+    assert.deepEqual(selectTuningSourceIds({ sourceFilter: null }), CORE_TUNING_SOURCE_IDS);
+  });
+
+  it('rejects unsupported source filter', () => {
+    assert.throws(
+      () => selectTuningSourceIds({ sourceFilter: 'dot-trafalrt' }),
+      /Unsupported source dot-trafalrt/,
+    );
+  });
+
+  it('builds source tuning entry and report envelope', () => {
+    const strategies = [
+      summarizeStrategyResult('date >= today order ASC', [], parksExtract, todayIso),
+    ];
+    const entry = buildSourceTuningEntry('fudw-fgrp', 'Parks Event Listing', strategies, todayIso);
+    assert.equal(entry.sourceDatasetId, 'fudw-fgrp');
+    assert.equal(entry.strategies.length, 1);
+    assert.match(entry.recommendation, /^stale_or_empty/);
+
+    const report = buildQueryTuningReport([entry], todayIso, '2026-07-01T12:00:00.000Z');
+    assert.equal(report.today, todayIso);
+    assert.equal(report.sources.length, 1);
   });
 });
 
