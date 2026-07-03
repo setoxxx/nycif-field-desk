@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1860,
-  "usable_complaints": 1860,
+  "source_complaints": 1786,
+  "usable_complaints": 1786,
   "source_dispensaries": 241,
   "source_retailers": 4882,
   "correlation_locations": 5123,
-  "output_locations": 193,
-  "low_signal_excluded": 4930,
+  "output_locations": 197,
+  "low_signal_excluded": 4926,
   "radius_feet": [
     100,
     250,
@@ -22,20 +22,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 169,
+    "licensed_smoke_vape_retailer": 173,
     "legal_cannabis_dispensary": 24
   },
   "borough_counts": {
-    "Brooklyn": 55,
+    "Brooklyn": 58,
     "Queens": 34,
-    "Bronx": 35,
-    "Manhattan": 67,
+    "Bronx": 34,
+    "Manhattan": 69,
     "Staten Island": 2
   },
   "signal_tier_counts": {
     "very_high": 4,
-    "high": 15,
-    "moderate": 174
+    "high": 16,
+    "moderate": 177
   },
   "top_locations_sample": [
     {
@@ -158,6 +158,17 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "ALTITUDE NY LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "807 MANHATTAN AVE, BROOKLYN, 11222 2710",
+      "borough": "Brooklyn",
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-01"
     },
     {
       "title": "BLAZINUP, LLC",
@@ -301,19 +312,8 @@
       "complaints_365d_100ft": 1,
       "complaints_365d_250ft": 1,
       "last_complaint_date": "2026-06-08"
-    },
-    {
-      "title": "401 NEW YORK DELI CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "401 SCHENECTADY AVE, BROOKLYN, 11213",
-      "borough": "Brooklyn",
-      "signal_score": 12,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-25"
     }
   ],
-  "generated_at": "2026-07-02T12:24:37.167Z",
+  "generated_at": "2026-07-03T12:23:06.796Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
