@@ -4,29 +4,29 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-03",
-  "matched_rows": 1806,
-  "mapped_total": 1786,
-  "needs_review": 20,
-  "rejected": 298194,
+  "since_date": "2025-07-04",
+  "matched_rows": 1780,
+  "mapped_total": 1759,
+  "needs_review": 21,
+  "rejected": 298220,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 636,
-    "cannabis_related_complaint": 1149,
+    "vape_complaint": 626,
+    "cannabis_related_complaint": 1132,
     "public_smoking_complaint": 1
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 636,
-    "cannabis_marijuana_weed": 1149,
+    "vape_electronic_cigarette": 626,
+    "cannabis_marijuana_weed": 1132,
     "public_secondhand_smoking": 1
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 584,
-    "Obstruction": 530,
+    "Smoking or Vaping": 574,
+    "Cannabis Retailer": 302,
+    "Maintenance or Facility": 284,
+    "Obstruction": 524,
     "Consumer Complaint": 52,
-    "Cannabis Retailer": 305,
     "Water Conservation": 2,
-    "Maintenance or Facility": 291,
     "Water System": 2,
     "Abandoned Vehicle": 1,
     "Noise - Street/Sidewalk": 5,
@@ -38,23 +38,22 @@
     "Derelict Vehicles": 1,
     "General Construction/Plumbing": 1,
     "Street Light Condition": 1,
-    "Overgrown Tree/Branches": 1,
-    "Building/Use": 1
+    "Overgrown Tree/Branches": 1
   },
   "descriptor_counts": {
-    "Allowed in Smoke Free Area": 579,
-    "Weeds or Grass": 529,
-    "E-Cigarette Sales": 40,
+    "Allowed in Smoke Free Area": 569,
+    "Suspicious Activity": 35,
+    "Grass/Weeds": 284,
     "Sales to Minors Under 21": 129,
+    "Unlicensed": 102,
+    "Weeds or Grass": 523,
+    "Too Close to a House of Worship": 11,
+    "E-Cigarette Sales": 40,
     "Water Meter Broken/Leaking - Private Residence (CMR)": 2,
     "Smoking, Cigar, or Vape Store": 12,
-    "Grass/Weeds": 291,
-    "Unlicensed": 105,
     "Product Concerns": 11,
-    "Too Close to a House of Worship": 9,
-    "Too Close to a School": 15,
+    "Too Close to a School": 14,
     "Hydrant Leaking (WC1)": 2,
-    "Suspicious Activity": 36,
     "With License Plate": 1,
     "Ashtray in Smoke-Free Area": 3,
     "Loud Music/Party": 7,
@@ -69,21 +68,20 @@
     "Smoking Ban - Smoking on Construction Site": 1,
     "Street Light Out": 1,
     "Hitting Power Lines": 1,
-    "Workplace Policy Not Provided or Inadequate": 1,
-    "No Certificate Of Occupancy/Illegal/Contrary To CO": 1
+    "Workplace Policy Not Provided or Inadequate": 1
   },
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 20
+      "count": 21
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298194
+      "count": 298220
     }
   ],
-  "generated_at": "2026-07-03T12:27:07.128Z",
+  "generated_at": "2026-07-04T11:49:48.107Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }

@@ -1763,6 +1763,44 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
+    "lat": 40.86231,
+    "lng": -73.85772,
+    "id": "legal-dispensary-OCM-CAURD-23-000026",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "CANNABIS EMPORIUM CORP.",
+    "address": "2460 WILLIAMSBRIDGE RD FL 1, BRONX, 10469 4806",
+    "borough": "Bronx",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-23-000026",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "920470041",
+      "legal_name": "CANNABIS EMPORIUM CORP.",
+      "ocm_license_number": "OCM-CAURD-23-000026",
+      "physical_county": "BRONX",
+      "physical_address": "2460 WILLIAMSBRIDGE RD FL 1",
+      "physical_city": "BRONX",
+      "physical_state": "NY",
+      "physical_zip": "10469 4806",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.85772,
+          40.86231
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "307",
+      ":@computed_region_wbg7_3whc": "706",
+      ":@computed_region_kjdx_g34t": "2032"
+    }
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
     "lat": 40.78698,
     "lng": -73.82174,
     "id": "legal-dispensary-OCM-RETL-24-000077",
@@ -4365,6 +4403,45 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
+    "lat": 40.68067,
+    "lng": -73.88238,
+    "id": "legal-dispensary-OCM-CAURD-25-000322",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "HUDSON HAZELLC",
+    "address": "3043 FULTON ST, BROOKLYN, 11208 1494",
+    "borough": "Brooklyn",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-25-000322",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "412360873",
+      "legal_name": "HUDSON HAZE LLC",
+      "dba_name": "HUDSON HAZELLC",
+      "ocm_license_number": "OCM-CAURD-25-000322",
+      "physical_county": "KINGS",
+      "physical_address": "3043 FULTON ST",
+      "physical_city": "BROOKLYN",
+      "physical_state": "NY",
+      "physical_zip": "11208 1494",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.88238,
+          40.68067
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "894",
+      ":@computed_region_wbg7_3whc": "886",
+      ":@computed_region_kjdx_g34t": "2137"
+    }
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
     "lat": 40.6601,
     "lng": -73.73951,
     "id": "legal-dispensary-OCM-RETL-24-000027",
@@ -5550,6 +5627,44 @@
       ":@computed_region_yamh_8v7k": "749",
       ":@computed_region_wbg7_3whc": "799",
       ":@computed_region_kjdx_g34t": "2095"
+    }
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
+    "lat": 40.83193,
+    "lng": -73.82729,
+    "id": "legal-dispensary-OCM-RETL-26-000501",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "MELYNE, INC.",
+    "address": "3461 E TREMONT AVE, BRONX, 10465 2015",
+    "borough": "Bronx",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-RETL-26-000501",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "920470996",
+      "legal_name": "MELYNE, INC.",
+      "ocm_license_number": "OCM-RETL-26-000501",
+      "physical_county": "BRONX",
+      "physical_address": "3461 E TREMONT AVE",
+      "physical_city": "BRONX",
+      "physical_state": "NY",
+      "physical_zip": "10465 2015",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.82729,
+          40.83193
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "307",
+      ":@computed_region_wbg7_3whc": "678",
+      ":@computed_region_kjdx_g34t": "2032"
     }
   },
   {
@@ -6972,44 +7087,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.67388,
-    "lng": -73.72787,
-    "id": "legal-dispensary-OCM-RETL-24-000003",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "ROSEDALE CANNABIS DISPENSARY LLC",
-    "address": "24502 MERRICK BLVD, ROSEDALE, 11422 1464",
-    "borough": "Queens",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-RETL-24-000003",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "933699852",
-      "legal_name": "ROSEDALE CANNABIS DISPENSARY LLC",
-      "ocm_license_number": "OCM-RETL-24-000003",
-      "physical_county": "QUEENS",
-      "physical_address": "24502 MERRICK BLVD",
-      "physical_city": "ROSEDALE",
-      "physical_state": "NY",
-      "physical_zip": "11422 1464",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.72787,
-          40.67388
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "196",
-      ":@computed_region_wbg7_3whc": "1169",
-      ":@computed_region_kjdx_g34t": "2137"
-    }
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.70116,
     "lng": -73.80788,
     "id": "legal-dispensary-OCM-RETL-24-000003",
@@ -7042,6 +7119,44 @@
       },
       ":@computed_region_yamh_8v7k": "196",
       ":@computed_region_wbg7_3whc": "1262",
+      ":@computed_region_kjdx_g34t": "2137"
+    }
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
+    "lat": 40.67388,
+    "lng": -73.72787,
+    "id": "legal-dispensary-OCM-RETL-24-000003",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "ROSEDALE CANNABIS DISPENSARY LLC",
+    "address": "24502 MERRICK BLVD, ROSEDALE, 11422 1464",
+    "borough": "Queens",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-RETL-24-000003",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "933699852",
+      "legal_name": "ROSEDALE CANNABIS DISPENSARY LLC",
+      "ocm_license_number": "OCM-RETL-24-000003",
+      "physical_county": "QUEENS",
+      "physical_address": "24502 MERRICK BLVD",
+      "physical_city": "ROSEDALE",
+      "physical_state": "NY",
+      "physical_zip": "11422 1464",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.72787,
+          40.67388
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "196",
+      ":@computed_region_wbg7_3whc": "1169",
       ":@computed_region_kjdx_g34t": "2137"
     }
   },
@@ -9000,6 +9115,44 @@
       ":@computed_region_yamh_8v7k": "307",
       ":@computed_region_wbg7_3whc": "675",
       ":@computed_region_kjdx_g34t": "2032"
+    }
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
+    "lat": 40.76105,
+    "lng": -73.96092,
+    "id": "legal-dispensary-OCM-CAURD-24-000075",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "LIBERTY BUDS",
+    "address": "JOSHUA AHL 1115 1ST AVE, NEW YORK, 10065 8309",
+    "borough": "Manhattan",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-24-000075",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "883893406",
+      "legal_name": "WEEDS R US INC.",
+      "dba_name": "LIBERTY BUDS",
+      "ocm_license_number": "OCM-CAURD-24-000075",
+      "physical_county": "NEW YORK",
+      "physical_address": "JOSHUA AHL 1115 1ST AVE",
+      "physical_city": "NEW YORK",
+      "physical_state": "NY",
+      "physical_zip": "10065 8309",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.96092,
+          40.76105
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "749",
+      ":@computed_region_kjdx_g34t": "2095"
     }
   },
   {

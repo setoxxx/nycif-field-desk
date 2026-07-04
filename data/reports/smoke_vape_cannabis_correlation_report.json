@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1786,
-  "usable_complaints": 1786,
-  "source_dispensaries": 241,
+  "source_complaints": 1759,
+  "usable_complaints": 1759,
+  "source_dispensaries": 245,
   "source_retailers": 4882,
-  "correlation_locations": 5123,
-  "output_locations": 197,
-  "low_signal_excluded": 4926,
+  "correlation_locations": 5127,
+  "output_locations": 200,
+  "low_signal_excluded": 4927,
   "radius_feet": [
     100,
     250,
@@ -22,20 +22,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 173,
-    "legal_cannabis_dispensary": 24
+    "licensed_smoke_vape_retailer": 177,
+    "legal_cannabis_dispensary": 23
   },
   "borough_counts": {
-    "Brooklyn": 58,
-    "Queens": 34,
-    "Bronx": 34,
-    "Manhattan": 69,
+    "Brooklyn": 60,
+    "Queens": 35,
+    "Bronx": 37,
+    "Manhattan": 66,
     "Staten Island": 2
   },
   "signal_tier_counts": {
     "very_high": 4,
     "high": 16,
-    "moderate": 177
+    "moderate": 180
   },
   "top_locations_sample": [
     {
@@ -292,17 +292,6 @@
       "last_complaint_date": "2026-06-27"
     },
     {
-      "title": "FIVE STARS DELI GROCERY",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "10413 JAMAICA AVE, JAMAICA, 11418",
-      "borough": "Queens",
-      "signal_score": 13,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-22"
-    },
-    {
       "title": "212PARTNERS LLC",
       "location_kind": "legal_cannabis_dispensary",
       "address": "1119 BROADWAY, BROOKLYN, 11221 8520",
@@ -312,8 +301,19 @@
       "complaints_365d_100ft": 1,
       "complaints_365d_250ft": 1,
       "last_complaint_date": "2026-06-08"
+    },
+    {
+      "title": "401 NEW YORK DELI CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "401 SCHENECTADY AVE, BROOKLYN, 11213",
+      "borough": "Brooklyn",
+      "signal_score": 12,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-25"
     }
   ],
-  "generated_at": "2026-07-03T12:27:10.229Z",
+  "generated_at": "2026-07-04T11:49:52.808Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
