@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1758,
-  "usable_complaints": 1758,
+  "source_complaints": 1735,
+  "usable_complaints": 1735,
   "source_dispensaries": 245,
   "source_retailers": 4882,
   "correlation_locations": 5127,
-  "output_locations": 196,
-  "low_signal_excluded": 4931,
+  "output_locations": 193,
+  "low_signal_excluded": 4934,
   "radius_feet": [
     100,
     250,
@@ -22,23 +22,45 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 173,
+    "licensed_smoke_vape_retailer": 170,
     "legal_cannabis_dispensary": 23
   },
   "borough_counts": {
-    "Queens": 34,
-    "Bronx": 37,
-    "Brooklyn": 60,
-    "Manhattan": 63,
+    "Bronx": 32,
+    "Queens": 37,
+    "Manhattan": 66,
+    "Brooklyn": 56,
     "Staten Island": 2
   },
   "signal_tier_counts": {
-    "very_high": 2,
-    "high": 20,
-    "moderate": 174
+    "very_high": 4,
+    "high": 18,
+    "moderate": 171
   },
   "top_locations_sample": [
     {
+      "title": "BOSTON ROAD CANDY INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1737 BOSTON RD, BRONX, 10460",
+      "borough": "Bronx",
+      "signal_score": 56,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 10,
+      "last_complaint_date": "2026-07-04"
+    },
+    {
+      "title": "BOSTON ROAD CANDY INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1737 BOSTON RD, BRONX, 10460",
+      "borough": "Bronx",
+      "signal_score": 56,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 10,
+      "last_complaint_date": "2026-07-04"
+    },
+    {
       "title": "SHAKTI PETROLEUM CORP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "15409 UNION TPKE, FLUSHING, 11367",
@@ -59,50 +81,6 @@
       "complaints_365d_100ft": 5,
       "complaints_365d_250ft": 5,
       "last_complaint_date": "2026-06-30"
-    },
-    {
-      "title": "BOSTON ROAD CANDY INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1737 BOSTON RD, BRONX, 10460",
-      "borough": "Bronx",
-      "signal_score": 46,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 9,
-      "last_complaint_date": "2026-06-25"
-    },
-    {
-      "title": "BOSTON ROAD CANDY INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1737 BOSTON RD, BRONX, 10460",
-      "borough": "Bronx",
-      "signal_score": 46,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 9,
-      "last_complaint_date": "2026-06-25"
-    },
-    {
-      "title": "215 FINEST DELI & GRILL CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "215 4 AVENUE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-06-24"
-    },
-    {
-      "title": "UNION DELI GROCERY 1 INC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "226 4TH AVE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-06-24"
     },
     {
       "title": "FRESH FOOD FARM",
@@ -204,26 +182,15 @@
       "last_complaint_date": "2026-06-30"
     },
     {
-      "title": "SHOREWAY CONVENIENCE INC",
+      "title": "215 FINEST DELI & GRILL CORP",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "3043 EMMONS AVE, BROOKLYN, 11235",
+      "address": "215 4 AVENUE, BROOKLYN, 11215",
       "borough": "Brooklyn",
-      "signal_score": 22,
+      "signal_score": 21,
       "signal_tier": "high",
       "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-03"
-    },
-    {
-      "title": "SHOREWAY CONVENIENCE INC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "3043 EMMONS AVE, BROOKLYN, 11235",
-      "borough": "Brooklyn",
-      "signal_score": 22,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-03"
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-24"
     },
     {
       "title": "BURKE CANDY & CONVENIENCE CORP",
@@ -270,6 +237,28 @@
       "last_complaint_date": "2026-07-03"
     },
     {
+      "title": "SHOREWAY CONVENIENCE INC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "3043 EMMONS AVE, BROOKLYN, 11235",
+      "borough": "Brooklyn",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-03"
+    },
+    {
+      "title": "SHOREWAY CONVENIENCE INC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "3043 EMMONS AVE, BROOKLYN, 11235",
+      "borough": "Brooklyn",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-03"
+    },
+    {
       "title": "SPEEDWAY LLC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1885 ATLANTIC AVE, BROOKLYN, 11233",
@@ -279,6 +268,17 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-06-18"
+    },
+    {
+      "title": "UNION DELI GROCERY 1 INC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "226 4TH AVE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-24"
     },
     {
       "title": "BLACK OLIVE GOURMET INC.",
@@ -314,6 +314,6 @@
       "last_complaint_date": "2026-06-27"
     }
   ],
-  "generated_at": "2026-07-05T11:51:35.586Z",
+  "generated_at": "2026-07-06T14:06:15.050Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
