@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1735,
-  "usable_complaints": 1735,
+  "source_complaints": 1697,
+  "usable_complaints": 1697,
   "source_dispensaries": 245,
   "source_retailers": 4882,
   "correlation_locations": 5127,
-  "output_locations": 193,
-  "low_signal_excluded": 4934,
+  "output_locations": 195,
+  "low_signal_excluded": 4932,
   "radius_feet": [
     100,
     250,
@@ -22,20 +22,19 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 170,
-    "legal_cannabis_dispensary": 23
+    "licensed_smoke_vape_retailer": 173,
+    "legal_cannabis_dispensary": 22
   },
   "borough_counts": {
-    "Bronx": 32,
+    "Bronx": 33,
     "Queens": 37,
     "Manhattan": 66,
-    "Brooklyn": 56,
-    "Staten Island": 2
+    "Brooklyn": 59
   },
   "signal_tier_counts": {
     "very_high": 4,
-    "high": 18,
-    "moderate": 171
+    "high": 19,
+    "moderate": 172
   },
   "top_locations_sample": [
     {
@@ -182,6 +181,17 @@
       "last_complaint_date": "2026-06-30"
     },
     {
+      "title": "15th Street Snacks & More Corp",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "992 E 15TH ST, BROOKLYN, 11230",
+      "borough": "Brooklyn",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-05"
+    },
+    {
       "title": "215 FINEST DELI & GRILL CORP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "215 4 AVENUE, BROOKLYN, 11215",
@@ -301,19 +311,8 @@
       "complaints_365d_100ft": 1,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-06-27"
-    },
-    {
-      "title": "CIGAR VAPE INC I",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "452 5 AVENUE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 13,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
     }
   ],
-  "generated_at": "2026-07-06T14:06:15.050Z",
+  "generated_at": "2026-07-07T12:42:24.334Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }

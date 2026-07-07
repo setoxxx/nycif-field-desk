@@ -4,28 +4,28 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-06",
-  "matched_rows": 1757,
-  "mapped_total": 1735,
-  "needs_review": 22,
-  "rejected": 298243,
+  "since_date": "2025-07-07",
+  "matched_rows": 1720,
+  "mapped_total": 1697,
+  "needs_review": 23,
+  "rejected": 298280,
   "duplicate_count": 0,
   "subtype_counts": {
-    "cannabis_related_complaint": 1123,
-    "vape_complaint": 611,
+    "vape_complaint": 593,
+    "cannabis_related_complaint": 1103,
     "public_smoking_complaint": 1
   },
   "match_bucket_counts": {
-    "cannabis_marijuana_weed": 1123,
-    "vape_electronic_cigarette": 611,
+    "vape_electronic_cigarette": 593,
+    "cannabis_marijuana_weed": 1103,
     "public_secondhand_smoking": 1
   },
   "complaint_type_counts": {
-    "Cannabis Retailer": 312,
-    "Smoking or Vaping": 556,
-    "Maintenance or Facility": 273,
-    "Consumer Complaint": 55,
-    "Obstruction": 517,
+    "Smoking or Vaping": 539,
+    "Maintenance or Facility": 268,
+    "Obstruction": 509,
+    "Consumer Complaint": 54,
+    "Cannabis Retailer": 306,
     "Damaged Tree": 1,
     "Water Conservation": 2,
     "Water System": 1,
@@ -37,23 +37,22 @@
     "Noise - Residential": 2,
     "Illegal Parking": 1,
     "Derelict Vehicles": 1,
-    "General Construction/Plumbing": 1,
-    "Street Light Condition": 1
+    "General Construction/Plumbing": 1
   },
   "descriptor_counts": {
-    "Unlicensed": 108,
-    "Allowed in Smoke Free Area": 551,
-    "Sales to Minors Under 21": 131,
+    "Allowed in Smoke Free Area": 534,
+    "Grass/Weeds": 268,
+    "Weeds or Grass": 508,
+    "E-Cigarette Sales": 40,
+    "Unlicensed": 105,
+    "Sales to Minors Under 21": 130,
     "Too Close to a School": 15,
-    "Grass/Weeds": 273,
     "Smoking, Cigar, or Vape Store": 14,
-    "Weeds or Grass": 516,
-    "Suspicious Activity": 33,
-    "Product Concerns": 12,
+    "Suspicious Activity": 32,
+    "Product Concerns": 11,
     "Branch or Limb Has Fallen Down": 1,
     "Sign Inadequate": 2,
     "Too Close to a House of Worship": 13,
-    "E-Cigarette Sales": 41,
     "Water Meter Broken/Leaking - Private Residence (CMR)": 2,
     "Hydrant Leaking (WC1)": 1,
     "With License Plate": 1,
@@ -66,21 +65,20 @@
     "Detached Trailer": 1,
     "Derelict Vehicles": 1,
     "Rough, Pitted or Cracked Roads": 1,
-    "Smoking Ban - Smoking on Construction Site": 1,
-    "Street Light Out": 1
+    "Smoking Ban - Smoking on Construction Site": 1
   },
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 22
+      "count": 23
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298243
+      "count": 298280
     }
   ],
-  "generated_at": "2026-07-06T14:06:14.656Z",
+  "generated_at": "2026-07-07T12:42:23.913Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }
