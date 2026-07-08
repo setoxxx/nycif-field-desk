@@ -2,6 +2,44 @@
   {
     "status": "needs_review",
     "reason": "needs_geocode",
+    "id": "smoke-intel-69619504",
+    "layer": "smoke_cannabis_vape_intel",
+    "category": "public_complaint_intel",
+    "subtype": "cannabis_related_complaint",
+    "subtype_label": "Cannabis-related complaint",
+    "match_bucket": "cannabis_marijuana_weed",
+    "icon": "🌿",
+    "title": "Cannabis-related complaint — 81 STREET, 11371",
+    "address": "81 STREET, 11371",
+    "borough": "Queens",
+    "complaint_type": "Obstruction",
+    "descriptor": "Weeds or Grass",
+    "location_type": "Street",
+    "created_date": "2026-07-06T12:08:27.000",
+    "source": "NYC 311 Service Requests",
+    "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
+    "raw_source_id": "69619504",
+    "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
+    "updated_at": "2026-07-08T12:01:39.656Z",
+    "raw": {
+      "unique_key": "69619504",
+      "created_date": "2026-07-06T12:08:27.000",
+      "complaint_type": "Obstruction",
+      "descriptor": "Weeds or Grass",
+      "location_type": "Street",
+      "incident_address": "81 STREET",
+      "street_name": "81 STREET",
+      "incident_zip": "11371",
+      "borough": "QUEENS",
+      "agency_name": "Department of Sanitation",
+      "status": "In Progress",
+      "cross_street_1": "19 AVENUE",
+      "cross_street_2": "DITMARS BOULEVARD"
+    }
+  },
+  {
+    "status": "needs_review",
+    "reason": "needs_geocode",
     "id": "smoke-intel-69618030",
     "layer": "smoke_cannabis_vape_intel",
     "category": "public_complaint_intel",
@@ -20,7 +58,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69618030",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:18.528Z",
+    "updated_at": "2026-07-08T12:01:39.763Z",
     "raw": {
       "unique_key": "69618030",
       "created_date": "2026-07-05T21:07:00.000",
@@ -31,6 +69,7 @@
       "street_name": "CORTELYOU ROAD",
       "incident_zip": "11226",
       "borough": "BROOKLYN",
+      "resolution_description": "The Department of Sanitation investigated this complaint and found no condition at the location.",
       "agency_name": "Department of Sanitation",
       "status": "In Progress",
       "cross_street_1": "EAST 16 STREET",
@@ -58,7 +97,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69615237",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:18.528Z",
+    "updated_at": "2026-07-08T12:01:39.764Z",
     "raw": {
       "unique_key": "69615237",
       "created_date": "2026-07-05T21:04:14.000",
@@ -69,6 +108,7 @@
       "street_name": "CORTELYOU ROAD",
       "incident_zip": "11226",
       "borough": "BROOKLYN",
+      "resolution_description": "The Department of Sanitation investigated this complaint and found no condition at the location.",
       "agency_name": "Department of Sanitation",
       "status": "In Progress",
       "cross_street_1": "EAST 17 STREET",
@@ -96,7 +136,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69589040",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:19.072Z",
+    "updated_at": "2026-07-08T12:01:40.334Z",
     "raw": {
       "unique_key": "69589040",
       "created_date": "2026-07-03T16:15:23.000",
@@ -134,7 +174,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69587269",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:19.135Z",
+    "updated_at": "2026-07-08T12:01:40.401Z",
     "raw": {
       "unique_key": "69587269",
       "created_date": "2026-07-03T08:56:57.000",
@@ -172,7 +212,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69565441",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:19.265Z",
+    "updated_at": "2026-07-08T12:01:40.538Z",
     "raw": {
       "unique_key": "69565441",
       "created_date": "2026-07-02T18:42:42.000",
@@ -210,7 +250,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69557357",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:19.483Z",
+    "updated_at": "2026-07-08T12:01:40.765Z",
     "raw": {
       "unique_key": "69557357",
       "created_date": "2026-07-01T15:03:23.000",
@@ -221,8 +261,9 @@
       "street_name": "ROCKAWAY PARKWAY",
       "incident_zip": "11236",
       "borough": "BROOKLYN",
+      "resolution_description": "The Department of Sanitation investigated this complaint and no DSNY related conditions/violations were observed. Location will be referred to the appropriate agency for further action.",
       "agency_name": "Department of Sanitation",
-      "status": "In Progress",
+      "status": "Closed",
       "cross_street_1": "AVENUE D",
       "cross_street_2": "FOSTER AVENUE"
     }
@@ -248,7 +289,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69550883",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:19.677Z",
+    "updated_at": "2026-07-08T12:01:40.962Z",
     "raw": {
       "unique_key": "69550883",
       "created_date": "2026-06-30T14:51:47.000",
@@ -286,7 +327,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69546343",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:19.677Z",
+    "updated_at": "2026-07-08T12:01:40.962Z",
     "raw": {
       "unique_key": "69546343",
       "created_date": "2026-06-30T14:48:30.000",
@@ -324,7 +365,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69527960",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:19.819Z",
+    "updated_at": "2026-07-08T12:01:41.107Z",
     "raw": {
       "unique_key": "69527960",
       "created_date": "2026-06-29T19:56:05.000",
@@ -362,7 +403,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69527956",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:19.841Z",
+    "updated_at": "2026-07-08T12:01:41.128Z",
     "raw": {
       "unique_key": "69527956",
       "created_date": "2026-06-29T17:34:10.000",
@@ -401,7 +442,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69522340",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:20.145Z",
+    "updated_at": "2026-07-08T12:01:41.441Z",
     "raw": {
       "unique_key": "69522340",
       "created_date": "2026-06-28T08:30:23.000",
@@ -440,7 +481,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69502140",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:20.559Z",
+    "updated_at": "2026-07-08T12:01:41.869Z",
     "raw": {
       "unique_key": "69502140",
       "created_date": "2026-06-26T09:09:13.000",
@@ -478,7 +519,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69473176",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:20.904Z",
+    "updated_at": "2026-07-08T12:01:42.222Z",
     "raw": {
       "unique_key": "69473176",
       "created_date": "2026-06-24T13:33:50.000",
@@ -517,7 +558,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69461786",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:21.090Z",
+    "updated_at": "2026-07-08T12:01:42.411Z",
     "raw": {
       "unique_key": "69461786",
       "created_date": "2026-06-23T13:17:53.000",
@@ -556,7 +597,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69460264",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:21.093Z",
+    "updated_at": "2026-07-08T12:01:42.415Z",
     "raw": {
       "unique_key": "69460264",
       "created_date": "2026-06-23T12:56:35.000",
@@ -595,7 +636,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69448899",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:21.326Z",
+    "updated_at": "2026-07-08T12:01:42.652Z",
     "raw": {
       "unique_key": "69448899",
       "created_date": "2026-06-22T07:50:33.000",
@@ -633,7 +674,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69444719",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:21.524Z",
+    "updated_at": "2026-07-08T12:01:42.853Z",
     "raw": {
       "unique_key": "69444719",
       "created_date": "2026-06-21T11:21:05.000",
@@ -670,7 +711,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69393767",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:22.356Z",
+    "updated_at": "2026-07-08T12:01:43.696Z",
     "raw": {
       "unique_key": "69393767",
       "created_date": "2026-06-17T08:22:16.000",
@@ -709,7 +750,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69374175",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:22.737Z",
+    "updated_at": "2026-07-08T12:01:44.080Z",
     "raw": {
       "unique_key": "69374175",
       "created_date": "2026-06-15T09:46:57.000",
@@ -748,7 +789,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69333497",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:23.328Z",
+    "updated_at": "2026-07-08T12:01:44.677Z",
     "raw": {
       "unique_key": "69333497",
       "created_date": "2026-06-12T10:52:15.000",
@@ -787,7 +828,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69340485",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:23.368Z",
+    "updated_at": "2026-07-08T12:01:44.717Z",
     "raw": {
       "unique_key": "69340485",
       "created_date": "2026-06-12T07:02:22.000",
@@ -826,7 +867,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69326995",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:23.471Z",
+    "updated_at": "2026-07-08T12:01:44.821Z",
     "raw": {
       "unique_key": "69326995",
       "created_date": "2026-06-11T15:18:47.000",
@@ -865,7 +906,7 @@
     "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
     "raw_source_id": "69325569",
     "data_note": "311 complaint record; public complaint activity only, not proof of illegal activity, causation, or wrongdoing.",
-    "updated_at": "2026-07-07T12:42:23.529Z",
+    "updated_at": "2026-07-08T12:01:44.880Z",
     "raw": {
       "unique_key": "69325569",
       "created_date": "2026-06-11T09:44:37.000",

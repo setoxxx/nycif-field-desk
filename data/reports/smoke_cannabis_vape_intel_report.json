@@ -4,29 +4,30 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-07",
-  "matched_rows": 1720,
-  "mapped_total": 1697,
-  "needs_review": 23,
-  "rejected": 298280,
+  "since_date": "2025-07-08",
+  "matched_rows": 1703,
+  "mapped_total": 1679,
+  "needs_review": 24,
+  "rejected": 298297,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 593,
-    "cannabis_related_complaint": 1103,
+    "cannabis_related_complaint": 1094,
+    "vape_complaint": 584,
     "public_smoking_complaint": 1
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 593,
-    "cannabis_marijuana_weed": 1103,
+    "cannabis_marijuana_weed": 1094,
+    "vape_electronic_cigarette": 584,
     "public_secondhand_smoking": 1
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 539,
+    "Cannabis Retailer": 305,
+    "Smoking or Vaping": 534,
+    "Obstruction": 499,
+    "Damaged Tree": 2,
     "Maintenance or Facility": 268,
-    "Obstruction": 509,
-    "Consumer Complaint": 54,
-    "Cannabis Retailer": 306,
-    "Damaged Tree": 1,
+    "Consumer Complaint": 50,
+    "Root/Sewer/Sidewalk Condition": 1,
     "Water Conservation": 2,
     "Water System": 1,
     "Abandoned Vehicle": 1,
@@ -40,23 +41,24 @@
     "General Construction/Plumbing": 1
   },
   "descriptor_counts": {
-    "Allowed in Smoke Free Area": 534,
+    "Unlicensed": 104,
+    "Allowed in Smoke Free Area": 530,
+    "Sales to Minors Under 21": 132,
+    "Weeds or Grass": 498,
+    "Branch or Limb Has Fallen Down": 2,
     "Grass/Weeds": 268,
-    "Weeds or Grass": 508,
-    "E-Cigarette Sales": 40,
-    "Unlicensed": 105,
-    "Sales to Minors Under 21": 130,
-    "Too Close to a School": 15,
-    "Smoking, Cigar, or Vape Store": 14,
-    "Suspicious Activity": 32,
-    "Product Concerns": 11,
-    "Branch or Limb Has Fallen Down": 1,
+    "E-Cigarette Sales": 37,
+    "Product Concerns": 12,
+    "Too Close to a School": 16,
+    "Trees and Sidewalks Program": 1,
+    "Smoking, Cigar, or Vape Store": 13,
+    "Suspicious Activity": 30,
     "Sign Inadequate": 2,
-    "Too Close to a House of Worship": 13,
+    "Too Close to a House of Worship": 11,
     "Water Meter Broken/Leaking - Private Residence (CMR)": 2,
     "Hydrant Leaking (WC1)": 1,
     "With License Plate": 1,
-    "Ashtray in Smoke-Free Area": 3,
+    "Ashtray in Smoke-Free Area": 2,
     "Loud Music/Party": 7,
     "Trash or Recycling": 1,
     "No Access": 1,
@@ -70,15 +72,15 @@
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 23
+      "count": 24
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298280
+      "count": 298297
     }
   ],
-  "generated_at": "2026-07-07T12:42:23.913Z",
+  "generated_at": "2026-07-08T12:01:45.065Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }
