@@ -1,12 +1,16 @@
 {
   "schemaVersion": "xri-status-v1",
   "generatedAt": "2026-07-08",
-  "projectLabel": "Live Feeds go-live readiness",
+  "projectLabel": "Press God View / Live Feeds readiness",
   "score": "41/50",
   "percent": 82,
   "currentPhase": "XRI-G95 merged",
   "nextGate": "XRI-G96 current-worktree isolated local path readiness recapture gate",
   "state": "Gated validation runway",
+  "operatorPurpose": "Unfiltered press/operator visibility for seeing the broader daily event universe before the public map is ready to show everything.",
+  "audience": "Private operator / press photographer view",
+  "publicMapPolicy": "The public /map remains curated and may intentionally show less than the GitHub Pages operator view.",
+  "githubViewPolicy": "The GitHub Pages admin view should expose all loaded daily candidate/event snapshot rows for operator review while staying read-only.",
   "blocker": "Current-worktree local path readiness is not yet recaptured; fixture validation has not completed in the active worktree.",
   "criticalPath": [
     "G96 recapture current-worktree local path readiness",
@@ -23,10 +27,11 @@
     "no publish controls",
     "no WordPress action",
     "no production write",
-    "no live fetch",
+    "no live fetch from this page",
     "no geocoding",
     "no cache mutation",
-    "no runtime feed mutation from this page"
+    "no runtime feed mutation from this page",
+    "unfiltered operator visibility does not equal public approval"
   ],
   "links": {
     "liveFeedsRepo": "https://github.com/setoxxx/nycif-live-feeds",
