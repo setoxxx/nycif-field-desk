@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "xri-status-v1",
+  "generatedAt": "2026-07-08",
+  "projectLabel": "Press God View / Live Feeds readiness",
+  "score": "41/50",
+  "percent": 82,
+  "currentPhase": "XRI-G95 merged",
+  "nextGate": "XRI-G96 current-worktree isolated local path readiness recapture gate",
+  "state": "Gated validation runway",
+  "operatorPurpose": "Unfiltered press/operator visibility for seeing the broader daily event universe before the public map is ready to show everything.",
+  "audience": "Private operator / press photographer view",
+  "publicMapPolicy": "The public /map remains curated and may intentionally show less than the GitHub Pages operator view.",
+  "githubViewPolicy": "The GitHub Pages admin view should expose all loaded daily candidate/event snapshot rows for operator review while staying read-only.",
+  "blocker": "Current-worktree local path readiness is not yet recaptured; fixture validation has not completed in the active worktree.",
+  "criticalPath": [
+    "G96 recapture current-worktree local path readiness",
+    "Confirm or recreate isolated tmp path only",
+    "Run the exact fixture-only validation command after authorization",
+    "Review result and classify any failure",
+    "Review artifacts/feed/runtime diffs",
+    "Verify raw public feed URLs and browser map behavior",
+    "Record final go/no-go approval",
+    "Post-merge verification and rollback note"
+  ],
+  "locks": [
+    "read-only dashboard only",
+    "no publish controls",
+    "no WordPress action",
+    "no production write",
+    "no live fetch from this page",
+    "no geocoding",
+    "no cache mutation",
+    "no runtime feed mutation from this page",
+    "unfiltered operator visibility does not equal public approval"
+  ],
+  "links": {
+    "liveFeedsRepo": "https://github.com/setoxxx/nycif-live-feeds",
+    "rawMajorFeed": "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json",
+    "rawAllFeed": "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_all_radar_map_events.json",
+    "publicMap": "https://nycinfocus.com/map/",
+    "fieldDesk": "https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1"
+  },
+  "runway": [
+    { "score": "42", "name": "XRI-G96", "description": "Recapture current-worktree local path readiness only." },
+    { "score": "43", "name": "Path confirmed", "description": "Confirm or recreate tmp/xri-g92/venv/bin/python safely." },
+    { "score": "44", "name": "Fixture run", "description": "Run the exact authorized fixture-only pytest command." },
+    { "score": "45", "name": "Result review", "description": "Pass forward or classify environment/code/test failure." },
+    { "score": "46", "name": "Diff review", "description": "Confirm no unauthorized generated/cache/runtime/feed diffs." },
+    { "score": "47", "name": "Feed readiness", "description": "Verify major/all public feed files and raw URLs." },
+    { "score": "48", "name": "Browser check", "description": "Confirm public map consumes feed correctly." },
+    { "score": "49", "name": "Final approval", "description": "Explicit go/no-go approval for public state." },
+    { "score": "50", "name": "Go-live complete", "description": "Post-merge verification, rollback note, no unintended mutation." }
+  ],
+  "fieldDeskRegistry": [
+    { "gate": "XRI-G0", "status": "complete", "meaning": "Registry foundation." },
+    { "gate": "XRI-G1", "status": "complete", "meaning": "Admin visibility path." },
+    { "gate": "XRI-G2", "status": "complete", "meaning": "Data panels." },
+    { "gate": "XRI-G3", "status": "complete", "meaning": "Dashboard/read-only visibility." },
+    { "gate": "XRI-G4", "status": "held", "meaning": "Do not start without explicit approval." },
+    { "gate": "XRI-G12", "status": "not started", "meaning": "No platform/publish phase active." }
+  ]
+}
