@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1679,
-  "usable_complaints": 1679,
+  "source_complaints": 1637,
+  "usable_complaints": 1637,
   "source_dispensaries": 245,
   "source_retailers": 4882,
   "correlation_locations": 5127,
-  "output_locations": 200,
-  "low_signal_excluded": 4927,
+  "output_locations": 187,
+  "low_signal_excluded": 4940,
   "radius_feet": [
     100,
     250,
@@ -22,19 +22,19 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 177,
+    "licensed_smoke_vape_retailer": 164,
     "legal_cannabis_dispensary": 23
   },
   "borough_counts": {
-    "Bronx": 37,
-    "Queens": 37,
-    "Manhattan": 69,
-    "Brooklyn": 57
+    "Bronx": 33,
+    "Queens": 35,
+    "Manhattan": 63,
+    "Brooklyn": 56
   },
   "signal_tier_counts": {
-    "very_high": 4,
+    "very_high": 2,
     "high": 20,
-    "moderate": 176
+    "moderate": 165
   },
   "top_locations_sample": [
     {
@@ -64,10 +64,10 @@
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "15409 UNION TPKE, FLUSHING, 11367",
       "borough": "Queens",
-      "signal_score": 51,
-      "signal_tier": "very_high",
-      "complaints_365d_100ft": 5,
-      "complaints_365d_250ft": 5,
+      "signal_score": 41,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-06-30"
     },
     {
@@ -75,10 +75,10 @@
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "15409 UNION TPKE, FLUSHING, 11367",
       "borough": "Queens",
-      "signal_score": 51,
-      "signal_tier": "very_high",
-      "complaints_365d_100ft": 5,
-      "complaints_365d_250ft": 5,
+      "signal_score": 41,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-06-30"
     },
     {
@@ -159,17 +159,6 @@
       "last_complaint_date": "2026-07-01"
     },
     {
-      "title": "BLAZINUP, LLC",
-      "location_kind": "legal_cannabis_dispensary",
-      "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
-      "borough": "Manhattan",
-      "signal_score": 22,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-16"
-    },
-    {
       "title": "DELI & SMOKE SHOP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "439 5TH AVE, BROOKLYN, 11215",
@@ -223,17 +212,6 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-06-23"
-    },
-    {
-      "title": "CHELSEA FINE FOODS",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "300 8TH AVE, NEW YORK, 10001",
-      "borough": "Manhattan",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-16"
     },
     {
       "title": "GOGA 176 INC",
@@ -311,8 +289,30 @@
       "complaints_365d_100ft": 1,
       "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-07-06"
+    },
+    {
+      "title": "U.M.K. INC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "5582 BROADWAY, BRONX, 10463",
+      "borough": "Bronx",
+      "signal_score": 14,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-06"
+    },
+    {
+      "title": "U.M.K. INC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "5582 BROADWAY, BRONX, 10463",
+      "borough": "Bronx",
+      "signal_score": 14,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-06"
     }
   ],
-  "generated_at": "2026-07-08T12:01:47.986Z",
+  "generated_at": "2026-07-10T12:40:29.563Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
