@@ -1,24 +1,25 @@
 {
   "schemaVersion": "xri-status-v2",
-  "generatedAt": "2026-07-10",
+  "generatedAt": "2026-07-11",
   "projectLabel": "NYCIF Live Feeds master completion roadmap",
   "score": "56%",
   "percent": 56,
-  "currentPhase": "XRI-G102 Checkpoint 1 of 4 completed in planning",
-  "nextGate": "XRI-G102 Checkpoint 2 of 4 — roadmap schema and content approval",
-  "state": "Canonical completion roadmap in progress",
+  "currentPhase": "XRI-G102 Checkpoint 2 scope-completion implementation under review",
+  "nextGate": "Review, SonarQube/static verification, merge authorization, and post-merge Milestone 1 completion reconciliation",
+  "state": "Milestone 1 scope completion prepared for review",
   "operatorPurpose": "Permanent read-only project memory for the NYCIF Live Feeds completion path, evidence standard, milestones, and recovery procedure.",
   "audience": "Howard / private operator and press desk",
   "publicMapPolicy": "The public /map remains curated. Roadmap completion never grants automatic publishing or production authority.",
   "githubViewPolicy": "The God View is a read-only status surface. Repository evidence controls over chat memory, and every milestone update must cite immutable evidence.",
-  "blocker": "Operational behavior is only 41% complete: current-main fixture validation, controlled dry run, actual disposition execution, current staging proof, current canary proof, and scheduled monitoring remain incomplete or unverified.",
+  "blocker": "Milestone 1 cannot be marked complete until the canonical Markdown roadmap and Admin God View links are merged and verified on main.",
   "completionSummary": {
     "controlFrameworkPercent": 90,
     "operationalSystemPercent": 41,
     "overallCombinedPercent": 56
   },
   "criticalPath": [
-    "Approve and merge the canonical XRI-G102 roadmap artifacts",
+    "Review and merge the Milestone 1 scope-completion pull request",
+    "Verify the canonical Markdown roadmap and Admin God View links on main",
     "Inventory all executable behavior on current main",
     "Pass fixture-only end-to-end validation on current main",
     "Verify one allowlisted live source read-only",
@@ -47,6 +48,7 @@
   "links": {
     "liveFeedsRepo": "https://github.com/setoxxx/nycif-live-feeds",
     "masterRoadmap": "./live-feeds-roadmap.html",
+    "masterRoadmapMarkdown": "../docs/live-feeds-master-roadmap.md",
     "masterRoadmapJson": "./data/live-feeds-master-roadmap.json",
     "recoveryPrompt": "https://github.com/setoxxx/nycif-field-desk/blob/main/docs/live-feeds-master-roadmap-recovery-prompt.md",
     "rawMajorFeed": "https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json",
@@ -55,22 +57,82 @@
     "fieldDesk": "https://setoxxx.github.io/nycif-field-desk/?v=c5p-postpublish-02&resetFilters=1"
   },
   "runway": [
-    { "score": "M1", "name": "Canonical roadmap", "description": "Approve the permanent roadmap, evidence method, and definition of done." },
-    { "score": "M2", "name": "Executable inventory", "description": "Classify all scripts, tools, tests, workflows, inputs, outputs, network calls, and writes." },
-    { "score": "M3", "name": "Fixture validation", "description": "Pass the complete fixture-only pipeline on current main." },
-    { "score": "M4", "name": "Live adapter", "description": "Verify one allowlisted live source read-only." },
-    { "score": "M5", "name": "Controlled dry run", "description": "Run source to review package with isolated artifacts and no forbidden writes." },
-    { "score": "M6", "name": "Review and disposition", "description": "Create the actual package, stable selection, validation, disposition, and decision trace." },
-    { "score": "M7", "name": "Isolated staging", "description": "Build and diff a production-shaped staging feed from approved records only." },
-    { "score": "M8", "name": "Production canary", "description": "Publish a minimal canary and verify feeds, map behavior, and rollback." },
-    { "score": "M9", "name": "Scheduled operations", "description": "Authorize recurring runs, freshness checks, monitoring, and alerts." },
-    { "score": "M10", "name": "Final closeout", "description": "Complete runbooks, ownership, public status, blockers, and evidence audit." }
+    {
+      "score": "M1",
+      "name": "Canonical roadmap",
+      "description": "Merge and verify the permanent Markdown/JSON roadmap, evidence method, definition of done, and God View links."
+    },
+    {
+      "score": "M2",
+      "name": "Executable inventory",
+      "description": "Classify all scripts, tools, tests, workflows, inputs, outputs, network calls, and writes."
+    },
+    {
+      "score": "M3",
+      "name": "Fixture validation",
+      "description": "Pass the complete fixture-only pipeline on current main."
+    },
+    {
+      "score": "M4",
+      "name": "Live adapter",
+      "description": "Verify one allowlisted live source read-only."
+    },
+    {
+      "score": "M5",
+      "name": "Controlled dry run",
+      "description": "Run source to review package with isolated artifacts and no forbidden writes."
+    },
+    {
+      "score": "M6",
+      "name": "Review and disposition",
+      "description": "Create the actual package, stable selection, validation, disposition, and decision trace."
+    },
+    {
+      "score": "M7",
+      "name": "Isolated staging",
+      "description": "Build and diff a production-shaped staging feed from approved records only."
+    },
+    {
+      "score": "M8",
+      "name": "Production canary",
+      "description": "Publish a minimal canary and verify feeds, map behavior, and rollback."
+    },
+    {
+      "score": "M9",
+      "name": "Scheduled operations",
+      "description": "Authorize recurring runs, freshness checks, monitoring, and alerts."
+    },
+    {
+      "score": "M10",
+      "name": "Final closeout",
+      "description": "Complete runbooks, ownership, public status, blockers, and evidence audit."
+    }
   ],
   "fieldDeskRegistry": [
-    { "gate": "XRI-G30–G34", "status": "historically aligned", "meaning": "Recovered roadmap intent closely matches the actual merged phase sequence." },
-    { "gate": "XRI-G35–G40", "status": "historically diverged", "meaning": "Recovered intended titles differ from actual merged phases; exact repository titles, PRs, and SHAs control." },
-    { "gate": "XRI-G101", "status": "merged documentation boundary", "meaning": "Defined future input-package and stable-candidate selection requirements; created no actual package or execution." },
-    { "gate": "XRI-G102", "status": "checkpoint 1 planning complete", "meaning": "Master completion baseline established; repository roadmap artifacts are not yet created." },
-    { "gate": "Master recovery prompt", "status": "stored with roadmap", "meaning": "Use it to restore context after a broken, lost, or incomplete chat and update evidence after each milestone." }
+    {
+      "gate": "XRI-G30–G34",
+      "status": "historically aligned",
+      "meaning": "Recovered roadmap intent closely matches the actual merged phase sequence."
+    },
+    {
+      "gate": "XRI-G35–G40",
+      "status": "historically diverged",
+      "meaning": "Recovered intended titles differ from actual merged phases; exact repository titles, PRs, and SHAs control."
+    },
+    {
+      "gate": "XRI-G101",
+      "status": "merged documentation boundary",
+      "meaning": "Defined future input-package and stable-candidate selection requirements; created no actual package or execution."
+    },
+    {
+      "gate": "XRI-G102",
+      "status": "checkpoint 2 scope implementation under review",
+      "meaning": "Canonical Markdown and read-only God View links are prepared; merge and post-merge verification remain pending."
+    },
+    {
+      "gate": "Master recovery prompt",
+      "status": "stored with roadmap",
+      "meaning": "Use it to restore context after a broken, lost, or incomplete chat and update evidence after each milestone."
+    }
   ]
 }
