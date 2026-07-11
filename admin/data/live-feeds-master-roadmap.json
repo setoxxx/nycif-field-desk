@@ -1,6 +1,6 @@
 {
   "schemaVersion": "nycif-live-feeds-master-roadmap-v1",
-  "generatedAt": "2026-07-10",
+  "generatedAt": "2026-07-11",
   "status": "active_master_roadmap",
   "sourceOfTruthPolicy": "Repository evidence controls over chat memory. Historical phase identity requires exact title, pull request, and immutable commit SHA; phase number alone is insufficient.",
   "project": {
@@ -10,8 +10,9 @@
     "baselineSha": "5a53177047590e4f3cdbbe92ab19388c3571c20f",
     "roadmapTrack": "nycif_live_feeds_project_completion_track",
     "currentPlanningPhase": "XRI-G102",
-    "currentCheckpoint": "Checkpoint 1 of 4 completed in planning; XRI-G102 repository artifacts are not yet created",
-    "nextCheckpoint": "XRI-G102 Checkpoint 2 of 4 — roadmap schema and content approval"
+    "currentCheckpoint": "XRI-G102 Checkpoint 2 scope-completion implementation prepared for review; Milestone 1 merge and post-merge verification remain pending",
+    "nextCheckpoint": "Review, SonarQube/static verification, merge authorization, and post-merge Milestone 1 completion reconciliation",
+    "canonicalRoadmapMarkdownPath": "docs/live-feeds-master-roadmap.md"
   },
   "completion": {
     "controlFrameworkPercent": 90,
@@ -50,7 +51,50 @@
         "Percent methodology and definition of done are locked",
         "God View points to the approved roadmap without modifying the public status artifact"
       ],
-      "recommendedNextGateType": "roadmap schema and content approval"
+      "recommendedNextGateType": "review, SonarQube/static verification, merge authorization, and post-merge completion reconciliation",
+      "evidence": [
+        {
+          "criterionId": "M1-EC1",
+          "criterion": "XRI-G102 roadmap Markdown and JSON are approved and merged",
+          "verificationState": "implementation_prepared_merge_pending",
+          "evidenceType": "canonical_roadmap_artifacts",
+          "repository": "setoxxx/nycif-field-desk",
+          "paths": [
+            "docs/live-feeds-master-roadmap.md",
+            "admin/data/live-feeds-master-roadmap.json"
+          ],
+          "immutableSha": null,
+          "classification": "governance_completion",
+          "mergeEvidenceStatus": "pending_review_and_merge"
+        },
+        {
+          "criterionId": "M1-EC2",
+          "criterion": "Percent methodology and definition of done are locked",
+          "verificationState": "satisfied",
+          "evidenceType": "merged_roadmap_methodology",
+          "repository": "setoxxx/nycif-field-desk",
+          "paths": [
+            "admin/data/live-feeds-master-roadmap.json"
+          ],
+          "immutableSha": "a832eb12376c21d22501ff7ca0c18f3ccce5eedd",
+          "classification": "governance_completion",
+          "mergeEvidenceStatus": "merged_in_pr_96"
+        },
+        {
+          "criterionId": "M1-EC3",
+          "criterion": "God View points to the approved roadmap without modifying the public status artifact",
+          "verificationState": "implementation_prepared_merge_pending",
+          "evidenceType": "read_only_god_view_links",
+          "repository": "setoxxx/nycif-field-desk",
+          "paths": [
+            "admin/index.html",
+            "admin/live-feeds-roadmap.html"
+          ],
+          "immutableSha": null,
+          "classification": "governance_completion",
+          "mergeEvidenceStatus": "pending_review_and_merge"
+        }
+      ]
     },
     {
       "id": 2,
