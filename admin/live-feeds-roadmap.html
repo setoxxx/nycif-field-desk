@@ -6,8 +6,60 @@
   <meta name="robots" content="noindex,nofollow">
   <title>NYCIF Live Feeds Master Roadmap</title>
   <style>
-    :root{color-scheme:dark;--bg:#09101d;--panel:#121b2e;--panel2:#18243a;--line:rgba(255,255,255,.12);--text:#eff4ff;--muted:#9eabc3;--accent:#60a5fa;--violet:#a78bfa;--ok:#34d399;--warn:#fbbf24;--danger:#fb7185}
-    *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#07101f,#101827 260px,var(--bg));color:var(--text);font:14px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1320px;margin:auto;padding:24px 16px 64px}.top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-start}.links{display:flex;flex-wrap:wrap;gap:8px}.links a{color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 13px;background:var(--panel2)}h1{margin:0 0 6px;font-size:clamp(28px,4vw,42px)}h2{margin:0 0 12px;font-size:20px}h3{margin:18px 0 8px;font-size:15px}.muted{color:var(--muted)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:16px;box-shadow:0 14px 34px rgba(0,0,0,.2)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.card{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:13px}.label{font-size:12px;color:var(--muted)}.value{font-weight:800;font-size:20px}.hero{display:grid;grid-template-columns:minmax(220px,.7fr) minmax(320px,1.3fr);gap:12px}.score{background:linear-gradient(145deg,rgba(96,165,250,.18),rgba(167,139,250,.14));border:1px solid rgba(96,165,250,.35);border-radius:16px;padding:18px}.score strong{font-size:48px;line-height:1}.bar{height:12px;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:14px 0}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--violet))}.notice{border-left:4px solid var(--warn);background:rgba(251,191,36,.08);padding:12px 14px;border-radius:12px;color:#fde68a;margin:10px 0}.notice.ok{border-left-color:var(--ok);background:rgba(52,211,153,.08);color:#a7f3d0}.notice.violet{border-left-color:var(--violet);background:rgba(167,139,250,.08);color:#ddd6fe}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:#0d1728}table{width:100%;border-collapse:collapse;min-width:800px}th,td{text-align:left;padding:10px 9px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);background:rgba(255,255,255,.03)}.status{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:12px}.complete,.substantially_complete{color:#a7f3d0;background:rgba(52,211,153,.08)}.partially_complete,.not_verified_on_current_baseline{color:#fde68a;background:rgba(251,191,36,.08)}.not_started,.blocked{color:#fecdd3;background:rgba(251,113,133,.08)}details{background:var(--panel2);border:1px solid var(--line);border-radius:14px;margin-top:10px;overflow:hidden}summary{cursor:pointer;padding:12px 14px;font-weight:800}details>div{padding:0 14px 14px}ul{margin:8px 0;padding-left:20px}.footer{margin-top:20px;color:var(--muted);font-size:12px}@media(max-width:760px){.hero{grid-template-columns:1fr}.wrap{padding:16px 10px 48px}}
+    :root {
+      color-scheme: dark;
+      --bg: #09101d;
+      --panel: #121b2e;
+      --panel2: #18243a;
+      --line: rgba(255, 255, 255, 0.2);
+      --text: #f8fafc;
+      --muted: #d7e0ef;
+      --accent: #dbeafe;
+      --violet: #ede9fe;
+      --ok: #d1fae5;
+      --warn: #fef3c7;
+      --danger: #ffe4e6;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: linear-gradient(180deg, #07101f, #101827 260px, var(--bg)); color: var(--text); font: 14px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .wrap { max-width: 1320px; margin: auto; padding: 24px 16px 64px; }
+    .top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: flex-start; }
+    .links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .links a { color: var(--accent); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 8px 13px; background: #101a2c; }
+    h1 { margin: 0 0 6px; font-size: clamp(28px, 4vw, 42px); }
+    h2 { margin: 0 0 12px; font-size: 20px; }
+    h3 { margin: 18px 0 8px; font-size: 15px; }
+    .muted { color: var(--muted); }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin-top: 16px; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+    .card { background: var(--panel2); border: 1px solid var(--line); border-radius: 14px; padding: 13px; }
+    .label { font-size: 12px; color: var(--muted); }
+    .value { font-weight: 800; font-size: 20px; overflow-wrap: anywhere; }
+    .hero { display: grid; grid-template-columns: minmax(220px, 0.7fr) minmax(320px, 1.3fr); gap: 12px; }
+    .score { background: #16243a; border: 1px solid #93c5fd; border-radius: 16px; padding: 18px; }
+    .score strong { font-size: 48px; line-height: 1; }
+    .bar { height: 12px; background: #26334a; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin: 14px 0; }
+    .bar span { display: block; height: 100%; background: linear-gradient(90deg, #93c5fd, #c4b5fd); }
+    .notice { border-left: 4px solid #fbbf24; background: #332b16; padding: 12px 14px; border-radius: 12px; color: var(--warn); margin: 10px 0; }
+    .notice.ok { border-left-color: #34d399; background: #123326; color: var(--ok); }
+    .notice.violet { border-left-color: #a78bfa; background: #292042; color: var(--violet); }
+    .table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 14px; background: #0d1728; }
+    table { width: 100%; border-collapse: collapse; min-width: 800px; }
+    caption { padding: 10px; color: var(--text); font-weight: 800; text-align: left; background: #101a2c; }
+    th, td { text-align: left; padding: 10px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--text); background: #162238; }
+    .status { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 4px 8px; font-size: 12px; }
+    .complete, .substantially_complete { color: var(--ok); background: #123326; }
+    .partially_complete, .not_verified_on_current_baseline { color: var(--warn); background: #332b16; }
+    .not_started, .blocked { color: var(--danger); background: #3a1922; }
+    ul { margin: 8px 0; padding-left: 20px; }
+    .footer { margin-top: 20px; color: var(--muted); font-size: 12px; }
+
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .wrap { padding: 16px 10px 48px; }
+    }
   </style>
 </head>
 <body>
@@ -17,43 +69,203 @@
         <h1>NYCIF Live Feeds Master Roadmap</h1>
         <p class="muted">Permanent read-only project memory. Repository evidence controls over chat memory.</p>
       </div>
-      <nav class="links">
+      <nav class="links" aria-label="Roadmap links">
         <a href="./index.html">Admin God View</a>
         <a href="https://github.com/setoxxx/nycif-live-feeds" target="_blank" rel="noopener noreferrer">Live Feeds repo</a>
         <a href="https://github.com/setoxxx/nycif-field-desk/blob/main/docs/live-feeds-master-roadmap-recovery-prompt.md" target="_blank" rel="noopener noreferrer">Recovery prompt</a>
       </nav>
     </header>
 
-    <section class="panel" id="summary"><div class="muted">Loading roadmap…</div></section>
+    <section class="panel" id="summary" role="status" aria-live="polite"><div class="muted">Loading roadmap…</div></section>
     <section class="panel"><h2>Canonical milestones</h2><div id="milestones"></div></section>
     <section class="panel"><h2>Recovered G30–G40 roadmap vs. actual merged history</h2><div class="notice">The recovered list is preserved as historical planning intent. The actual merged title, PR, and commit remain authoritative.</div><div id="legacy"></div></section>
     <section class="panel"><h2>Definition of done</h2><div id="done"></div></section>
     <section class="panel"><h2>Milestone update rules</h2><div id="rules"></div></section>
     <p class="footer">Static JSON roadmap display only. No write, publish, approval, geocoding, cache, workflow, WordPress, staging, or production controls exist on this page.</p>
   </main>
-<script>
-const roadmapUrl='./data/live-feeds-master-roadmap.json';
-const esc=v=>String(v??'—');
-function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=esc(text);return n}
-function list(items){const ul=document.createElement('ul');(items||[]).forEach(x=>ul.append(node('li','',x)));return ul}
-function table(headers,rows){const wrap=node('div','table-wrap'),t=document.createElement('table'),thead=document.createElement('thead'),hr=document.createElement('tr');headers.forEach(h=>hr.append(node('th','',h[0])));thead.append(hr);t.append(thead);const body=document.createElement('tbody');(rows||[]).forEach(r=>{const tr=document.createElement('tr');headers.forEach(h=>{const td=document.createElement('td'),v=h[1](r);v instanceof Node?td.append(v):td.textContent=esc(v);tr.append(td)});body.append(tr)});t.append(body);wrap.append(t);return wrap}
-function render(r){
-  const s=document.getElementById('summary');s.replaceChildren();
-  const hero=node('div','hero'),score=node('div','score'),pct=r.completion?.overallCombinedPercent||0,bar=node('div','bar'),fill=document.createElement('span');fill.style.width=Math.max(0,Math.min(100,pct))+'%';bar.append(fill);score.append(node('div','label','Overall combined completion'),node('strong','',pct+'%'),bar,node('div','muted',r.project?.currentCheckpoint));
-  const state=node('div','grid');state.append(node('div','card'));state.lastChild.append(node('div','label','Control framework'),node('div','value',r.completion?.controlFrameworkPercent+'%'));state.append(node('div','card'));state.lastChild.append(node('div','label','Operational system'),node('div','value',r.completion?.operationalSystemPercent+'%'));state.append(node('div','card'));state.lastChild.append(node('div','label','Baseline SHA'),node('div','value',r.project?.baselineSha));state.append(node('div','card'));state.lastChild.append(node('div','label','Next checkpoint'),node('div','value',r.project?.nextCheckpoint));hero.append(score,state);s.append(hero,node('div','notice violet',r.sourceOfTruthPolicy));
 
-  const m=document.getElementById('milestones');m.replaceChildren(table([
-    ['#',x=>x.id],['Milestone',x=>x.name],['Status',x=>node('span','status '+x.status,x.status)],['Completion',x=>x.completionPercent+'%'],['Objective',x=>x.objective],['Exit criteria',x=>list(x.exitCriteria)],['Recommended next gate type',x=>x.recommendedNextGateType]
-  ],r.milestones));
+  <script type="module">
+    const roadmapUrl = './data/live-feeds-master-roadmap.json';
+    const asText = value => String(value ?? '—');
 
-  const l=document.getElementById('legacy');l.replaceChildren(table([
-    ['Phase',x=>x.phase],['Recovered planning title',x=>x.recoveredPlanTitle],['Actual merged title',x=>x.actualMergedTitle],['PR',x=>'#'+x.pullRequest],['Merge commit',x=>x.mergeCommit],['Finding',x=>x.relationship]
-  ],r.legacyRoadmapCrosswalk?.entries));
+    function node(tag, className, text) {
+      const element = document.createElement(tag);
 
-  document.getElementById('done').replaceChildren(list(r.definitionOfDoneSummary));
-  const rules=document.getElementById('rules');rules.replaceChildren(node('div','notice ok','Update the roadmap and God View snapshot together after each approved milestone.'),list(r.updatePolicy?.rules),node('h3','','Required evidence'),list(r.updatePolicy?.requiredEvidence));
-}
-fetch(roadmapUrl,{cache:'no-store'}).then(x=>{if(!x.ok)throw new Error(x.status+' '+x.statusText);return x.json()}).then(render).catch(err=>{document.getElementById('summary').replaceChildren(node('div','notice','Roadmap failed to load: '+err.message))});
-</script>
+      if (className) {
+        element.className = className;
+      }
+
+      if (text !== undefined) {
+        element.textContent = asText(text);
+      }
+
+      return element;
+    }
+
+    function list(items) {
+      const unorderedList = document.createElement('ul');
+      (items || []).forEach(item => unorderedList.append(node('li', '', item)));
+      return unorderedList;
+    }
+
+    function table(captionText, headers, rows) {
+      const wrapper = node('div', 'table-wrap');
+      const tableElement = document.createElement('table');
+      const caption = node('caption', '', captionText);
+      const tableHead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+
+      headers.forEach(header => {
+        const headerCell = node('th', '', header[0]);
+        headerCell.scope = 'col';
+        headerRow.append(headerCell);
+      });
+
+      tableHead.append(headerRow);
+      tableElement.append(caption, tableHead);
+
+      const tableBody = document.createElement('tbody');
+      (rows || []).forEach(row => {
+        const tableRow = document.createElement('tr');
+
+        headers.forEach(header => {
+          const tableCell = document.createElement('td');
+          const value = header[1](row);
+
+          if (value instanceof Node) {
+            tableCell.append(value);
+          } else {
+            tableCell.textContent = asText(value);
+          }
+
+          tableRow.append(tableCell);
+        });
+
+        tableBody.append(tableRow);
+      });
+
+      tableElement.append(tableBody);
+      wrapper.append(tableElement);
+      return wrapper;
+    }
+
+    function card(label, value) {
+      const cardElement = node('div', 'card');
+      cardElement.append(node('div', 'label', label), node('div', 'value', value));
+      return cardElement;
+    }
+
+    function assertRoadmapShape(roadmap) {
+      if (!roadmap || typeof roadmap !== 'object') {
+        throw new Error('Roadmap data is not an object.');
+      }
+
+      if (!roadmap.completion || !roadmap.project) {
+        throw new Error('Roadmap summary data is incomplete.');
+      }
+
+      if (!Array.isArray(roadmap.milestones) || roadmap.milestones.length !== 10) {
+        throw new Error('Roadmap must contain exactly 10 milestones.');
+      }
+
+      if (!Array.isArray(roadmap.legacyRoadmapCrosswalk?.entries) || roadmap.legacyRoadmapCrosswalk.entries.length !== 11) {
+        throw new Error('Roadmap must contain exactly 11 historical crosswalk entries.');
+      }
+
+      if (!Array.isArray(roadmap.definitionOfDoneSummary) || !roadmap.updatePolicy) {
+        throw new Error('Roadmap completion rules are incomplete.');
+      }
+    }
+
+    function render(roadmap) {
+      assertRoadmapShape(roadmap);
+
+      const summary = document.getElementById('summary');
+      summary.replaceChildren();
+
+      const hero = node('div', 'hero');
+      const score = node('div', 'score');
+      const percent = roadmap.completion.overallCombinedPercent || 0;
+      const progress = node('div', 'bar');
+      const progressFill = document.createElement('span');
+      const clampedPercent = Math.max(0, Math.min(100, percent));
+
+      progress.setAttribute('role', 'progressbar');
+      progress.setAttribute('aria-label', 'Overall combined completion');
+      progress.setAttribute('aria-valuemin', '0');
+      progress.setAttribute('aria-valuemax', '100');
+      progress.setAttribute('aria-valuenow', String(clampedPercent));
+      progressFill.style.width = `${clampedPercent}%`;
+      progress.append(progressFill);
+
+      score.append(
+        node('div', 'label', 'Overall combined completion'),
+        node('strong', '', `${percent}%`),
+        progress,
+        node('div', 'muted', roadmap.project.currentCheckpoint)
+      );
+
+      const state = node('div', 'grid');
+      state.append(
+        card('Control framework', `${roadmap.completion.controlFrameworkPercent}%`),
+        card('Operational system', `${roadmap.completion.operationalSystemPercent}%`),
+        card('Baseline SHA', roadmap.project.baselineSha),
+        card('Next checkpoint', roadmap.project.nextCheckpoint)
+      );
+
+      hero.append(score, state);
+      summary.append(hero, node('div', 'notice violet', roadmap.sourceOfTruthPolicy));
+
+      document.getElementById('milestones').replaceChildren(table(
+        'Canonical completion milestones',
+        [
+          ['#', item => item.id],
+          ['Milestone', item => item.name],
+          ['Status', item => node('span', `status ${item.status}`, item.status)],
+          ['Completion', item => `${item.completionPercent}%`],
+          ['Objective', item => item.objective],
+          ['Exit criteria', item => list(item.exitCriteria)],
+          ['Recommended next gate type', item => item.recommendedNextGateType]
+        ],
+        roadmap.milestones
+      ));
+
+      document.getElementById('legacy').replaceChildren(table(
+        'Recovered planning titles compared with actual merged history',
+        [
+          ['Phase', item => item.phase],
+          ['Recovered planning title', item => item.recoveredPlanTitle],
+          ['Actual merged title', item => item.actualMergedTitle],
+          ['PR', item => `#${item.pullRequest}`],
+          ['Merge commit', item => item.mergeCommit],
+          ['Finding', item => item.relationship]
+        ],
+        roadmap.legacyRoadmapCrosswalk.entries
+      ));
+
+      document.getElementById('done').replaceChildren(list(roadmap.definitionOfDoneSummary));
+      document.getElementById('rules').replaceChildren(
+        node('div', 'notice ok', 'Update the roadmap and God View snapshot together after each approved milestone.'),
+        list(roadmap.updatePolicy.rules),
+        node('h3', '', 'Required evidence'),
+        list(roadmap.updatePolicy.requiredEvidence)
+      );
+    }
+
+    try {
+      const response = await fetch(roadmapUrl, { cache: 'no-store' });
+
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+
+      const roadmap = await response.json();
+      render(roadmap);
+    } catch (error) {
+      const summary = document.getElementById('summary');
+      summary.setAttribute('role', 'alert');
+      summary.replaceChildren(node('div', 'notice', `Roadmap failed to load: ${error.message}`));
+    }
+  </script>
 </body>
 </html>
