@@ -13,7 +13,7 @@ Repository evidence controls over chat memory. A phase number alone is not suffi
 
 ## Repository baselines
 
-- Field Desk baseline: `a832eb12376c21d22501ff7ca0c18f3ccce5eedd`
+- Field Desk baseline: `5f9e6b85f62810b8d4d37d95934d0e6573039a01`
 - Operational baseline: `5a53177047590e4f3cdbbe92ab19388c3571c20f`
 
 ## Completion model
@@ -26,20 +26,25 @@ Documentation, contracts, schemas, reports, and planning artifacts cannot be cou
 
 ## Current checkpoint
 
-XRI-G102 Checkpoint 2 scope-completion implementation is under review. The canonical Markdown roadmap and Admin God View links are prepared on a review branch. They are not yet merged, and Canonical Milestone 1 is not finally complete until merge and post-merge verification succeed.
+XRI-G102 Checkpoint 2 is complete, and Canonical Milestone 1 is complete. PR #97 merged at `5f9e6b85f62810b8d4d37d95934d0e6573039a01`. Canonical Milestone 2 has not started and requires separate authorization.
 
 ## Canonical milestones
 
 ### 1. Canonical roadmap and status baseline
 
-- Status: `partially_complete`
-- Completion: **25%**
+- Status: `complete`
+- Completion: **100%**
 - Objective: Create one authoritative completion model separating governance, implementation existence, current-baseline verification, historical execution, and production operation.
 - Exit criteria:
   - XRI-G102 roadmap Markdown and JSON are approved and merged
   - Percent methodology and definition of done are locked
   - God View points to the approved roadmap without modifying the public status artifact
-- Recommended next safe gate: review, SonarQube/static verification, merge authorization, and post-merge completion reconciliation
+- Recommended next safe gate: separately authorized read-only current-main executable inventory gate
+- Immutable completion evidence:
+  - PR #96 merge commit: `a832eb12376c21d22501ff7ca0c18f3ccce5eedd`
+  - PR #97 head SHA: `8a9dc283fd34394c6f64e00c4cfa0f4c764dbceb`
+  - PR #97 merge commit: `5f9e6b85f62810b8d4d37d95934d0e6573039a01`
+  - PR #97 merge timestamp: `2026-07-11T01:26:20Z`
 
 ### 2. Current-main executable inventory
 
