@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1637,
-  "usable_complaints": 1637,
-  "source_dispensaries": 245,
+  "source_complaints": 1649,
+  "usable_complaints": 1649,
+  "source_dispensaries": 247,
   "source_retailers": 4882,
-  "correlation_locations": 5127,
-  "output_locations": 187,
-  "low_signal_excluded": 4940,
+  "correlation_locations": 5129,
+  "output_locations": 188,
+  "low_signal_excluded": 4941,
   "radius_feet": [
     100,
     250,
@@ -23,18 +23,19 @@
   "min_signal_score": 3,
   "location_kind_counts": {
     "licensed_smoke_vape_retailer": 164,
-    "legal_cannabis_dispensary": 23
+    "legal_cannabis_dispensary": 24
   },
   "borough_counts": {
     "Bronx": 33,
-    "Queens": 35,
+    "Brooklyn": 57,
+    "Queens": 34,
     "Manhattan": 63,
-    "Brooklyn": 56
+    "Staten Island": 1
   },
   "signal_tier_counts": {
     "very_high": 2,
     "high": 20,
-    "moderate": 165
+    "moderate": 166
   },
   "top_locations_sample": [
     {
@@ -60,59 +61,59 @@
       "last_complaint_date": "2026-07-04"
     },
     {
-      "title": "SHAKTI PETROLEUM CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "15409 UNION TPKE, FLUSHING, 11367",
-      "borough": "Queens",
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-06-30"
-    },
-    {
-      "title": "SHAKTI PETROLEUM CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "15409 UNION TPKE, FLUSHING, 11367",
-      "borough": "Queens",
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-06-30"
-    },
-    {
-      "title": "FRESH FOOD FARM",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1310 2ND AVE, NEW YORK, 10065",
-      "borough": "Manhattan",
-      "signal_score": 31,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
-    },
-    {
-      "title": "FRESH FOOD FARM",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1310 2ND AVE, NEW YORK, 10065",
-      "borough": "Manhattan",
-      "signal_score": 31,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
-    },
-    {
       "title": "LINCOLN DELI AND SMOKE SHOP CORP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "41 LINCOLN RD, BROOKLYN, 11225",
       "borough": "Brooklyn",
+      "signal_score": 41,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-09"
+    },
+    {
+      "title": "SHAKTI PETROLEUM CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "15409 UNION TPKE, FLUSHING, 11367",
+      "borough": "Queens",
+      "signal_score": 41,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-06-30"
+    },
+    {
+      "title": "SHAKTI PETROLEUM CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "15409 UNION TPKE, FLUSHING, 11367",
+      "borough": "Queens",
+      "signal_score": 41,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-06-30"
+    },
+    {
+      "title": "FRESH FOOD FARM",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1310 2ND AVE, NEW YORK, 10065",
+      "borough": "Manhattan",
       "signal_score": 31,
       "signal_tier": "high",
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-25"
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "FRESH FOOD FARM",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1310 2ND AVE, NEW YORK, 10065",
+      "borough": "Manhattan",
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
     },
     {
       "title": "CANNALICIOUS LLC",
@@ -313,6 +314,6 @@
       "last_complaint_date": "2026-07-06"
     }
   ],
-  "generated_at": "2026-07-10T12:40:29.563Z",
+  "generated_at": "2026-07-11T11:28:35.560Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }

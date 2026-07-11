@@ -4,27 +4,27 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-10",
-  "matched_rows": 1660,
-  "mapped_total": 1637,
-  "needs_review": 23,
-  "rejected": 298340,
+  "since_date": "2025-07-11",
+  "matched_rows": 1674,
+  "mapped_total": 1649,
+  "needs_review": 25,
+  "rejected": 298326,
   "duplicate_count": 0,
   "subtype_counts": {
-    "cannabis_related_complaint": 1082,
-    "vape_complaint": 555
+    "cannabis_related_complaint": 1093,
+    "vape_complaint": 556
   },
   "match_bucket_counts": {
-    "cannabis_marijuana_weed": 1082,
-    "vape_electronic_cigarette": 555
+    "cannabis_marijuana_weed": 1093,
+    "vape_electronic_cigarette": 556
   },
   "complaint_type_counts": {
-    "Obstruction": 509,
-    "Smoking or Vaping": 508,
-    "Cannabis Retailer": 299,
+    "Cannabis Retailer": 305,
+    "Smoking or Vaping": 509,
     "Maintenance or Facility": 253,
-    "Noise - Street/Sidewalk": 6,
     "Consumer Complaint": 47,
+    "Obstruction": 514,
+    "Noise - Street/Sidewalk": 6,
     "Damaged Tree": 2,
     "Root/Sewer/Sidewalk Condition": 1,
     "Water Conservation": 2,
@@ -37,20 +37,21 @@
     "Illegal Parking": 1
   },
   "descriptor_counts": {
-    "Weeds or Grass": 508,
-    "Allowed in Smoke Free Area": 504,
-    "Unlicensed": 103,
-    "Suspicious Activity": 29,
+    "Sales to Minors Under 21": 130,
+    "Allowed in Smoke Free Area": 503,
+    "Unlicensed": 108,
     "Grass/Weeds": 253,
-    "Sales to Minors Under 21": 128,
-    "Product Concerns": 14,
-    "Loud Music/Party": 8,
     "Smoking, Cigar, or Vape Store": 13,
+    "Too Close to a School": 17,
+    "Weeds or Grass": 513,
+    "Workplace Policy Not Provided or Inadequate": 1,
+    "Sign Inadequate": 3,
+    "Suspicious Activity": 28,
+    "Product Concerns": 13,
+    "Loud Music/Party": 8,
     "Branch or Limb Has Fallen Down": 2,
     "E-Cigarette Sales": 34,
-    "Too Close to a School": 16,
     "Trees and Sidewalks Program": 1,
-    "Sign Inadequate": 2,
     "Too Close to a House of Worship": 9,
     "Water Meter Broken/Leaking - Private Residence (CMR)": 2,
     "Hydrant Leaking (WC1)": 1,
@@ -65,15 +66,15 @@
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 23
+      "count": 25
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298340
+      "count": 298326
     }
   ],
-  "generated_at": "2026-07-10T12:40:26.939Z",
+  "generated_at": "2026-07-11T11:28:35.155Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }

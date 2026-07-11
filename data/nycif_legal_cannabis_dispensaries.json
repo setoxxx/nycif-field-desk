@@ -1992,6 +1992,44 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
+    "lat": 40.71872,
+    "lng": -73.95675,
+    "id": "legal-dispensary-OCM-CAURD-24-000102",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "CANNA LIFE NY INC.",
+    "address": "PETER BEZNOS 152 BEDFORD AVE, BROOKLYN, 11249 1377",
+    "borough": "Brooklyn",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-24-000102",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "931830066",
+      "legal_name": "CANNA LIFE NY INC.",
+      "ocm_license_number": "OCM-CAURD-24-000102",
+      "physical_county": "KINGS",
+      "physical_address": "PETER BEZNOS 152 BEDFORD AVE",
+      "physical_city": "BROOKLYN",
+      "physical_state": "NY",
+      "physical_zip": "11249 1377",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.95675,
+          40.71872
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "894",
+      ":@computed_region_wbg7_3whc": "889",
+      ":@computed_region_kjdx_g34t": "2090"
+    }
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
     "lat": 40.57876,
     "lng": -73.95969,
     "id": "legal-dispensary-OCM-RETL-24-000144",
@@ -7087,44 +7125,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.70116,
-    "lng": -73.80788,
-    "id": "legal-dispensary-OCM-RETL-24-000003",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "ROSEDALE CANNABIS DISPENSARY LLC",
-    "address": "ROSEDALE CANNABIS DISPENSARY L 9067 SUTPHIN BLVD UNIT A, JAMAICA, 11435 4333",
-    "borough": "Queens",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-RETL-24-000003",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "933699852",
-      "legal_name": "ROSEDALE CANNABIS DISPENSARY LLC",
-      "ocm_license_number": "OCM-RETL-24-000003",
-      "physical_county": "QUEENS",
-      "physical_address": "ROSEDALE CANNABIS DISPENSARY L 9067 SUTPHIN BLVD UNIT A",
-      "physical_city": "JAMAICA",
-      "physical_state": "NY",
-      "physical_zip": "11435 4333",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.80788,
-          40.70116
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "196",
-      ":@computed_region_wbg7_3whc": "1262",
-      ":@computed_region_kjdx_g34t": "2137"
-    }
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.67388,
     "lng": -73.72787,
     "id": "legal-dispensary-OCM-RETL-24-000003",
@@ -7157,6 +7157,44 @@
       },
       ":@computed_region_yamh_8v7k": "196",
       ":@computed_region_wbg7_3whc": "1169",
+      ":@computed_region_kjdx_g34t": "2137"
+    }
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
+    "lat": 40.70116,
+    "lng": -73.80788,
+    "id": "legal-dispensary-OCM-RETL-24-000003",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "ROSEDALE CANNABIS DISPENSARY LLC",
+    "address": "ROSEDALE CANNABIS DISPENSARY L 9067 SUTPHIN BLVD UNIT A, JAMAICA, 11435 4333",
+    "borough": "Queens",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-RETL-24-000003",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "933699852",
+      "legal_name": "ROSEDALE CANNABIS DISPENSARY LLC",
+      "ocm_license_number": "OCM-RETL-24-000003",
+      "physical_county": "QUEENS",
+      "physical_address": "ROSEDALE CANNABIS DISPENSARY L 9067 SUTPHIN BLVD UNIT A",
+      "physical_city": "JAMAICA",
+      "physical_state": "NY",
+      "physical_zip": "11435 4333",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.80788,
+          40.70116
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "196",
+      ":@computed_region_wbg7_3whc": "1262",
       ":@computed_region_kjdx_g34t": "2137"
     }
   },
@@ -8465,6 +8503,44 @@
       ":@computed_region_yamh_8v7k": "894",
       ":@computed_region_wbg7_3whc": "889",
       ":@computed_region_kjdx_g34t": "2090"
+    }
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
+    "lat": 40.72033,
+    "lng": -73.90525,
+    "id": "legal-dispensary-OCM-RETL-26-000499",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "TIMES SQ CULTURE INC.",
+    "address": "6071 FLUSHING AVE, MASPETH, 11378 3243",
+    "borough": "Queens",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-RETL-26-000499",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "933340613",
+      "legal_name": "TIMES SQ CULTURE INC.",
+      "ocm_license_number": "OCM-RETL-26-000499",
+      "physical_county": "QUEENS",
+      "physical_address": "6071 FLUSHING AVE",
+      "physical_city": "MASPETH",
+      "physical_state": "NY",
+      "physical_zip": "11378 3243",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.90525,
+          40.72033
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "196",
+      ":@computed_region_wbg7_3whc": "847",
+      ":@computed_region_kjdx_g34t": "2137"
     }
   },
   {
