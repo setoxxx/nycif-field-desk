@@ -32,6 +32,7 @@
     h3 { margin: 18px 0 8px; font-size: 15px; }
     .muted { color: var(--muted); }
     .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin-top: 16px; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2); }
+    .summary-status { display: block; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
     .card { background: var(--panel2); border: 1px solid var(--line); border-radius: 14px; padding: 13px; }
     .label { font-size: 12px; color: var(--muted); }
@@ -76,7 +77,10 @@
       </nav>
     </header>
 
-    <section class="panel" id="summary" role="status" aria-live="polite"><div class="muted">Loading roadmap…</div></section>
+    <section class="panel">
+      <output class="summary-status muted" id="summary-status" aria-live="polite">Loading roadmap…</output>
+      <div id="summary"></div>
+    </section>
     <section class="panel"><h2>Canonical milestones</h2><div id="milestones"></div></section>
     <section class="panel"><h2>Recovered G30–G40 roadmap vs. actual merged history</h2><div class="notice">The recovered list is preserved as historical planning intent. The actual merged title, PR, and commit remain authoritative.</div><div id="legacy"></div></section>
     <section class="panel"><h2>Definition of done</h2><div id="done"></div></section>
@@ -180,7 +184,9 @@
     function render(roadmap) {
       assertRoadmapShape(roadmap);
 
+      const summaryStatus = document.getElementById('summary-status');
       const summary = document.getElementById('summary');
+      summaryStatus.value = 'Roadmap loaded.';
       summary.replaceChildren();
 
       const hero = node('div', 'hero');
@@ -262,9 +268,13 @@
       const roadmap = await response.json();
       render(roadmap);
     } catch (error) {
+      const summaryStatus = document.getElementById('summary-status');
       const summary = document.getElementById('summary');
-      summary.setAttribute('role', 'alert');
-      summary.replaceChildren(node('div', 'notice', `Roadmap failed to load: ${error.message}`));
+      summary.replaceChildren();
+      summaryStatus.setAttribute('role', 'alert');
+      summaryStatus.setAttribute('aria-live', 'assertive');
+      summaryStatus.className = 'summary-status notice';
+      summaryStatus.value = `Roadmap failed to load: ${error.message}`;
     }
   </script>
 </body>
