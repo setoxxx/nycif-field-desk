@@ -1,0 +1,289 @@
+{
+  "schemaVersion": "nycif-live-feeds-master-roadmap-v1",
+  "generatedAt": "2026-07-10",
+  "status": "active_master_roadmap",
+  "sourceOfTruthPolicy": "Repository evidence controls over chat memory. Historical phase identity requires exact title, pull request, and immutable commit SHA; phase number alone is insufficient.",
+  "project": {
+    "name": "NYCIF Live Feeds",
+    "repository": "setoxxx/nycif-live-feeds",
+    "baselineBranch": "main",
+    "baselineSha": "5a53177047590e4f3cdbbe92ab19388c3571c20f",
+    "roadmapTrack": "nycif_live_feeds_project_completion_track",
+    "currentPlanningPhase": "XRI-G102",
+    "currentCheckpoint": "Checkpoint 1 of 4 completed in planning; XRI-G102 repository artifacts are not yet created",
+    "nextCheckpoint": "XRI-G102 Checkpoint 2 of 4 — roadmap schema and content approval"
+  },
+  "completion": {
+    "controlFrameworkPercent": 90,
+    "operationalSystemPercent": 41,
+    "overallCombinedPercent": 56,
+    "method": "Equal-weight operational completion is kept separate from governance completion so documentation cannot be counted as executed runtime behavior."
+  },
+  "updatePolicy": {
+    "updateAtEveryMilestone": true,
+    "requiredEvidence": [
+      "immutable main SHA",
+      "exact pull request number and state",
+      "exact phase title",
+      "artifact paths",
+      "execution result when runtime behavior is claimed",
+      "rollback evidence when production is touched"
+    ],
+    "rules": [
+      "Do not mark runtime work complete from a contract, schema, report, fixture, or planning artifact alone.",
+      "Do not treat a historical test result as current-baseline proof.",
+      "Do not assign a future XRI phase number from this roadmap.",
+      "Do not rewrite historical phase titles to match an earlier plan.",
+      "Update the master roadmap and God View snapshot together after each approved milestone.",
+      "No direct-to-main change and no merge without Howard's explicit approval."
+    ]
+  },
+  "milestones": [
+    {
+      "id": 1,
+      "name": "Canonical roadmap and status baseline",
+      "status": "partially_complete",
+      "completionPercent": 25,
+      "objective": "Create one authoritative completion model separating governance, implementation existence, current-baseline verification, historical execution, and production operation.",
+      "exitCriteria": [
+        "XRI-G102 roadmap Markdown and JSON are approved and merged",
+        "Percent methodology and definition of done are locked",
+        "God View points to the approved roadmap without modifying the public status artifact"
+      ],
+      "recommendedNextGateType": "roadmap schema and content approval"
+    },
+    {
+      "id": 2,
+      "name": "Current-main executable inventory",
+      "status": "partially_complete",
+      "completionPercent": 30,
+      "objective": "Classify every executable, workflow, dependency, input, output, network call, and write target on the current main SHA.",
+      "exitCriteria": [
+        "No unclassified executable or workflow remains",
+        "Superseded and active paths are distinguished",
+        "Inventory is tied to an immutable main SHA"
+      ],
+      "recommendedNextGateType": "read-only executable inventory gate"
+    },
+    {
+      "id": 3,
+      "name": "Fixture-only end-to-end validation",
+      "status": "not_verified_on_current_baseline",
+      "completionPercent": 30,
+      "objective": "Prove the fixture pipeline passes deterministically on the then-current main baseline.",
+      "exitCriteria": [
+        "Positive and failure-case tests pass",
+        "Stable identity and review-rank prohibitions are enforced",
+        "Commands, dependencies, stdout, stderr, exit code, and hashes are recorded",
+        "No live source or forbidden write occurs"
+      ],
+      "recommendedNextGateType": "isolated fixture execution and result-capture gate"
+    },
+    {
+      "id": 4,
+      "name": "Read-only live-source adapter",
+      "status": "partially_complete",
+      "completionPercent": 50,
+      "objective": "Verify at least one allowlisted live source in read-only mode with strict limits and schema-drift handling.",
+      "exitCriteria": [
+        "One allowlisted adapter passes current-baseline verification",
+        "Pagination, timeout, size limits, retry, and schema checks are evidenced",
+        "No geocoding, staging, production, registry, WordPress, or cache write occurs"
+      ],
+      "recommendedNextGateType": "source-specific read-only adapter verification gate"
+    },
+    {
+      "id": 5,
+      "name": "Controlled non-production dry run",
+      "status": "not_verified_on_current_baseline",
+      "completionPercent": 35,
+      "objective": "Run the isolated source-to-review-package path on current main without production authority.",
+      "exitCriteria": [
+        "Source, normalization, candidate identity, deduplication, validation, and audit outputs pass",
+        "Artifacts are isolated and reproducible",
+        "Zero production, public-map, WordPress, workflow, registry, or unauthorized cache writes"
+      ],
+      "recommendedNextGateType": "controlled dry-run authorization and result-review sequence"
+    },
+    {
+      "id": 6,
+      "name": "Human review and disposition",
+      "status": "partially_complete",
+      "completionPercent": 30,
+      "objective": "Generate an actual review package, select by stable identity, and record a controlled non-authoritative disposition and decision trace.",
+      "exitCriteria": [
+        "Actual input package exists",
+        "Actual stable candidate-selection record exists",
+        "Structural validation and disposition are reproducible",
+        "No automatic approval, promotion, staging, publishing, or production authority is inferred"
+      ],
+      "recommendedNextGateType": "input-package, candidate-selection, validation, and disposition execution gates"
+    },
+    {
+      "id": 7,
+      "name": "Isolated staging",
+      "status": "partially_complete",
+      "completionPercent": 45,
+      "objective": "Build a production-shaped staging feed from disposition-approved records only.",
+      "exitCriteria": [
+        "Staging manifest records lineage, inclusions, exclusions, deduplication, counts, and hashes",
+        "Production comparison is deterministic",
+        "Existing production remains untouched"
+      ],
+      "recommendedNextGateType": "staging creation and diff-validation gate"
+    },
+    {
+      "id": 8,
+      "name": "Production canary",
+      "status": "partially_complete",
+      "completionPercent": 40,
+      "objective": "Publish a minimal explicitly approved canary with verified backup, public-feed checks, map checks, and rollback.",
+      "exitCriteria": [
+        "Pre-canary snapshot integrity verified",
+        "Minimal merge-not-replace publish succeeds",
+        "Raw feeds and public map are independently verified",
+        "Rollback restoration is demonstrated or independently validated"
+      ],
+      "recommendedNextGateType": "production-canary authorization, verification, and rollback gate"
+    },
+    {
+      "id": 9,
+      "name": "Scheduled operations and monitoring",
+      "status": "partially_complete",
+      "completionPercent": 40,
+      "objective": "Operate repeated refresh and QA runs with explicit authorization, freshness monitoring, alerts, and no automatic production promotion.",
+      "exitCriteria": [
+        "Schedule is separately authorized",
+        "Freshness, source drift, anomalies, and failures alert correctly",
+        "Run history and ownership are recorded",
+        "Workflow cannot directly push or promote by default"
+      ],
+      "recommendedNextGateType": "scheduled workflow and operational-readiness gate"
+    },
+    {
+      "id": 10,
+      "name": "Final project closeout",
+      "status": "not_started",
+      "completionPercent": 10,
+      "objective": "Audit all definition-of-done requirements and establish durable operational ownership.",
+      "exitCriteria": [
+        "Operating and maintenance runbooks complete",
+        "Public status artifact current",
+        "Zero unresolved critical blockers",
+        "Zero unintended open pull requests or issues",
+        "All completion claims trace to immutable evidence"
+      ],
+      "recommendedNextGateType": "final evidence audit and closeout gate"
+    }
+  ],
+  "legacyRoadmapCrosswalk": {
+    "purpose": "Preserve the recovered G30-G40 intended runway without replacing the actual merged repository history.",
+    "entries": [
+      {
+        "phase": "XRI-G30",
+        "recoveredPlanTitle": "merge validation-summary gate",
+        "actualMergedTitle": "XRI-G30 non-production manual review export validation summary gate",
+        "pullRequest": 40,
+        "mergeCommit": "5612fc8969b8db48a3b74f41bd17a099fde3abf9",
+        "relationship": "closely aligned"
+      },
+      {
+        "phase": "XRI-G31",
+        "recoveredPlanTitle": "non-production manual review export readiness checkpoint gate",
+        "actualMergedTitle": "XRI-G31 non-production manual review export readiness checkpoint gate",
+        "pullRequest": 41,
+        "mergeCommit": "0511419a0c0120677dfcf192e5d0a54ac4b7b3d2",
+        "relationship": "aligned"
+      },
+      {
+        "phase": "XRI-G32",
+        "recoveredPlanTitle": "production-readiness boundary contract",
+        "actualMergedTitle": "XRI-G32 production-boundary design gate",
+        "pullRequest": 42,
+        "mergeCommit": "ce4bf0e8a8054a4a828ba5eedd9dac9ec077a641",
+        "relationship": "conceptually aligned; actual title controls"
+      },
+      {
+        "phase": "XRI-G33",
+        "recoveredPlanTitle": "candidate event registry schema gate",
+        "actualMergedTitle": "XRI-G33 candidate event registry schema gate",
+        "pullRequest": 43,
+        "mergeCommit": "b589a59ace787e897fe8726284dd2439780fcf57",
+        "relationship": "aligned"
+      },
+      {
+        "phase": "XRI-G34",
+        "recoveredPlanTitle": "source ingestion contract for today/weekend events",
+        "actualMergedTitle": "XRI-G34 source ingestion contract for today/weekend events gate",
+        "pullRequest": 44,
+        "mergeCommit": "7f56aae80be31429103bc5c3ea78d4e08dbc12ea",
+        "relationship": "aligned"
+      },
+      {
+        "phase": "XRI-G35",
+        "recoveredPlanTitle": "manual review approval queue gate",
+        "actualMergedTitle": "XRI-G35 non-production source ingestion sample contract gate",
+        "pullRequest": 45,
+        "mergeCommit": "fd16bff1fd58bdaedb6099bb548f546982a0dde0",
+        "relationship": "diverged; recovered plan was not the merged phase"
+      },
+      {
+        "phase": "XRI-G36",
+        "recoveredPlanTitle": "production export feed dry-run gate",
+        "actualMergedTitle": "XRI-G36 non-production source ingestion sample validation gate",
+        "pullRequest": 46,
+        "mergeCommit": "022afcd1f0120da82c608873d9dfd23b9c59d6fe",
+        "relationship": "diverged; recovered plan was not the merged phase"
+      },
+      {
+        "phase": "XRI-G37",
+        "recoveredPlanTitle": "public map feed integration gate",
+        "actualMergedTitle": "XRI-G37 non-production source ingestion validation summary gate",
+        "pullRequest": 47,
+        "mergeCommit": "111c8bb3f81b3b67c3b56888184161a641db9805",
+        "relationship": "diverged; recovered plan was not the merged phase"
+      },
+      {
+        "phase": "XRI-G38",
+        "recoveredPlanTitle": "scheduled refresh / publish workflow gate",
+        "actualMergedTitle": "XRI-G38 source ingestion readiness checkpoint gate",
+        "pullRequest": 48,
+        "mergeCommit": "6e8a31a784b97d2fe61878730b80bb1db03651b2",
+        "relationship": "diverged; recovered plan was not the merged phase"
+      },
+      {
+        "phase": "XRI-G39",
+        "recoveredPlanTitle": "live-map QA and rollback gate",
+        "actualMergedTitle": "XRI-G39 controlled implementation planning gate",
+        "pullRequest": 49,
+        "mergeCommit": "e2a82f8a80136a650de227ae6057b280c7d4e9ea",
+        "relationship": "diverged; recovered plan was not the merged phase"
+      },
+      {
+        "phase": "XRI-G40",
+        "recoveredPlanTitle": "first controlled production map publish",
+        "actualMergedTitle": "XRI-G40 fixture-only scaffold gate",
+        "pullRequest": 50,
+        "mergeCommit": "f8cb2f6d00b7dbb24827e096c5e03644ccdad93f",
+        "relationship": "diverged; recovered plan was not the merged phase"
+      }
+    ]
+  },
+  "definitionOfDoneSummary": [
+    "Current-main executable inventory complete",
+    "Fixture-only end-to-end validation passes on current main",
+    "At least one allowlisted live source is integrated read-only",
+    "Controlled non-production dry run passes",
+    "Deterministic identity and deduplication are enforced",
+    "Actual review package and controlled disposition are recorded",
+    "Isolated staging succeeds",
+    "Rollback snapshot and restoration are verified",
+    "Limited production canary and public-feed verification succeed",
+    "Scheduled workflow is explicitly authorized",
+    "Freshness monitoring and failure alerts are active",
+    "Operating and maintenance ownership are recorded",
+    "Public status artifact is current",
+    "Zero unresolved critical blockers and unintended open PRs/issues"
+  ],
+  "recoveryPromptPath": "docs/live-feeds-master-roadmap-recovery-prompt.md"
+}
