@@ -138,6 +138,8 @@ Editorial credibility is a product asset. Paid placement must never change evide
 
 ## Dynamic status pages
 
+- Platform architecture: `admin/platform-architecture.html`
+- Platform architecture JSON: `admin/data/nycif-platform-architecture.json`
 - Platform roadmap: `admin/platform-roadmap.html`
 - Platform roadmap JSON: `admin/data/nycif-platform-roadmap.json`
 - Live Feeds engineering roadmap: `admin/live-feeds-roadmap.html`
