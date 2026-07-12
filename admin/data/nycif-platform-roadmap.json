@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "nycif-platform-master-roadmap-v1",
+  "generatedAt": "2026-07-12",
+  "status": "active_product_direction",
+  "project": {
+    "name": "NYC In Focus Platform",
+    "vision": "A three-panel New York City platform combining a live event map, geo-verified ZIP Code community chat, and the NYC In Focus editorial story feed.",
+    "currentMilestone": "Canonical Milestone 6 — GPS Pipeline Reliability and Identity Integrity",
+    "currentState": "Milestones 1–5 complete. Milestone 6 implementation is complete on PR #143 and awaiting separate review and merge.",
+    "currentMainSha": "b59fb070de238ea97c699a29b6ef3ec61155593f",
+    "activePullRequest": 143,
+    "nextDecision": "Review and merge PR #143, then authorize Milestone 7 identity consolidation and duplicate-key enforcement.",
+    "mobileGoal": "Launch one cross-platform application on the Apple App Store and Google Play after the backend, API, trust-and-safety, privacy, and store-readiness milestones pass."
+  },
+  "productPillars": [
+    {
+      "id": "map",
+      "name": "Center — Live NYC Map",
+      "summary": "All approved events and city activity on an interactive map with filters, event details, directions, significance badges, and links into local discussion and reporting.",
+      "keyFeatures": ["event pins and clustering", "nearby and borough filters", "event details and directions", "Gold/Silver/Bronze significance badges", "busy-event and major-event visibility", "links to ZIP chat and NYCIF stories"]
+    },
+    {
+      "id": "chat",
+      "name": "Left — Geo-Verified ZIP Chat",
+      "summary": "Five-borough and ZIP Code rooms that anyone may read, while only users currently verified inside the geographic boundary may post.",
+      "keyFeatures": ["borough-to-ZIP directory", "precise-location permission at posting time", "server-side point-in-polygon verification", "short-lived posting authorization", "read-only access outside the ZIP", "report, block, mute, moderation, and audit controls"]
+    },
+    {
+      "id": "stories",
+      "name": "Right — NYC In Focus Story Feed",
+      "summary": "A visual editorial feed for NYC In Focus reporting, galleries, videos, civic coverage, and event stories, with direct links back to the map and local rooms.",
+      "keyFeatures": ["story cards", "photo and video", "borough and category feeds", "view-on-map links", "save and share", "clear separation between NYCIF reporting, community reports, and sponsorships"]
+    }
+  ],
+  "interactionModel": {
+    "navigation": "The map is the central home screen. Press-and-hold circular left and right arrow controls, plus horizontal swipe gestures, move between chat, map, and stories while reducing accidental navigation.",
+    "notifications": "Users can independently enable or disable notifications for ZIP chat, boroughs, event categories, major-event tiers, breaking coverage, saved events, and NYCIF stories.",
+    "locationPolicy": "Precise location is requested only when a user attempts to join a local conversation. Browsing remains available without precise location. Background location is not required for the initial release.",
+    "privacyRule": "Other users never see exact coordinates, home address, movement history, or precise distance. The visible state is only a time-limited location-verified eligibility badge."
+  },
+  "eventSignificance": {
+    "publicName": "Event Significance",
+    "tiers": [
+      {"tier": "Gold", "meaning": "Major citywide event", "examples": ["large parades", "citywide races", "flagship annual celebrations", "very high-attendance events"]},
+      {"tier": "Silver", "meaning": "Significant borough or regional event", "examples": ["large festivals", "stadium events", "major concerts", "large cultural gatherings"]},
+      {"tier": "Bronze", "meaning": "Notable community event", "examples": ["neighborhood fairs", "park events", "local performances", "community programs"]}
+    ],
+    "signals": ["estimated attendance", "historical attendance", "event duration", "permit footprint", "route or road closures", "number of agencies involved", "geographic footprint", "annual flagship status"],
+    "integrityRules": ["tiers are evidence-based, not paid", "sponsored placement is labeled separately", "editorial picks are labeled separately", "users may view why an event received its tier"]
+  },
+  "milestones": [
+    {"id": 1, "name": "Foundation and governance", "status": "complete", "completionPercent": 100, "objective": "Establish repository controls, evidence standards, review boundaries, and protected production paths."},
+    {"id": 2, "name": "Fixture and registry validation", "status": "complete", "completionPercent": 100, "objective": "Prove deterministic fixture-only processing and stable review boundaries."},
+    {"id": 3, "name": "Credential and network-control closure", "status": "complete", "completionPercent": 100, "objective": "Close secret-handling risks and establish process-level network isolation evidence."},
+    {"id": 4, "name": "Isolated validation execution", "status": "complete", "completionPercent": 100, "objective": "Run authorized fixture validation in a network-denied, minimal environment with integrity proof."},
+    {"id": 5, "name": "Dependency reproducibility and workflow hardening", "status": "complete", "completionPercent": 100, "objective": "Pin dependencies, harden commit conditions, enforce fail-closed email behavior, add offline tests, and document closure."},
+    {"id": 6, "name": "GPS pipeline reliability and identity integrity", "status": "review_pending", "completionPercent": 95, "objective": "Document identity systems, add identity-drift and transition tests, and verify gating without modifying implementation.", "evidence": "PR #143 open; 16 new tests; 110 total tests reported passing under isolation."},
+    {"id": 7, "name": "Identity consolidation and duplicate enforcement", "status": "planned", "completionPercent": 0, "objective": "Create one shared normalization and identity implementation, add explicit duplicate-key signaling, and deprecate unsafe positional review artifacts."},
+    {"id": 8, "name": "App-facing API and event-significance service", "status": "planned", "completionPercent": 0, "objective": "Expose versioned event, nearby, category, borough, article, and significance endpoints with pagination, caching, errors, and rate limits."},
+    {"id": 9, "name": "Accounts, location verification, and ZIP-room authorization", "status": "planned", "completionPercent": 0, "objective": "Build authentication, privacy-preserving geofence checks, short-lived posting eligibility, and ZIP room access rules."},
+    {"id": 10, "name": "Real-time chat and trust-and-safety", "status": "planned", "completionPercent": 0, "objective": "Build messaging, media controls, moderation, reports, blocking, rate limits, audit logs, and community-report labeling."},
+    {"id": 11, "name": "Three-panel cross-platform application", "status": "planned", "completionPercent": 0, "objective": "Build the center map, left chat, right story feed, press-and-hold navigation, accessibility, device layouts, and deep links for iOS and Android."},
+    {"id": 12, "name": "Notifications and personalization", "status": "planned", "completionPercent": 0, "objective": "Add opt-in notification controls for ZIP rooms, boroughs, categories, significance tiers, saved events, and NYCIF stories."},
+    {"id": 13, "name": "Editorial feed and WordPress integration", "status": "planned", "completionPercent": 0, "objective": "Connect NYCIF stories, galleries, video, map pins, and local rooms while preserving editorial and sponsorship labeling."},
+    {"id": 14, "name": "App-store privacy, safety, testing, and launch", "status": "planned", "completionPercent": 0, "objective": "Complete privacy disclosures, permission flows, moderation readiness, TestFlight/Play testing, accessibility, store assets, and review submissions."},
+    {"id": 15, "name": "Revenue and growth", "status": "planned", "completionPercent": 0, "objective": "Introduce clearly labeled sponsorships, promoted event tools, ticket affiliates, premium alerts, memberships, business products, and partner API licensing without compromising editorial trust."}
+  ],
+  "revenueModel": ["clearly labeled sponsored events", "paid organizer enhancement tools", "ticket and attraction affiliate links", "premium alert or membership options", "local business promotion", "advertising separated from editorial ranking", "partner data and API licensing"],
+  "nonNegotiableRules": ["No organizer may buy a Gold, Silver, or Bronze significance tier.", "Community reports must be labeled as unverified until independently confirmed.", "Precise user coordinates are never exposed to other users.", "Posting authorization is decided server-side and expires.", "Location permission is requested contextually, not at first launch.", "Moderation, reporting, blocking, and contact mechanisms are launch requirements.", "No milestone automatically authorizes the next milestone, production launch, or app-store submission."],
+  "links": {
+    "liveFeedsRoadmap": "./live-feeds-roadmap.html",
+    "platformPlanMarkdown": "https://github.com/setoxxx/nycif-field-desk/blob/main/docs/nycif-platform-master-plan.md",
+    "platformPlanText": "https://github.com/setoxxx/nycif-field-desk/blob/main/docs/nycif-platform-master-plan.txt",
+    "liveFeedsRepository": "https://github.com/setoxxx/nycif-live-feeds",
+    "fieldDeskRepository": "https://github.com/setoxxx/nycif-field-desk",
+    "publicMap": "https://nycinfocus.com/map/"
+  }
+}
