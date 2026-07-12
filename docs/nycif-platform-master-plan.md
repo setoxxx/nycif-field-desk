@@ -136,6 +136,15 @@ Editorial credibility is a product asset. Paid placement must never change evide
 - Every production, location, notification, publishing, or app-store step requires explicit authorization and evidence.
 - No milestone automatically authorizes the next one.
 
+## Prompt handoff workflow
+
+- Long implementation prompts must be saved as plain-text `.txt` files in the repository or generated as downloadable `.txt` artifacts.
+- Do not paste large implementation prompts directly into chat when a text-file handoff is possible.
+- Every future milestone handoff must identify the exact prompt filename.
+- The prompt file is the authoritative reusable handoff artifact; chat summaries should remain short.
+- This rule exists to reduce browser freezing, preserve exact wording, and make Claude Code browser workflows easier to resume and test.
+- A prompt file does not authorize execution by itself. Normal milestone authorization, review, merge, and safety gates still apply.
+
 ## Dynamic status pages
 
 - Platform architecture: `admin/platform-architecture.html`
