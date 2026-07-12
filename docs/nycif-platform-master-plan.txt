@@ -1,0 +1,113 @@
+NYC IN FOCUS PLATFORM MASTER PLAN
+Version 1.0
+Date: July 12, 2026
+Owner: Howard Weiss
+Status: Active product direction
+
+MISSION
+
+Build NYC In Focus into a trusted New York City information platform combining:
+
+1. A live event map.
+2. Geo-verified ZIP Code community chat.
+3. The NYC In Focus editorial story feed.
+4. User-controlled notifications.
+5. A cross-platform Apple and Android application.
+6. Revenue products that preserve editorial trust.
+
+CORE APP EXPERIENCE
+
+CENTER — LIVE NYC MAP
+
+The center screen is the home screen. It displays approved events and city activity with filters for borough, date, time, category, nearby activity, and event significance. Event pages link to directions, saved events, local ZIP discussion, and related NYC In Focus reporting.
+
+Users move between the three main screens through horizontal swipes and two small circular arrow controls. The arrows activate through press-and-hold to reduce accidental navigation while using the map.
+
+LEFT — GEO-VERIFIED ZIP CHAT
+
+Users select one of the five boroughs and then a ZIP Code room. Anyone may read public discussion. A user may post only after the server verifies that the user is physically inside the approved geographic boundary.
+
+Precise location is requested only when the user attempts to participate. Exact coordinates, addresses, movement history, and precise distance are never visible to other users. The system issues only a short-lived location-verified posting authorization.
+
+Launch requirements include reporting, blocking, muting, moderation, spam controls, rate limits, audit logs, community rules, and clear labeling of community reports that are not independently verified by NYC In Focus.
+
+RIGHT — NYC IN FOCUS STORY FEED
+
+The right panel is a visual feed of NYC In Focus articles, breaking updates, Civic Watch reporting, photo galleries, and video. Stories connect back to map pins and local ZIP rooms. NYCIF reporting, community posts, editorial picks, and sponsorships must remain clearly separated.
+
+NOTIFICATIONS
+
+Users control notifications in settings for:
+
+- ZIP Code chat
+- selected boroughs
+- event categories
+- Gold-only or Gold-and-Silver events
+- saved-event reminders
+- breaking NYCIF coverage
+- new NYC In Focus stories
+
+Notifications must be opt-in, rate-limited, useful, and easy to disable.
+
+EVENT SIGNIFICANCE
+
+Gold: major citywide event.
+Silver: significant borough or regional event.
+Bronze: notable community event.
+
+Signals may include expected attendance, historical attendance, event duration, permit footprint, geographic footprint, routes and road closures, number of agencies, and annual flagship status.
+
+No organizer may purchase a Gold, Silver, or Bronze tier. Sponsored placement and editorial selections use separate labels.
+
+CANONICAL MILESTONE TIMELINE
+
+1. Foundation and governance — COMPLETE
+2. Fixture and registry validation — COMPLETE
+3. Credential and network-control closure — COMPLETE
+4. Isolated validation execution — COMPLETE
+5. Dependency reproducibility and workflow hardening — COMPLETE
+6. GPS pipeline reliability and identity integrity — PR #143 OPEN; REVIEW AND MERGE PENDING
+7. Identity consolidation and duplicate enforcement — NEXT PLANNED MILESTONE
+8. App-facing API and event-significance service
+9. Accounts, location verification, and ZIP-room authorization
+10. Real-time chat and trust-and-safety
+11. Three-panel cross-platform application
+12. Notifications and personalization
+13. Editorial feed and WordPress integration
+14. App-store privacy, safety, testing, and launch
+15. Revenue and growth
+
+NEXT AUTHORIZED DIRECTION AFTER PR #143 MERGE
+
+Milestone 7 should:
+
+- consolidate duplicated normalization functions into one shared implementation;
+- establish one canonical active identity contract;
+- add explicit duplicate-key detection to the GPS repository builder;
+- formally deprecate or remove unsafe positional review arrays;
+- add offline compatibility and regression tests;
+- avoid live-source, production, publishing, WordPress, geocoding, staging, and public-map changes unless separately authorized.
+
+REVENUE DIRECTION
+
+Potential revenue includes clearly labeled sponsored events, paid organizer enhancement tools, ticket and attraction affiliate links, premium alerts or memberships, local business promotion, advertising separated from editorial ranking, and partner data/API licensing.
+
+NON-NEGOTIABLE RULES
+
+- Precise coordinates are never exposed to other users.
+- Location eligibility is server-authorized and expires.
+- Browsing remains available without precise location.
+- Community claims are not presented as verified reporting.
+- Moderation and abuse controls are required before public chat launch.
+- Event significance cannot be purchased.
+- Sponsorship is labeled separately from editorial and algorithmic ranking.
+- No milestone automatically authorizes the next milestone.
+
+DYNAMIC STATUS FILES
+
+admin/platform-roadmap.html
+admin/data/nycif-platform-roadmap.json
+docs/nycif-platform-master-plan.md
+docs/nycif-platform-master-plan.txt
+admin/live-feeds-roadmap.html
+admin/index.html
