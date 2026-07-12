@@ -1,9 +1,9 @@
 {
   "schemaVersion": "nycif-platform-timeline-v1",
   "generatedAt": "2026-07-12",
-  "currentFoundationState": "Canonical Milestones 1-5 are complete in nycif-live-feeds. Canonical Milestone 6 (GPS pipeline reliability and identity integrity) is implementation-complete on live-feeds PR #143, which is open and has NOT been merged. Canonical Milestone 7 (identity consolidation and duplicate-key enforcement) has not started.",
-  "currentAuthorizedWork": "No platform phase beyond Phase 1 is currently authorized to begin implementation. The only currently open, in-review engineering work is live-feeds PR #143 (Phase 2 scope), awaiting independent review and merge.",
-  "nextRecommendedGate": "Independently review and merge live-feeds PR #143, then separately authorize Canonical Milestone 7 (identity consolidation) to complete Phase 2 before any Phase 3 (App-facing API) work is authorized.",
+  "currentFoundationState": "Canonical Milestones 1-5 are complete in nycif-live-feeds. Canonical Milestone 6 (GPS pipeline reliability and identity integrity) is complete/merged on live-feeds PR #143 (head 5197bdd3918fd95a381e8f9e520681fa7fe36464; merge 8796d64ea628007327e715f0995c16e6ab071c78). Canonical Milestone 7 (identity consolidation and duplicate-key enforcement) is planned, not authorized, and not started.",
+  "currentAuthorizedWork": "No platform phase beyond Phase 1 is currently authorized to begin implementation. live-feeds PR #143 is merged as Phase 2 evidence, but Canonical Milestone 7 remains unstarted and requires separate authorization.",
+  "nextRecommendedGate": "Separately authorize Canonical Milestone 7 (identity consolidation) to complete Phase 2 before any Phase 3 (App-facing API) work is authorized.",
   "phases": [
     {
       "phaseId": "phase-01",
@@ -24,16 +24,16 @@
       "phaseId": "phase-02",
       "name": "GPS and event identity integrity",
       "status": "in_progress",
-      "completionPercent": 45,
+      "completionPercent": 50,
       "purpose": "Deliver one reliable, deduplicated, location-validated event identity for every downstream layer to trust.",
       "dependencies": ["phase-01"],
       "successCriteria": ["PR #143 merged", "one canonical shared normalization/identity implementation", "explicit duplicate-key detection", "positional review arrays deprecated or removed", "offline migration-compatibility regression tests passing"],
-      "risks": ["Merging PR #143 without independent review", "starting Milestone 7 before PR #143 lands", "silent reintroduction of duplicated normalization logic"],
+      "risks": ["Starting Milestone 7 without separate authorization", "silent reintroduction of duplicated normalization logic"],
       "completionRequirements": ["PR #143 merged with evidence", "Milestone 7 objectives implemented and tested", "no live-source, production, or publishing behavior changed without separate authorization"],
       "separateAuthorizationRequired": true,
       "runtimeImpact": "None from this phase's own scope (pipeline-internal, staged data only).",
       "privacyImpact": "none",
-      "evidence": "completionPercent basis: Canonical Milestone 6 is implementation-complete but unmerged (treated as 90% of this phase's Milestone-6 half, i.e. 45 of a 50-point share); Milestone 7 has not started (0 of its 50-point share). (0.5 x 90) + (0.5 x 0) = 45. live-feeds PR #143 is open, not merged, as of 2026-07-12."
+      "evidence": "completionPercent basis: Canonical Milestone 6 is COMPLETE / MERGED on live-feeds PR #143 (head 5197bdd3918fd95a381e8f9e520681fa7fe36464; merge 8796d64ea628007327e715f0995c16e6ab071c78) and contributes 50 of 50 points. Canonical Milestone 7 is PLANNED / NOT AUTHORIZED / NOT STARTED and contributes 0 of 50 points. Total = 50%."
     },
     {
       "phaseId": "phase-03",
@@ -193,17 +193,17 @@
     "trustAndSafety": "not_ready",
     "notifications": "not_ready",
     "revenue": "not_ready",
-    "note": "No platform-product surface is release-ready. Only Phase 1 (engineering foundation) in nycif-live-feeds is complete; Phase 2 is in progress and unmerged."
+    "note": "No platform-product surface is release-ready. Phase 1 (engineering foundation) is complete; Phase 2 is in progress at 50% because Milestone 6 is complete/merged and Milestone 7 is not authorized or started."
   },
   "criticalDependencies": [
-    "live-feeds PR #143 must be independently reviewed and merged before Phase 2 can be considered complete.",
+    "live-feeds PR #143 is merged and counts as Canonical Milestone 6 evidence; Canonical Milestone 7 must be separately authorized, implemented, and tested before Phase 2 can be considered complete.",
     "Phase 2 (GPS and event identity integrity) must complete before Phase 3 (App-facing API) may be authorized.",
     "Phase 3 (App-facing API) blocks Phase 8 (story/editorial integration), Phase 9 (push notifications), Phase 10 (mobile), and Phase 12 (revenue).",
     "Phase 4 (accounts) blocks Phase 5 (geofencing), which blocks Phase 6 (chat), which blocks Phase 7 (trust and safety), which blocks Phase 10 (mobile).",
     "Phase 10 (mobile) blocks Phase 11 (app-store launch), which is required before widgets/newsletter (post-launch) or in-app-purchase revenue products ship."
   ],
   "riskRegister": [
-    {"risk": "Merging live-feeds PR #143 without independent review", "impact": "high", "mitigation": "Require separate explicit review-and-merge authorization, per established repository practice."},
+    {"risk": "Starting Canonical Milestone 7 without separate authorization", "impact": "high", "mitigation": "Require a separate explicit Milestone 7 authorization before identity consolidation or duplicate-key work begins."},
     {"risk": "Building the app-facing API against an unstable identity model", "impact": "high", "mitigation": "Do not authorize Phase 3 until Phase 2 (PR #143 merge + Milestone 7) is complete."},
     {"risk": "Launching real-time chat posting before trust-and-safety tooling exists", "impact": "high", "mitigation": "ADR-004: moderation is a launch requirement, not a post-launch addition; Phase 7 gates Phase 6's posting capability in production."},
     {"risk": "Sponsorship or premium revenue features influencing Gold/Silver/Bronze significance", "impact": "high", "mitigation": "Explicit non-negotiable rule and dependency-graph rule: no revenue feature may write to or weight significance computation."},

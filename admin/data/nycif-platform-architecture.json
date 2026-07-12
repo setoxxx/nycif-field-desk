@@ -9,7 +9,7 @@
     "description": "Four-layer architecture for the NYC In Focus live event map, geo-verified ZIP Code community chat, NYC In Focus editorial story feed, and cross-platform mobile applications.",
     "activePipelineMilestone": 6,
     "activePipelinePR": 143,
-    "currentMainSha": "b59fb070de238ea97c699a29b6ef3ec61155593f",
+    "currentMainSha": "8796d64ea628007327e715f0995c16e6ab071c78",
     "nextPipelineMilestone": 7,
     "note": "Architecture V1 is a planning artifact only. No component, integration point, or service boundary listed here is authorized for implementation without separate explicit authorization.",
     "platformPhasesDoc": "../docs/platform-phases.md",
@@ -57,7 +57,7 @@
       "subcomponents": ["permit-feed-client", "agency-source-clients", "candidate-normalizer", "ingestion-scheduler"],
       "dependencies": [],
       "interfaces": ["candidate-output"],
-      "notes": "Milestones 1–5 established the ingestion foundation. Milestone 6 GPS quality layer is review pending on PR #143."
+      "notes": "Milestones 1–5 established the ingestion foundation. Milestone 6 GPS quality layer is complete/merged on PR #143 (head 5197bdd3918fd95a381e8f9e520681fa7fe36464; merge 8796d64ea628007327e715f0995c16e6ab071c78)."
     },
     {
       "id": "normalization-identity",
@@ -76,12 +76,12 @@
       "name": "GPS and Location Quality",
       "layer": "data-pipeline",
       "platformMilestone": 6,
-      "status": "review_pending",
+      "status": "complete",
       "description": "Validates and resolves GPS coordinates for all events before staging. Includes location-drift detection and identity-transition tests. Raw ingestion coordinates are never exposed in the public API or application.",
       "subcomponents": ["coordinate-validator", "geocode-resolver", "location-drift-detector", "identity-transition-tests"],
       "dependencies": ["normalization-identity"],
       "interfaces": ["location-validated-event"],
-      "notes": "Implementation complete on PR #143 in the live-feeds repository. Awaiting separate review and merge."
+      "notes": "Implementation complete and merged on PR #143 in the live-feeds repository. Milestone 7 remains planned, not authorized, and not started."
     },
     {
       "id": "review-adjudication",

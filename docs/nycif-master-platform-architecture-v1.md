@@ -30,7 +30,7 @@ The pipeline owns all ingestion, normalization, stable identity, location qualit
 
 Pulls from NYC Open Data permit feeds, city agency sources, and additional tracked origins on scheduled intervals. Output is a normalized candidate set. No production write is authorized during ingestion.
 
-Status: `partially_complete`. Milestones 1–5 established the ingestion foundation. Milestone 6 (GPS pipeline reliability) is implementation-complete on PR #143 in the live-feeds repository and awaiting separate review and merge.
+Status: `partially_complete`. Milestones 1–5 established the ingestion foundation. Milestone 6 (GPS pipeline reliability) is complete/merged on PR #143 in the live-feeds repository (head `5197bdd3918fd95a381e8f9e520681fa7fe36464`; merge `8796d64ea628007327e715f0995c16e6ab071c78`).
 
 ### 1b. Normalization and identity
 
@@ -42,7 +42,7 @@ Status: `partially_complete`. Identity consolidation and explicit duplicate-key 
 
 Validates and resolves GPS coordinates for all events before staging. Raw ingestion coordinates are never exposed in the public API or application. Location drift detection and identity-transition tests are part of this layer.
 
-Status: `review_pending`. Implementation complete; PR #143 open in the live-feeds repository. Awaiting separate review and merge before Milestone 7 begins.
+Status: `complete`. Implementation complete and merged on live-feeds PR #143. Milestone 7 remains planned, not authorized, and not started.
 
 ### 1d. Review and adjudication
 
@@ -185,7 +185,7 @@ The platform runs a single backend serving all client surfaces. Infrastructure d
 |---|---|---|---|
 | Source ingestion | Data pipeline | 1–5 | partially_complete |
 | Normalization and identity | Data pipeline | 7 | partially_complete |
-| GPS and location quality | Data pipeline | 6 | review_pending |
+| GPS and location quality | Data pipeline | 6 | complete |
 | Review and adjudication | Data pipeline | — | partially_complete |
 | Publishing controls | Data pipeline | — | partially_complete |
 | Events API | App API | 8 | planned |
@@ -278,11 +278,11 @@ The platform runs a single backend serving all client surfaces. Infrastructure d
 
 Architecture V1 is a planning artifact only. The current authorized engineering track is the live-feeds pipeline documented in `docs/live-feeds-master-roadmap.md`.
 
-Platform Milestone 6 (GPS pipeline reliability and identity integrity) is implementation-complete on PR #143 in the live-feeds repository and awaiting separate review and merge.
+Platform Milestone 6 (GPS pipeline reliability and identity integrity) is complete/merged on PR #143 in the live-feeds repository (head `5197bdd3918fd95a381e8f9e520681fa7fe36464`; merge `8796d64ea628007327e715f0995c16e6ab071c78`).
 
-Platform Milestone 7 (identity consolidation and duplicate enforcement) is the next planned milestone and requires separate explicit authorization to begin.
+Platform Milestone 7 (identity consolidation and duplicate enforcement) is the next planned milestone and requires separate explicit authorization to begin. It has not started.
 
-No work on Layers 2, 3, or 4 is authorized by this document or by any currently open pull request.
+No work on Layers 2, 3, or 4 is authorized by this document or by this architecture pull request.
 
 ## Dynamic status pages
 

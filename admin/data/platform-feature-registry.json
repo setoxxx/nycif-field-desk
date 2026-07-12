@@ -707,7 +707,7 @@
       "implementationState": "not_started",
       "authorizationState": "not_authorized",
       "blocked": true,
-      "blocker": "Phase 2 (GPS and event identity integrity) is not complete: live-feeds PR #143 is open and unmerged, and Canonical Milestone 7 has not started.",
+      "blocker": "Phase 2 (GPS and event identity integrity) is not complete: Canonical Milestone 6 is complete/merged on live-feeds PR #143 (merge 8796d64ea628007327e715f0995c16e6ab071c78), but Canonical Milestone 7 is planned, not authorized, and not started.",
       "runtimeImpact": "None yet — would introduce a new production-facing read service once implemented.",
       "privacyImpact": "low",
       "moderationRequirement": "none",

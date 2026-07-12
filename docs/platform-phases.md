@@ -11,7 +11,7 @@ This document defines the twelve product-platform phases that sit above the engi
 
 **Historical engineering milestones and future platform-product phases are deliberately kept separate.** The Canonical Milestone numbering in `nycif-live-feeds` describes *how the data pipeline was engineered and hardened*. The phases below describe *what user-facing and commercial capability ships next, and in what order*. A phase can reference milestone evidence (for example, Phase 2 references Canonical Milestone 6 and PR #143), but a phase is never renamed to match a milestone number, and completing a milestone does not by itself complete a phase.
 
-**Do not falsely mark Canonical Milestone 6 merged unless live-feeds PR #143 is verified merged.** As of this document's date, PR #143 in `nycif-live-feeds` is open and has not been merged. Phase 2 below reflects that fact precisely: implementation-complete, review-pending, not merged.
+**Do not mark any Canonical Milestone as merged without verified evidence.** Canonical Milestone 6 is verified complete and merged on live-feeds PR #143. Phase 2 below reflects that fact precisely: Milestone 6 is complete/merged, Milestone 7 remains planned, not authorized, and not started, and Phase 2 remains in progress at 50%.
 
 ## The twelve phases
 
@@ -51,10 +51,10 @@ This order is authoritative for planning. It does not by itself authorize work o
 
 - **Purpose:** Deliver one reliable, deduplicated, location-validated event identity so every downstream layer (API, map, significance, notifications) can trust a single canonical event record.
 - **Dependencies:** `phase-01`.
-- **Current status:** `in_progress`. Canonical Milestone 6 (GPS pipeline reliability and identity integrity) is implementation-complete on live-feeds PR #143 and awaiting independent review and merge. Canonical Milestone 7 (identity consolidation and duplicate-key enforcement) has not started.
+- **Current status:** `in_progress` at 50%. Canonical Milestone 6 (GPS pipeline reliability and identity integrity) is complete/merged on live-feeds PR #143 (head `5197bdd3918fd95a381e8f9e520681fa7fe36464`; merge `8796d64ea628007327e715f0995c16e6ab071c78`). Canonical Milestone 7 (identity consolidation and duplicate-key enforcement) remains planned, not authorized, and not started.
 - **Implementation repositories:** `nycif-live-feeds`.
 - **Success criteria:** PR #143 merged; one canonical shared normalization/identity implementation in place; explicit duplicate-key detection; positional review arrays deprecated or removed; offline migration-compatibility regression tests passing.
-- **Risks:** Merging PR #143 without independent review; starting Milestone 7 before PR #143 lands; silent reintroduction of duplicated normalization logic.
+- **Risks:** Starting Milestone 7 without separate authorization; silent reintroduction of duplicated normalization logic.
 - **Completion requirements:** PR #143 merged with evidence; Milestone 7 objectives implemented and tested; no live-source, production, or publishing behavior changed without separate authorization.
 - **Runtime impact:** None from this phase's own scope (pipeline-internal, staged data only). Production publishing remains gated separately.
 - **Privacy impact:** None — no user or account data involved.
@@ -195,7 +195,7 @@ This order is authoritative for planning. It does not by itself authorize work o
 | Platform phase | Related `nycif-live-feeds` Canonical Milestone(s) |
 |---|---|
 | Phase 1 — Engineering foundation | Milestones 1–5 (complete) |
-| Phase 2 — GPS and event identity integrity | Milestone 6 (PR #143, review-pending, **not merged**), Milestone 7 (not started) |
+| Phase 2 — GPS and event identity integrity | Milestone 6 (PR #143, complete/merged; head `5197bdd3918fd95a381e8f9e520681fa7fe36464`; merge `8796d64ea628007327e715f0995c16e6ab071c78`), Milestone 7 (planned, not authorized, not started) |
 | Phases 3–12 | No corresponding Canonical Milestone yet exists in `nycif-live-feeds`; these are new platform-product phases, not renumbered engineering milestones. |
 
 This table exists specifically so that no future document conflates a live-feeds engineering milestone number with a platform phase number. They are two independent sequences that happen to share Phase 1/2 as their point of contact.

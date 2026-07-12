@@ -82,13 +82,13 @@ function render(d){
   g.append(
     card('Architecture version',d.platform.architectureVersion,'Generated '+d.generatedAt),
     card('Total components',total,'Across '+d.layers.length+' layers'),
-    card('Active pipeline milestone',d.platform.activePipelineMilestone,'PR #'+d.platform.activePipelinePR+' awaiting review'),
+    card('Milestone 6 PR','#'+d.platform.activePipelinePR,'merged'),
     card('Partially complete',(byStatus.partially_complete||0),'Active engineering track'),
-    card('Review pending',byStatus.review_pending||0,'Awaiting separate merge'),
+    card('Complete',byStatus.complete||0,'Merged/evidence-backed'),
     card('Planned',(byStatus.planned||0)+' of '+total,'Require separate authorization')
   );
   s.append(g);
-  s.append(el('div','notice ok','Current authorized engineering track: live-feeds pipeline through Platform Milestone '+d.platform.activePipelineMilestone+'. No work on Layers 2, 3, or 4 is authorized.'));
+  s.append(el('div','notice ok','Current engineering evidence: live-feeds pipeline through Platform Milestone '+d.platform.activePipelineMilestone+' is complete. Milestone 7 requires separate authorization. No work on Layers 2, 3, or 4 is authorized.'));
   s.append(el('div','notice violet',d.platform.note));
   const layerBox=document.getElementById('layers');
   d.layers.forEach(lyr=>{
