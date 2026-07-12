@@ -151,5 +151,10 @@ Editorial credibility is a product asset. Paid placement must never change evide
 - Platform architecture JSON: `admin/data/nycif-platform-architecture.json`
 - Platform roadmap: `admin/platform-roadmap.html`
 - Platform roadmap JSON: `admin/data/nycif-platform-roadmap.json`
+- Platform phases: `docs/platform-phases.md`
+- Platform feature registry: `docs/platform-feature-registry.md`
+- Platform feature registry JSON: `admin/data/platform-feature-registry.json`
+- Platform dependency graph: `docs/platform-dependency-graph.md`
+- Platform timeline JSON: `admin/data/platform-timeline.json`
 - Live Feeds engineering roadmap: `admin/live-feeds-roadmap.html`
 - Admin God View: `admin/index.html`

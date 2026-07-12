@@ -11,7 +11,10 @@
     "activePipelinePR": 143,
     "currentMainSha": "b59fb070de238ea97c699a29b6ef3ec61155593f",
     "nextPipelineMilestone": 7,
-    "note": "Architecture V1 is a planning artifact only. No component, integration point, or service boundary listed here is authorized for implementation without separate explicit authorization."
+    "note": "Architecture V1 is a planning artifact only. No component, integration point, or service boundary listed here is authorized for implementation without separate explicit authorization.",
+    "platformPhasesDoc": "../docs/platform-phases.md",
+    "platformFeatureRegistryDoc": "../docs/platform-feature-registry.md",
+    "platformDependencyGraphDoc": "../docs/platform-dependency-graph.md"
   },
   "layers": [
     {
@@ -482,6 +485,11 @@
     "architectureDashboard": "./platform-architecture.html",
     "platformMasterPlan": "../docs/nycif-platform-master-plan.md",
     "architectureMarkdown": "../docs/nycif-master-platform-architecture-v1.md",
+    "platformPhasesDoc": "../docs/platform-phases.md",
+    "platformFeatureRegistryDoc": "../docs/platform-feature-registry.md",
+    "platformDependencyGraphDoc": "../docs/platform-dependency-graph.md",
+    "platformFeatureRegistryJson": "./data/platform-feature-registry.json",
+    "platformTimelineJson": "./data/platform-timeline.json",
     "platformRoadmap": "./platform-roadmap.html",
     "platformRoadmapJson": "./data/nycif-platform-roadmap.json",
     "liveFeedsRoadmap": "./live-feeds-roadmap.html",
