@@ -4,26 +4,26 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-11",
-  "matched_rows": 1674,
-  "mapped_total": 1649,
+  "since_date": "2025-07-12",
+  "matched_rows": 1685,
+  "mapped_total": 1660,
   "needs_review": 25,
-  "rejected": 298326,
+  "rejected": 298315,
   "duplicate_count": 0,
   "subtype_counts": {
-    "cannabis_related_complaint": 1093,
-    "vape_complaint": 556
+    "vape_complaint": 546,
+    "cannabis_related_complaint": 1114
   },
   "match_bucket_counts": {
-    "cannabis_marijuana_weed": 1093,
-    "vape_electronic_cigarette": 556
+    "vape_electronic_cigarette": 546,
+    "cannabis_marijuana_weed": 1114
   },
   "complaint_type_counts": {
-    "Cannabis Retailer": 305,
-    "Smoking or Vaping": 509,
-    "Maintenance or Facility": 253,
-    "Consumer Complaint": 47,
-    "Obstruction": 514,
+    "Smoking or Vaping": 498,
+    "Obstruction": 542,
+    "Cannabis Retailer": 302,
+    "Maintenance or Facility": 249,
+    "Consumer Complaint": 48,
     "Noise - Street/Sidewalk": 6,
     "Damaged Tree": 2,
     "Root/Sewer/Sidewalk Condition": 1,
@@ -37,26 +37,26 @@
     "Illegal Parking": 1
   },
   "descriptor_counts": {
-    "Sales to Minors Under 21": 130,
-    "Allowed in Smoke Free Area": 503,
-    "Unlicensed": 108,
-    "Grass/Weeds": 253,
+    "Allowed in Smoke Free Area": 493,
+    "Weeds or Grass": 541,
+    "Sales to Minors Under 21": 127,
+    "Grass/Weeds": 249,
+    "Suspicious Activity": 28,
+    "E-Cigarette Sales": 35,
+    "Too Close to a School": 18,
+    "Unlicensed": 107,
     "Smoking, Cigar, or Vape Store": 13,
-    "Too Close to a School": 17,
-    "Weeds or Grass": 513,
     "Workplace Policy Not Provided or Inadequate": 1,
     "Sign Inadequate": 3,
-    "Suspicious Activity": 28,
     "Product Concerns": 13,
     "Loud Music/Party": 8,
     "Branch or Limb Has Fallen Down": 2,
-    "E-Cigarette Sales": 34,
     "Trees and Sidewalks Program": 1,
     "Too Close to a House of Worship": 9,
     "Water Meter Broken/Leaking - Private Residence (CMR)": 2,
     "Hydrant Leaking (WC1)": 1,
     "With License Plate": 1,
-    "Ashtray in Smoke-Free Area": 2,
+    "Ashtray in Smoke-Free Area": 1,
     "Trash or Recycling": 1,
     "No Access": 1,
     "Loud Television": 1,
@@ -72,9 +72,9 @@
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298326
+      "count": 298315
     }
   ],
-  "generated_at": "2026-07-11T11:28:35.155Z",
+  "generated_at": "2026-07-12T11:35:20.937Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }

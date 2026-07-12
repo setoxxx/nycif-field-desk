@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1649,
-  "usable_complaints": 1649,
+  "source_complaints": 1660,
+  "usable_complaints": 1660,
   "source_dispensaries": 247,
   "source_retailers": 4882,
   "correlation_locations": 5129,
-  "output_locations": 188,
-  "low_signal_excluded": 4941,
+  "output_locations": 181,
+  "low_signal_excluded": 4948,
   "radius_feet": [
     100,
     250,
@@ -22,20 +22,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 164,
-    "legal_cannabis_dispensary": 24
+    "licensed_smoke_vape_retailer": 159,
+    "legal_cannabis_dispensary": 22
   },
   "borough_counts": {
-    "Bronx": 33,
-    "Brooklyn": 57,
+    "Bronx": 32,
+    "Brooklyn": 55,
     "Queens": 34,
-    "Manhattan": 63,
+    "Manhattan": 59,
     "Staten Island": 1
   },
   "signal_tier_counts": {
     "very_high": 2,
-    "high": 20,
-    "moderate": 166
+    "high": 17,
+    "moderate": 162
   },
   "top_locations_sample": [
     {
@@ -204,17 +204,6 @@
       "last_complaint_date": "2026-06-24"
     },
     {
-      "title": "BURKE CANDY & CONVENIENCE CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "702 BURKE AVE, BRONX, 10467",
-      "borough": "Bronx",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-23"
-    },
-    {
       "title": "GOGA 176 INC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "176 GRAND ST, BROOKLYN, 11211",
@@ -229,28 +218,6 @@
       "title": "GOGA 176 INC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "176 GRAND ST, BROOKLYN, 11211",
-      "borough": "Brooklyn",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-03"
-    },
-    {
-      "title": "SHOREWAY CONVENIENCE INC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "3043 EMMONS AVE, BROOKLYN, 11235",
-      "borough": "Brooklyn",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-03"
-    },
-    {
-      "title": "SHOREWAY CONVENIENCE INC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "3043 EMMONS AVE, BROOKLYN, 11235",
       "borough": "Brooklyn",
       "signal_score": 21,
       "signal_tier": "high",
@@ -312,8 +279,41 @@
       "complaints_365d_100ft": 1,
       "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-07-06"
+    },
+    {
+      "title": "CIGAR VAPE INC I",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "452 5 AVENUE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 13,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "CIGAR VAPE INC I",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "452 5 AVENUE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 13,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "BEAST COAST GROUP LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "JOHN MAGNA 16105 29TH AVE STORE, FLUSHING, 11358 1049",
+      "borough": "Queens",
+      "signal_score": 12,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 1,
+      "last_complaint_date": "2026-06-15"
     }
   ],
-  "generated_at": "2026-07-11T11:28:35.560Z",
+  "generated_at": "2026-07-12T11:35:24.014Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
