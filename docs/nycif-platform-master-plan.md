@@ -96,8 +96,8 @@ The chat database and private user records must not be stored in the public feed
 3. Credential and network-control closure — complete
 4. Isolated validation execution — complete
 5. Dependency reproducibility and workflow hardening — complete
-6. GPS pipeline reliability and identity integrity — implementation complete on PR #143; review and merge pending
-7. Identity consolidation and duplicate enforcement — next planned milestone
+6. GPS pipeline reliability and identity integrity — complete / merged on PR #143 (head `5197bdd3918fd95a381e8f9e520681fa7fe36464`; merge `8796d64ea628007327e715f0995c16e6ab071c78`)
+7. Identity consolidation and duplicate enforcement — planned / not authorized / not started
 8. App-facing API and event-significance service
 9. Accounts, location verification, and ZIP-room authorization
 10. Real-time chat and trust-and-safety
@@ -109,7 +109,7 @@ The chat database and private user records must not be stored in the public feed
 
 ## Immediate next engineering direction
 
-After PR #143 is independently reviewed and merged, Milestone 7 should:
+Milestone 7 remains planned, not authorized, and not started. When separately authorized, Milestone 7 should:
 
 - consolidate duplicated normalization logic into one shared implementation;
 - establish one canonical identity contract across active pipeline stages;
@@ -136,9 +136,25 @@ Editorial credibility is a product asset. Paid placement must never change evide
 - Every production, location, notification, publishing, or app-store step requires explicit authorization and evidence.
 - No milestone automatically authorizes the next one.
 
+## Prompt handoff workflow
+
+- Long implementation prompts must be saved as plain-text `.txt` files in the repository or generated as downloadable `.txt` artifacts.
+- Do not paste large implementation prompts directly into chat when a text-file handoff is possible.
+- Every future milestone handoff must identify the exact prompt filename.
+- The prompt file is the authoritative reusable handoff artifact; chat summaries should remain short.
+- This rule exists to reduce browser freezing, preserve exact wording, and make Claude Code browser workflows easier to resume and test.
+- A prompt file does not authorize execution by itself. Normal milestone authorization, review, merge, and safety gates still apply.
+
 ## Dynamic status pages
 
+- Platform architecture: `admin/platform-architecture.html`
+- Platform architecture JSON: `admin/data/nycif-platform-architecture.json`
 - Platform roadmap: `admin/platform-roadmap.html`
 - Platform roadmap JSON: `admin/data/nycif-platform-roadmap.json`
+- Platform phases: `docs/platform-phases.md`
+- Platform feature registry: `docs/platform-feature-registry.md`
+- Platform feature registry JSON: `admin/data/platform-feature-registry.json`
+- Platform dependency graph: `docs/platform-dependency-graph.md`
+- Platform timeline JSON: `admin/data/platform-timeline.json`
 - Live Feeds engineering roadmap: `admin/live-feeds-roadmap.html`
 - Admin God View: `admin/index.html`

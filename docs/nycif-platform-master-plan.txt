@@ -66,8 +66,8 @@ CANONICAL MILESTONE TIMELINE
 3. Credential and network-control closure — COMPLETE
 4. Isolated validation execution — COMPLETE
 5. Dependency reproducibility and workflow hardening — COMPLETE
-6. GPS pipeline reliability and identity integrity — PR #143 OPEN; REVIEW AND MERGE PENDING
-7. Identity consolidation and duplicate enforcement — NEXT PLANNED MILESTONE
+6. GPS pipeline reliability and identity integrity — COMPLETE / MERGED on PR #143 (head 5197bdd3918fd95a381e8f9e520681fa7fe36464; merge 8796d64ea628007327e715f0995c16e6ab071c78)
+7. Identity consolidation and duplicate enforcement — PLANNED / NOT AUTHORIZED / NOT STARTED
 8. App-facing API and event-significance service
 9. Accounts, location verification, and ZIP-room authorization
 10. Real-time chat and trust-and-safety
@@ -77,7 +77,9 @@ CANONICAL MILESTONE TIMELINE
 14. App-store privacy, safety, testing, and launch
 15. Revenue and growth
 
-NEXT AUTHORIZED DIRECTION AFTER PR #143 MERGE
+NEXT PLANNED DIRECTION
+
+Milestone 7 remains planned, not authorized, and not started. When separately authorized:
 
 Milestone 7 should:
 
@@ -102,6 +104,15 @@ NON-NEGOTIABLE RULES
 - Event significance cannot be purchased.
 - Sponsorship is labeled separately from editorial and algorithmic ranking.
 - No milestone automatically authorizes the next milestone.
+
+PROMPT HANDOFF WORKFLOW
+
+- Long implementation prompts must be saved as plain-text .txt files in the repository or generated as downloadable .txt artifacts.
+- Do not paste large implementation prompts directly into chat when a text-file handoff is possible.
+- Every future milestone handoff must identify the exact prompt filename.
+- The prompt file is the authoritative reusable handoff artifact; chat summaries should remain short.
+- This rule exists to reduce browser freezing, preserve exact wording, and make Claude Code browser workflows easier to resume and test.
+- A prompt file does not authorize execution by itself. Normal milestone authorization, review, merge, and safety gates still apply.
 
 DYNAMIC STATUS FILES
 
