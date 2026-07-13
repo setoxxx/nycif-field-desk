@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: nycif-pin-pipeline
+  cancel-in-progress: false
+
 jobs:
   build-pins:
     runs-on: ubuntu-latest
@@ -20,17 +24,37 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Build generated pin data
-        run: node tools/pin-pipeline/run-all-builders.mjs
-
-      - name: Commit generated data
+      - name: Build and commit generated data
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/*.json data/reports/*.json
-          if git diff --cached --quiet; then
-            echo "No generated data changes to commit."
-          else
+
+          # Generated pin data is derived state: if main advances between our
+          # checkout and our push (another workflow's bot commit, a PR merge),
+          # the correct resolution is to rebuild on the new tip and try again —
+          # never to merge, rebase-with-conflicts, or force-push over it.
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard FETCH_HEAD
+
+            node tools/pin-pipeline/run-all-builders.mjs
+
+            git add data/*.json data/reports/*.json
+            if git diff --cached --quiet; then
+              echo "No generated data changes to commit."
+              exit 0
+            fi
+
             git commit -m "Refresh NYCIF generated data"
-            git push
-          fi
+            if git push origin HEAD:main; then
+              echo "Pushed generated data on attempt ${attempt}."
+              exit 0
+            fi
+
+            echo "Push rejected (main advanced since fetch); rebuilding on the new tip (attempt ${attempt} of 3)."
+            sleep $((attempt * 10))
+          done
+
+          echo "::error::Could not push generated data after 3 attempts; main kept advancing. Re-run the workflow."
+          exit 1
