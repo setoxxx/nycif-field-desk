@@ -4,25 +4,25 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-12",
-  "matched_rows": 1685,
-  "mapped_total": 1660,
-  "needs_review": 25,
-  "rejected": 298315,
+  "since_date": "2025-07-13",
+  "matched_rows": 1687,
+  "mapped_total": 1663,
+  "needs_review": 24,
+  "rejected": 298313,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 546,
-    "cannabis_related_complaint": 1114
+    "cannabis_related_complaint": 1122,
+    "vape_complaint": 541
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 546,
-    "cannabis_marijuana_weed": 1114
+    "cannabis_marijuana_weed": 1122,
+    "vape_electronic_cigarette": 541
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 498,
-    "Obstruction": 542,
-    "Cannabis Retailer": 302,
-    "Maintenance or Facility": 249,
+    "Maintenance or Facility": 248,
+    "Smoking or Vaping": 493,
+    "Cannabis Retailer": 303,
+    "Obstruction": 550,
     "Consumer Complaint": 48,
     "Noise - Street/Sidewalk": 6,
     "Damaged Tree": 2,
@@ -37,14 +37,14 @@
     "Illegal Parking": 1
   },
   "descriptor_counts": {
-    "Allowed in Smoke Free Area": 493,
-    "Weeds or Grass": 541,
+    "Grass/Weeds": 248,
+    "Allowed in Smoke Free Area": 488,
     "Sales to Minors Under 21": 127,
-    "Grass/Weeds": 249,
+    "Weeds or Grass": 549,
     "Suspicious Activity": 28,
+    "Unlicensed": 108,
     "E-Cigarette Sales": 35,
     "Too Close to a School": 18,
-    "Unlicensed": 107,
     "Smoking, Cigar, or Vape Store": 13,
     "Workplace Policy Not Provided or Inadequate": 1,
     "Sign Inadequate": 3,
@@ -66,15 +66,15 @@
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 25
+      "count": 24
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298315
+      "count": 298313
     }
   ],
-  "generated_at": "2026-07-12T11:35:20.937Z",
+  "generated_at": "2026-07-13T12:45:11.558Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }
