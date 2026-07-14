@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-v015-map-restore-v02';
+const CACHE_NAME = 'nycif-v016-data-explorer-v01';
 const APP_SHELL = [
   './',
   './index.html',
@@ -12,12 +12,13 @@ const APP_SHELL = [
   './boot-today-v073-safe.js',
   './date-normalizer-v073-safe.js',
   './app-v06-safe.js',
+  './all-source-data-explorer-v01.js',
   './manifest.json',
   './icons/icon-192.svg',
   './icons/icon-512.svg'
 ];
 
-const NETWORK_FIRST_RE = /\/(?:index\.html|app-v06-safe\.js|public-map-defaults-v01\.js|service-worker\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js)$/;
+const NETWORK_FIRST_RE = /\/(?:index\.html|app-v06-safe\.js|all-source-data-explorer-v01\.js|public-map-defaults-v01\.js|service-worker\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js)$/;
 
 function isNetworkFirst(url) {
   return (url.origin === location.origin && NETWORK_FIRST_RE.test(url.pathname)) || url.hostname === 'raw.githubusercontent.com';
@@ -39,16 +40,20 @@ self.addEventListener('fetch', event => {
 
   if (isNetworkFirst(url)) {
     event.respondWith(fetch(event.request, { cache: 'no-store' }).then(response => {
-      const copy = response.clone();
-      caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+      if (response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+      }
       return response;
     }).catch(() => caches.match(event.request)));
     return;
   }
 
   event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
-    const copy = response.clone();
-    caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+    if (response.ok) {
+      const copy = response.clone();
+      caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+    }
     return response;
   })));
 });
