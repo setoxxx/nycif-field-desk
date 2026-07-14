@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1663,
-  "usable_complaints": 1663,
+  "source_complaints": 1648,
+  "usable_complaints": 1648,
   "source_dispensaries": 247,
   "source_retailers": 4882,
   "correlation_locations": 5129,
-  "output_locations": 184,
-  "low_signal_excluded": 4945,
+  "output_locations": 183,
+  "low_signal_excluded": 4946,
   "radius_feet": [
     100,
     250,
@@ -22,19 +22,19 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 161,
-    "legal_cannabis_dispensary": 23
+    "licensed_smoke_vape_retailer": 159,
+    "legal_cannabis_dispensary": 24
   },
   "borough_counts": {
-    "Bronx": 34,
-    "Brooklyn": 55,
-    "Queens": 35,
+    "Bronx": 35,
+    "Queens": 33,
     "Manhattan": 57,
+    "Brooklyn": 55,
     "Staten Island": 3
   },
   "signal_tier_counts": {
     "very_high": 2,
-    "high": 18,
+    "high": 17,
     "moderate": 164
   },
   "top_locations_sample": [
@@ -59,17 +59,6 @@
       "complaints_365d_100ft": 5,
       "complaints_365d_250ft": 10,
       "last_complaint_date": "2026-07-04"
-    },
-    {
-      "title": "LINCOLN DELI AND SMOKE SHOP CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "41 LINCOLN RD, BROOKLYN, 11225",
-      "borough": "Brooklyn",
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-07-09"
     },
     {
       "title": "SHAKTI PETROLEUM CORP",
@@ -125,6 +114,17 @@
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "LINCOLN DELI AND SMOKE SHOP CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "41 LINCOLN RD, BROOKLYN, 11225",
+      "borough": "Brooklyn",
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-07-09"
     },
     {
       "title": "CANNALICIOUS LLC",
@@ -237,17 +237,6 @@
       "last_complaint_date": "2026-07-11"
     },
     {
-      "title": "SPEEDWAY LLC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1885 ATLANTIC AVE, BROOKLYN, 11233",
-      "borough": "Brooklyn",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-18"
-    },
-    {
       "title": "UNION DELI GROCERY 1 INC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "226 4TH AVE, BROOKLYN, 11215",
@@ -312,8 +301,19 @@
       "complaints_365d_100ft": 1,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "BLAZINUP, LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
+      "borough": "Manhattan",
+      "signal_score": 12,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 1,
+      "last_complaint_date": "2026-07-12"
     }
   ],
-  "generated_at": "2026-07-13T13:35:11.076Z",
+  "generated_at": "2026-07-14T11:49:54.614Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
