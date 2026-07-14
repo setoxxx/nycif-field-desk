@@ -90,6 +90,17 @@ body.public-map-page .item-tag.featured {
   color: #7a6128 !important;
 }
 
+/* Ordinary actions are never red; red is reserved for real errors. */
+body.public-map-page .quick-actions a,
+body.public-map-page .quick-actions button,
+body.public-map-page .field-action:first-child {
+  background: #44546b;
+}
+
+body.public-map-page .desk-header p {
+  color: #7a6128;
+}
+
 body.public-map-page .popup-pending {
   margin-top: 7px;
   padding: 7px 8px;
@@ -253,7 +264,7 @@ body.public-map-page .date-chips {
     bottom: 164px;
   }
   body.public-map-page .date-chips {
-    max-width: calc(100vw - 74px);
+    max-width: calc(100vw - 126px);
   }
   body.public-map-page .layers-panel {
     inset-block-start: calc(env(safe-area-inset-top, 0px) + 176px);
