@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-v015-map-restore-v02';
+const CACHE_NAME = 'nycif-v019-discovery-taxonomy-v02';
 const APP_SHELL = [
   './',
   './index.html',
@@ -8,16 +8,12 @@ const APP_SHELL = [
   './public-map-v01.css',
   './public-approved-overlays-capture-v01.js',
   './public-map-defaults-v01.js',
+  './discovery-patch-v02.js',
   './public-approved-overlays-v01.js',
-  './boot-today-v073-safe.js',
-  './date-normalizer-v073-safe.js',
-  './app-v06-safe.js',
-  './manifest.json',
-  './icons/icon-192.svg',
-  './icons/icon-512.svg'
+  './service-worker.js'
 ];
 
-const NETWORK_FIRST_RE = /\/(?:index\.html|app-v06-safe\.js|public-map-defaults-v01\.js|service-worker\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js)$/;
+const NETWORK_FIRST_RE = /\/(?:index\.html|discovery-patch-v02\.js|public-map-defaults-v01\.js|service-worker\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js|app-schema-v1-major-all-v01\.js|event-feed-schema-v1\.js)$/;
 
 function isNetworkFirst(url) {
   return (url.origin === location.origin && NETWORK_FIRST_RE.test(url.pathname)) || url.hostname === 'raw.githubusercontent.com';
@@ -38,17 +34,21 @@ self.addEventListener('fetch', event => {
   if (url.origin !== location.origin && url.hostname !== 'raw.githubusercontent.com') return;
 
   if (isNetworkFirst(url)) {
-    event.respondWith(fetch(event.request, { cache: 'no-store' }).then(response => {
-      const copy = response.clone();
-      caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
-      return response;
-    }).catch(() => caches.match(event.request)));
+    event.respondWith(
+      fetch(event.request).then(response => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        return response;
+      }).catch(() => caches.match(event.request))
+    );
     return;
   }
 
-  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
-    const copy = response.clone();
-    caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
-    return response;
-  })));
+  event.respondWith(
+    caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
+      const copy = response.clone();
+      caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+      return response;
+    }))
+  );
 });
