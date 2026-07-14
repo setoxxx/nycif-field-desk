@@ -30,7 +30,7 @@
     ['jobs', /job fair|career fair|employment|workforce|hiring/],
     ['housing', /\btenant\b|housing ambassador|rent assistance|landlord|homeowner|property owner clinic/],
     ['government', /hearing|public meeting|community board|city government|government office|council meeting/],
-    ['sports', /sport - youth|sport - adult|athletic race|triathlon|duathlon|marathon|\b5k\b|\b10k\b|criterium|world cup|fifa|fan zone|softball|baseball|basketball|soccer|football|hockey|tennis|volleyball/],
+    ['sports', /sport - youth|sport - adult|athletic race|triathlon|duathlon|marathon|\b5k\b|\b10k\b|criterium|world cup|fifa|fan zone|softball|baseball|basketball|soccer|football|hockey|tennis|volleyball|lacrosse|cricket|kickball|rugby|little league|league sports?|sports? league|competitive sports?/],
     ['fitness', /yoga|zumba|pilates|fitness|workout|aerobics|exercise|calisthenics|boot camp|barre|spinning|tai chi|qigong|wellness|stretching|shape up nyc|lap swim/],
     ['civic', /\bparade\b|\bmarch\b|\brally\b|\bvigil\b|\bceremony\b|\bprocession\b|baraat|street and neighborhood|block party|open street|\bcivic\b|unity walk/],
     ['services', /benefit|resource fair|outreach|clinic|health screening|social service|food assistance|legal help/],
@@ -88,7 +88,7 @@
   // Exactly eight forward calendar-day choices: Today, Tomorrow, then
   // compact weekday labels such as "Wed 7/15". Never a past date.
   function dateChipModel(baseDate) {
-    const start = baseDate instanceof Date ? new Date(baseDate) : new Date();
+    const start = baseDate && typeof baseDate.getTime === 'function' ? new Date(baseDate.getTime()) : new Date();
     const chips = [];
     for (let i = 0; i < 8; i += 1) {
       const d = new Date(start);
