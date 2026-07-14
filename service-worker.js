@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-v021-discovery-ui-cleanup-v04';
+const CACHE_NAME = 'nycif-v022-public-map-v05';
 const APP_SHELL = [
   './',
   './index.html',

@@ -1,6 +1,8 @@
 /* NYCIF public map polish v01 */
 body.public-map-page .brand-card {
-  max-width: min(360px, calc(100vw - 98px));
+  left: calc(env(safe-area-inset-left, 0px) + 8px);
+  transform: none;
+  max-width: min(330px, calc(100vw - 120px));
 }
 
 body.public-map-page .brand-card strong::after {
@@ -8,12 +10,26 @@ body.public-map-page .brand-card strong::after {
 }
 
 body.public-map-page .panel-label {
-  font-size: 0;
+  font-size: 10px;
 }
 
-body.public-map-page .panel-label::after {
-  content: "Choose what to show";
-  font-size: 9.5px;
+/* Upper-right control stack: Filters, Near Me, GPS, Bug. */
+body.public-map-page .map-controls {
+  position: absolute;
+  z-index: 800;
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
+  right: calc(env(safe-area-inset-right, 0px) + 8px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+body.public-map-page .map-controls .pill,
+body.public-map-page .map-controls .near-me-btn,
+body.public-map-page .map-controls .locate-btn,
+body.public-map-page .map-controls .bug-btn {
+  position: static;
 }
 
 body.public-map-page .pill.layers-pill {
@@ -22,6 +38,66 @@ body.public-map-page .pill.layers-pill {
   gap: 6px;
   font-size: 11px;
   border-width: 1px;
+}
+
+body.public-map-page .near-me-btn {
+  min-height: 31px;
+  background: rgba(255, 255, 255, .94);
+  color: #44546b;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .22);
+}
+
+body.public-map-page .bug-btn {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .94);
+  color: #44546b;
+  font-size: 16px;
+  line-height: 1;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .22);
+  cursor: pointer;
+}
+
+body.public-map-page .layers-panel {
+  top: auto;
+  left: auto;
+  right: calc(env(safe-area-inset-right, 0px) + 8px);
+  inset-block-start: calc(env(safe-area-inset-top, 0px) + 176px);
+}
+
+body.public-map-page .layers-panel .panel-action {
+  margin-top: 6px;
+  background: #f4ede0;
+  color: #3f3a2f;
+  box-shadow: 0 4px 12px rgba(63, 58, 47, .14);
+  border: 1px solid rgba(63, 58, 47, .14);
+}
+
+body.public-map-page .layers-panel .panel-action:first-of-type {
+  margin-top: 0;
+}
+
+body.public-map-page #retryFeedBtn {
+  background: #44546b;
+  color: #fff;
+  border: 0;
+}
+
+body.public-map-page .item-tag.featured {
+  background: rgba(176, 141, 62, .16);
+  color: #7a6128 !important;
+}
+
+body.public-map-page .popup-pending {
+  margin-top: 7px;
+  padding: 7px 8px;
+  border-radius: 10px;
+  background: rgba(107, 114, 128, .10);
+  border-left: 3px solid #9ca3af;
+  color: #4b5563;
+  font-size: 12px;
 }
 
 body.public-map-page .pill.layers-pill span {
@@ -108,7 +184,7 @@ body.public-map-page .status {
 }
 
 .public-intro-v01 strong {
-  color: #d40000;
+  color: #7a6128;
 }
 
 .view-banner {
@@ -120,8 +196,9 @@ body.public-map-page .status {
   max-width: min(560px, calc(100vw - 24px));
   padding: 8px 12px;
   border-radius: 10px;
-  background: rgba(245, 158, 11, .92);
-  color: #111;
+  background: rgba(244, 237, 224, .96);
+  color: #3f3a2f;
+  border: 1px solid rgba(63, 58, 47, .18);
   font-size: 12px;
   font-weight: 650;
 }
@@ -139,38 +216,13 @@ body.public-map-page .status {
   font-size: 11px;
 }
 
-.mode-toggle {
-  position: absolute;
-  top: 72px;
-  left: 12px;
-  z-index: 900;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  max-width: min(420px, calc(100vw - 24px));
-  border: 0;
-  margin: 0;
-  padding: 0;
-  min-inline-size: 0;
+/* Date chips sit under the brand card, clear of the right-hand controls. */
+body.public-map-page .date-chips {
+  left: calc(env(safe-area-inset-left, 0px) + 8px);
+  transform: none;
+  width: auto;
+  max-width: min(640px, calc(100vw - 84px));
 }
-
-.mode-btn {
-  border: 0;
-  border-radius: 999px;
-  padding: 8px 12px;
-  font-size: 12px;
-  font-weight: 700;
-  background: rgba(8, 12, 18, .78);
-  color: #fff;
-  cursor: pointer;
-}
-
-.mode-btn.active {
-  background: #d40000;
-}
-
-.nycif-source-review { color: #f59e0b; font-weight: 800; }
-.nycif-list-only { color: #ef4444; font-weight: 800; }
 
 .debug-panel {
   position: absolute;
@@ -192,11 +244,6 @@ body.public-map-page .status {
   .public-intro-v01 {
     display: none;
   }
-  .mode-toggle {
-    top: auto;
-    bottom: 86px;
-    left: 10px;
-  }
   .view-banner,
   .index-status {
     top: auto;
@@ -204,6 +251,13 @@ body.public-map-page .status {
   }
   .index-status {
     bottom: 164px;
+  }
+  body.public-map-page .date-chips {
+    max-width: calc(100vw - 74px);
+  }
+  body.public-map-page .layers-panel {
+    inset-block-start: calc(env(safe-area-inset-top, 0px) + 176px);
+    max-height: 56dvh;
   }
 }
 

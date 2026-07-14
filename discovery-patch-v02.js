@@ -5,7 +5,7 @@
 (() => {
   'use strict';
 
-  const VERSION = 'discovery-live-repair-v03';
+  const VERSION = 'public-map-v05';
   const DEFAULT_FEED_REF = 'bf7deddc7ba09e248bbc19f23cb3449dc9fd626e';
   const FEED_ROOT = 'schema-v1-discovery';
   const LIVE_FEED_HOST = 'raw.githubusercontent.com';
@@ -396,12 +396,6 @@
       enhanceListCard(node);
     }
     node.querySelectorAll('.event-item[data-id]').forEach(enhanceListCard);
-    if (node.matches('.user-location') || node.querySelector('.user-location')) {
-      const locationMarker = node.matches('.user-location') ? node : node.querySelector('.user-location');
-      if (locationMarker && locationMarker.textContent !== '📍') {
-        locationMarker.textContent = '📍';
-      }
-    }
   }
 
   const observer = new MutationObserver(records => {

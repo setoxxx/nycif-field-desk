@@ -107,7 +107,7 @@ html, body {
 .check input {
   width: 16px;
   height: 16px;
-  accent-color: #d40000;
+  accent-color: #b08d3e;
 }
 
 .check.major {
@@ -126,28 +126,25 @@ html, body {
   min-height: 34px;
   border: 0;
   border-radius: 12px;
-  background: #d40000;
+  background: #44546b;
   color: #fff;
   font-size: 12px;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(212,0,0,.25);
+  box-shadow: 0 8px 18px rgba(68,84,107,.25);
 }
 
 .load-all:disabled { opacity: .72; cursor: wait; }
 
 .locate-btn {
-  position: absolute;
-  z-index: 760;
-  top: calc(env(safe-area-inset-top, 0px) + 108px);
-  right: calc(env(safe-area-inset-right, 0px) + 8px);
   width: 34px;
   height: 34px;
   border: 0;
   border-radius: 999px;
-  background: #d40000;
-  color: #fff;
-  font-size: 16px;
+  background: rgba(255,255,255,.94);
+  color: #44546b;
+  font-size: 19px;
+  line-height: 1;
   box-shadow: 0 10px 28px rgba(0,0,0,.3);
   cursor: pointer;
 }
@@ -334,9 +331,15 @@ html, body {
   display: inline-flex !important;
   padding: 2px 6px;
   border-radius: 999px;
-  background: rgba(212,0,0,.1);
-  color: #d40000 !important;
+  background: rgba(176,141,62,.14);
+  color: #7a6128 !important;
   font-weight: 900;
+}
+
+.item-tag.pending {
+  background: rgba(107,114,128,.12);
+  color: #4b5563 !important;
+  font-weight: 700;
 }
 
 .item-tag.danger {
@@ -398,15 +401,15 @@ html, body {
 }
 
 .user-location {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 42px;
-  border-radius: 18px 18px 18px 4px;
-  background: #d40000;
-  color: #fff;
-  font-size: 18px;
-  box-shadow: 0 10px 26px rgba(0,0,0,.28);
+  position: relative;
+  display: block;
+  width: 17px;
+  height: 17px;
+  margin: 3px auto;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #1677ff;
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, .28), 0 2px 8px rgba(0, 0, 0, .28);
 }
 
 .popup-card {
