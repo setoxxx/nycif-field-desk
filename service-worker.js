@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-v020-discovery-live-repair-v03';
+const CACHE_NAME = 'nycif-v021-discovery-ui-cleanup-v04';
 const APP_SHELL = [
   './',
   './index.html',
@@ -37,7 +37,7 @@ self.addEventListener('install', event => {
           const response = await fetch(path, { cache: 'reload' });
           await putSuccessful(cache, path, response);
         } catch {
-          // A single optional asset must not prevent the repaired worker installing.
+          // A single optional asset must not prevent the worker installing.
         }
       }
     })
