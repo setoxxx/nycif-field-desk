@@ -14,10 +14,10 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" integrity="sha384-pmjIAcz2bAn0xukfxADbZIb3t8oRT9Sv0rvO+BR5Csr6Dhqq+nZs59P0pPKQJkEV" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" integrity="sha384-wgw+aLYNQ7dlhK47ZPK7FRACiq7ROZwgFNg0m04avm4CaXS+Z9Y7nMu8yNjBKYC+" crossorigin="anonymous">
-  <link rel="stylesheet" href="./style.css?v=discovery-taxonomy-v02">
-  <link rel="stylesheet" href="./fielddesk-v02.css?v=discovery-taxonomy-v02">
-  <link rel="stylesheet" href="./weekstrip-v06-safe.css?v=discovery-taxonomy-v02">
-  <link rel="stylesheet" href="./public-map-v01.css?v=discovery-taxonomy-v02">
+  <link rel="stylesheet" href="./style.css?v=discovery-taxonomy-v03">
+  <link rel="stylesheet" href="./fielddesk-v02.css?v=discovery-taxonomy-v03">
+  <link rel="stylesheet" href="./weekstrip-v06-safe.css?v=discovery-taxonomy-v03">
+  <link rel="stylesheet" href="./public-map-v01.css?v=discovery-taxonomy-v03">
   <style>
     .explore-more-block { margin: 0.55rem 0 0.25rem; }
     #explore-more-toggle {
@@ -52,23 +52,23 @@
         </div>
       </div>
 
-      <fieldset class="mode-toggle">
-        <legend class="sr-only">Event mode</legend>
-        <button id="modeMajor" type="button" class="mode-btn active" aria-pressed="true">Major Events</button>
-        <button id="modeAll" type="button" class="mode-btn" aria-pressed="false">All Events</button>
-      </fieldset>
-
       <div id="viewBanner" class="view-banner" hidden></div>
       <div id="indexStatus" class="index-status" hidden></div>
 
       <div id="dateChips" class="date-chips" aria-label="Date filters"></div>
+
+      <button id="locateBtn" class="locate-btn" type="button" aria-label="Show my GPS location" title="Show my GPS location">⌖</button>
 
       <button id="layersBtn" class="pill layers-pill" type="button" aria-expanded="false" aria-controls="layersPanel">
         <span>☰</span><b>Filters</b>
       </button>
 
       <aside id="layersPanel" class="layers-panel" aria-label="Map filters" hidden>
-        <p class="panel-label">⭐ Major events only (use Major / All toggle)</p>
+        <fieldset class="mode-toggle mode-toggle--panel">
+          <legend class="panel-label">Event view</legend>
+          <button id="modeMajor" type="button" class="mode-btn active" aria-pressed="true">Major Events</button>
+          <button id="modeAll" type="button" class="mode-btn" aria-pressed="false">All Events</button>
+        </fieldset>
 
         <label class="sort source-filter-label">
           <span>All Events source</span>
@@ -118,7 +118,6 @@
         <label class="check"><input type="checkbox" id="nypdOnly"> <span>🚨 Public safety / field intel</span></label>
       </aside>
 
-      <button id="locateBtn" class="locate-btn" type="button" aria-label="Show my location" title="Show my location">🗽</button>
       <button id="nearMeBtn" class="near-me-btn" type="button" aria-label="Sort events near me" title="Near me">Near Me</button>
       <button id="deskBtn" class="desk-btn" type="button" aria-expanded="false" aria-controls="deskDrawer">Event List</button>
 
@@ -161,19 +160,19 @@
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" integrity="sha384-eXVCORTRlv4FUUgS/xmOyr66XBVraen8ATNLMESp92FKXLAMiKkerixTiBvXriZr" crossorigin="anonymous"></script>
-  <script src="./public-approved-overlays-capture-v01.js?v=discovery-taxonomy-v02"></script>
-  <script src="./public-map-defaults-v01.js?v=discovery-taxonomy-v02"></script>
-  <script src="./discovery-patch-v02.js?v=discovery-taxonomy-v02"></script>
-  <script src="./event-feed-schema-v1.js?v=discovery-taxonomy-v02"></script>
-  <script src="./app-schema-v1-major-all-v01.js?v=discovery-taxonomy-v02"></script>
-  <script src="./public-approved-overlays-v01.js?v=discovery-taxonomy-v02"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" integrity="sha384-eXVCORTRlvfUUgS/xmOyr66XBVraen8ATNLMESp92FKXLAMiKkerixTiBvXriZr" crossorigin="anonymous"></script>
+  <script src="./feed-retry-v01.js?v=discovery-taxonomy-v03"></script>
+  <script src="./public-approved-overlays-capture-v01.js?v=discovery-taxonomy-v03"></script>
+  <script src="./public-map-defaults-v01.js?v=discovery-taxonomy-v03"></script>
+  <script src="./discovery-patch-v02.js?v=discovery-taxonomy-v03"></script>
+  <script src="./event-feed-schema-v1.js?v=discovery-taxonomy-v03"></script>
+  <script src="./app-schema-v1-major-all-v01.js?v=discovery-taxonomy-v03"></script>
+  <script src="./public-approved-overlays-v01.js?v=discovery-taxonomy-v03"></script>
   <script>
     (function () {
       var btn = document.getElementById("explore-more-toggle");
       var panel = document.getElementById("explore-more-panel");
       if (!btn || !panel) return;
-      // Collapsed by default on mobile (<720px); open on larger screens for discoverability.
       var mobile = window.matchMedia("(max-width: 719px)").matches;
       panel.hidden = mobile;
       btn.setAttribute("aria-expanded", mobile ? "false" : "true");
@@ -195,13 +194,13 @@
       var showUpcoming = document.getElementById("showAllUpcomingBtn");
       if (showUpcoming) {
         showUpcoming.addEventListener("click", function () {
-          var allChip = document.querySelector('#dateChips [data-mode="all"]');
+          var allChip = document.querySelector('#dateChips [data-date-mode="all"]');
           if (allChip) allChip.click();
         });
       }
     })();
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./service-worker.js?v=discovery-taxonomy-v02").catch(function () {});
+      navigator.serviceWorker.register("./service-worker.js?v=discovery-taxonomy-v03").catch(function () {});
     }
   </script>
 </body>
