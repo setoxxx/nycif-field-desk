@@ -30,7 +30,7 @@
     ['jobs', /job fair|career fair|employment|workforce|hiring/],
     ['housing', /\btenant\b|housing ambassador|rent assistance|landlord|homeowner|property owner clinic/],
     ['government', /hearing|public meeting|community board|city government|government office|council meeting/],
-    ['sports', /sport - youth|sport - adult|athletic race|triathlon|duathlon|marathon|\b5k\b|\b10k\b|criterium|world cup|fifa|fan zone|softball|baseball|basketball|soccer|football|hockey|tennis|volleyball/],
+    ['sports', /sport - youth|sport - adult|athletic race|triathlon|duathlon|marathon|\b5k\b|\b10k\b|criterium|world cup|fifa|fan zone|softball|baseball|basketball|soccer|football|hockey|tennis|volleyball|lacrosse|cricket|kickball|rugby|little league|league sports?|sports? league|competitive sports?/],
     ['fitness', /yoga|zumba|pilates|fitness|workout|aerobics|exercise|calisthenics|boot camp|barre|spinning|tai chi|qigong|wellness|stretching|shape up nyc|lap swim/],
     ['civic', /\bparade\b|\bmarch\b|\brally\b|\bvigil\b|\bceremony\b|\bprocession\b|baraat|street and neighborhood|block party|open street|\bcivic\b|unity walk/],
     ['services', /benefit|resource fair|outreach|clinic|health screening|social service|food assistance|legal help/],
@@ -43,8 +43,64 @@
     ['parks', /parks? & recreation|\bpark\b|playground|pool|recreation|garden|beach/]
   ];
 
+  // Terms that must always classify as Sports, even when a backend category
+  // says Fitness. League/competitive sports are never Fitness / Wellness.
+  const SPORTS_OVERRIDE = /softball|baseball|basketball|soccer|football|hockey|tennis|lacrosse|cricket|volleyball|kickball|rugby|little league|league sports?|sports? league|competitive sports?/;
+
   const norm = v => String(v ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
   const hasOwn = (obj, key) => Object.hasOwn(obj, key);
+
+  const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+  // Validate that a value is a real calendar date in YYYY-MM-DD form.
+  // "2026-99-99" or "2026-02-31" match the shape but are not dates.
+  function validCalendarDate(value) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value ?? ''));
+    if (!match) return null;
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    if (year < 2000 || year > 2100 || month < 1 || month > 12 || day < 1) return null;
+    const leap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+    const max = month === 2 && leap ? 29 : DAYS_IN_MONTH[month - 1];
+    return day <= max ? match[0] : null;
+  }
+
+  function classificationText(row) {
+    const categories = Array.isArray(row.categories) ? row.categories.join(' ') : (row.categories || '');
+    return norm([row.category, categories, row.title, row.name, row.event_type, row.type, row.event_agency, row.street_closure_type, row.location, row.display_location].filter(Boolean).join(' '));
+  }
+
+  // League and competitive sports must never surface as Fitness / Wellness.
+  function enforceSportsFitness(category, row) {
+    if (category === 'fitness' && SPORTS_OVERRIDE.test(classificationText(row))) {
+      return 'sports';
+    }
+    return category;
+  }
+
+  const CHIP_DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  function chipDateKey(d) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  // Exactly eight forward calendar-day choices: Today, Tomorrow, then
+  // compact weekday labels such as "Wed 7/15". Never a past date.
+  function dateChipModel(baseDate) {
+    const start = baseDate && typeof baseDate.getTime === 'function' ? new Date(baseDate.getTime()) : new Date();
+    const chips = [];
+    for (let i = 0; i < 8; i += 1) {
+      const d = new Date(start);
+      d.setDate(d.getDate() + i);
+      let label;
+      if (i === 0) label = 'Today';
+      else if (i === 1) label = 'Tomorrow';
+      else label = `${CHIP_DAY_NAMES[d.getDay()]} ${d.getMonth() + 1}/${d.getDate()}`;
+      chips.push({ key: chipDateKey(d), label, offset: i });
+    }
+    return chips;
+  }
 
   function boroughLabel(value) {
     const raw = Array.isArray(value) ? value[0] : value;
@@ -69,11 +125,11 @@
   }
 
   function preserveDate(row) {
-    const direct = String(row.date || '').slice(0, 10);
-    if (/^\d{4}-\d{2}-\d{2}$/.test(direct)) return direct;
+    const direct = validCalendarDate(String(row.date || '').slice(0, 10));
+    if (direct) return direct;
     const start = String(row.start_date_time || row.start || '');
     const match = /^(\d{4}-\d{2}-\d{2})/.exec(start);
-    return match ? match[1] : '';
+    return (match && validCalendarDate(match[1])) || '';
   }
 
   function inferCategory(row, preferDirect) {
@@ -81,8 +137,7 @@
     if (preferDirect && direct && direct !== 'general') return direct;
     const eventType = EVENT_TYPE_MAP[norm(row.event_type || row.type)];
     if (eventType) return eventType;
-    const categories = Array.isArray(row.categories) ? row.categories.join(' ') : (row.categories || '');
-    const text = norm([row.category, categories, row.title, row.name, row.event_type, row.type, row.event_agency, row.street_closure_type, row.location, row.display_location].filter(Boolean).join(' '));
+    const text = classificationText(row);
     for (const [slug, pattern] of KEYWORD_RULES) {
       if (pattern.test(text)) return slug;
     }
@@ -162,7 +217,7 @@
     return {
       id: String(id),
       title: String(row.title || row.name || row.search_label || 'Untitled event'),
-      category: inferCategory(row, preferDirect),
+      category: enforceSportsFitness(inferCategory(row, preferDirect), row),
       start_date_time: row.start_date_time || row.start || null,
       end_date_time: row.end_date_time || row.end || null,
       timezone: String(row.timezone || DEFAULT_TIMEZONE),
@@ -189,7 +244,7 @@
     return {
       id: String(row.id || `${dataLayer}:${row.source?.dataset || 'unknown'}:${row.source?.source_event_id || index}`),
       title: String(row.title || 'Untitled event'),
-      category: CATEGORY_ALIASES[norm(row.category)] || inferCategory(row, dataLayer === 'approved_staged'),
+      category: enforceSportsFitness(CATEGORY_ALIASES[norm(row.category)] || inferCategory(row, dataLayer === 'approved_staged'), row),
       start_date_time: row.start_date_time ?? null,
       end_date_time: row.end_date_time ?? null,
       timezone: String(row.timezone || DEFAULT_TIMEZONE),
@@ -252,6 +307,9 @@
     validNycCoords,
     boroughLabel,
     safeExternalUrl,
-    inferCategory
+    inferCategory,
+    enforceSportsFitness,
+    validCalendarDate,
+    dateChipModel
   };
 })();

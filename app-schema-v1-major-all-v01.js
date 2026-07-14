@@ -5,12 +5,13 @@
   const DEFAULT_VERSION = VERSION;
   const LIST_PAGE = 100;
   const VIEWPORT_BUFFER = 0.15;
-  const MAJOR_MARKER_SOFT_CAP = 800;
-  const ALL_MARKER_SOFT_CAP = 600;
+  const MARKER_SOFT_CAP = 600;
   const SEARCH_DEBOUNCE_MS = 180;
+  const DAY_WINDOW = 7; // today plus seven more calendar days = eight choices
   const NYC_CENTER = [40.7128, -74.006];
   const SCHEMA = window.NYCIF_EVENT_FEED_SCHEMA_V1;
   const FEED_ROOT = (DISCOVERY && DISCOVERY.feedRoot) || 'schema-v1';
+  const BUG_REPORT_EMAIL = 'howard@nycinfocus.com';
   const localHost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   const feedBranch = (() => {
     try {
@@ -37,16 +38,18 @@
     return `${FEED_HOST}/data/${FEED_ROOT}/${layer}/pages/${name}.json`;
   };
   const FEEDS = {
+    // Primary: current live discovery feed used by the authoritative runtime.
     major: FEED_HOST + `/data/${FEED_ROOT}/major/events.json`,
+    // Fallback: full current/future feed at the same authorized ref.
     majorFallback: FEED_HOST + (
       DISCOVERY
         ? '/data/events_discovery_v02_major.json'
         : '/data/events_schema_v1_major.json'
     ),
+    // Emergency: major-only feed maintained on the backend main branch.
+    majorEmergency: 'https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/nycif_major_radar_map_events.json',
     approvedManifest: FEED_HOST + `/data/${FEED_ROOT}/approved/manifest.json`,
-    reviewManifest: FEED_HOST + `/data/${FEED_ROOT}/review/manifest.json`,
-    approvedPage: cursor => pageUrl('approved', cursor),
-    reviewPage: cursor => pageUrl('review', cursor)
+    approvedPage: cursor => pageUrl('approved', cursor)
   };
   const CATEGORY_META = {
     sports: { emoji: '🏟️', label: 'Sports' },
@@ -55,13 +58,13 @@
     arts: { emoji: '🎭', label: 'Arts / culture' },
     market: { emoji: '🛍️', label: 'Markets / fairs' },
     civic: { emoji: '📣', label: 'Civic / neighborhood' },
-    government: { emoji: '🏛️', label: 'Government / hearings' },
-    education: { emoji: '📚', label: 'Education / training' },
+    government: { emoji: '🏛️', label: 'Government / meetings' },
+    education: { emoji: '📚', label: 'Classes / workshops' },
     family: { emoji: '👨‍👩‍👧', label: 'Kids / family' },
-    services: { emoji: '🤝', label: 'Benefits / services' },
-    environment: { emoji: '🌎', label: 'Environment' },
-    volunteer: { emoji: '🙋', label: 'Volunteer' },
-    jobs: { emoji: '💼', label: 'Jobs / careers' },
+    services: { emoji: '🤝', label: 'Health / benefits' },
+    environment: { emoji: '🌎', label: 'Environment / nature' },
+    volunteer: { emoji: '🙋', label: 'Volunteer opportunities' },
+    jobs: { emoji: '💼', label: 'Jobs / career' },
     housing: { emoji: '🏠', label: 'Housing / tenant help' },
     general: { emoji: '📍', label: 'General' },
     tours: { emoji: '🗺️', label: 'Tours / history' }
@@ -73,38 +76,37 @@
   }
   const ALL_CATEGORY_KEYS = Object.keys(CATEGORY_META);
   const BOROUGHS = ['All', 'Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'];
-  const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const debug = (() => {
     try { return new URL(location.href).searchParams.get('debugMap') === '1'; }
     catch { return false; }
   })();
 
   const state = {
-    viewMode: 'major',
-    sourceFilter: 'all',
     events: [],
     byId: new Map(),
     search: '',
     borough: 'all',
     sort: 'priority',
-    dateMode: 'next7',
+    dateMode: 'today',
     categories: Object.fromEntries(ALL_CATEGORY_KEYS.map(k => [k, true])),
-    photoOnly: false,
-    nypdOnly: false,
     userLocation: null,
     listShown: LIST_PAGE,
-    userChangedFilters: false,
     banner: '',
-    fallbackUsed: false,
+    // 'loading' | 'ok' | 'error' — lets the UI distinguish an honest empty
+    // day from a feed failure. A failure must never present as zero events.
+    feedPhase: 'loading',
+    feedSource: '',
+    lastGoodLoadAt: null,
+    hasFitBounds: false,
     timings: {},
     errors: [],
     markerObjects: 0,
     peakMarkerObjects: 0,
     indexComplete: false,
-    pagesLoaded: { approved: 0, review: 0 },
-    pagesTotal: { approved: 0, review: 0 },
+    pagesLoaded: { approved: 0 },
+    pagesTotal: { approved: 0 },
     loadToken: 0,
-    manifests: { approved: null, review: null }
+    manifests: { approved: null }
   };
 
   const els = {
@@ -115,15 +117,11 @@
     layersPanel: document.getElementById('layersPanel'),
     locateBtn: document.getElementById('locateBtn'),
     nearMeBtn: document.getElementById('nearMeBtn'),
+    bugBtn: document.getElementById('bugBtn'),
     deskBtn: document.getElementById('deskBtn'),
     deskDrawer: document.getElementById('deskDrawer'),
     closeDeskBtn: document.getElementById('closeDeskBtn'),
-    modeMajor: document.getElementById('modeMajor'),
-    modeAll: document.getElementById('modeAll'),
-    sourceFilter: document.getElementById('sourceFilter'),
     banner: document.getElementById('viewBanner'),
-    photoOnly: document.getElementById('photoOnly'),
-    nypdOnly: document.getElementById('nypdOnly'),
     searchInput: document.getElementById('searchInput'),
     sortSelect: document.getElementById('sortSelect'),
     dateChips: document.getElementById('dateChips'),
@@ -131,6 +129,7 @@
     listMeta: document.getElementById('listMeta'),
     eventList: document.getElementById('eventList'),
     loadMoreBtn: document.getElementById('loadMoreBtn'),
+    enableAllBtn: document.getElementById('enableAllCategoriesBtn'),
     resetFiltersBtn: document.getElementById('resetFiltersBtn'),
     retryFeedBtn: document.getElementById('retryFeedBtn'),
     debugPanel: document.getElementById('debugPanel'),
@@ -139,7 +138,7 @@
 
   if (!els.map || !SCHEMA) {
     if (els.status) {
-      els.status.textContent = 'Map boot failed: required map/schema elements are missing.';
+      els.status.textContent = 'The map could not start. Please refresh the page.';
     }
     return;
   }
@@ -206,13 +205,12 @@
   let searchTimer = null;
   let renderTimer = null;
   let moveTimer = null;
-  let swRegistered = false;
 
   const norm = v => String(v ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
   const dateKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   const todayKey = () => dateKey(new Date());
   const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
-  const dayRange = () => ({ today: todayKey(), end: dateKey(addDays(new Date(), 7)) });
+  const dayRange = () => ({ today: todayKey(), end: dateKey(addDays(new Date(), DAY_WINDOW)) });
   const status = t => { if (els.status) els.status.textContent = t; };
   const setBanner = t => {
     state.banner = t || '';
@@ -230,18 +228,35 @@
     els.indexStatus.textContent = t || '';
   };
 
+  // The selected calendar date. 'today' is a sentinel so the default always
+  // tracks the real current day, even across midnight or stale storage.
+  function selectedDateKey() {
+    if (state.dateMode === 'today') {
+      return todayKey();
+    }
+    const valid = SCHEMA.validCalendarDate(state.dateMode);
+    if (valid && valid >= todayKey()) {
+      return valid;
+    }
+    return todayKey();
+  }
+
+  // Preference order: schema event date, then row.date, then a date derived
+  // from start_date_time. Impossible dates like 2026-02-31 are rejected and
+  // the event is excluded from date-specific public results.
   function eventDate(row) {
-    const nycifDate = row?.nycif?.event_date;
-    if (/^\d{4}-\d{2}-\d{2}$/.test(String(nycifDate || ''))) {
+    const nycifDate = SCHEMA.validCalendarDate(row?.nycif?.event_date);
+    if (nycifDate) {
       return nycifDate;
     }
-    const direct = String(row.date || '').slice(0, 10);
-    if (/^\d{4}-\d{2}-\d{2}$/.test(direct)) {
+    const direct = SCHEMA.validCalendarDate(String(row.date || '').slice(0, 10));
+    if (direct) {
       return direct;
     }
     const start = String(row.start_date_time || '');
-    if (/^\d{4}-\d{2}-\d{2}/.test(start)) {
-      return start.slice(0, 10);
+    const match = /^(\d{4}-\d{2}-\d{2})/.exec(start);
+    if (match) {
+      return SCHEMA.validCalendarDate(match[1]) || '';
     }
     return '';
   }
@@ -296,9 +311,6 @@
       marker: null
     };
     e.priority = Number(e.major_score || 0) + (e.isMajor ? 500 : 0) + (e.photoPick ? 120 : 0);
-    if (e.verification_status === 'nypd_field_intel') {
-      e.priority += 800;
-    }
     return e;
   }
 
@@ -376,24 +388,15 @@
     return {
       borough: 'all',
       sort: 'priority',
-      dateMode: 'next7',
-      viewMode: 'major',
-      sourceFilter: 'all',
+      dateMode: 'today',
       categories: Object.fromEntries(ALL_CATEGORY_KEYS.map(k => [k, true])),
-      photoOnly: false,
-      nypdOnly: false,
       nycifDefaultVersion: DEFAULT_VERSION
     };
   }
 
   function forceReset() {
     try {
-      const u = new URL(location.href);
-      const v = u.searchParams.get('v');
-      return u.searchParams.get('resetFilters') === '1'
-        || v === DEFAULT_VERSION
-        || v === 'map-restore-v02'
-        || v === 'data-explorer-v01';
+      return new URL(location.href).searchParams.get('resetFilters') === '1';
     } catch {
       return false;
     }
@@ -410,21 +413,17 @@
       const use = migrate ? defaults : {
         ...defaults,
         ...parsed,
-        categories: { ...defaults.categories, ...(parsed.categories || {}) },
-        viewMode: parsed.viewMode === 'all' ? 'all' : 'major'
+        categories: { ...defaults.categories, ...(parsed.categories || {}) }
       };
       if (use.categories.parade != null && use.categories.civic == null) {
         use.categories.civic = !!use.categories.parade;
       }
       Object.assign(state, {
         borough: use.borough,
-        sort: use.sort,
-        dateMode: use.dateMode,
-        viewMode: use.viewMode || 'major',
-        sourceFilter: use.sourceFilter || 'all',
-        categories: Object.fromEntries(ALL_CATEGORY_KEYS.map(k => [k, use.categories[k] !== false])),
-        photoOnly: !!use.photoOnly,
-        nypdOnly: !!use.nypdOnly
+        sort: use.sort === 'near' ? 'priority' : use.sort,
+        // Today is always the default date after a normal load.
+        dateMode: 'today',
+        categories: Object.fromEntries(ALL_CATEGORY_KEYS.map(k => [k, use.categories[k] !== false]))
       });
       savePrefs();
     } catch {
@@ -436,12 +435,7 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       borough: state.borough,
       sort: state.sort === 'near' && !state.userLocation ? 'priority' : state.sort,
-      dateMode: state.dateMode,
-      viewMode: state.viewMode,
-      sourceFilter: state.sourceFilter,
       categories: { ...state.categories },
-      photoOnly: state.photoOnly,
-      nypdOnly: state.nypdOnly,
       nycifDefaultVersion: DEFAULT_VERSION
     }));
   }
@@ -450,41 +444,22 @@
     if (!e.dateKey) {
       return false;
     }
-    const { today, end } = dayRange();
-    if (state.dateMode === 'next7') {
-      return e.dateKey >= today && e.dateKey <= end;
+    // Historical events never appear in the public view.
+    if (e.dateKey < todayKey()) {
+      return false;
     }
-    if (state.dateMode === 'all') {
-      return e.dateKey >= today;
-    }
-    if (state.dateMode === 'today') {
-      return e.dateKey === today;
-    }
-    if (/^\d{4}-\d{2}-\d{2}$/.test(state.dateMode)) {
-      return e.dateKey === state.dateMode;
-    }
-    return e.dateKey >= today;
+    return e.dateKey === selectedDateKey();
   }
 
   function sourceMatches(e) {
-    if (state.viewMode === 'major') {
-      return e.isMajor && !e.isReview;
-    }
-    if (state.sourceFilter === 'approved') {
-      return !e.isReview;
-    }
-    if (state.sourceFilter === 'review') {
-      return e.isReview;
-    }
-    return true;
+    // The public map shows approved/staged events only.
+    return !e.isReview;
   }
 
   function eventMatches(e) {
     return sourceMatches(e)
       && dateMatches(e)
       && categoryFilterMatch(e)
-      && (!state.photoOnly || e.photoPick)
-      && (!state.nypdOnly || e.verification_status === 'nypd_field_intel')
       && (state.borough === 'all' || e.borough === state.borough)
       && (!state.search || e.searchText.includes(state.search));
   }
@@ -562,20 +537,6 @@
     return a;
   }
 
-  function eventSourceLabel(e) {
-    if (e.isReview) {
-      return 'Expanded review (not production-approved)';
-    }
-    if (e.isMajor) {
-      return 'Major events';
-    }
-    return 'Approved / staged';
-  }
-
-  function reviewTagClass(isReview) {
-    return isReview ? 'item-tag nycif-source-review' : 'item-tag';
-  }
-
   function formatDistanceLabel(dist) {
     if (dist < 0.1) {
       return 'nearby';
@@ -584,23 +545,18 @@
     return `${dist.toFixed(digits)} mi`;
   }
 
-  function viewModeNoun() {
-    return state.viewMode === 'major' ? 'major' : 'events';
-  }
-
-  function dateModeLabel() {
-    return state.dateMode === 'next7' ? 'next 7 days' : state.dateMode;
-  }
-
-  function viewModeTitle() {
-    return state.viewMode === 'major' ? 'Major' : 'All';
-  }
-
-  function listOnlySuffix(count) {
-    if (!count) {
-      return '';
+  function friendlyDateLabel(key) {
+    const today = todayKey();
+    if (key === today) {
+      return 'today';
     }
-    return ` · ${count.toLocaleString()} list-only`;
+    if (key === dateKey(addDays(new Date(), 1))) {
+      return 'tomorrow';
+    }
+    if (SCHEMA.validCalendarDate(key)) {
+      return `${Number(key.slice(5, 7))}/${Number(key.slice(8, 10))}`;
+    }
+    return key;
   }
 
   function popupRoot(e) {
@@ -621,9 +577,9 @@
       appendText(wrap, 'dd', dd);
       dl.appendChild(wrap);
     };
-    const displayDate = /^\d{4}-\d{2}-\d{2}$/.test(String(e.dateKey || ''))
+    const displayDate = SCHEMA.validCalendarDate(e.dateKey)
       ? `${e.dateKey.slice(5, 7)}/${e.dateKey.slice(8, 10)}/${e.dateKey.slice(2, 4)}`
-      : (e.dateKey || 'Date unavailable');
+      : 'Date unavailable';
     addRow('Date', displayDate);
     addRow('Borough', e.borough);
     addRow('Location', e.location);
@@ -635,7 +591,7 @@
       appendSafeLink(actions, mapsUrl('google', e), 'Google Maps', 'field-action');
       root.appendChild(actions);
     } else {
-      appendText(root, 'div', 'LIST ONLY — coordinates pending', 'popup-photo');
+      appendText(root, 'div', 'Location being confirmed.', 'popup-pending');
     }
     return root;
   }
@@ -708,14 +664,9 @@
       markers.clearLayers();
     }
     const mapReady = visible.filter(e => markerEligible(e));
-    let candidates;
-    if (state.viewMode === 'major') {
-      candidates = mapReady.slice(0, MAJOR_MARKER_SOFT_CAP);
-    } else {
-      const bounds = expandedBounds();
-      const inView = bounds ? mapReady.filter(e => bounds.contains([e.lat, e.lng])) : mapReady;
-      candidates = (inView.length ? inView : mapReady).slice(0, ALL_MARKER_SOFT_CAP);
-    }
+    const bounds = expandedBounds();
+    const inView = bounds ? mapReady.filter(e => bounds.contains([e.lat, e.lng])) : mapReady;
+    const candidates = (inView.length ? inView : mapReady).slice(0, MARKER_SOFT_CAP);
     const batch = [];
     for (const e of candidates) {
       const marker = ensureMarker(e);
@@ -744,12 +695,11 @@
     appendText(top, 'span', `${e.categoryMeta.emoji} ${e.categoryMeta.label}`, 'item-source');
     const tags = document.createElement('span');
     tags.className = 'item-tags';
-    appendText(tags, 'span', e.isReview ? 'REVIEW' : 'LIVE', reviewTagClass(e.isReview));
-    if (!e.mapReady) {
-      appendText(tags, 'span', 'LIST ONLY', 'item-tag nycif-list-only');
-    }
     if (e.isMajor) {
-      appendText(tags, 'span', 'MAJOR', 'item-tag');
+      appendText(tags, 'span', '⭐ Featured', 'item-tag featured');
+    }
+    if (!e.mapReady) {
+      appendText(tags, 'span', 'Location being confirmed', 'item-tag pending');
     }
     const dist = milesBetween(state.userLocation, e);
     if (Number.isFinite(dist)) {
@@ -759,7 +709,7 @@
     button.appendChild(top);
     appendText(button, 'strong', e.title);
     appendText(button, 'span', e.dateKey || 'Date unavailable');
-    appendText(button, 'small', [e.borough, e.location, e.nycif?.event_type].filter(Boolean).join(' • '));
+    appendText(button, 'small', [e.borough, e.location].filter(Boolean).join(' • '));
     if (e.mapReady) {
       const actions = document.createElement('span');
       actions.className = 'quick-actions';
@@ -775,95 +725,66 @@
     return button;
   }
 
-  function countForMode(mode) {
-    const { today, end } = dayRange();
-    return state.events.filter(e => {
-      if (!e.dateKey || e.dateKey < today || e.dateKey > end) {
-        return false;
-      }
-      if (mode === 'major') {
-        return e.isMajor && !e.isReview;
-      }
-      return true;
-    }).length;
-  }
-
-  function updateModeButtons() {
-    if (els.modeMajor) {
-      els.modeMajor.textContent = `Major Events (${countForMode('major').toLocaleString()})`;
-      els.modeMajor.classList.toggle('active', state.viewMode === 'major');
-      els.modeMajor.setAttribute('aria-pressed', String(state.viewMode === 'major'));
-    }
-    if (els.modeAll) {
-      els.modeAll.textContent = `All Events (${countForMode('all').toLocaleString()})`;
-      els.modeAll.classList.toggle('active', state.viewMode === 'all');
-      els.modeAll.setAttribute('aria-pressed', String(state.viewMode === 'all'));
-    }
-    if (els.sourceFilter) {
-      els.sourceFilter.hidden = state.viewMode !== 'all';
-    }
-  }
-
-  function applyZeroMajorFallback(visible) {
-    if (state.viewMode !== 'major' || state.userChangedFilters || visible.length) {
-      return visible;
-    }
-    const upcomingMajor = state.events
-      .filter(e => e.isMajor && !e.isReview && e.dateKey && e.dateKey >= todayKey())
-      .sort((a, b) => a.dateKey.localeCompare(b.dateKey));
-    if (upcomingMajor.length) {
-      state.dateMode = upcomingMajor[0].dateKey;
-      setBanner(`No Major Events in the next 7 days. Showing the next major date: ${state.dateMode}.`);
-      buildDateChips();
-      return state.events.filter(eventMatches).sort(sortEvents);
-    }
-    state.viewMode = 'all';
-    state.dateMode = 'next7';
-    setBanner('No upcoming Major Events were found. Showing all events for the next seven days.');
-    updateModeButtons();
-    buildDateChips();
-    return state.events.filter(eventMatches).sort(sortEvents);
-  }
-
   function updateIndexLabel() {
     if (state.indexComplete) {
-      setIndexStatus('Full event index loaded');
+      setIndexStatus('');
       return;
     }
-    setIndexStatus('Indexing more events…');
+    setIndexStatus('Finding more events…');
+  }
+
+  function emptyStateMessage() {
+    if (state.feedPhase === 'error' && !state.events.length) {
+      return 'Events could not be loaded right now. Please use Retry Events in the Filters panel, or check back in a few minutes.';
+    }
+    const anyCategoryOn = ALL_CATEGORY_KEYS.some(k => state.categories[k]);
+    if (!anyCategoryOn) {
+      return 'No categories are selected. Use Enable All in the Filters panel to see events.';
+    }
+    if (state.search || state.borough !== 'all') {
+      return 'No events match your current search or borough. Try widening your filters.';
+    }
+    return `No events found for ${friendlyDateLabel(selectedDateKey())} yet. Try another day or check back soon.`;
   }
 
   function render() {
     const t0 = performance.now();
-    updateModeButtons();
     updateIndexLabel();
-    let visible = state.events.filter(eventMatches).sort(sortEvents);
-    visible = applyZeroMajorFallback(visible);
+    const visible = state.events.filter(eventMatches).sort(sortEvents);
     const drawn = renderMarkers(visible);
     const shown = Math.min(state.listShown, visible.length);
-    const listOnly = visible.filter(e => !e.mapReady).length;
-    let indexNote = state.indexComplete ? 'full index loaded' : 'index still loading pages';
-    els.listMeta.textContent = `${state.events.length.toLocaleString()} loaded · ${visible.length.toLocaleString()} match filters · ${drawn.length.toLocaleString()} markers in view · showing ${shown.toLocaleString()} of ${visible.length.toLocaleString()} list results · ${indexNote}${listOnlySuffix(listOnly)}`;
+    const mapEligibleCount = visible.filter(e => markerEligible(e)).length;
+    const dateLabel = friendlyDateLabel(selectedDateKey());
+    let meta = `${visible.length.toLocaleString()} event${visible.length === 1 ? '' : 's'} ${dateLabel === 'today' || dateLabel === 'tomorrow' ? dateLabel : `on ${dateLabel}`}`;
+    if (drawn.length < mapEligibleCount) {
+      meta += ' · move or zoom the map to see more pins';
+    }
+    els.listMeta.textContent = meta;
     clearChildren(els.eventList);
     if (!visible.length) {
-      appendText(els.eventList, 'div', 'No events match this view. Try Show All Events or Reset Filters.', 'empty');
+      appendText(els.eventList, 'div', emptyStateMessage(), 'empty');
     } else {
       visible.slice(0, shown).forEach(e => els.eventList.appendChild(buildListCard(e)));
     }
     if (els.loadMoreBtn) {
       els.loadMoreBtn.hidden = shown >= visible.length;
-      els.loadMoreBtn.textContent = `Load 100 more (${Math.max(0, visible.length - shown).toLocaleString()} remaining)`;
+      els.loadMoreBtn.textContent = `Show 100 more (${Math.max(0, visible.length - shown).toLocaleString()} remaining)`;
     }
     if (els.brandCount) {
-      els.brandCount.textContent = `${visible.length.toLocaleString()} ${viewModeNoun()} · ${dateModeLabel()}`;
+      els.brandCount.textContent = `${visible.length.toLocaleString()} event${visible.length === 1 ? '' : 's'} · ${dateLabel}`;
     }
-    status(`${viewModeTitle()} · ${visible.length.toLocaleString()} match · ${drawn.length.toLocaleString()} markers · v${VERSION}`);
+    if (state.feedPhase === 'error' && !state.events.length) {
+      status('Events are temporarily unavailable. Open Filters and choose Retry Events.');
+    } else if (state.feedPhase === 'error') {
+      status('Events could not be refreshed. Showing the most recent available information.');
+    } else {
+      status(`${visible.length.toLocaleString()} event${visible.length === 1 ? '' : 's'} · ${dateLabel}`);
+    }
     state.timings.listRenderMs = Math.round(performance.now() - t0);
     if (debug && els.debugPanel) {
       els.debugPanel.hidden = false;
       els.debugPanel.textContent = JSON.stringify({
         version: VERSION,
-        viewMode: state.viewMode,
         total: state.events.length,
         filtered: visible.length,
         markers: drawn.length,
@@ -872,6 +793,8 @@
         pagesLoaded: state.pagesLoaded,
         pagesTotal: state.pagesTotal,
         cluster: useCluster,
+        feedPhase: state.feedPhase,
+        feedSource: state.feedSource,
         timings: state.timings,
         errors: state.errors.slice(-8)
       }, null, 2);
@@ -890,7 +813,7 @@
       return;
     }
     if (!e.mapReady) {
-      status(`${e.title}: coordinate pending; list-only record.`);
+      status(`${e.title}: location being confirmed.`);
       setDesk(true);
       return;
     }
@@ -931,7 +854,6 @@
   }
 
   function onBoroughSelected(value, button) {
-    state.userChangedFilters = true;
     state.borough = value;
     setActiveBoroughButton(button);
     savePrefs();
@@ -958,25 +880,11 @@
   }
 
   function onDateChipSelected(mode) {
-    state.userChangedFilters = true;
     state.dateMode = mode;
     state.listShown = LIST_PAGE;
-    savePrefs();
     buildDateChips();
     scheduleRender();
     loadPagesForCurrentWindow(state.loadToken);
-  }
-
-  function appendDateChip(track, mode, label) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.dataset.dateMode = mode;
-    button.textContent = label;
-    if (state.dateMode === mode) {
-      button.classList.add('active');
-    }
-    button.addEventListener('click', () => onDateChipSelected(mode));
-    track.appendChild(button);
   }
 
   function buildDateChips() {
@@ -986,33 +894,20 @@
     clearChildren(els.dateChips);
     const track = document.createElement('div');
     track.className = 'date-chip-track';
-    const { today, end } = dayRange();
-    const pool = state.events.filter(e => {
-      if (state.viewMode === 'major') {
-        return e.isMajor && !e.isReview;
+    const activeKey = selectedDateKey();
+    SCHEMA.dateChipModel(new Date()).forEach(chip => {
+      const mode = chip.offset === 0 ? 'today' : chip.key;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.dateMode = mode;
+      button.dataset.dateKey = chip.key;
+      button.textContent = chip.label;
+      if (chip.key === activeKey) {
+        button.classList.add('active');
       }
-      if (state.sourceFilter === 'approved') {
-        return !e.isReview;
-      }
-      if (state.sourceFilter === 'review') {
-        return e.isReview;
-      }
-      return true;
+      button.addEventListener('click', () => onDateChipSelected(mode));
+      track.appendChild(button);
     });
-    const counts = {
-      next7: pool.filter(e => e.dateKey && e.dateKey >= today && e.dateKey <= end).length,
-      all: pool.filter(e => e.dateKey && e.dateKey >= today).length
-    };
-    const addChip = (mode, label) => appendDateChip(track, mode, label);
-    addChip('next7', `Next 7 days (${counts.next7.toLocaleString()})`);
-    for (let i = 0; i < 8; i += 1) {
-      const d = addDays(new Date(), i);
-      const key = dateKey(d);
-      const n = pool.filter(e => e.dateKey === key).length;
-      const label = i === 0 ? `Today (${n})` : `${DAY_NAMES[d.getDay()]} ${d.getMonth() + 1}/${d.getDate()} (${n})`;
-      addChip(key, label);
-    }
-    addChip('all', `All upcoming (${counts.all.toLocaleString()})`);
     els.dateChips.appendChild(track);
   }
 
@@ -1024,20 +919,16 @@
     }
     else {
       userMarker = L.marker(here, {
-        icon: L.divIcon({ className: 'user-location-shell', html: '<span class="user-location"></span>', iconSize: [36, 44], iconAnchor: [18, 42] }),
+        icon: L.divIcon({ className: 'user-location-shell', html: '<span class="user-location" aria-hidden="true"></span>', iconSize: [24, 24], iconAnchor: [12, 12] }),
         zIndexOffset: 4000
       }).addTo(map);
-      const shell = userMarker.getElement()?.querySelector('.user-location');
-      if (shell) {
-        shell.textContent = '🗽';
-      }
-      userMarker.bindPopup('Location updated');
+      userMarker.bindPopup('You are here');
     }
     if (userAccuracy) {
       userAccuracy.setLatLng(here);
       userAccuracy.setRadius(accuracy || 0);
     } else {
-      userAccuracy = L.circle(here, { radius: accuracy || 0, color: '#d40000', weight: 2, fillColor: '#d40000', fillOpacity: 0.08 }).addTo(map);
+      userAccuracy = L.circle(here, { radius: accuracy || 0, color: '#1677ff', weight: 2, fillColor: '#1677ff', fillOpacity: 0.08 }).addTo(map);
     }
   }
 
@@ -1060,98 +951,88 @@
       map.flyTo([latitude, longitude], Math.max(map.getZoom(), 14), { duration: 0.6 });
       userMarker?.openPopup();
       scheduleRender();
-    }, () => status('Location failed.'), { enableHighAccuracy: true, timeout: 12000, maximumAge: 15000 });
+    }, () => {
+      status('We could not access your location. Please check your browser location permission and try again.');
+    }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 15000 });
   }
 
   function pageOverlapsWindow(page, today, end) {
     if (!page.earliest_date || !page.latest_date) {
       return true;
     }
-    if (state.dateMode === 'all') {
-      return page.latest_date >= today;
-    }
-    if (state.dateMode === 'today') {
-      return page.earliest_date <= today && page.latest_date >= today;
-    }
-    if (/^\d{4}-\d{2}-\d{2}$/.test(state.dateMode)) {
-      return page.earliest_date <= state.dateMode && page.latest_date >= state.dateMode;
-    }
     return page.latest_date >= today && page.earliest_date <= end;
   }
 
-  async function loadLayerPages(layer, manifest, token, prioritizeWindow) {
+  async function loadLayerPages(layer, manifest, token) {
     if (!manifest?.pages?.length) {
       return;
     }
-    state.pagesTotal[layer] = manifest.page_count || manifest.pages.length;
     const { today, end } = dayRange();
-    const ordered = [...manifest.pages].sort((a, b) => {
-      const aHit = pageOverlapsWindow(a, today, end) ? 0 : 1;
-      const bHit = pageOverlapsWindow(b, today, end) ? 0 : 1;
-      return aHit - bHit;
-    });
-    const urlFor = layer === 'approved' ? FEEDS.approvedPage : FEEDS.reviewPage;
-    for (const page of ordered) {
+    // Only pages that overlap the public eight-day window are downloaded.
+    const windowPages = [...manifest.pages].filter(page => pageOverlapsWindow(page, today, end));
+    state.pagesTotal[layer] = windowPages.length;
+    const urlFor = FEEDS.approvedPage;
+    for (const page of windowPages) {
       if (token !== state.loadToken) {
         return;
-      }
-      if (prioritizeWindow && !pageOverlapsWindow(page, today, end) && state.dateMode !== 'all') {
-        // still load later for full search index
       }
       try {
         const json = await fetchJson(urlFor(page.cursor || page.page.replace('.json', '')), `${layer}-${page.page}`);
         if (token !== state.loadToken) {
           return;
         }
-        const envelope = SCHEMA.projectEnvelope(json, layer === 'review' ? 'review_supplemental' : 'approved_staged', json.generated_at_utc);
+        const envelope = SCHEMA.projectEnvelope(json, 'approved_staged', json.generated_at_utc);
         upsertEvents(envelope.events);
         state.pagesLoaded[layer] += 1;
         updateIndexLabel();
         scheduleRender();
       } catch (err) {
         state.errors.push(String(err.message || err));
+        console.error('[NYCIF] page load failed:', layer, page.page, err);
       }
     }
   }
 
   async function loadPagesForCurrentWindow(token) {
-    const needReview = state.viewMode === 'all' && (state.sourceFilter === 'all' || state.sourceFilter === 'review');
-    const needApproved = state.viewMode === 'all' || true; // approved pages also enrich major flags/search
-    if (needApproved && state.manifests.approved) {
-      await loadLayerPages('approved', state.manifests.approved, token, true);
-    }
-    if (needReview && state.manifests.review) {
-      await loadLayerPages('review', state.manifests.review, token, true);
+    if (state.manifests.approved) {
+      await loadLayerPages('approved', state.manifests.approved, token);
     }
     if (token === state.loadToken) {
-      state.indexComplete = state.pagesLoaded.approved >= (state.pagesTotal.approved || 0)
-        && (
-          !(state.viewMode === 'all' && (state.sourceFilter === 'all' || state.sourceFilter === 'review'))
-          || state.pagesLoaded.review >= (state.pagesTotal.review || 0)
-        );
-      // Once approved fully loaded, search is globally complete for approved/major.
-      if (state.pagesLoaded.approved >= (state.pagesTotal.approved || 0) && state.pagesLoaded.review >= (state.pagesTotal.review || 0)) {
-        state.indexComplete = true;
-      }
+      state.indexComplete = state.pagesLoaded.approved >= (state.pagesTotal.approved || 0);
       updateIndexLabel();
       scheduleRender();
     }
   }
 
+  async function loadMajorWithFallbacks() {
+    const chain = [
+      { url: FEEDS.major, label: 'major', source: 'primary' },
+      { url: FEEDS.majorFallback, label: 'major-fallback', source: 'fallback' },
+      { url: FEEDS.majorEmergency, label: 'major-emergency', source: 'emergency' }
+    ];
+    const failures = [];
+    for (const step of chain) {
+      try {
+        const json = await fetchJson(step.url, step.label);
+        console.info(`[NYCIF] events loaded from ${step.source} feed`, step.url);
+        return { json, source: step.source };
+      } catch (err) {
+        failures.push(`${step.label}: ${err.message || err}`);
+        console.error(`[NYCIF] ${step.source} feed failed:`, step.url, err);
+      }
+    }
+    throw new Error(failures.join(' | '));
+  }
+
   async function bootFeeds() {
     const token = ++state.loadToken;
     state.errors = [];
-    state.pagesLoaded = { approved: 0, review: 0 };
+    state.pagesLoaded = { approved: 0 };
     state.indexComplete = false;
-    status('Loading Major Events…');
+    state.feedPhase = state.events.length ? state.feedPhase : 'loading';
+    status('Loading NYC events…');
     try {
-      let majorJson;
-      try {
-        majorJson = await fetchJson(FEEDS.major, 'major');
-      } catch {
-        majorJson = await fetchJson(FEEDS.majorFallback, 'major-fallback');
-        state.fallbackUsed = true;
-      }
+      const { json: majorJson, source } = await loadMajorWithFallbacks();
       if (token !== state.loadToken) {
         return;
       }
@@ -1160,77 +1041,66 @@
         e.significance = 'major';
         e.nycif = { ...(e.nycif || {}), is_major: true, data_layer: 'approved_staged' };
       });
+      // Replace inventory only after a feed has succeeded. A failed refresh
+      // must never clear events that are already on screen.
       state.byId.clear();
       upsertEvents(major.events);
+      state.feedPhase = 'ok';
+      state.feedSource = source;
+      state.lastGoodLoadAt = new Date().toISOString();
+      setBanner('');
       state.timings.timeToFirstMajorMs = state.timings.major?.fetchMs || 0;
       const visible = render();
-      const mapReady = visible.filter(e => e.mapReady);
-      if (mapReady.length) {
-        map.fitBounds(mapReady.slice(0, 200).map(e => [e.lat, e.lng]), { padding: [44, 44], maxZoom: 12 });
+      if (!state.hasFitBounds) {
+        const mapReady = visible.filter(e => e.mapReady);
+        if (mapReady.length) {
+          map.fitBounds(mapReady.slice(0, 200).map(e => [e.lat, e.lng]), { padding: [44, 44], maxZoom: 12 });
+          state.hasFitBounds = true;
+        }
       }
     } catch (err) {
       state.errors.push(String(err.message || err));
-      setBanner('Major feed unavailable. Use Retry Feed or open All Events after recovery.');
-      status('Major feed unavailable.');
+      console.error('[NYCIF] all event feeds failed:', err);
+      state.feedPhase = 'error';
+      if (state.events.length) {
+        setBanner('Events could not be refreshed. Showing the most recent available information.');
+      } else {
+        setBanner('Events could not be loaded. Open Filters and choose Retry Events.');
+      }
+      render();
     }
 
     try {
-      status('Loading approved and review page manifests…');
-      const [approvedManifest, reviewManifest] = await Promise.all([
-        fetchJson(FEEDS.approvedManifest, 'approved-manifest'),
-        fetchJson(FEEDS.reviewManifest, 'review-manifest')
-      ]);
+      const approvedManifest = await fetchJson(FEEDS.approvedManifest, 'approved-manifest');
       if (token !== state.loadToken) {
         return;
       }
       state.manifests.approved = approvedManifest;
-      state.manifests.review = reviewManifest;
-      state.pagesTotal.approved = approvedManifest.page_count || approvedManifest.pages?.length || 0;
-      state.pagesTotal.review = reviewManifest.page_count || reviewManifest.pages?.length || 0;
       await loadPagesForCurrentWindow(token);
     } catch (err) {
       state.errors.push(String(err.message || err));
-      setBanner('Page manifests unavailable. Major Events may still work. All Events search may be incomplete.');
+      console.error('[NYCIF] approved manifest failed:', err);
       state.indexComplete = false;
       updateIndexLabel();
     }
   }
 
   function syncUi() {
-    if (els.photoOnly) {
-      els.photoOnly.checked = state.photoOnly;
-    }
-    if (els.nypdOnly) {
-      els.nypdOnly.checked = state.nypdOnly;
-    }
     if (els.sortSelect) {
       els.sortSelect.value = state.sort;
-    }
-    if (els.sourceFilter) {
-      els.sourceFilter.value = state.sourceFilter;
     }
     document.querySelectorAll('[data-cat]').forEach(input => {
       input.checked = !!state.categories[input.dataset.cat];
     });
-    updateModeButtons();
-  }
-
-  function onToggleFilterChange(input) {
-    state.userChangedFilters = true;
-    state[input.id] = input.checked;
-    savePrefs();
-    scheduleRender();
   }
 
   function onCategoryFilterChange(input) {
-    state.userChangedFilters = true;
     state.categories[input.dataset.cat] = input.checked;
     savePrefs();
     scheduleRender();
   }
 
   function onSearchInput() {
-    state.userChangedFilters = true;
     clearTimeout(searchTimer);
     searchTimer = setTimeout(() => {
       state.search = norm(els.searchInput.value);
@@ -1240,7 +1110,6 @@
   }
 
   function onSortSelectChange() {
-    state.userChangedFilters = true;
     state.sort = els.sortSelect.value;
     savePrefs();
     if (state.sort === 'near' && !state.userLocation) {
@@ -1258,10 +1127,58 @@
 
     clearTimeout(moveTimer);
     moveTimer = setTimeout(() => {
-      if (state.viewMode === 'all') {
-        scheduleRender();
-      }
+      scheduleRender();
     }, 120);
+  }
+
+  function enableAllCategories() {
+    ALL_CATEGORY_KEYS.forEach(k => { state.categories[k] = true; });
+    syncUi();
+    savePrefs();
+    scheduleRender();
+  }
+
+  function clearFilters() {
+    ALL_CATEGORY_KEYS.forEach(k => { state.categories[k] = false; });
+    state.search = '';
+    state.borough = 'all';
+    state.sort = 'priority';
+    state.dateMode = 'today';
+    state.listShown = LIST_PAGE;
+    if (els.searchInput) {
+      els.searchInput.value = '';
+    }
+    syncUi();
+    buildBoroughs();
+    buildDateChips();
+    savePrefs();
+    scheduleRender();
+  }
+
+  function bugReportMailto() {
+    const categoriesOn = ALL_CATEGORY_KEYS.filter(k => state.categories[k]);
+    const categorySummary = categoriesOn.length === ALL_CATEGORY_KEYS.length
+      ? 'All'
+      : (categoriesOn.join(', ') || 'None');
+    const center = map.getCenter();
+    const lines = [
+      `Map URL: ${location.href}`,
+      `Selected date: ${selectedDateKey()}`,
+      `Categories: ${categorySummary}`,
+      `Borough: ${state.borough}`,
+      `Sort: ${state.sort}`,
+      `Feed state: ${state.feedPhase}${state.feedSource ? ` (${state.feedSource})` : ''}`,
+      `Browser: ${navigator.userAgent}`,
+      `Screen: ${window.innerWidth}x${window.innerHeight}`,
+      `Timestamp: ${new Date().toISOString()}`,
+      `App version: ${VERSION}`,
+      `Map center: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`,
+      `Map zoom: ${map.getZoom()}`,
+      '',
+      'What happened?',
+      ''
+    ];
+    return `mailto:${BUG_REPORT_EMAIL}?subject=${encodeURIComponent('Bug Found')}&body=${encodeURIComponent(lines.join('\n'))}`;
   }
 
   function bindUi() {
@@ -1270,33 +1187,8 @@
     els.closeDeskBtn?.addEventListener('click', () => setDesk(false));
     els.locateBtn?.addEventListener('click', () => locateUser());
     els.nearMeBtn?.addEventListener('click', () => locateUser({ sortNear: true }));
-    els.modeMajor?.addEventListener('click', () => {
-      state.userChangedFilters = true;
-      state.viewMode = 'major';
-      state.listShown = LIST_PAGE;
-      setBanner('');
-      savePrefs();
-      scheduleRender();
-    });
-    els.modeAll?.addEventListener('click', () => {
-      state.userChangedFilters = true;
-      state.viewMode = 'all';
-      state.listShown = LIST_PAGE;
-      setBanner('');
-      savePrefs();
-      scheduleRender();
-      loadPagesForCurrentWindow(state.loadToken);
-    });
-    els.sourceFilter?.addEventListener('change', () => {
-      state.userChangedFilters = true;
-      state.sourceFilter = els.sourceFilter.value;
-      state.listShown = LIST_PAGE;
-      savePrefs();
-      scheduleRender();
-      loadPagesForCurrentWindow(state.loadToken);
-    });
-    [els.photoOnly, els.nypdOnly].filter(Boolean).forEach(input => {
-      input.addEventListener('change', () => onToggleFilterChange(input));
+    els.bugBtn?.addEventListener('click', () => {
+      window.location.href = bugReportMailto();
     });
     document.querySelectorAll('[data-cat]').forEach(input => {
       input.addEventListener('change', () => onCategoryFilterChange(input));
@@ -1307,20 +1199,8 @@
       state.listShown += LIST_PAGE;
       scheduleRender();
     });
-    els.resetFiltersBtn?.addEventListener('click', () => {
-      const keepEvents = state.events;
-      const keepById = state.byId;
-      const keepMeta = { timings: state.timings, manifests: state.manifests, pagesLoaded: state.pagesLoaded, pagesTotal: state.pagesTotal, indexComplete: state.indexComplete };
-      Object.assign(state, publicDefaults(), keepMeta, { events: keepEvents, byId: keepById, listShown: LIST_PAGE, userChangedFilters: false, search: '' });
-      setBanner('');
-      if (els.searchInput) {
-        els.searchInput.value = '';
-      }
-      syncUi();
-      savePrefs();
-      buildDateChips();
-      scheduleRender();
-    });
+    els.enableAllBtn?.addEventListener('click', enableAllCategories);
+    els.resetFiltersBtn?.addEventListener('click', clearFilters);
     els.retryFeedBtn?.addEventListener('click', () => bootFeeds());
     map.on('moveend', onMapMoveEnd);
   }
@@ -1331,10 +1211,6 @@
     bindUi();
     buildBoroughs();
     buildDateChips();
-    if ('serviceWorker' in navigator && !swRegistered) {
-      swRegistered = true;
-      navigator.serviceWorker.register('./service-worker.js').catch(() => { /* optional */ });
-    }
     await bootFeeds();
     window.NYCIF_UNIFIED_VIEWER = {
       version: VERSION,
@@ -1342,7 +1218,6 @@
         total: state.events.length,
         major: state.events.filter(e => e.isMajor && !e.isReview).length,
         approved: state.events.filter(e => !e.isReview).length,
-        review: state.events.filter(e => e.isReview).length,
         mapReady: state.events.filter(e => e.mapReady).length,
         listOnly: state.events.filter(e => !e.mapReady).length,
         markerObjects: state.markerObjects,
@@ -1351,7 +1226,10 @@
         indexComplete: state.indexComplete,
         pagesLoaded: state.pagesLoaded,
         pagesTotal: state.pagesTotal,
-        fullDumpDownloaded: false,
+        feedPhase: state.feedPhase,
+        feedSource: state.feedSource,
+        lastGoodLoadAt: state.lastGoodLoadAt,
+        selectedDate: selectedDateKey(),
         timings: state.timings
       })
     };
