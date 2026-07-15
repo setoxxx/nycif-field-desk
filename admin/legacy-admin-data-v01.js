@@ -7,6 +7,23 @@
   const card=(label,value,detail)=>{const el=node('article','stat');el.append(node('div','label',label),node('div','value',value));if(detail)el.append(node('div','detail',detail));return el};
   const count=v=>Number.isFinite(Number(v))?Number(v).toLocaleString():'—';
   const link=(label,url)=>{const a=node('a','',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a};
+  function ensureRecoveryPanel(){
+    if(byId('recovery'))return;
+    const anchor=byId('deployment')||byId('live-pipeline-section');
+    if(!anchor)return;
+    const section=node('section','panel');section.id='recovery';
+    section.append(node('h2','','Recovery and Source of Truth'),node('p','section-intro','The permanent recovery record identifies the immutable pre-God-View baseline, canonical files, protected systems, and safe rollback paths.'));
+    const freshness=node('div','notice');freshness.id='recovery-freshness';freshness.hidden=true;
+    const grid=node('div','grid');grid.id='recovery-status-grid';
+    const guard=node('div','notice violet','If God View becomes unstable, return to the recorded immutable baseline or revert only the God View change. Never overwrite the map, calendar, or backend to repair this page.');
+    const links=node('div','links');links.id='recovery-links';
+    section.append(freshness,grid,guard,links);
+    anchor.before(section);
+  }
+  function loadRecovery(){
+    if(document.querySelector('script[data-god-view-recovery]'))return;
+    const script=document.createElement('script');script.src='./god-view-recovery-v01.js';script.dataset.godViewRecovery='1';script.async=false;document.body.append(script);
+  }
   async function loadAll(){return Promise.all(resources.map(async([key,path])=>{try{const r=await fetch(path,{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);return[key,await r.json(),null,path]}catch(error){return[key,null,error.message,path]}}))}
   function renderErrors(rows){const failures=rows.filter(row=>row[2]),panel=byId('errors'),target=clear(byId('error-list'));panel.hidden=!failures.length;failures.forEach(([, ,message,path])=>target.append(node('div','notice danger',`${path}: ${message}`)))}
   function renderOverview(data,rows){const live=window.NYCIF_LIVE_PIPELINE_SUMMARY||{},target=clear(byId('overview'));target.append(card('Live staged events',count(live.staged_feed_events),'Current backend pipeline summary.'),card('Newly added',count(live.newly_added_events),'Delta since previous staged snapshot.'),card('Calendar-only gap',count(live.calendar_only_unique_keys),'Unlinked Citywide Calendar rows.'),card('Parks-only gap',count(live.parks_only_unique_keys),'Unlinked Parks event rows.'),card('Local snapshots',`${rows.filter(row=>row[1]).length}/${rows.length}`,'Historical and diagnostic admin snapshots.'),card('Candidate-source feeds connected','0','MOME and DOB remain disconnected evaluation candidates.'))}
@@ -19,5 +36,5 @@
   function renderXri(xri){const target=clear(byId('xri'));if(!xri){target.append(node('div','empty','XRI historical snapshot did not load.'));return}target.append(node('div','notice warn','Historical XRI reference. It is not the current program-stage authority.'),card('Recorded phase',xri.currentPhase||xri.current_phase||'Unknown'),card('Recorded next gate',xri.nextGate||xri.next_gate||'Unknown'),card('Recorded score',xri.score||'Unknown'))}
   function renderNotes(data){const target=clear(byId('notes'));['God View is read-only and cannot publish, approve, geocode, or mutate production.','Local admin snapshots are historical reference and do not power the current map or calendar.','Candidate-source evaluation does not authorize ingestion.',data.xriStatus?.blocker?`Historical XRI blocker: ${data.xriStatus.blocker}`:null].filter(Boolean).forEach(message=>target.append(node('li','',message)))}
   function renderAll(rows){renderErrors(rows);const data=Object.fromEntries(rows.map(row=>[row[0],row[1]]));renderOverview(data,rows);renderProject(data.projectStatus);renderSourceFreshness(data.sourceFreshness);renderPress(data.tvppCandidates);renderCandidates(data.tvppCandidates,data.tvppTriage);renderBuckets('triage',data.tvppTriage,'bucketCounts');renderBuckets('location-readiness',data.tvppLocationReadiness,'locationBucketCounts');renderMap();renderXri(data.xriStatus);renderNotes(data);const snapshot=byId('snapshot-time');if(snapshot)snapshot.textContent=`Local snapshots: ${data.index?.generatedAt||data.projectStatus?.generatedAt||'unknown'}`}
-  loadAll().then(renderAll);document.addEventListener('nycif-live-pipeline-ready',()=>loadAll().then(renderAll));
+  ensureRecoveryPanel();loadRecovery();loadAll().then(renderAll);document.addEventListener('nycif-live-pipeline-ready',()=>loadAll().then(renderAll));
 })();
