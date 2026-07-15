@@ -18,6 +18,7 @@ test('God View is the project control center and leads with Map v1 completion', 
   assert.match(html, /Finish and freeze Map v1/);
   assert.match(html, /Now, Next, Later/);
   assert.match(html, /How the current system works/);
+  assert.match(html, /@media\(min-width:981px\)\{\.command-facts\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)\}\}/);
 });
 
 test('God View preserves source governance and historical diagnostics', () => {
