@@ -6,7 +6,13 @@
   'use strict';
 
   const VERSION = 'public-map-v05';
-  const DEFAULT_FEED_REF = 'bf7deddc7ba09e248bbc19f23cb3449dc9fd626e';
+  // Feed source ref on the backend repo (setoxxx/nycif-live-feeds).
+  // Points at `main`, which already serves data/schema-v1-discovery/** and is
+  // kept current by the backend Discovery Feed Refresh workflow (daily rebuild
+  // + commit). This replaces the old pinned commit that could not refresh and
+  // would break if its branch were deleted. If the primary/full feeds are ever
+  // unavailable, the app still degrades to the major-only emergency feed.
+  const DEFAULT_FEED_REF = 'main';
   const FEED_ROOT = 'schema-v1-discovery';
   const LIVE_FEED_HOST = 'raw.githubusercontent.com';
   const successfulPageUrls = new Set();
