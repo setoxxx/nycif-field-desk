@@ -1,26 +1,17 @@
 (() => {
-  const addCalendarLink = () => {
-    const nav = document.querySelector('.topbar .links');
-    if (!nav || nav.querySelector('[data-calendar-blotter-link]')) return;
-    const link = document.createElement('a');
-    link.href = './calendar.html';
-    link.textContent = '📅 Assignment Desk Calendar';
-    link.dataset.calendarBlotterLink = 'true';
-    link.style.color = '#fde68a';
-    link.style.borderColor = 'rgba(251,191,36,.55)';
-    link.style.background = 'rgba(251,191,36,.10)';
-    nav.prepend(link);
-  };
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addCalendarLink);
-  else addCalendarLink();
-
-  const original = document.createElement('script');
-  original.src = 'https://cdn.jsdelivr.net/gh/setoxxx/nycif-field-desk@9111fa460025146b8c2f880477f838c5fbb90dd0/admin/live-pipeline-panel-v01.js';
-  original.async = false;
-  original.onerror = () => {
-    const status = document.getElementById('live-pipeline-status');
-    if (status) status.textContent = 'Live pipeline panel could not load. Assignment Desk Calendar remains available.';
-  };
-  document.head.append(original);
+'use strict';
+const REG='../shared/nycif-feed-registry-v01.js?v=god-view-master-sources-v01';
+const OLD='https://cdn.jsdelivr.net/gh/setoxxx/nycif-field-desk@9111fa460025146b8c2f880477f838c5fbb90dd0/admin/live-pipeline-panel-v01.js';
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function script(src){return new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.async=false;s.onload=()=>ok(s);s.onerror=()=>no(new Error('Could not load '+src));document.head.append(s)})}
+function link(url,label){const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=label;return a}
+function addCalendar(){const n=document.querySelector('.topbar .links');if(!n||n.querySelector('[data-calendar-link]'))return;const a=link('./calendar.html','📅 Assignment Desk Calendar');a.dataset.calendarLink='1';a.style.cssText='color:#fde68a;border-color:rgba(251,191,36,.55);background:rgba(251,191,36,.10)';n.prepend(a)}
+function stat(label,value,detail){const d=document.createElement('div');d.className='stat';d.innerHTML=`<div class="label">${esc(label)}</div><div class="value">${esc(value)}</div><div class="detail">${esc(detail)}</div>`;return d}
+function sourceGroup(title,rows,tone,open=false){const d=document.createElement('details');d.open=open;const s=document.createElement('summary');s.textContent=`${title} (${rows.length})`;const b=document.createElement('div');b.innerHTML=`<div class="notice ${tone}">${tone==='ok'?'These feeds power both the map and calendar.':tone==='warn'?'Automatic fallbacks only. Do not use these for normal daily review.':tone==='violet'?'Operational status and troubleshooting JSON only.':'Reference only. These local files do not power the map or calendar.'}</div>`;const w=document.createElement('div');w.className='table-wrap';const t=document.createElement('table');t.innerHTML='<thead><tr><th>Source</th><th>Used by</th><th>When to open</th><th>Link</th></tr></thead>';const tb=document.createElement('tbody');rows.forEach(r=>{const tr=document.createElement('tr');[r.name,r.usedBy,r.openWhen].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});const td=document.createElement('td');if(r.url.includes('{cursor}')){const c=document.createElement('code');c.textContent=r.url;td.append(c)}else td.append(link(r.url,'Open source'));tr.append(td);tb.append(tr)});t.append(tb);w.append(t);b.append(w);d.append(s,b);return d}
+function master(config,catalog){if(document.getElementById('master-data-sources-section'))return;const anchor=document.getElementById('live-pipeline-section');if(!anchor)return;const p=document.createElement('section');p.className='panel';p.id='master-data-sources-section';p.innerHTML='<h2>Master Data Sources — Map, Calendar and God View</h2><div class="notice ok"><strong>Daily operator rule:</strong> use the Field Desk Map and Assignment Desk Calendar. Open raw JSON only for troubleshooting. Both interfaces use the same active feed ref and feed root.</div><div class="notice violet"><strong>Master change point:</strong> <code>discovery-patch-v02.js</code> controls the production feed ref and feed root. This registry builds every current link from that master configuration.</div><div id="master-source-summary" class="grid"></div><div id="master-interface-links" class="links" style="margin-top:12px"></div><div id="master-source-tables"></div><div class="notice warn"><strong>When links change:</strong> update <code>discovery-patch-v02.js</code> for the active ref/root. Update <code>shared/nycif-feed-registry-v01.js</code> only when path names, fallback files, or diagnostic artifacts change.</div>';anchor.before(p);p.querySelector('#master-source-summary').append(stat('Active feed ref',config.branch,config.branchOverride?'Temporary URL override is active.':'Production default from discovery runtime.'),stat('Feed root',config.feedRoot,'Shared schema path used by map and calendar.'),stat('Primary consumers','Map + Calendar','God View documents and monitors the same data system.'),stat('Normal daily JSON review','Not required','Use interfaces first; raw files are troubleshooting tools.'));p.querySelector('#master-interface-links').append(link(config.interfaces.fieldDeskMap,'Open Field Desk Map'),link(config.interfaces.calendar,'Open Assignment Desk Calendar'),link(config.interfaces.publicMap,'Open nycinfocus.com/map/'),link(config.interfaces.liveFeedsRepo,'Open Live Feeds Repository'),link(config.masterFiles.runtimeDiscovery,'Open Runtime Discovery Master'),link(config.masterFiles.registry,'Open Feed Registry Master'));p.querySelector('#master-source-tables').append(sourceGroup('Authoritative runtime feeds',catalog.authoritative,'ok',true),sourceGroup('Automatic fallback feeds',catalog.fallback,'warn'),sourceGroup('Operational diagnostic JSON',catalog.diagnostics,'violet'),sourceGroup('Legacy/local admin snapshots',catalog.localSnapshots,'danger'))}
+function consolidate(){document.querySelectorAll('#live-pipeline .links').forEach(x=>{if(x.querySelector('a'))x.remove()});document.querySelectorAll('#map-links a,#xri a').forEach(a=>{const t=a.textContent.toLowerCase();if(t.includes('raw major')||t.includes('raw all')||t.includes('dashboard json')||t.includes('delta report')||t.includes('coverage report'))a.remove()})}
+function legacy(){if(document.getElementById('legacy-snapshot-group'))return;const ids=['project-status','source-freshness','press-god-view','candidates','triage','location-readiness','xri'];const panels=ids.map(id=>document.getElementById(id)?.closest('.panel')).filter(Boolean);if(!panels.length)return;const d=document.createElement('details');d.className='panel';d.id='legacy-snapshot-group';const s=document.createElement('summary');s.textContent='Legacy / Local Snapshot Reference — not used by the current map or calendar';const b=document.createElement('div');b.innerHTML='<div class="notice warn"><strong>Reference only:</strong> these panels read local admin/data snapshot JSON. Use the Assignment Desk Calendar for current assignments and Live Pipeline for current backend status.</div>';d.append(s,b);panels[0].before(d);panels.forEach(p=>b.append(p))}
+async function registry(){try{await script(REG);const r=window.NYCIF_FEED_REGISTRY_V01,c=await r.loadConfiguration();master(c,r.catalog(c));legacy();consolidate()}catch(e){const a=document.getElementById('live-pipeline-section');if(a){const n=document.createElement('div');n.className='notice danger';n.textContent='Master data-source registry could not load: '+e.message;a.before(n)}}}
+function init(){addCalendar();registry();script(OLD).catch(()=>{const s=document.getElementById('live-pipeline-status');if(s)s.textContent='Live pipeline panel could not load. The master registry and calendar remain available.'});new MutationObserver(consolidate).observe(document.body,{childList:true,subtree:true});document.addEventListener('nycif-live-pipeline-ready',consolidate)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
