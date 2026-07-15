@@ -49,6 +49,18 @@
       <aside id="layersPanel" class="layers-panel" aria-label="Choose what to show" hidden>
         <p class="panel-label">Choose what to show</p>
 
+        <div class="editors-block">
+          <label class="check newsdesk-check"><input type="checkbox" id="newsDeskToggle" checked> <span>📰 News Desk <small>money shots + viral</small></span></label>
+          <label class="editors-pick">
+            <span>🏅 Editor's Picks</span>
+            <select id="editorsPicksSelect" aria-label="Editor's Picks medal filter">
+              <option value="all">Show all events</option>
+              <option value="medaled">Medals only 🥇🥈🥉</option>
+              <option value="gold">Gold only 🥇</option>
+            </select>
+          </label>
+        </div>
+
         <label class="check"><input type="checkbox" data-cat="sports" checked> <span>🏟️ Sports</span></label>
         <label class="check"><input type="checkbox" data-cat="fitness" checked> <span>💪 Fitness / wellness</span></label>
         <label class="check"><input type="checkbox" data-cat="parks" checked> <span>🌳 Parks / outdoors</span></label>
@@ -127,6 +139,7 @@
   <script src="./public-map-defaults-v01.js?v=public-map-v05"></script>
   <script src="./discovery-patch-v02.js?v=public-map-v05"></script>
   <script src="./event-feed-schema-v1.js?v=public-map-v05"></script>
+  <script src="./news-desk-editors-picks-v01.js?v=public-map-v05"></script>
   <script src="./app-schema-v1-major-all-v01.js?v=public-map-v05"></script>
   <script src="./public-approved-overlays-v01.js?v=public-map-v05"></script>
   <script src="./field-desk-operator-layer-v01.js?v=public-map-v05"></script>

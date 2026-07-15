@@ -51,6 +51,18 @@
     approvedManifest: FEED_HOST + `/data/${FEED_ROOT}/approved/manifest.json`,
     approvedPage: cursor => pageUrl('approved', cursor)
   };
+  // News Desk operator lanes (money shots + viral magnets), same feed ref.
+  const NEWS_DESK_DATA = {
+    money: FEED_HOST + '/data/photographer_assignment_calendar_2mo.json',
+    viral: FEED_HOST + '/data/photographer_viral_recurrence_matches.json'
+  };
+  // Editor's Picks / medal engine (pure module). Falls back to inert stubs if
+  // the script is missing, so the map never breaks over the ranking layer.
+  const ED = window.NYCIF_EDITORIAL || {
+    editorialScore: () => 0, medalOf: () => '', sourceKey: () => '',
+    extractReturningKeys: () => new Set(), extractNewsDeskRows: () => [],
+    MEDAL_META: {}
+  };
   const CATEGORY_META = {
     sports: { emoji: '🏟️', label: 'Sports' },
     fitness: { emoji: '💪', label: 'Fitness / wellness' },
@@ -89,6 +101,12 @@
     sort: 'priority',
     dateMode: 'today',
     categories: Object.fromEntries(ALL_CATEGORY_KEYS.map(k => [k, true])),
+    newsDeskOn: true,          // 📰 News Desk category (money shots + viral magnets)
+    medalFilter: 'all',        // 'all' | 'medaled' | 'gold' — Editor's Picks focus
+    returningKeys: new Set(),  // source keys with proven past presence
+    moneyKeys: new Set(),      // source keys flagged as money-day shots
+    moneyScoreByKey: new Map(),// source key -> money-day assignment score
+    newsDeskLoaded: false,
     userLocation: null,
     listShown: LIST_PAGE,
     banner: '',
@@ -132,6 +150,8 @@
     enableAllBtn: document.getElementById('enableAllCategoriesBtn'),
     resetFiltersBtn: document.getElementById('resetFiltersBtn'),
     retryFeedBtn: document.getElementById('retryFeedBtn'),
+    newsDeskToggle: document.getElementById('newsDeskToggle'),
+    editorsPicks: document.getElementById('editorsPicksSelect'),
     debugPanel: document.getElementById('debugPanel'),
     indexStatus: document.getElementById('indexStatus')
   };
@@ -311,10 +331,40 @@
       marker: null
     };
     e.priority = Number(e.major_score || 0) + (e.isMajor ? 500 : 0) + (e.photoPick ? 120 : 0);
+    e.crowdScore = Number(nycif.expected_crowd_score || 0);
+    applyEditorial(e);
     return e;
   }
 
+  // Compute (or recompute) an event's editorial score, medal tier, and News
+  // Desk flags. Called at build time and again once the News Desk signals load.
+  function applyEditorial(e) {
+    const key = ED.sourceKey(e);
+    e.returning = state.returningKeys.has(key);
+    e.newsDesk = e.returning || state.moneyKeys.has(key) || e.kind === 'money' || e.kind === 'viral';
+    e.editorialScore = ED.editorialScore({
+      isMajor: e.isMajor,
+      crowdScore: e.crowdScore,
+      photoPick: e.photoPick,
+      returning: e.returning,
+      moneyScore: state.moneyScoreByKey.get(key) || (e.kind === 'money' ? e.major_score : 0)
+    });
+    e.medal = ED.medalOf(e.editorialScore);
+    return e;
+  }
+
+  function medalMatch(e) {
+    if (state.medalFilter === 'gold') return e.medal === 'gold';
+    if (state.medalFilter === 'medaled') return !!e.medal;
+    return true;
+  }
+
   function categoryFilterMatch(e) {
+    // News Desk is an additive highlight: when on, money shots + viral magnets
+    // show regardless of their category selection.
+    if (state.newsDeskOn && e.newsDesk) {
+      return true;
+    }
     if (state.categories[e.categoryKey]) {
       return true;
     }
@@ -390,6 +440,8 @@
       sort: 'priority',
       dateMode: 'today',
       categories: Object.fromEntries(ALL_CATEGORY_KEYS.map(k => [k, true])),
+      newsDeskOn: true,
+      medalFilter: 'all',
       nycifDefaultVersion: DEFAULT_VERSION
     };
   }
@@ -423,7 +475,9 @@
         sort: use.sort === 'near' ? 'priority' : use.sort,
         // Today is always the default date after a normal load.
         dateMode: 'today',
-        categories: Object.fromEntries(ALL_CATEGORY_KEYS.map(k => [k, use.categories[k] !== false]))
+        categories: Object.fromEntries(ALL_CATEGORY_KEYS.map(k => [k, use.categories[k] !== false])),
+        newsDeskOn: use.newsDeskOn !== false,
+        medalFilter: (use.medalFilter === 'gold' || use.medalFilter === 'medaled') ? use.medalFilter : 'all'
       });
       savePrefs();
     } catch {
@@ -436,6 +490,8 @@
       borough: state.borough,
       sort: state.sort === 'near' && !state.userLocation ? 'priority' : state.sort,
       categories: { ...state.categories },
+      newsDeskOn: state.newsDeskOn,
+      medalFilter: state.medalFilter,
       nycifDefaultVersion: DEFAULT_VERSION
     }));
   }
@@ -460,6 +516,7 @@
     return sourceMatches(e)
       && dateMatches(e)
       && categoryFilterMatch(e)
+      && medalMatch(e)
       && (state.borough === 'all' || e.borough === state.borough)
       && (!state.search || e.searchText.includes(state.search));
   }
@@ -604,10 +661,14 @@
     if (e.isMajor) {
       cls.push('marker--major');
     }
+    if (e.medal) {
+      cls.push(`marker--medal-${e.medal}`);
+    }
+    const medalEmoji = e.medal && ED.MEDAL_META[e.medal] ? ED.MEDAL_META[e.medal].emoji : '';
     const marker = L.marker([e.lat, e.lng], {
       icon: L.divIcon({
         className: 'marker-shell',
-        html: `<span class="${cls.join(' ')}"><span class="emoji"></span></span>`,
+        html: `<span class="${cls.join(' ')}"><span class="emoji"></span>${medalEmoji ? '<span class="medal"></span>' : ''}</span>`,
         iconSize: [38, 38],
         iconAnchor: [19, 19],
         popupAnchor: [0, -24]
@@ -617,9 +678,14 @@
     });
     // Set emoji via textContent after icon create for trusted static shell only.
     marker.on('add', () => {
-      const emoji = marker.getElement()?.querySelector('.emoji');
+      const root = marker.getElement();
+      const emoji = root?.querySelector('.emoji');
       if (emoji) {
         emoji.textContent = e.categoryMeta.emoji;
+      }
+      const medal = root?.querySelector('.medal');
+      if (medal && medalEmoji) {
+        medal.textContent = medalEmoji;
       }
     });
     marker.bindPopup(popupRoot(e), {
@@ -695,7 +761,13 @@
     appendText(top, 'span', `${e.categoryMeta.emoji} ${e.categoryMeta.label}`, 'item-source');
     const tags = document.createElement('span');
     tags.className = 'item-tags';
-    if (e.isMajor) {
+    if (e.medal && ED.MEDAL_META[e.medal]) {
+      appendText(tags, 'span', `${ED.MEDAL_META[e.medal].emoji} ${ED.MEDAL_META[e.medal].label}`, `item-tag medal medal-${e.medal}`);
+    }
+    if (e.newsDesk) {
+      appendText(tags, 'span', '📰 News Desk', 'item-tag newsdesk');
+    }
+    if (e.isMajor && !e.medal) {
       appendText(tags, 'span', '⭐ Featured', 'item-tag featured');
     }
     if (!e.mapReady) {
@@ -1085,9 +1157,86 @@
     }
   }
 
+  // Load the News Desk signals (money shots + viral magnets), tag matching
+  // events, add certified pins not already in the feed, and recompute medals.
+  // Non-blocking and failure-tolerant: the public map works without it.
+  async function loadNewsDeskSignals() {
+    try {
+      const [moneyJson, viralJson] = await Promise.all([
+        fetchJson(NEWS_DESK_DATA.money, 'newsdesk-money').catch(() => null),
+        fetchJson(NEWS_DESK_DATA.viral, 'newsdesk-viral').catch(() => null)
+      ]);
+      state.returningKeys = ED.extractReturningKeys(viralJson);
+      const rows = ED.extractNewsDeskRows(moneyJson, viralJson);
+      state.moneyKeys = new Set(
+        rows.filter(r => r.kind === 'money' && r.key).map(r => r.key)
+      );
+      state.moneyScoreByKey = new Map(
+        rows.filter(r => r.kind === 'money' && r.key).map(r => [r.key, r.majorScore])
+      );
+      // Add certified News Desk pins that are not already in the loaded feed
+      // window, so today's money shots always appear. Deduped by source key.
+      const known = new Set([...state.byId.values()].map(e => ED.sourceKey(e)).filter(Boolean));
+      let added = 0;
+      rows.forEach(r => {
+        if (!r.key || known.has(r.key)) return;
+        known.add(r.key);
+        const catKey = CATEGORY_META[r.category] ? r.category : 'general';
+        const e = {
+          id: r.id,
+          title: r.title,
+          lat: r.lat,
+          lng: r.lng,
+          latitude: r.lat,
+          longitude: r.lng,
+          borough: r.borough,
+          location: r.location,
+          dateKey: SCHEMA.validCalendarDate(r.date) || '',
+          start_date_time: r.start_date_time,
+          end_date_time: r.end_date_time,
+          categoryKey: catKey,
+          categoryMeta: CATEGORY_META[catKey],
+          interests: [],
+          tags: [],
+          source: r.source,
+          event_role: 'public_event',
+          parent_event_id: null,
+          mapReady: true,
+          isReview: false,
+          isMajor: true,
+          photoPick: false,
+          major_score: r.majorScore,
+          crowdScore: 0,
+          kind: r.kind,
+          nycif: { coordinate_status: 'map_ready', display_disposition: 'standalone_public_event' },
+          searchText: norm([r.title, r.location, r.borough, catKey, 'news desk'].filter(Boolean).join(' ')),
+          priority: r.majorScore + 500,
+          marker: null
+        };
+        applyEditorial(e);
+        state.byId.set(e.id, e);
+        added += 1;
+      });
+      // Re-tag + re-score everything now that the signals are known.
+      state.events = [...state.byId.values()];
+      state.events.forEach(applyEditorial);
+      state.newsDeskLoaded = true;
+      console.info(`[NYCIF] News Desk loaded: ${state.returningKeys.size} returning, ${state.moneyKeys.size} money, ${added} supplemental pins.`);
+      scheduleRender();
+    } catch (err) {
+      console.error('[NYCIF] News Desk signals failed:', err);
+    }
+  }
+
   function syncUi() {
     if (els.sortSelect) {
       els.sortSelect.value = state.sort;
+    }
+    if (els.newsDeskToggle) {
+      els.newsDeskToggle.checked = state.newsDeskOn;
+    }
+    if (els.editorsPicks) {
+      els.editorsPicks.value = state.medalFilter;
     }
     document.querySelectorAll('[data-cat]').forEach(input => {
       input.checked = !!state.categories[input.dataset.cat];
@@ -1096,6 +1245,20 @@
 
   function onCategoryFilterChange(input) {
     state.categories[input.dataset.cat] = input.checked;
+    savePrefs();
+    scheduleRender();
+  }
+
+  function onNewsDeskToggle() {
+    state.newsDeskOn = !!els.newsDeskToggle?.checked;
+    savePrefs();
+    scheduleRender();
+  }
+
+  function onEditorsPicksChange() {
+    const v = els.editorsPicks?.value;
+    state.medalFilter = (v === 'gold' || v === 'medaled') ? v : 'all';
+    state.listShown = LIST_PAGE;
     savePrefs();
     scheduleRender();
   }
@@ -1133,6 +1296,7 @@
 
   function enableAllCategories() {
     ALL_CATEGORY_KEYS.forEach(k => { state.categories[k] = true; });
+    state.newsDeskOn = true;
     syncUi();
     savePrefs();
     scheduleRender();
@@ -1140,6 +1304,8 @@
 
   function clearFilters() {
     ALL_CATEGORY_KEYS.forEach(k => { state.categories[k] = false; });
+    state.newsDeskOn = false;
+    state.medalFilter = 'all';
     state.search = '';
     state.borough = 'all';
     state.sort = 'priority';
@@ -1202,6 +1368,8 @@
     els.enableAllBtn?.addEventListener('click', enableAllCategories);
     els.resetFiltersBtn?.addEventListener('click', clearFilters);
     els.retryFeedBtn?.addEventListener('click', () => bootFeeds());
+    els.newsDeskToggle?.addEventListener('change', onNewsDeskToggle);
+    els.editorsPicks?.addEventListener('change', onEditorsPicksChange);
     map.on('moveend', onMapMoveEnd);
   }
 
@@ -1212,6 +1380,8 @@
     buildBoroughs();
     buildDateChips();
     await bootFeeds();
+    // News Desk + Editor's Picks signals load after the core feed (non-blocking).
+    loadNewsDeskSignals();
     window.NYCIF_UNIFIED_VIEWER = {
       version: VERSION,
       getSummary: () => ({
@@ -1230,6 +1400,13 @@
         feedSource: state.feedSource,
         lastGoodLoadAt: state.lastGoodLoadAt,
         selectedDate: selectedDateKey(),
+        newsDeskLoaded: state.newsDeskLoaded,
+        newsDeskCount: state.events.filter(e => e.newsDesk).length,
+        medals: {
+          gold: state.events.filter(e => e.medal === 'gold').length,
+          silver: state.events.filter(e => e.medal === 'silver').length,
+          bronze: state.events.filter(e => e.medal === 'bronze').length
+        },
         timings: state.timings
       })
     };

@@ -101,6 +101,66 @@ body.public-map-page .desk-header p {
   color: #7a6128;
 }
 
+/* Editor's Picks + News Desk filter controls */
+body.public-map-page .editors-block {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 6px;
+  padding: 6px;
+  border-radius: 10px;
+  background: rgba(176, 141, 62, .10);
+  border: 1px solid rgba(176, 141, 62, .22);
+}
+body.public-map-page .newsdesk-check small {
+  display: block;
+  font-size: 8.5px;
+  font-weight: 600;
+  color: #7a6128;
+  opacity: .85;
+}
+body.public-map-page .editors-pick {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #3f3a2f;
+}
+body.public-map-page .editors-pick select {
+  min-height: 26px;
+  border: 1px solid rgba(63, 58, 47, .2);
+  border-radius: 8px;
+  padding: 0 6px;
+  font-size: 10px;
+  background: #fff;
+}
+
+/* Medal badges — markers */
+body.public-map-page .marker .medal {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+  font-size: 11px;
+  line-height: 1;
+}
+body.public-map-page .marker--medal-gold { border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212, 175, 55, .34), 0 10px 22px rgba(0, 0, 0, .25); }
+body.public-map-page .marker--medal-silver { border-color: #9aa0a6; box-shadow: 0 0 0 3px rgba(154, 160, 166, .34), 0 10px 22px rgba(0, 0, 0, .25); }
+body.public-map-page .marker--medal-bronze { border-color: #b08d3e; box-shadow: 0 0 0 3px rgba(176, 141, 62, .30), 0 10px 22px rgba(0, 0, 0, .25); }
+
+/* Medal + News Desk tags — list cards */
+body.public-map-page .item-tag.medal { background: rgba(212, 175, 55, .16); color: #7a5c00 !important; }
+body.public-map-page .item-tag.medal-silver { background: rgba(154, 160, 166, .18); color: #52565b !important; }
+body.public-map-page .item-tag.medal-bronze { background: rgba(176, 141, 62, .16); color: #7a6128 !important; }
+body.public-map-page .item-tag.newsdesk { background: rgba(68, 84, 107, .14); color: #37465e !important; }
+
 body.public-map-page .popup-pending {
   margin-top: 7px;
   padding: 7px 8px;
