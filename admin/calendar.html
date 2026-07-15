@@ -1,1 +1,66 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1020"><title>NYCIF Calendar Blotter</title><link rel="stylesheet" href="./calendar.css?v=calendar-blotter-v01"></head><body><a class="skip-link" href="#calendarMonths">Skip to calendar</a><main class="page-shell"><header class="page-header"><div class="header-copy"><p class="brand">NYC IN FOCUS · PRESS GOD VIEW</p><h1>NYCIF Calendar Blotter</h1><p class="subtitle">Two-month operator view of NYC events, newly added leads, strong assignments, and rows requiring review.</p></div><nav class="top-links" aria-label="Calendar navigation"><a href="./">Admin Dashboard</a><a href="../?v=calendar-blotter-v01&amp;resetFilters=1" target="_blank" rel="noopener noreferrer">Field Desk Map</a><a href="https://nycinfocus.com/map/" target="_blank" rel="noopener noreferrer">Public Map</a></nav></header><section class="safety-notice" aria-label="Read-only notice"><strong>Read-only operator tool.</strong> Review markings are stored only in this browser. They do not change the public map or production feeds.</section><section class="toolbar-panel" aria-label="Calendar controls"><div class="month-navigation"><button id="previousMonths" class="button secondary" type="button" aria-label="Show the previous two-month period">Previous</button><button id="currentMonths" class="button primary" type="button">Current + Next</button><button id="nextMonths" class="button secondary" type="button" aria-label="Show the next two-month period">Next</button></div><div class="data-actions"><button id="refreshData" class="button secondary" type="button">Refresh live data</button></div></section><section class="legend-panel" aria-label="Event status legend"><div class="legend-item"><span class="status-dot status-new" aria-hidden="true"></span><span><strong>Amber</strong> New / unreviewed</span></div><div class="legend-item"><span class="status-dot status-good" aria-hidden="true"></span><span><strong>Green</strong> Good assignment</span></div><div class="legend-item"><span class="status-dot status-review" aria-hidden="true"></span><span><strong>Red</strong> Needs review</span></div><div class="legend-item"><span class="status-dot status-standard" aria-hidden="true"></span><span><strong>Blue</strong> Standard event</span></div></section><section class="status-panel" aria-live="polite" aria-atomic="true"><div id="loadStatus" class="load-status">Loading live event feeds…</div><div id="statusMetrics" class="metrics" hidden></div></section><section class="filters-panel" aria-labelledby="filtersHeading"><div class="section-heading"><div><h2 id="filtersHeading">Filter the blotter</h2><p>Filters update both calendar counts and the selected day.</p></div><button id="clearFilters" class="button text-button" type="button">Clear filters</button></div><div class="filter-grid"><label class="field field-wide"><span>Search</span><input id="searchFilter" type="search" placeholder="Event, location, source, or borough" autocomplete="off"></label><label class="field"><span>Borough</span><select id="boroughFilter"><option value="">All boroughs</option></select></label><label class="field"><span>Status</span><select id="statusFilter"><option value="">All statuses</option><option value="new">New / unreviewed</option><option value="good">Good assignment</option><option value="review">Needs review</option><option value="standard">Standard event</option></select></label><label class="field"><span>Category</span><select id="categoryFilter"><option value="">All categories</option></select></label><label class="toggle-field"><input id="majorOnly" type="checkbox"><span>Major assignments only</span></label><label class="toggle-field"><input id="photoOnly" type="checkbox"><span>Photo picks only</span></label></div><div class="quick-status" aria-label="Quick status filters"><button type="button" data-status-quick="">Show all</button><button type="button" data-status-quick="new">Only new</button><button type="button" data-status-quick="good">Only good assignments</button><button type="button" data-status-quick="review">Only needs review</button></div></section><section id="calendarMonths" class="calendar-layout" aria-label="Two-month event calendar"></section><section class="blotter-panel" aria-labelledby="dailyHeading"><div class="section-heading daily-heading-row"><div><p id="dailyDateLabel" class="eyebrow">Select a date</p><h2 id="dailyHeading">Daily Blotter</h2><p id="dailySummary">Choose a date in either calendar to review its events.</p></div><button id="markAllReviewed" class="button secondary" type="button" disabled>Mark all visible reviewed</button></div><div id="dailyEvents" class="daily-events"><div class="empty-state">Select a date to open the Daily Blotter.</div></div></section><footer class="page-footer">Calendar Blotter v01 · Browser-local review state only · No publishing, geocoding, approval, or feed mutation controls.</footer></main><script src="./calendar.js?v=calendar-blotter-v01" defer></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0b1020">
+<title>NYCIF Assignment Desk Calendar</title>
+<link rel="stylesheet" href="./calendar.css?v=assignment-desk-v02">
+</head>
+<body>
+<a class="skip-link" href="#calendarMonth">Skip to calendar</a>
+<main class="page-shell">
+<header class="page-header">
+  <div>
+    <p class="brand">NYC IN FOCUS · GOD VIEW</p>
+    <h1>Assignment Desk Calendar</h1>
+    <p class="subtitle">Traditional month view for planning photography and reporting assignments across New York City.</p>
+  </div>
+  <nav class="top-links" aria-label="Assignment Desk navigation">
+    <a href="./">God View Admin</a>
+    <a href="../?v=assignment-desk-v02&amp;resetFilters=1" target="_blank" rel="noopener noreferrer">Field Desk Map</a>
+    <a href="https://nycinfocus.com/map/" target="_blank" rel="noopener noreferrer">Public Map</a>
+  </nav>
+</header>
+<section class="safety-notice"><strong>Private assignment-desk view.</strong> Review markings are stored only in this browser. Nothing here changes the public map or production feeds.</section>
+<section class="command-bar" aria-label="Calendar controls">
+  <div class="month-navigation">
+    <button id="previousMonth" type="button">Previous</button>
+    <button id="todayMonth" class="primary" type="button">Today</button>
+    <button id="nextMonth" type="button">Next</button>
+  </div>
+  <div class="month-heading"><h2 id="monthTitle">Loading month…</h2><p id="monthSummary">Loading assignments…</p></div>
+  <button id="refreshData" type="button">Refresh live data</button>
+</section>
+<section class="legend-panel" aria-label="Assignment status legend">
+  <span><i class="dot new"></i><strong>Amber</strong> New</span>
+  <span><i class="dot good"></i><strong>Green</strong> Strong assignment</span>
+  <span><i class="dot review"></i><strong>Red</strong> Needs review</span>
+  <span><i class="dot standard"></i><strong>Blue</strong> Standard</span>
+</section>
+<section class="filters-panel" aria-labelledby="filtersHeading">
+  <div class="section-heading"><div><h2 id="filtersHeading">Assignment filters</h2><p>Filters update both the month and the selected day.</p></div><button id="clearFilters" type="button" class="text-button">Clear filters</button></div>
+  <div class="filter-grid">
+    <label class="field field-wide"><span>Search</span><input id="searchFilter" type="search" placeholder="Event, borough, location, or source"></label>
+    <label class="field"><span>Borough</span><select id="boroughFilter"><option value="">All boroughs</option></select></label>
+    <label class="field"><span>Status</span><select id="statusFilter"><option value="">All statuses</option><option value="new">New</option><option value="good">Strong assignment</option><option value="review">Needs review</option><option value="standard">Standard</option></select></label>
+    <label class="field"><span>Category</span><select id="categoryFilter"><option value="">All categories</option></select></label>
+    <label class="toggle"><input id="majorOnly" type="checkbox"><span>Major assignments only</span></label>
+    <label class="toggle"><input id="photoOnly" type="checkbox"><span>Photo picks only</span></label>
+  </div>
+</section>
+<section class="status-panel" aria-live="polite"><div id="loadStatus">Loading live event feeds…</div><div id="statusMetrics" class="metrics" hidden></div></section>
+<section id="calendarMonth" class="calendar-card" aria-label="Monthly assignment calendar"></section>
+<section class="assignment-panel" aria-labelledby="dayHeading">
+  <div class="section-heading assignment-heading">
+    <div><p id="dayLabel" class="eyebrow">Select a date</p><h2 id="dayHeading">Daily Assignment Desk</h2><p id="daySummary">Choose a date in the month view.</p></div>
+    <button id="markAllReviewed" type="button" disabled>Mark all visible reviewed</button>
+  </div>
+  <div id="dailyEvents" class="daily-events"><div class="empty-state">Select a date to view assignments.</div></div>
+</section>
+<footer>Assignment Desk Calendar v02 · GitHub Pages admin subpage · Browser-local review state only.</footer>
+</main>
+<script src="./calendar.js?v=assignment-desk-v02" defer></script>
+</body>
+</html>
