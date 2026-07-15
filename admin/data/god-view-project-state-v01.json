@@ -1,10 +1,12 @@
 {
   "schema_version": "god-view-project-state-v01",
-  "verified_at_utc": "2026-07-15T17:56:26Z",
+  "verified_at_utc": "2026-07-15T18:24:14Z",
   "verified_against": {
     "field_desk_main_sha": "acb27c958b4aba4b75d229e3170fe7ff256e7b53",
+    "god_view_head_inspected_sha": "4d386631ce91e3fdac5fb41ca01e17b1cfdb6003",
     "live_feeds_main_sha": "65f410ed76c795b2b1301b67badb6ac5869141dc"
   },
+  "recovery_manifest": "./data/god-view-recovery-manifest-v01.json",
   "project": {
     "name": "NYC In Focus",
     "current_stage": "map_v1_completion",
@@ -18,6 +20,7 @@
     "status": "in_review",
     "repository": "setoxxx/nycif-live-feeds",
     "pull_request": 178,
+    "pull_request_state": "open",
     "decision_required": "Merge, request changes, or close after independent review",
     "url": "https://github.com/setoxxx/nycif-live-feeds/pull/178"
   },
@@ -26,9 +29,25 @@
     "status": "queued",
     "repository": "setoxxx/nycif-live-feeds",
     "pull_request": 177,
+    "pull_request_state": "open",
     "decision_required": "Review workflow collisions, freshness inputs, and commit boundaries",
     "url": "https://github.com/setoxxx/nycif-live-feeds/pull/177"
   },
+  "held_pull_requests": [
+    {
+      "repository": "setoxxx/nycif-field-desk",
+      "pull_request": 118,
+      "state": "open",
+      "reason": "Public News Desk and medal-ranking policy are held until one canonical ranking policy is approved."
+    },
+    {
+      "repository": "setoxxx/nycif-field-desk",
+      "pull_request": 106,
+      "state": "open",
+      "mergeable": false,
+      "reason": "All Data Explorer is held until Map v1 is completed and frozen."
+    }
+  ],
   "future_work_lock": {
     "active": true,
     "message": "Newsroom Engine and connector expansion begin only after Map v1 freeze."
@@ -89,6 +108,8 @@
     {"label": "Platform Roadmap", "url": "./platform-roadmap.html"},
     {"label": "Platform Architecture", "url": "./platform-architecture.html"},
     {"label": "Live Feeds Roadmap", "url": "./live-feeds-roadmap.html"},
+    {"label": "Master Source of Truth", "url": "../docs/god-view-master-source-of-truth-v01.md"},
+    {"label": "Master Recovery Prompt", "url": "../docs/god-view-master-recovery-prompt-v01.md"},
     {"label": "Field Desk Repository", "url": "https://github.com/setoxxx/nycif-field-desk"},
     {"label": "Live Feeds Repository", "url": "https://github.com/setoxxx/nycif-live-feeds"}
   ]
