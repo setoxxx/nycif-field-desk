@@ -4,28 +4,29 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-14",
-  "matched_rows": 1672,
-  "mapped_total": 1648,
+  "since_date": "2025-07-15",
+  "matched_rows": 1701,
+  "mapped_total": 1677,
   "needs_review": 24,
-  "rejected": 298328,
+  "rejected": 298299,
   "duplicate_count": 0,
   "subtype_counts": {
-    "cannabis_related_complaint": 1122,
-    "vape_complaint": 526
+    "vape_complaint": 522,
+    "cannabis_related_complaint": 1155
   },
   "match_bucket_counts": {
-    "cannabis_marijuana_weed": 1122,
-    "vape_electronic_cigarette": 526
+    "vape_electronic_cigarette": 522,
+    "cannabis_marijuana_weed": 1155
   },
   "complaint_type_counts": {
-    "Obstruction": 541,
-    "Cannabis Retailer": 305,
-    "Smoking or Vaping": 480,
-    "Maintenance or Facility": 252,
+    "Smoking or Vaping": 478,
+    "Obstruction": 568,
+    "Cannabis Retailer": 303,
+    "Maintenance or Facility": 259,
+    "Consumer Complaint": 44,
+    "Overgrown Tree/Branches": 1,
     "Drug Activity": 1,
     "Noise - Street/Sidewalk": 8,
-    "Consumer Complaint": 46,
     "Damaged Tree": 2,
     "Root/Sewer/Sidewalk Condition": 1,
     "Water Conservation": 2,
@@ -38,19 +39,20 @@
     "Illegal Parking": 1
   },
   "descriptor_counts": {
-    "Weeds or Grass": 540,
-    "Unlicensed": 112,
-    "Sales to Minors Under 21": 128,
-    "Allowed in Smoke Free Area": 475,
-    "Grass/Weeds": 252,
-    "Suspicious Activity": 28,
+    "Allowed in Smoke Free Area": 472,
+    "Weeds or Grass": 567,
+    "Unlicensed": 114,
+    "Grass/Weeds": 259,
+    "Sign Inadequate": 4,
+    "Smoking, Cigar, or Vape Store": 12,
+    "Hitting Phone/Cable Lines": 1,
+    "Sales to Minors Under 21": 126,
+    "Suspicious Activity": 26,
     "Too Close to a School": 16,
     "Use Indoor": 1,
     "Loud Talking": 2,
-    "E-Cigarette Sales": 33,
-    "Smoking, Cigar, or Vape Store": 13,
+    "E-Cigarette Sales": 32,
     "Workplace Policy Not Provided or Inadequate": 1,
-    "Sign Inadequate": 3,
     "Product Concerns": 12,
     "Loud Music/Party": 8,
     "Branch or Limb Has Fallen Down": 2,
@@ -75,9 +77,9 @@
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298328
+      "count": 298299
     }
   ],
-  "generated_at": "2026-07-14T11:52:33.237Z",
+  "generated_at": "2026-07-15T11:53:50.832Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }

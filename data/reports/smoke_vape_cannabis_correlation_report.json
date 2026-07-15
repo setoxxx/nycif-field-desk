@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1648,
-  "usable_complaints": 1648,
+  "source_complaints": 1677,
+  "usable_complaints": 1677,
   "source_dispensaries": 247,
   "source_retailers": 4882,
   "correlation_locations": 5129,
-  "output_locations": 183,
-  "low_signal_excluded": 4946,
+  "output_locations": 180,
+  "low_signal_excluded": 4949,
   "radius_feet": [
     100,
     250,
@@ -22,20 +22,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 159,
+    "licensed_smoke_vape_retailer": 156,
     "legal_cannabis_dispensary": 24
   },
   "borough_counts": {
     "Bronx": 35,
     "Queens": 33,
-    "Manhattan": 57,
+    "Manhattan": 52,
     "Brooklyn": 55,
-    "Staten Island": 3
+    "Staten Island": 5
   },
   "signal_tier_counts": {
     "very_high": 2,
-    "high": 17,
-    "moderate": 164
+    "high": 20,
+    "moderate": 158
   },
   "top_locations_sample": [
     {
@@ -204,26 +204,37 @@
       "last_complaint_date": "2026-06-24"
     },
     {
-      "title": "GOGA 176 INC",
+      "title": "FREEDOM NEWS I, INC.",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "176 GRAND ST, BROOKLYN, 11211",
-      "borough": "Brooklyn",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
       "signal_score": 21,
       "signal_tier": "high",
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-03"
+      "last_complaint_date": "2026-07-13"
     },
     {
-      "title": "GOGA 176 INC",
+      "title": "FREEDOM NEWS I, INC.",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "176 GRAND ST, BROOKLYN, 11211",
-      "borough": "Brooklyn",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
       "signal_score": 21,
       "signal_tier": "high",
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-03"
+      "last_complaint_date": "2026-07-13"
+    },
+    {
+      "title": "JAY NEWSSTAND",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "71 AVENUE, Forest Hills, 11375",
+      "borough": "Queens",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-13"
     },
     {
       "title": "OLYMPIA ORGANIC DELI INC.",
@@ -235,6 +246,28 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-11"
+    },
+    {
+      "title": "SUNAC NATURAL",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-13"
+    },
+    {
+      "title": "SUNAC NATURAL",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-13"
     },
     {
       "title": "UNION DELI GROCERY 1 INC",
@@ -279,41 +312,8 @@
       "complaints_365d_100ft": 1,
       "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-07-06"
-    },
-    {
-      "title": "CIGAR VAPE INC I",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "452 5 AVENUE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 13,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
-    },
-    {
-      "title": "CIGAR VAPE INC I",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "452 5 AVENUE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 13,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
-    },
-    {
-      "title": "BLAZINUP, LLC",
-      "location_kind": "legal_cannabis_dispensary",
-      "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
-      "borough": "Manhattan",
-      "signal_score": 12,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 1,
-      "last_complaint_date": "2026-07-12"
     }
   ],
-  "generated_at": "2026-07-14T11:52:33.643Z",
+  "generated_at": "2026-07-15T11:53:53.810Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
