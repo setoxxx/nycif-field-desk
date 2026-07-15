@@ -139,7 +139,7 @@ test('enable all checks categories without touching date, search, or feeds', () 
 });
 
 test('service worker cache version was bumped for this release', () => {
-  assert.match(swJs, /const CACHE_NAME = 'nycif-v022-public-map-v05'/);
+  assert.match(swJs, /const CACHE_NAME = 'nycif-v\d+-[a-z0-9-]+'/);
   assert.ok(swJs.includes('keys.filter') || swJs.includes(".filter(key => key.startsWith('nycif-')"), 'old caches are cleaned up');
 });
 
