@@ -18,18 +18,19 @@
     if (value !== undefined) element.textContent = text(value);
     return element;
   };
-  const isStale = (verifiedAt, now = Date.now()) => {
-    const parsed = Date.parse(verifiedAt);
-    return !Number.isFinite(parsed) || now - parsed > STALE_AFTER_MS;
+  const verifiedDateFormatter = new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'America/New_York'
+  });
+  const verifiedDate = value => new Date(value);
+  const isStale = verifiedAt => {
+    const timestamp = verifiedDate(verifiedAt).getTime();
+    return !Number.isFinite(timestamp) || Date.now() - timestamp > STALE_AFTER_MS;
   };
   const formatVerified = verifiedAt => {
-    const parsed = Date.parse(verifiedAt);
-    if (!Number.isFinite(parsed)) return 'Unknown';
-    return new Intl.DateTimeFormat('en-US', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-      timeZone: 'America/New_York'
-    }).format(parsed);
+    const date = verifiedDate(verifiedAt);
+    return Number.isNaN(date.getTime()) ? 'Unknown' : verifiedDateFormatter.format(date);
   };
   const card = (label, value, detail, tone = '') => {
     const element = node('article', `stat recovery-stat ${tone}`.trim());
