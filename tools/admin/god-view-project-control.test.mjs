@@ -6,6 +6,7 @@ const html = fs.readFileSync(new URL('../../admin/index.html', import.meta.url),
 const projectScript = fs.readFileSync(new URL('../../admin/god-view-project-control-v01.js', import.meta.url), 'utf8');
 const recoveryScript = fs.readFileSync(new URL('../../admin/god-view-recovery-v01.js', import.meta.url), 'utf8');
 const legacyScript = fs.readFileSync(new URL('../../admin/legacy-admin-data-v01.js', import.meta.url), 'utf8');
+const livePipelineScript = fs.readFileSync(new URL('../../admin/live-pipeline-panel-v01.js', import.meta.url), 'utf8');
 const state = JSON.parse(fs.readFileSync(new URL('../../admin/data/god-view-project-state-v01.json', import.meta.url), 'utf8'));
 const recovery = JSON.parse(fs.readFileSync(new URL('../../admin/data/god-view-recovery-manifest-v01.json', import.meta.url), 'utf8'));
 const sourceGuide = fs.readFileSync(new URL('../../docs/god-view-master-source-of-truth-v01.md', import.meta.url), 'utf8');
@@ -27,6 +28,8 @@ test('God View preserves source governance and historical diagnostics', () => {
   assert.match(html, /id="live-pipeline-section"/);
   assert.match(html, /id="project-status"/);
   assert.match(html, /id="xri"/);
+  assert.match(livePipelineScript, /Technical Diagnostics and Historical Reference/);
+  assert.doesNotMatch(livePipelineScript, /Legacy \/ Local Snapshot Reference/);
 });
 
 test('project state records the verified Map v1 gates and recovery source', () => {
