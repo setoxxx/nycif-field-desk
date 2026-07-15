@@ -4,7 +4,7 @@
     if (!nav || nav.querySelector('[data-calendar-blotter-link]')) return;
     const link = document.createElement('a');
     link.href = './calendar.html';
-    link.textContent = '📅 Calendar Blotter';
+    link.textContent = '📅 Assignment Desk Calendar';
     link.dataset.calendarBlotterLink = 'true';
     link.style.color = '#fde68a';
     link.style.borderColor = 'rgba(251,191,36,.55)';
@@ -20,7 +20,7 @@
   original.async = false;
   original.onerror = () => {
     const status = document.getElementById('live-pipeline-status');
-    if (status) status.textContent = 'Live pipeline panel could not load. Calendar Blotter remains available.';
+    if (status) status.textContent = 'Live pipeline panel could not load. Assignment Desk Calendar remains available.';
   };
   document.head.append(original);
 })();
