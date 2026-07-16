@@ -110,6 +110,21 @@ test('index.html exposes the public News Desk toggle and Editor’s Picks contro
   assert.ok(indexHtml.indexOf('news-desk-editors-picks-v01.js') < indexHtml.indexOf('app-schema-v1-major-all-v01.js'));
 });
 
+test('marquee types (FIFA / festival / parade / feast) medal and reach News Desk', () => {
+  assert.equal(ED.isMarquee('FIFA House Installation'), true);
+  assert.equal(ED.isMarquee('Feast of Our Lady of Mount Carmel'), true);
+  assert.equal(ED.isMarquee('Puerto Rican Day Parade'), true);
+  assert.equal(ED.isMarquee('Summer Festival'), true);
+  assert.equal(ED.isMarquee('Adult Softball League'), false);
+  // A marquee event earns a medal even with no money/viral history.
+  assert.ok(ED.medalOf(ED.editorialScore({ marquee: true, isMajor: true })) !== '');
+});
+
+test('app treats marquee + medaled events as News Desk', () => {
+  assert.match(appJs, /e\.marquee \|\| !!e\.medal/);
+  assert.match(appJs, /marqueeText/);
+});
+
 test('app wires medals into filtering and rendering', () => {
   assert.match(appJs, /medalMatch/);
   assert.match(appJs, /state\.newsDeskOn/);
