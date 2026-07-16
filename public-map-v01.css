@@ -571,3 +571,27 @@ body.public-map-page .item-tag.ended {
   background: rgba(107, 114, 128, .16);
   color: #4b5563 !important;
 }
+
+/* Category filters with no loaded events read as "not ready yet" — grayed and
+   non-interactive, with a live count on the lanes that do have data. */
+body.public-map-page .layers-panel .check.check--empty {
+  opacity: .45;
+  cursor: not-allowed;
+}
+body.public-map-page .layers-panel .check.check--empty input {
+  cursor: not-allowed;
+}
+body.public-map-page .layers-panel .check .check-count {
+  margin-left: auto;
+  padding-left: 8px;
+  font-size: 11px;
+  color: #9aa0a6;
+  font-variant-numeric: tabular-nums;
+}
+body.public-map-page .layers-panel .check.check--empty .check-count {
+  font-style: italic;
+}
+body.public-map-page .layers-panel .check {
+  display: flex;
+  align-items: center;
+}

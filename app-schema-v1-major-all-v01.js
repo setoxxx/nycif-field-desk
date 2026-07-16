@@ -88,6 +88,45 @@
     });
   }
   const ALL_CATEGORY_KEYS = Object.keys(CATEGORY_META);
+  // Event-specific emoji: pick a glyph that looks like what the event IS
+  // ("food looks like food") from the title/tags, falling back to the category
+  // emoji. First match wins, so put specific patterns before generic ones.
+  const EVENT_EMOJI_RULES = [
+    [/\bfeast\b|giglio|san gennaro/i, '🍝'],
+    [/food|culinary|taste of|restaurant|eats|foodie|chili|pizza|bbq|barbecue|cook ?out|grill/i, '🍽️'],
+    [/farmers? market|greenmarket|green market|produce|harvest/i, '🥕'],
+    [/night market|bazaar|flea|vendor|sidewalk sale|craft fair|makers/i, '🛍️'],
+    [/wine|beer|brew|cocktail|spirits/i, '🍷'],
+    [/ice cream|dessert|sweet|bake/i, '🍦'],
+    [/coffee/i, '☕'],
+    [/parade/i, '🎊'],
+    [/carnival|mardi gras/i, '🎡'],
+    [/fireworks/i, '🎆'],
+    [/marathon|\b\d+ ?k\b|road race|run\b|running|jog|triathlon|duathlon|cycl|bike ride|criterium/i, '🏃'],
+    [/yoga|zumba|pilates|fitness|workout|aerobic|bootcamp|tai chi|wellness/i, '🧘'],
+    [/concert|music|jazz|band|dj\b|symphony|orchestra|hip ?hop|salsa|reggae|summerstage/i, '🎵'],
+    [/danc(e|ing)/i, '💃'],
+    [/theater|theatre|play\b|shakespeare|drama/i, '🎭'],
+    [/film|movie|cinema|screening|shoot|production|red carpet/i, '🎬'],
+    [/art|gallery|exhibit|mural|paint|sculpture/i, '🎨'],
+    [/book|story ?time|read|poetry|author|literary/i, '📖'],
+    [/religious|church|mass|procession|prayer|vigil|worship|faith/i, '⛪'],
+    [/health|clinic|screening|vaccine|medical|blood drive|wellness fair/i, '🏥'],
+    [/block party|street festival|festival|fair\b|fest\b|celebration|party/i, '🎉'],
+    [/rally|march|protest|demonstration|vigil/i, '✊'],
+    [/clean ?-?up|garden|tree|nature|environment|compost|recycl/i, '🌳'],
+    [/kids|children|youth|family|playground/i, '🧒'],
+    [/job|career|hiring|workforce/i, '💼'],
+    [/soccer|football|basketball|baseball|softball|tennis|hockey|volleyball|cricket|sport/i, '⚽'],
+    [/beach|boardwalk|pool|swim/i, '🏖️'],
+  ];
+  function eventEmoji(title, tags, categoryKey) {
+    const hay = `${title || ''} ${(tags || []).join(' ')}`;
+    for (const [re, glyph] of EVENT_EMOJI_RULES) {
+      if (re.test(hay)) return glyph;
+    }
+    return (CATEGORY_META[categoryKey] || CATEGORY_META.general).emoji;
+  }
   const BOROUGHS = ['All', 'Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'];
   const debug = (() => {
     try { return new URL(location.href).searchParams.get('debugMap') === '1'; }
@@ -334,6 +373,7 @@
       })(),
       categoryKey: catKey,
       categoryMeta: CATEGORY_META[catKey],
+      displayEmoji: eventEmoji(title, tags, catKey),
       interests,
       tags,
       event_role: schemaEvent.event_role || 'public_event',
@@ -675,7 +715,7 @@
     root.className = 'popup-card';
 
     const cat = appendText(root, 'div', '', 'popup-category');
-    appendText(cat, 'span', e.categoryMeta.emoji);
+    appendText(cat, 'span', e.displayEmoji);
     cat.appendChild(document.createTextNode(` ${e.categoryMeta.label}`));
     appendText(root, 'h2', e.title);
     const dl = document.createElement('dl');
@@ -735,7 +775,7 @@
       const root = marker.getElement();
       const emoji = root?.querySelector('.emoji');
       if (emoji) {
-        emoji.textContent = e.categoryMeta.emoji;
+        emoji.textContent = e.displayEmoji;
       }
       const medal = root?.querySelector('.medal');
       if (medal && medalEmoji) {
@@ -812,7 +852,7 @@
 
     const top = document.createElement('span');
     top.className = 'item-top';
-    appendText(top, 'span', `${e.categoryMeta.emoji} ${e.categoryMeta.label}`, 'item-source');
+    appendText(top, 'span', `${e.displayEmoji} ${e.categoryMeta.label}`, 'item-source');
     const tags = document.createElement('span');
     tags.className = 'item-tags';
     if (e.isPast) {
@@ -879,9 +919,40 @@
     return `No events found for ${friendlyDateLabel(selectedDateKey())} yet. Try another day or check back soon.`;
   }
 
+  // Gray out category filters that have no events in the loaded set ("not ready
+  // yet"), and show a live count on the ones that do. Recomputes only when the
+  // loaded event count changes, so it is cheap across renders.
+  let _catAvailAt = -1;
+  function updateCategoryAvailability() {
+    if (_catAvailAt === state.events.length) return;
+    _catAvailAt = state.events.length;
+    const counts = {};
+    for (const e of state.events) {
+      counts[e.categoryKey] = (counts[e.categoryKey] || 0) + 1;
+    }
+    document.querySelectorAll('[data-cat]').forEach(input => {
+      const key = input.getAttribute('data-cat');
+      const n = counts[key] || 0;
+      const label = input.closest('.check');
+      if (label) {
+        label.classList.toggle('check--empty', n === 0);
+        let badge = label.querySelector('.check-count');
+        if (!badge) {
+          badge = document.createElement('small');
+          badge.className = 'check-count';
+          label.appendChild(badge);
+        }
+        badge.textContent = n === 0 ? 'not ready' : n.toLocaleString();
+      }
+      // Empty lanes are non-interactive; enabling one would just show nothing.
+      input.disabled = n === 0;
+    });
+  }
+
   function render() {
     const t0 = performance.now();
     updateIndexLabel();
+    updateCategoryAvailability();
     const visible = state.events.filter(eventMatches).sort(sortEvents);
     const drawn = renderMarkers(visible);
     const shown = Math.min(state.listShown, visible.length);
