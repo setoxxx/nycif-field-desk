@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-v024-news-desk-medals-v01';
+const CACHE_NAME = 'nycif-v025-multiday-span-v01';
 const APP_SHELL = [
   './',
   './index.html',
