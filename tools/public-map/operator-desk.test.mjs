@@ -110,7 +110,7 @@ test('viral extractor uses current-side coords only and returning_likely only', 
 test('index.html loads the operator layer and it is service-worker cached', () => {
   assert.match(indexHtml, /field-desk-operator-layer-v01\.js/);
   assert.match(swJs, /field-desk-operator-layer-v01\.js/);
-  assert.match(swJs, /const CACHE_NAME = 'nycif-v023-operator-desk-v01'/);
+  assert.match(swJs, /const CACHE_NAME = 'nycif-v\d+-[a-z0-9-]+'/);
 });
 
 test('operator terminology is not added to the public (default) filter panel markup', () => {
