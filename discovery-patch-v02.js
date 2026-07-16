@@ -84,7 +84,8 @@
       services: { emoji: '🤝', label: 'Health / benefits' },
       jobs: { emoji: '💼', label: 'Jobs / career' },
       housing: { emoji: '🏠', label: 'Housing / tenant help' },
-      environment: { emoji: '🌎', label: 'Environment / nature' }
+      environment: { emoji: '🌎', label: 'Environment / nature' },
+      media: { emoji: '🎬', label: 'Film / production' }
     }
   };
 
