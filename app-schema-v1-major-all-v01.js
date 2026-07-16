@@ -346,6 +346,7 @@
         nycif.major_reason,
         schemaEvent.event_role
       ].filter(Boolean).join(' ')),
+      marqueeText: norm([title, nycif.event_type, nycif.major_reason, nycif.classification_reason].filter(Boolean).join(' ')),
       marker: null
     };
     e.priority = Number(e.major_score || 0) + (e.isMajor ? 500 : 0) + (e.photoPick ? 120 : 0);
@@ -359,15 +360,20 @@
   function applyEditorial(e) {
     const key = ED.sourceKey(e);
     e.returning = state.returningKeys.has(key);
-    e.newsDesk = e.returning || state.moneyKeys.has(key) || e.kind === 'money' || e.kind === 'viral';
+    e.marquee = typeof ED.isMarquee === 'function' && ED.isMarquee(e.marqueeText);
+    const money = state.moneyKeys.has(key) || e.kind === 'money';
     e.editorialScore = ED.editorialScore({
       isMajor: e.isMajor,
       crowdScore: e.crowdScore,
       photoPick: e.photoPick,
       returning: e.returning,
+      marquee: e.marquee,
       moneyScore: state.moneyScoreByKey.get(key) || (e.kind === 'money' ? e.major_score : 0)
     });
     e.medal = ED.medalOf(e.editorialScore);
+    // News Desk = the curated standouts: money shots, viral magnets, marquee
+    // types (FIFA/festival/parade/feast), and anything that earned a medal.
+    e.newsDesk = e.returning || money || e.kind === 'viral' || e.marquee || !!e.medal;
     return e;
   }
 
@@ -1252,6 +1258,7 @@
           kind: r.kind,
           nycif: { coordinate_status: 'map_ready', display_disposition: 'standalone_public_event' },
           searchText: norm([r.title, r.location, r.borough, catKey, 'news desk'].filter(Boolean).join(' ')),
+          marqueeText: norm(r.title || ''),
           priority: r.majorScore + 500,
           marker: null
         };

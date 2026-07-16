@@ -28,7 +28,8 @@
     crowd: 1,       // per point of expected_crowd_score (bigger crowd = better)
     photo: 120,     // photogenic / photo_pick
     returning: 200, // proven past presence (returning_likely from viral memory)
-    moneyCap: 250   // money-day assignment_score contribution, capped
+    moneyCap: 250,  // money-day assignment_score contribution, capped
+    marquee: 200    // marquee type (FIFA / World Cup / festival / parade / feast)
   };
   // Pyramid: gold needs past presence PLUS another standout (money/crowd/photo/
   // major), so returning-alone lands at silver and gold stays the true cream.
@@ -52,8 +53,16 @@
     score += num(s.crowdScore) * WEIGHTS.crowd;
     if (s.photoPick) score += WEIGHTS.photo;
     if (s.returning) score += WEIGHTS.returning;
+    if (s.marquee) score += WEIGHTS.marquee;
     score += Math.min(num(s.moneyScore), WEIGHTS.moneyCap);
     return score;
+  }
+
+  // Marquee event types a photographer wants on the News Desk even without
+  // money/viral history: FIFA / World Cup, festivals, parades, feasts, fairs.
+  const MARQUEE_RE = /\bfifa\b|world cup|\bfeast\b|festival|\bparade\b|carnival|giglio|street fair|san gennaro|fan (?:fest|zone)|marathon/i;
+  function isMarquee(text) {
+    return MARQUEE_RE.test(String(text || ''));
   }
 
   function medalOf(score) {
@@ -153,6 +162,7 @@
     MEDAL_META,
     editorialScore,
     medalOf,
+    isMarquee,
     sourceKey,
     certifiedNycCoord,
     extractReturningKeys,
