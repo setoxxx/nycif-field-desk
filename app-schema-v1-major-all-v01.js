@@ -70,6 +70,7 @@
     arts: { emoji: '🎭', label: 'Arts / culture' },
     market: { emoji: '🛍️', label: 'Markets / fairs' },
     civic: { emoji: '📣', label: 'Civic / neighborhood' },
+    media: { emoji: '🎬', label: 'Film / production' },
     government: { emoji: '🏛️', label: 'Government / meetings' },
     education: { emoji: '📚', label: 'Classes / workshops' },
     family: { emoji: '👨‍👩‍👧', label: 'Kids / family' },
@@ -320,6 +321,17 @@
       dateKey: startDay,
       startDay,
       endDay: eventEndDay(schemaEvent, startDay),
+      // Past = the event's end time has already elapsed (wall clock). Computed
+      // live against the viewer's current moment so an event that ended earlier
+      // today grays out too ("what's happening now" reads at a glance), not just
+      // events on prior days. Falls back to end-of-day when only a date exists.
+      isPast: (() => {
+        const raw = schemaEvent.end_date_time || schemaEvent.start_date_time || '';
+        if (!raw) return false;
+        const hasTime = /T\d{2}:\d{2}/.test(raw);
+        const when = new Date(hasTime ? raw : `${String(raw).slice(0, 10)}T23:59:59`);
+        return !Number.isNaN(when.getTime()) && when.getTime() < Date.now();
+      })(),
       categoryKey: catKey,
       categoryMeta: CATEGORY_META[catKey],
       interests,
@@ -694,6 +706,9 @@
 
   function makeMarker(e) {
     const cls = ['marker', `marker--${e.categoryKey}`];
+    if (e.isPast) {
+      cls.push('marker--past');
+    }
     if (e.photoPick) {
       cls.push('marker--photo');
     }
@@ -792,7 +807,7 @@
   function buildListCard(e) {
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'event-item';
+    button.className = e.isPast ? 'event-item event-item--past' : 'event-item';
     button.dataset.id = e.id;
 
     const top = document.createElement('span');
@@ -800,6 +815,9 @@
     appendText(top, 'span', `${e.categoryMeta.emoji} ${e.categoryMeta.label}`, 'item-source');
     const tags = document.createElement('span');
     tags.className = 'item-tags';
+    if (e.isPast) {
+      appendText(tags, 'span', '✓ Ended', 'item-tag ended');
+    }
     if (e.medal && ED.MEDAL_META[e.medal]) {
       appendText(tags, 'span', `${ED.MEDAL_META[e.medal].emoji} ${ED.MEDAL_META[e.medal].label}`, `item-tag medal medal-${e.medal}`);
     }

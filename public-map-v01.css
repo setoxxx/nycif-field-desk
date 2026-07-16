@@ -549,3 +549,25 @@ body.public-map-page .nycif-event-popup .leaflet-popup-close-button {
     font-size: 17px;
   }
 }
+
+/* Past events (ended before today) are de-emphasized so "what's happening now"
+   reads at a glance — still visible and clickable, just grayed. */
+body.public-map-page .marker.marker--past {
+  filter: grayscale(1);
+  opacity: .5;
+}
+body.public-map-page .marker.marker--past.marker--major,
+body.public-map-page .marker.marker--past[class*="marker--medal-"] {
+  opacity: .6; /* keep faded majors/medals a touch more legible */
+}
+body.public-map-page .event-item.event-item--past {
+  opacity: .62;
+}
+body.public-map-page .event-item.event-item--past strong {
+  font-weight: 600;
+  color: #6b7280;
+}
+body.public-map-page .item-tag.ended {
+  background: rgba(107, 114, 128, .16);
+  color: #4b5563 !important;
+}
