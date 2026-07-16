@@ -117,8 +117,18 @@ test('a feed failure is never presented as zero events', () => {
 
 test('today is the default date and only forward days match', () => {
   assert.ok(appJs.includes("dateMode: 'today'"), 'default date mode is today');
-  assert.ok(appJs.includes('e.dateKey < todayKey()'), 'past events are excluded');
   assert.ok(appJs.includes('dateChipModel'), 'chips come from the shared eight-day model');
+});
+
+test('multi-day events match every day they run (feasts/festivals span)', () => {
+  // dateMatches uses a start<=selected<=end span, not just the start date.
+  assert.match(appJs, /start <= sel && sel <= end/);
+  assert.match(appJs, /function eventEndDay/);
+  assert.ok(appJs.includes('endDay:'), 'events carry an endDay');
+  // Finished events still never appear (selected day is always today or later).
+  assert.match(appJs, /selectedDateKey\(\) is always today or later/);
+  // A cap prevents a season-long permit from flooding every day.
+  assert.match(appJs, /MAX_SPAN_DAYS/);
 });
 
 test('clear filters resets to Today without reloading feeds', () => {

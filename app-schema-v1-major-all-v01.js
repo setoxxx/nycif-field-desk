@@ -281,6 +281,21 @@
     return '';
   }
 
+  // The last day a multi-day event (feast / festival / installation) runs, so
+  // it shows on EVERY day it is active — not only its start date. Absurdly long
+  // spans (season-long permits) are capped so they don't flood every day.
+  const MAX_SPAN_DAYS = 21;
+  function eventEndDay(row, startDay) {
+    if (!startDay) return startDay || '';
+    const raw = /^(\d{4}-\d{2}-\d{2})/.exec(String(row.end_date_time || ''));
+    const endDay = raw ? SCHEMA.validCalendarDate(raw[1]) : '';
+    if (!endDay || endDay <= startDay) {
+      return startDay;
+    }
+    const cap = dateKey(addDays(new Date(`${startDay}T12:00:00`), MAX_SPAN_DAYS));
+    return endDay > cap ? cap : endDay;
+  }
+
   function toUiEvent(schemaEvent) {
     const nycif = schemaEvent.nycif || {};
     const catKey = CATEGORY_META[schemaEvent.category] ? schemaEvent.category : 'general';
@@ -297,11 +312,14 @@
     const tags = Array.isArray(schemaEvent.tags)
       ? schemaEvent.tags.map(v => String(v || '')).filter(Boolean)
       : [];
+    const startDay = eventDate(schemaEvent);
     const e = {
       ...schemaEvent,
       lat: schemaEvent.latitude,
       lng: schemaEvent.longitude,
-      dateKey: eventDate(schemaEvent),
+      dateKey: startDay,
+      startDay,
+      endDay: eventEndDay(schemaEvent, startDay),
       categoryKey: catKey,
       categoryMeta: CATEGORY_META[catKey],
       interests,
@@ -497,14 +515,16 @@
   }
 
   function dateMatches(e) {
-    if (!e.dateKey) {
+    const start = e.startDay || e.dateKey;
+    if (!start) {
       return false;
     }
-    // Historical events never appear in the public view.
-    if (e.dateKey < todayKey()) {
-      return false;
-    }
-    return e.dateKey === selectedDateKey();
+    const end = e.endDay || start;
+    const sel = selectedDateKey();
+    // Multi-day events (feasts, festivals, installations) show on every day
+    // they run. selectedDateKey() is always today or later, so a finished
+    // event (end < today) can never match — no historical events appear.
+    return start <= sel && sel <= end;
   }
 
   function sourceMatches(e) {
@@ -616,6 +636,22 @@
     return key;
   }
 
+  const shortDate = key => (SCHEMA.validCalendarDate(key)
+    ? `${key.slice(5, 7)}/${key.slice(8, 10)}/${key.slice(2, 4)}`
+    : '');
+  // "07/16/26" for a single day, "07/16 – 07/19" for a multi-day run.
+  function formatDateSpan(e) {
+    const start = e.startDay || e.dateKey;
+    if (!SCHEMA.validCalendarDate(start)) {
+      return 'Date unavailable';
+    }
+    const end = e.endDay || start;
+    if (SCHEMA.validCalendarDate(end) && end > start) {
+      return `${start.slice(5, 7)}/${start.slice(8, 10)} – ${end.slice(5, 7)}/${end.slice(8, 10)}`;
+    }
+    return shortDate(start);
+  }
+
   function popupRoot(e) {
     const root = document.createElement('article');
     root.className = 'popup-card';
@@ -634,10 +670,7 @@
       appendText(wrap, 'dd', dd);
       dl.appendChild(wrap);
     };
-    const displayDate = SCHEMA.validCalendarDate(e.dateKey)
-      ? `${e.dateKey.slice(5, 7)}/${e.dateKey.slice(8, 10)}/${e.dateKey.slice(2, 4)}`
-      : 'Date unavailable';
-    addRow('Date', displayDate);
+    addRow('Date', formatDateSpan(e));
     addRow('Borough', e.borough);
     addRow('Location', e.location);
     root.appendChild(dl);
@@ -767,6 +800,9 @@
     if (e.newsDesk) {
       appendText(tags, 'span', '📰 News Desk', 'item-tag newsdesk');
     }
+    if (e.endDay && e.startDay && e.endDay > e.startDay) {
+      appendText(tags, 'span', '📅 Multi-day', 'item-tag multiday');
+    }
     if (e.isMajor && !e.medal) {
       appendText(tags, 'span', '⭐ Featured', 'item-tag featured');
     }
@@ -780,7 +816,7 @@
     top.appendChild(tags);
     button.appendChild(top);
     appendText(button, 'strong', e.title);
-    appendText(button, 'span', e.dateKey || 'Date unavailable');
+    appendText(button, 'span', formatDateSpan(e));
     appendText(button, 'small', [e.borough, e.location].filter(Boolean).join(' • '));
     if (e.mapReady) {
       const actions = document.createElement('span');
@@ -1028,11 +1064,11 @@
     }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 15000 });
   }
 
-  function pageOverlapsWindow(page, today, end) {
+  function pageOverlapsWindow(page, start, end) {
     if (!page.earliest_date || !page.latest_date) {
       return true;
     }
-    return page.latest_date >= today && page.earliest_date <= end;
+    return page.latest_date >= start && page.earliest_date <= end;
   }
 
   async function loadLayerPages(layer, manifest, token) {
@@ -1040,8 +1076,12 @@
       return;
     }
     const { today, end } = dayRange();
-    // Only pages that overlap the public eight-day window are downloaded.
-    const windowPages = [...manifest.pages].filter(page => pageOverlapsWindow(page, today, end));
+    // Look back one span-length so multi-day events (feasts, festivals) that
+    // started before today but are still running are still downloaded — their
+    // manifest page is dated by start, not by end. dateMatches still hides
+    // anything already finished, so no past events are shown.
+    const lookbackStart = dateKey(addDays(new Date(), -MAX_SPAN_DAYS));
+    const windowPages = [...manifest.pages].filter(page => pageOverlapsWindow(page, lookbackStart, end));
     state.pagesTotal[layer] = windowPages.length;
     const urlFor = FEEDS.approvedPage;
     for (const page of windowPages) {
@@ -1192,6 +1232,8 @@
           borough: r.borough,
           location: r.location,
           dateKey: SCHEMA.validCalendarDate(r.date) || '',
+          startDay: SCHEMA.validCalendarDate(r.date) || '',
+          endDay: eventEndDay(r, SCHEMA.validCalendarDate(r.date) || ''),
           start_date_time: r.start_date_time,
           end_date_time: r.end_date_time,
           categoryKey: catKey,
