@@ -4,26 +4,26 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-15",
-  "matched_rows": 1701,
-  "mapped_total": 1677,
-  "needs_review": 24,
-  "rejected": 298299,
+  "since_date": "2025-07-16",
+  "matched_rows": 1732,
+  "mapped_total": 1706,
+  "needs_review": 26,
+  "rejected": 298268,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 522,
-    "cannabis_related_complaint": 1155
+    "vape_complaint": 521,
+    "cannabis_related_complaint": 1185
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 522,
-    "cannabis_marijuana_weed": 1155
+    "vape_electronic_cigarette": 521,
+    "cannabis_marijuana_weed": 1185
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 478,
-    "Obstruction": 568,
-    "Cannabis Retailer": 303,
-    "Maintenance or Facility": 259,
-    "Consumer Complaint": 44,
+    "Smoking or Vaping": 474,
+    "Cannabis Retailer": 309,
+    "Consumer Complaint": 47,
+    "Maintenance or Facility": 275,
+    "Obstruction": 577,
     "Overgrown Tree/Branches": 1,
     "Drug Activity": 1,
     "Noise - Street/Sidewalk": 8,
@@ -35,23 +35,22 @@
     "Blocked Driveway": 1,
     "Noise - Commercial": 1,
     "Street Condition": 3,
-    "Noise - Residential": 2,
-    "Illegal Parking": 1
+    "Noise - Residential": 2
   },
   "descriptor_counts": {
-    "Allowed in Smoke Free Area": 472,
-    "Weeds or Grass": 567,
-    "Unlicensed": 114,
-    "Grass/Weeds": 259,
-    "Sign Inadequate": 4,
-    "Smoking, Cigar, or Vape Store": 12,
-    "Hitting Phone/Cable Lines": 1,
-    "Sales to Minors Under 21": 126,
-    "Suspicious Activity": 26,
+    "Allowed in Smoke Free Area": 467,
+    "Unlicensed": 118,
+    "E-Cigarette Sales": 34,
+    "Grass/Weeds": 275,
     "Too Close to a School": 16,
+    "Sales to Minors Under 21": 127,
+    "Smoking, Cigar, or Vape Store": 13,
+    "Weeds or Grass": 576,
+    "Sign Inadequate": 5,
+    "Suspicious Activity": 27,
+    "Hitting Phone/Cable Lines": 1,
     "Use Indoor": 1,
     "Loud Talking": 2,
-    "E-Cigarette Sales": 32,
     "Workplace Policy Not Provided or Inadequate": 1,
     "Product Concerns": 12,
     "Loud Music/Party": 8,
@@ -65,21 +64,20 @@
     "Trash or Recycling": 1,
     "No Access": 1,
     "Loud Television": 1,
-    "Line/Marking - After Repaving": 3,
-    "Detached Trailer": 1
+    "Line/Marking - After Repaving": 3
   },
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 24
+      "count": 26
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298299
+      "count": 298268
     }
   ],
-  "generated_at": "2026-07-15T11:55:40.889Z",
+  "generated_at": "2026-07-16T11:57:22.211Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }
