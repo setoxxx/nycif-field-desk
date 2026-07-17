@@ -48,3 +48,10 @@ Better production option:
 
 Open the deployed URL in Safari:
 Share > Add to Home Screen
+
+### Supplemental approved export preview (admin / QA only)
+
+- Standalone: `approved-export-preview.html` (**3,566** approved supplemental events)
+- Desk overlay: `desk.html?previewExport=1`
+- Feed: `https://raw.githubusercontent.com/setoxxx/nycif-live-feeds/main/dist/supplemental_approved_export_feed.json`
+- Preview only — not production map; `promotion_allowed=false`.
