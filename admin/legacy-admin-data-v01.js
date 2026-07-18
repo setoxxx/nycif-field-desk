@@ -1,40 +1,65 @@
+/**
+ * Legacy admin historical sections — defers to dynamic panels when available.
+ */
 (() => {
-  'use strict';
-  const resources=[['index','./data/index.json'],['projectStatus','./data/project-status.json'],['sourceFreshness','./data/source-freshness.json'],['tvppCandidates','./data/tvpp-candidates.json'],['tvppTriage','./data/tvpp-triage.json'],['tvppLocationReadiness','./data/tvpp-location-readiness.json'],['xriStatus','./data/xri-status.json']];
-  const byId=id=>document.getElementById(id),text=v=>String(v??'').trim()||'—';
-  const node=(tag,cls,value)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(value!==undefined)el.textContent=text(value);return el};
-  const clear=el=>{if(el)el.replaceChildren();return el};
-  const card=(label,value,detail)=>{const el=node('article','stat');el.append(node('div','label',label),node('div','value',value));if(detail)el.append(node('div','detail',detail));return el};
-  const count=v=>Number.isFinite(Number(v))?Number(v).toLocaleString():'—';
-  const link=(label,url)=>{const a=node('a','',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a};
-  function ensureRecoveryPanel(){
-    if(byId('recovery'))return;
-    const anchor=byId('deployment')||byId('live-pipeline-section');
-    if(!anchor)return;
-    const section=node('section','panel');section.id='recovery';
-    section.append(node('h2','','Recovery and Source of Truth'),node('p','section-intro','The permanent recovery record identifies the immutable pre-God-View baseline, canonical files, protected systems, and safe rollback paths.'));
-    const freshness=node('div','notice');freshness.id='recovery-freshness';freshness.hidden=true;
-    const grid=node('div','grid');grid.id='recovery-status-grid';
-    const guard=node('div','notice violet','If God View becomes unstable, return to the recorded immutable baseline or revert only the God View change. Never overwrite the map, calendar, or backend to repair this page.');
-    const links=node('div','links');links.id='recovery-links';
-    section.append(freshness,grid,guard,links);
-    anchor.before(section);
+  const VERSION = "legacy-admin-data-v01";
+
+  function esc(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (ch) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch])
+    );
   }
-  function loadRecovery(){
-    if(document.querySelector('script[data-god-view-recovery]'))return;
-    const script=document.createElement('script');script.src='./god-view-recovery-v01.js';script.dataset.godViewRecovery='1';script.async=false;document.body.append(script);
+
+  function setHtml(id, html) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
   }
-  async function loadAll(){return Promise.all(resources.map(async([key,path])=>{try{const r=await fetch(path,{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);return[key,await r.json(),null,path]}catch(error){return[key,null,error.message,path]}}))}
-  function renderErrors(rows){const failures=rows.filter(row=>row[2]),panel=byId('errors'),target=clear(byId('error-list'));panel.hidden=!failures.length;failures.forEach(([, ,message,path])=>target.append(node('div','notice danger',`${path}: ${message}`)))}
-  function renderOverview(data,rows){const live=window.NYCIF_LIVE_PIPELINE_SUMMARY||{},target=clear(byId('overview'));target.append(card('Live staged events',count(live.staged_feed_events),'Current backend pipeline summary.'),card('Newly added',count(live.newly_added_events),'Delta since previous staged snapshot.'),card('Calendar-only gap',count(live.calendar_only_unique_keys),'Unlinked Citywide Calendar rows.'),card('Parks-only gap',count(live.parks_only_unique_keys),'Unlinked Parks event rows.'),card('Local snapshots',`${rows.filter(row=>row[1]).length}/${rows.length}`,'Historical and diagnostic admin snapshots.'),card('Candidate-source feeds connected','0','MOME and DOB remain disconnected evaluation candidates.'))}
-  function renderProject(project){const target=clear(byId('project-status'));if(!project){target.append(node('div','empty','Historical project-status snapshot did not load.'));return}target.append(node('div','notice warn','Historical snapshot only. God View Project Control Center is authoritative for current operational status.'),card('Snapshot generated',project.generatedAt||project.generated_at||'Unknown'),card('Admin mode',project.adminMode||'Unknown'),card('Production feed writes',String(project.eventSourcesStatus?.productionFeedWrites??false)))}
-  function renderSourceFreshness(source){const target=clear(byId('source-freshness'));if(!source){target.append(node('div','empty','Source-freshness snapshot did not load.'));return}const grid=node('div','grid');(source.sources||[]).forEach(item=>grid.append(card(item.source||'Source',item.freshness||'unknown',`${count(item.rowCount)} rows · ${item.recommendation||'No recommendation'}`)));target.append(grid)}
-  function renderCandidates(candidates,triage){const target=clear(byId('candidates'));if(!candidates){target.append(node('div','empty','TVPP candidates snapshot did not load.'));return}const buckets=triage?.bucketCounts||{};target.append(node('div','notice warn','Historical/local candidate sample. Use the Assignment Desk Calendar and current backend feeds for daily operation.'),card('Candidate sample',count(candidates.itemCount??candidates.rowCount??candidates.leads?.length)),card('Strong assignments',count(buckets.strong_assignment)),card('Needs review',count(buckets.needs_review)))}
-  function renderBuckets(id,data,key){const target=clear(byId(id)),grid=node('div','grid');Object.entries(data?.[key]||{}).forEach(([bucket,total])=>grid.append(card(bucket.replaceAll('_',' '),count(total),'Local snapshot count')));target.append(grid.childNodes.length?grid:node('div','empty',`${id} snapshot did not load.`))}
-  function renderPress(candidates){clear(byId('press-god-view')).append(node('div','notice violet','Historical unfiltered local sample. Current assignment planning belongs in the Assignment Desk Calendar.'),card('Loaded local leads',count(candidates?.leads?.length),'No approval, geocoding, publish, or mutation controls.'))}
-  function renderMap(){const links=clear(byId('map-links'));links.append(link('Field Desk Map','https://setoxxx.github.io/nycif-field-desk/?resetFilters=1'),link('nycinfocus.com/map/','https://nycinfocus.com/map/'),link('Live Feeds Repository','https://github.com/setoxxx/nycif-live-feeds'));const preview=clear(byId('map-preview')),iframe=document.createElement('iframe');iframe.src='https://nycinfocus.com/map/';iframe.title='Read-only preview of the NYC In Focus public map';iframe.loading='lazy';iframe.referrerPolicy='no-referrer';iframe.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups');preview.append(iframe)}
-  function renderXri(xri){const target=clear(byId('xri'));if(!xri){target.append(node('div','empty','XRI historical snapshot did not load.'));return}target.append(node('div','notice warn','Historical XRI reference. It is not the current program-stage authority.'),card('Recorded phase',xri.currentPhase||xri.current_phase||'Unknown'),card('Recorded next gate',xri.nextGate||xri.next_gate||'Unknown'),card('Recorded score',xri.score||'Unknown'))}
-  function renderNotes(data){const target=clear(byId('notes'));['God View is read-only and cannot publish, approve, geocode, or mutate production.','Local admin snapshots are historical reference and do not power the current map or calendar.','Candidate-source evaluation does not authorize ingestion.',data.xriStatus?.blocker?`Historical XRI blocker: ${data.xriStatus.blocker}`:null].filter(Boolean).forEach(message=>target.append(node('li','',message)))}
-  function renderAll(rows){renderErrors(rows);const data=Object.fromEntries(rows.map(row=>[row[0],row[1]]));renderOverview(data,rows);renderProject(data.projectStatus);renderSourceFreshness(data.sourceFreshness);renderPress(data.tvppCandidates);renderCandidates(data.tvppCandidates,data.tvppTriage);renderBuckets('triage',data.tvppTriage,'bucketCounts');renderBuckets('location-readiness',data.tvppLocationReadiness,'locationBucketCounts');renderMap();renderXri(data.xriStatus);renderNotes(data);const snapshot=byId('snapshot-time');if(snapshot)snapshot.textContent=`Local snapshots: ${data.index?.generatedAt||data.projectStatus?.generatedAt||'unknown'}`}
-  ensureRecoveryPanel();loadRecovery();loadAll().then(renderAll);document.addEventListener('nycif-live-pipeline-ready',()=>loadAll().then(renderAll));
+
+  function renderHistoricalNotice() {
+    const notice = `
+      <div class="notice ok">
+        Historical snapshots below are static/local. For current operational status use
+        <strong>Project Control Center</strong> (top), <strong>Live Pipeline</strong>, and
+        <strong>Discovery God View</strong> panels — they load fresh JSON from nycif-live-feeds main.
+      </div>
+    `;
+    ["project-status", "source-freshness", "overview"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el && !el.dataset.legacyHydrated) {
+        el.insertAdjacentHTML("afterbegin", notice);
+        el.dataset.legacyHydrated = "1";
+      }
+    });
+  }
+
+  function hydrateFromProjectState(state) {
+    if (!state) return;
+    const summary = state.status_summary || state.command_center?.current_stage;
+    if (summary) {
+      setHtml(
+        "project-status",
+        `<p class="detail">${esc(summary)}</p><p class="muted">Full timeline: see Project Control Center above.</p>`
+      );
+    }
+    const counts = state.counts || {};
+    setHtml(
+      "overview",
+      `<div class="grid">
+        <div class="stat"><div class="label">Discovery approved</div><div class="value">${esc(counts.discovery_approved_events ?? "—")}</div></div>
+        <div class="stat"><div class="label">Supplemental approved</div><div class="value">${esc(counts.supplemental_approved ?? "—")}</div></div>
+      </div>`
+    );
+  }
+
+  document.addEventListener("nycif-godview-project-ready", (event) => {
+    hydrateFromProjectState(event.detail?.state);
+  });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderHistoricalNotice);
+  } else {
+    renderHistoricalNotice();
+  }
+
+  window.NYCIF_LEGACY_ADMIN_DATA = { version: VERSION };
 })();
