@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1706,
-  "usable_complaints": 1706,
-  "source_dispensaries": 247,
+  "source_complaints": 1725,
+  "usable_complaints": 1725,
+  "source_dispensaries": 250,
   "source_retailers": 4882,
-  "correlation_locations": 5129,
-  "output_locations": 185,
-  "low_signal_excluded": 4944,
+  "correlation_locations": 5132,
+  "output_locations": 201,
+  "low_signal_excluded": 4931,
   "radius_feet": [
     100,
     250,
@@ -22,20 +22,19 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 162,
-    "legal_cannabis_dispensary": 23
+    "licensed_smoke_vape_retailer": 177,
+    "legal_cannabis_dispensary": 24
   },
   "borough_counts": {
-    "Bronx": 33,
-    "Queens": 37,
-    "Brooklyn": 52,
-    "Manhattan": 58,
+    "Bronx": 35,
+    "Brooklyn": 53,
+    "Manhattan": 62,
+    "Queens": 46,
     "Staten Island": 5
   },
   "signal_tier_counts": {
-    "very_high": 2,
-    "high": 22,
-    "moderate": 161
+    "high": 25,
+    "moderate": 176
   },
   "top_locations_sample": [
     {
@@ -43,10 +42,10 @@
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1737 BOSTON RD, BRONX, 10460",
       "borough": "Bronx",
-      "signal_score": 56,
-      "signal_tier": "very_high",
-      "complaints_365d_100ft": 5,
-      "complaints_365d_250ft": 10,
+      "signal_score": 45,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 8,
       "last_complaint_date": "2026-07-04"
     },
     {
@@ -54,77 +53,22 @@
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1737 BOSTON RD, BRONX, 10460",
       "borough": "Bronx",
-      "signal_score": 56,
-      "signal_tier": "very_high",
-      "complaints_365d_100ft": 5,
-      "complaints_365d_250ft": 10,
+      "signal_score": 45,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 8,
       "last_complaint_date": "2026-07-04"
     },
     {
-      "title": "SHAKTI PETROLEUM CORP",
+      "title": "215 FINEST DELI & GRILL CORP",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "15409 UNION TPKE, FLUSHING, 11367",
-      "borough": "Queens",
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-06-30"
-    },
-    {
-      "title": "SHAKTI PETROLEUM CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "15409 UNION TPKE, FLUSHING, 11367",
-      "borough": "Queens",
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-06-30"
-    },
-    {
-      "title": "ALTITUDE NY LLC",
-      "location_kind": "legal_cannabis_dispensary",
-      "address": "807 MANHATTAN AVE, BROOKLYN, 11222 2710",
+      "address": "215 4 AVENUE, BROOKLYN, 11215",
       "borough": "Brooklyn",
-      "signal_score": 32,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-14"
-    },
-    {
-      "title": "RIVERBEND CANDY STORE",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "2289 5 AVENUE, NEW YORK, 10037",
-      "borough": "Manhattan",
-      "signal_score": 32,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-07-11"
-    },
-    {
-      "title": "FRESH FOOD FARM",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1310 2ND AVE, NEW YORK, 10065",
-      "borough": "Manhattan",
       "signal_score": 31,
       "signal_tier": "high",
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
-    },
-    {
-      "title": "FRESH FOOD FARM",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1310 2ND AVE, NEW YORK, 10065",
-      "borough": "Manhattan",
-      "signal_score": 31,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
+      "last_complaint_date": "2026-07-15"
     },
     {
       "title": "LINCOLN DELI AND SMOKE SHOP CORP",
@@ -138,6 +82,17 @@
       "last_complaint_date": "2026-07-09"
     },
     {
+      "title": "RIVERBEND CANDY STORE",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "2289 5 AVENUE, NEW YORK, 10037",
+      "borough": "Manhattan",
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-07-11"
+    },
+    {
       "title": "THE HOT SPOT 4 CORP.",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "99 BELMONT AVE, BROOKLYN, 11212",
@@ -147,6 +102,17 @@
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-07-14"
+    },
+    {
+      "title": "UNION DELI GROCERY 1 INC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "226 4TH AVE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-07-15"
     },
     {
       "title": "CANNALICIOUS LLC",
@@ -182,6 +148,17 @@
       "last_complaint_date": "2026-06-27"
     },
     {
+      "title": "ALTITUDE NY LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "807 MANHATTAN AVE, BROOKLYN, 11222 2710",
+      "borough": "Brooklyn",
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-14"
+    },
+    {
       "title": "DELI & SMOKE SHOP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "439 5TH AVE, BROOKLYN, 11215",
@@ -202,17 +179,6 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-05"
-    },
-    {
-      "title": "215 FINEST DELI & GRILL CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "215 4 AVENUE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-24"
     },
     {
       "title": "2527 MR DELI GOURMET I CORP.",
@@ -248,6 +214,28 @@
       "last_complaint_date": "2026-07-13"
     },
     {
+      "title": "FRESH FOOD FARM",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1310 2ND AVE, NEW YORK, 10065",
+      "borough": "Manhattan",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "FRESH FOOD FARM",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1310 2ND AVE, NEW YORK, 10065",
+      "borough": "Manhattan",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-27"
+    },
+    {
       "title": "JAY NEWSSTAND",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "71 AVENUE, Forest Hills, 11375",
@@ -257,6 +245,17 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-13"
+    },
+    {
+      "title": "KNICKERBOCKER FRESH MARKET INCORPORATED",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "341 KNICKERBOCKER AVE, BROOKLYN, 11237",
+      "borough": "Brooklyn",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-15"
     },
     {
       "title": "OLYMPIA ORGANIC DELI INC.",
@@ -270,15 +269,26 @@
       "last_complaint_date": "2026-07-11"
     },
     {
-      "title": "SUNAC NATURAL",
+      "title": "SHAKTI PETROLEUM CORP",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
+      "address": "15409 UNION TPKE, FLUSHING, 11367",
+      "borough": "Queens",
       "signal_score": 21,
       "signal_tier": "high",
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-13"
+      "last_complaint_date": "2026-06-30"
+    },
+    {
+      "title": "SHAKTI PETROLEUM CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "15409 UNION TPKE, FLUSHING, 11367",
+      "borough": "Queens",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-30"
     },
     {
       "title": "SUNAC NATURAL",
@@ -292,28 +302,17 @@
       "last_complaint_date": "2026-07-13"
     },
     {
-      "title": "UNION DELI GROCERY 1 INC",
+      "title": "SUNAC NATURAL",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "226 4TH AVE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
       "signal_score": 21,
       "signal_tier": "high",
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-24"
-    },
-    {
-      "title": "Ramesh Newsstand LLC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "BROADWAY, BRONX, 10463",
-      "borough": "Bronx",
-      "signal_score": 14,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-07-06"
+      "last_complaint_date": "2026-07-13"
     }
   ],
-  "generated_at": "2026-07-17T11:45:13.979Z",
+  "generated_at": "2026-07-18T11:27:10.754Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
