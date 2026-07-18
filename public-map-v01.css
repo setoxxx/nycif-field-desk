@@ -1,19 +1,34 @@
 /* NYCIF public map polish v01 */
-body.public-map-page .brand-card {
+body.public-map-page .brand-header-row {
+  position: absolute;
+  z-index: 790;
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
   left: calc(env(safe-area-inset-left, 0px) + 8px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(420px, calc(100vw - 120px));
+}
+
+body.public-map-page .brand-header-row .brand-card {
+  position: static;
+  top: auto;
+  left: auto;
   transform: none;
-  max-width: min(330px, calc(100vw - 120px));
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+}
+
+body.public-map-page .brand-card {
+  max-width: min(360px, calc(100vw - 98px));
 }
 
 body.public-map-page .brand-card strong::after {
   content: " Event Map";
 }
 
-body.public-map-page .panel-label {
-  font-size: 10px;
-}
-
-/* Upper-right control stack: Filters, Near Me, GPS, Bug. */
+/* Upper-right control stack: Filters, GPS, Bug, then Near Me. */
 body.public-map-page .map-controls {
   position: absolute;
   z-index: 800;
@@ -32,19 +47,18 @@ body.public-map-page .map-controls .bug-btn {
   position: static;
 }
 
-body.public-map-page .pill.layers-pill {
-  min-height: 31px;
-  padding: 0 10px;
-  gap: 6px;
-  font-size: 11px;
-  border-width: 1px;
-}
-
 body.public-map-page .near-me-btn {
   min-height: 31px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 11px;
   background: rgba(255, 255, 255, .94);
   color: #44546b;
+  font-size: 11px;
+  font-weight: 900;
   box-shadow: 0 8px 24px rgba(0, 0, 0, .22);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
 }
 
 body.public-map-page .bug-btn {
@@ -67,109 +81,21 @@ body.public-map-page .layers-panel {
   inset-block-start: calc(env(safe-area-inset-top, 0px) + 176px);
 }
 
-body.public-map-page .layers-panel .panel-action {
-  margin-top: 6px;
-  background: #f4ede0;
-  color: #3f3a2f;
-  box-shadow: 0 4px 12px rgba(63, 58, 47, .14);
-  border: 1px solid rgba(63, 58, 47, .14);
+body.public-map-page .panel-label {
+  font-size: 0;
 }
 
-body.public-map-page .layers-panel .panel-action:first-of-type {
-  margin-top: 0;
+body.public-map-page .panel-label::after {
+  content: "Choose what to show";
+  font-size: 9.5px;
 }
 
-body.public-map-page #retryFeedBtn {
-  background: #44546b;
-  color: #fff;
-  border: 0;
-}
-
-body.public-map-page .item-tag.featured {
-  background: rgba(176, 141, 62, .16);
-  color: #7a6128 !important;
-}
-
-/* Ordinary actions are never red; red is reserved for real errors. */
-body.public-map-page .quick-actions a,
-body.public-map-page .quick-actions button,
-body.public-map-page .field-action:first-child {
-  background: #44546b;
-}
-
-body.public-map-page .desk-header p {
-  color: #7a6128;
-}
-
-/* Editor's Picks + News Desk filter controls */
-body.public-map-page .editors-block {
-  display: grid;
-  gap: 4px;
-  margin: 0 0 6px;
-  padding: 6px;
-  border-radius: 10px;
-  background: rgba(176, 141, 62, .10);
-  border: 1px solid rgba(176, 141, 62, .22);
-}
-body.public-map-page .newsdesk-check small {
-  display: block;
-  font-size: 8.5px;
-  font-weight: 600;
-  color: #7a6128;
-  opacity: .85;
-}
-body.public-map-page .editors-pick {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
+body.public-map-page .pill.layers-pill {
+  min-height: 31px;
+  padding: 0 10px;
   gap: 6px;
-  font-size: 10px;
-  font-weight: 800;
-  color: #3f3a2f;
-}
-body.public-map-page .editors-pick select {
-  min-height: 26px;
-  border: 1px solid rgba(63, 58, 47, .2);
-  border-radius: 8px;
-  padding: 0 6px;
-  font-size: 10px;
-  background: #fff;
-}
-
-/* Medal badges — markers */
-body.public-map-page .marker .medal {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  display: grid;
-  place-items: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
   font-size: 11px;
-  line-height: 1;
-}
-body.public-map-page .marker--medal-gold { border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212, 175, 55, .34), 0 10px 22px rgba(0, 0, 0, .25); }
-body.public-map-page .marker--medal-silver { border-color: #9aa0a6; box-shadow: 0 0 0 3px rgba(154, 160, 166, .34), 0 10px 22px rgba(0, 0, 0, .25); }
-body.public-map-page .marker--medal-bronze { border-color: #b08d3e; box-shadow: 0 0 0 3px rgba(176, 141, 62, .30), 0 10px 22px rgba(0, 0, 0, .25); }
-
-/* Medal + News Desk tags — list cards */
-body.public-map-page .item-tag.medal { background: rgba(212, 175, 55, .16); color: #7a5c00 !important; }
-body.public-map-page .item-tag.medal-silver { background: rgba(154, 160, 166, .18); color: #52565b !important; }
-body.public-map-page .item-tag.medal-bronze { background: rgba(176, 141, 62, .16); color: #7a6128 !important; }
-body.public-map-page .item-tag.newsdesk { background: rgba(68, 84, 107, .14); color: #37465e !important; }
-body.public-map-page .item-tag.multiday { background: rgba(47, 111, 79, .14); color: #2f6f4f !important; }
-
-body.public-map-page .popup-pending {
-  margin-top: 7px;
-  padding: 7px 8px;
-  border-radius: 10px;
-  background: rgba(107, 114, 128, .10);
-  border-left: 3px solid #9ca3af;
-  color: #4b5563;
-  font-size: 12px;
+  border-width: 1px;
 }
 
 body.public-map-page .pill.layers-pill span {
@@ -256,7 +182,7 @@ body.public-map-page .status {
 }
 
 .public-intro-v01 strong {
-  color: #7a6128;
+  color: #d40000;
 }
 
 .view-banner {
@@ -268,9 +194,8 @@ body.public-map-page .status {
   max-width: min(560px, calc(100vw - 24px));
   padding: 8px 12px;
   border-radius: 10px;
-  background: rgba(244, 237, 224, .96);
-  color: #3f3a2f;
-  border: 1px solid rgba(63, 58, 47, .18);
+  background: rgba(245, 158, 11, .92);
+  color: #111;
   font-size: 12px;
   font-weight: 650;
 }
@@ -288,13 +213,38 @@ body.public-map-page .status {
   font-size: 11px;
 }
 
-/* Date chips sit under the brand card, clear of the right-hand controls. */
-body.public-map-page .date-chips {
-  left: calc(env(safe-area-inset-left, 0px) + 8px);
-  transform: none;
-  width: auto;
-  max-width: min(640px, calc(100vw - 84px));
+.mode-toggle {
+  position: absolute;
+  top: 72px;
+  left: 12px;
+  z-index: 900;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  max-width: min(420px, calc(100vw - 24px));
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
 }
+
+.mode-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(8, 12, 18, .78);
+  color: #fff;
+  cursor: pointer;
+}
+
+.mode-btn.active {
+  background: #d40000;
+}
+
+.nycif-source-review { color: #f59e0b; font-weight: 800; }
+.nycif-list-only { color: #ef4444; font-weight: 800; }
 
 .debug-panel {
   position: absolute;
@@ -316,6 +266,11 @@ body.public-map-page .date-chips {
   .public-intro-v01 {
     display: none;
   }
+  .mode-toggle {
+    top: auto;
+    bottom: 86px;
+    left: 10px;
+  }
   .view-banner,
   .index-status {
     top: auto;
@@ -323,13 +278,6 @@ body.public-map-page .date-chips {
   }
   .index-status {
     bottom: 164px;
-  }
-  body.public-map-page .date-chips {
-    max-width: calc(100vw - 126px);
-  }
-  body.public-map-page .layers-panel {
-    inset-block-start: calc(env(safe-area-inset-top, 0px) + 176px);
-    max-height: 56dvh;
   }
 }
 
@@ -536,6 +484,106 @@ body.public-map-page .nycif-event-popup .leaflet-popup-close-button {
   line-height: 27px;
 }
 
+body.public-map-page .nycif-event-popup .nycif-popup-back {
+  position: absolute;
+  top: 9px;
+  right: 44px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(118, 118, 128, .12);
+  color: #636366;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+body.public-map-page .nycif-event-popup .nycif-popup-back svg {
+  width: 18px;
+  height: 18px;
+}
+
+body.public-map-page .marker--stacked {
+  margin-bottom: 4px;
+}
+
+body.public-map-page .marker .stack-dots {
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+}
+
+body.public-map-page .marker .stack-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #111827;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .85);
+}
+
+body.public-map-page .marker .stack-more {
+  font: 800 8px/1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #111827;
+}
+
+body.public-map-page .popup-card--picker .popup-picker-label {
+  margin: 0 0 4px;
+  color: #636366;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+body.public-map-page .popup-card--picker h2 {
+  margin-top: 0;
+}
+
+body.public-map-page .popup-stack-grid {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+body.public-map-page .popup-stack-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .72);
+  color: #1d1d1f;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+body.public-map-page .popup-stack-item:hover {
+  background: rgba(0, 110, 230, .08);
+  border-color: rgba(0, 110, 230, .22);
+}
+
+body.public-map-page .popup-stack-emoji {
+  flex: 0 0 28px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+body.public-map-page .popup-stack-title {
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
 @media (max-width: 500px) {
   body.public-map-page .nycif-event-popup .leaflet-popup-content-wrapper {
     width: min(340px, calc(100vw - 24px));
@@ -548,50 +596,4 @@ body.public-map-page .nycif-event-popup .leaflet-popup-close-button {
   body.public-map-page .nycif-event-popup .popup-card h2 {
     font-size: 17px;
   }
-}
-
-/* Past events (ended before today) are de-emphasized so "what's happening now"
-   reads at a glance — still visible and clickable, just grayed. */
-body.public-map-page .marker.marker--past {
-  filter: grayscale(1);
-  opacity: .5;
-}
-body.public-map-page .marker.marker--past.marker--major,
-body.public-map-page .marker.marker--past[class*="marker--medal-"] {
-  opacity: .6; /* keep faded majors/medals a touch more legible */
-}
-body.public-map-page .event-item.event-item--past {
-  opacity: .62;
-}
-body.public-map-page .event-item.event-item--past strong {
-  font-weight: 600;
-  color: #6b7280;
-}
-body.public-map-page .item-tag.ended {
-  background: rgba(107, 114, 128, .16);
-  color: #4b5563 !important;
-}
-
-/* Category filters with no loaded events read as "not ready yet" — grayed and
-   non-interactive, with a live count on the lanes that do have data. */
-body.public-map-page .layers-panel .check.check--empty {
-  opacity: .45;
-  cursor: not-allowed;
-}
-body.public-map-page .layers-panel .check.check--empty input {
-  cursor: not-allowed;
-}
-body.public-map-page .layers-panel .check .check-count {
-  margin-left: auto;
-  padding-left: 8px;
-  font-size: 11px;
-  color: #9aa0a6;
-  font-variant-numeric: tabular-nums;
-}
-body.public-map-page .layers-panel .check.check--empty .check-count {
-  font-style: italic;
-}
-body.public-map-page .layers-panel .check {
-  display: flex;
-  align-items: center;
 }
