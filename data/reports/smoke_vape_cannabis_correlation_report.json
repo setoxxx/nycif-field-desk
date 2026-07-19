@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1725,
-  "usable_complaints": 1725,
+  "source_complaints": 1736,
+  "usable_complaints": 1736,
   "source_dispensaries": 250,
   "source_retailers": 4882,
   "correlation_locations": 5132,
-  "output_locations": 201,
-  "low_signal_excluded": 4931,
+  "output_locations": 209,
+  "low_signal_excluded": 4923,
   "radius_feet": [
     100,
     250,
@@ -22,19 +22,19 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 177,
+    "licensed_smoke_vape_retailer": 185,
     "legal_cannabis_dispensary": 24
   },
   "borough_counts": {
-    "Bronx": 35,
-    "Brooklyn": 53,
+    "Bronx": 38,
+    "Brooklyn": 55,
     "Manhattan": 62,
-    "Queens": 46,
+    "Queens": 49,
     "Staten Island": 5
   },
   "signal_tier_counts": {
-    "high": 25,
-    "moderate": 176
+    "high": 23,
+    "moderate": 186
   },
   "top_locations_sample": [
     {
@@ -42,10 +42,10 @@
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1737 BOSTON RD, BRONX, 10460",
       "borough": "Bronx",
-      "signal_score": 45,
+      "signal_score": 44,
       "signal_tier": "high",
       "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 8,
+      "complaints_365d_250ft": 7,
       "last_complaint_date": "2026-07-04"
     },
     {
@@ -53,10 +53,10 @@
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1737 BOSTON RD, BRONX, 10460",
       "borough": "Bronx",
-      "signal_score": 45,
+      "signal_score": 44,
       "signal_tier": "high",
       "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 8,
+      "complaints_365d_250ft": 7,
       "last_complaint_date": "2026-07-04"
     },
     {
@@ -69,17 +69,6 @@
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-07-15"
-    },
-    {
-      "title": "LINCOLN DELI AND SMOKE SHOP CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "41 LINCOLN RD, BROOKLYN, 11225",
-      "borough": "Brooklyn",
-      "signal_score": 31,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-09"
     },
     {
       "title": "RIVERBEND CANDY STORE",
@@ -170,6 +159,17 @@
       "last_complaint_date": "2026-06-27"
     },
     {
+      "title": "OC DISPENSARY",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "OMAR NISIMOV 769 FRANKLIN AVE, BROOKLYN, 11238 4804",
+      "borough": "Brooklyn",
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-17"
+    },
+    {
       "title": "15th Street Snacks & More Corp",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "992 E 15TH ST, BROOKLYN, 11230",
@@ -192,26 +192,15 @@
       "last_complaint_date": "2026-07-14"
     },
     {
-      "title": "FREEDOM NEWS I, INC.",
+      "title": "FARES GROCERY & DELI CORP.",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
+      "address": "624 SAINT JOHNS PLACE, BROOKLYN, 11238",
+      "borough": "Brooklyn",
       "signal_score": 21,
       "signal_tier": "high",
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-13"
-    },
-    {
-      "title": "FREEDOM NEWS I, INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-13"
+      "last_complaint_date": "2026-07-17"
     },
     {
       "title": "FRESH FOOD FARM",
@@ -258,6 +247,17 @@
       "last_complaint_date": "2026-07-15"
     },
     {
+      "title": "LINCOLN DELI AND SMOKE SHOP CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "41 LINCOLN RD, BROOKLYN, 11225",
+      "borough": "Brooklyn",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-09"
+    },
+    {
       "title": "OLYMPIA ORGANIC DELI INC.",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "56 TIEMANN PL, NEW YORK, 10027",
@@ -291,28 +291,28 @@
       "last_complaint_date": "2026-06-30"
     },
     {
-      "title": "SUNAC NATURAL",
+      "title": "CIGAR VAPE INC I",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-13"
+      "address": "452 5 AVENUE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 13,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
     },
     {
-      "title": "SUNAC NATURAL",
+      "title": "CIGAR VAPE INC I",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-13"
+      "address": "452 5 AVENUE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 13,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-06-27"
     }
   ],
-  "generated_at": "2026-07-18T11:27:10.754Z",
+  "generated_at": "2026-07-19T11:35:11.605Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
