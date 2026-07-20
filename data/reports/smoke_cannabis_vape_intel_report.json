@@ -4,26 +4,26 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-19",
-  "matched_rows": 1762,
-  "mapped_total": 1736,
-  "needs_review": 26,
-  "rejected": 298238,
+  "since_date": "2025-07-20",
+  "matched_rows": 1742,
+  "mapped_total": 1717,
+  "needs_review": 25,
+  "rejected": 298258,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 514,
-    "cannabis_related_complaint": 1222
+    "vape_complaint": 516,
+    "cannabis_related_complaint": 1201
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 514,
-    "cannabis_marijuana_weed": 1222
+    "vape_electronic_cigarette": 516,
+    "cannabis_marijuana_weed": 1201
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 467,
-    "Cannabis Retailer": 303,
-    "Obstruction": 620,
-    "Consumer Complaint": 47,
-    "Maintenance or Facility": 282,
+    "Smoking or Vaping": 468,
+    "Obstruction": 613,
+    "Cannabis Retailer": 296,
+    "Consumer Complaint": 48,
+    "Maintenance or Facility": 275,
     "Overgrown Tree/Branches": 1,
     "Drug Activity": 1,
     "Noise - Street/Sidewalk": 4,
@@ -38,16 +38,16 @@
   },
   "descriptor_counts": {
     "Allowed in Smoke Free Area": 460,
-    "Suspicious Activity": 29,
-    "Unlicensed": 118,
-    "Weeds or Grass": 619,
-    "E-Cigarette Sales": 35,
-    "Grass/Weeds": 282,
-    "Sales to Minors Under 21": 121,
+    "Weeds or Grass": 612,
+    "Unlicensed": 116,
+    "Sales to Minors Under 21": 117,
+    "E-Cigarette Sales": 36,
+    "Grass/Weeds": 275,
+    "Sign Inadequate": 6,
+    "Suspicious Activity": 28,
     "Smoking, Cigar, or Vape Store": 12,
     "Product Concerns": 13,
     "Too Close to a School": 15,
-    "Sign Inadequate": 5,
     "Hitting Phone/Cable Lines": 1,
     "Use Indoor": 1,
     "Loud Talking": 2,
@@ -68,15 +68,15 @@
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 26
+      "count": 25
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298238
+      "count": 298258
     }
   ],
-  "generated_at": "2026-07-19T11:35:11.197Z",
+  "generated_at": "2026-07-20T12:28:59.945Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }

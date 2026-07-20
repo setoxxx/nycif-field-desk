@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1736,
-  "usable_complaints": 1736,
+  "source_complaints": 1717,
+  "usable_complaints": 1717,
   "source_dispensaries": 250,
   "source_retailers": 4882,
   "correlation_locations": 5132,
-  "output_locations": 209,
-  "low_signal_excluded": 4923,
+  "output_locations": 208,
+  "low_signal_excluded": 4924,
   "radius_feet": [
     100,
     250,
@@ -22,19 +22,19 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 185,
+    "licensed_smoke_vape_retailer": 184,
     "legal_cannabis_dispensary": 24
   },
   "borough_counts": {
-    "Bronx": 38,
-    "Brooklyn": 55,
+    "Bronx": 36,
     "Manhattan": 62,
+    "Brooklyn": 56,
     "Queens": 49,
     "Staten Island": 5
   },
   "signal_tier_counts": {
-    "high": 23,
-    "moderate": 186
+    "high": 25,
+    "moderate": 183
   },
   "top_locations_sample": [
     {
@@ -42,10 +42,10 @@
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1737 BOSTON RD, BRONX, 10460",
       "borough": "Bronx",
-      "signal_score": 44,
+      "signal_score": 34,
       "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 7,
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 6,
       "last_complaint_date": "2026-07-04"
     },
     {
@@ -53,22 +53,11 @@
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1737 BOSTON RD, BRONX, 10460",
       "borough": "Bronx",
-      "signal_score": 44,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 7,
-      "last_complaint_date": "2026-07-04"
-    },
-    {
-      "title": "215 FINEST DELI & GRILL CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "215 4 AVENUE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 31,
+      "signal_score": 34,
       "signal_tier": "high",
       "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-15"
+      "complaints_365d_250ft": 6,
+      "last_complaint_date": "2026-07-04"
     },
     {
       "title": "RIVERBEND CANDY STORE",
@@ -91,17 +80,6 @@
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-07-14"
-    },
-    {
-      "title": "UNION DELI GROCERY 1 INC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "226 4TH AVE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 31,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-15"
     },
     {
       "title": "CANNALICIOUS LLC",
@@ -181,6 +159,17 @@
       "last_complaint_date": "2026-07-05"
     },
     {
+      "title": "215 FINEST DELI & GRILL CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "215 4 AVENUE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-15"
+    },
+    {
       "title": "2527 MR DELI GOURMET I CORP.",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "2527 FREDERICK DOUGLASS BLVD, NEW YORK, 10030",
@@ -258,6 +247,17 @@
       "last_complaint_date": "2026-07-09"
     },
     {
+      "title": "NEW FIREHOUSE DELI AND GRILL INC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "5615 METROPOLITAN AVENUE, RIDGEWOOD, 11385",
+      "borough": "Queens",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-18"
+    },
+    {
       "title": "OLYMPIA ORGANIC DELI INC.",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "56 TIEMANN PL, NEW YORK, 10027",
@@ -269,6 +269,17 @@
       "last_complaint_date": "2026-07-11"
     },
     {
+      "title": "PNZ GRILL & DELI CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "5605 METROPOLITAN AVE, RIDGEWOOD, 11385",
+      "borough": "Queens",
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-18"
+    },
+    {
       "title": "SHAKTI PETROLEUM CORP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "15409 UNION TPKE, FLUSHING, 11367",
@@ -291,28 +302,17 @@
       "last_complaint_date": "2026-06-30"
     },
     {
-      "title": "CIGAR VAPE INC I",
+      "title": "UNION DELI GROCERY 1 INC",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "452 5 AVENUE, BROOKLYN, 11215",
+      "address": "226 4TH AVE, BROOKLYN, 11215",
       "borough": "Brooklyn",
-      "signal_score": 13,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
-    },
-    {
-      "title": "CIGAR VAPE INC I",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "452 5 AVENUE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "signal_score": 13,
-      "signal_tier": "moderate",
-      "complaints_365d_100ft": 1,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-06-27"
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-15"
     }
   ],
-  "generated_at": "2026-07-19T11:35:11.605Z",
+  "generated_at": "2026-07-20T12:29:02.966Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
