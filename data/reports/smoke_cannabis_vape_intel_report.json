@@ -4,26 +4,26 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-20",
-  "matched_rows": 1742,
-  "mapped_total": 1717,
+  "since_date": "2025-07-21",
+  "matched_rows": 1734,
+  "mapped_total": 1709,
   "needs_review": 25,
-  "rejected": 298258,
+  "rejected": 298266,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 516,
+    "vape_complaint": 508,
     "cannabis_related_complaint": 1201
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 516,
+    "vape_electronic_cigarette": 508,
     "cannabis_marijuana_weed": 1201
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 468,
+    "Smoking or Vaping": 460,
     "Obstruction": 613,
     "Cannabis Retailer": 296,
-    "Consumer Complaint": 48,
     "Maintenance or Facility": 275,
+    "Consumer Complaint": 48,
     "Overgrown Tree/Branches": 1,
     "Drug Activity": 1,
     "Noise - Street/Sidewalk": 4,
@@ -37,17 +37,17 @@
     "Street Condition": 2
   },
   "descriptor_counts": {
-    "Allowed in Smoke Free Area": 460,
+    "Allowed in Smoke Free Area": 452,
     "Weeds or Grass": 612,
-    "Unlicensed": 116,
-    "Sales to Minors Under 21": 117,
-    "E-Cigarette Sales": 36,
+    "Sales to Minors Under 21": 120,
+    "Too Close to a School": 18,
     "Grass/Weeds": 275,
-    "Sign Inadequate": 6,
-    "Suspicious Activity": 28,
-    "Smoking, Cigar, or Vape Store": 12,
     "Product Concerns": 13,
-    "Too Close to a School": 15,
+    "Unlicensed": 112,
+    "E-Cigarette Sales": 36,
+    "Sign Inadequate": 6,
+    "Suspicious Activity": 26,
+    "Smoking, Cigar, or Vape Store": 12,
     "Hitting Phone/Cable Lines": 1,
     "Use Indoor": 1,
     "Loud Talking": 2,
@@ -74,9 +74,9 @@
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298258
+      "count": 298266
     }
   ],
-  "generated_at": "2026-07-20T12:31:53.007Z",
+  "generated_at": "2026-07-21T12:04:32.658Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }
