@@ -79,13 +79,15 @@
       "id": 1,
       "scenario": "Missing manifest.json",
       "result": "PASS",
-      "evidence": "runtime: all-fixtures-missing copy — page usable, no blank, failure panels shown"
+      "evidence": "runtime: all-fixtures-missing copy — page usable, no blank, failure panels shown",
+      "method": "runtime"
     },
     {
       "id": 2,
       "scenario": "Manifest HTTP 404",
       "result": "PASS",
-      "evidence": "runtime: 404 in all-fail copy handled via fetch !ok path"
+      "evidence": "runtime: 404 in all-fail copy handled via fetch !ok path",
+      "method": "runtime"
     },
     {
       "id": 3,
@@ -98,38 +100,43 @@
       "id": 4,
       "scenario": "Manifest missing subordinate",
       "result": "PASS",
-      "evidence": "runtime: partial copy manifest lists v2/summary.json which returns 404 → degraded banner counts it"
+      "evidence": "runtime: partial copy manifest lists v2/summary.json which returns 404 → degraded banner counts it",
+      "method": "runtime"
     },
     {
       "id": 5,
       "scenario": "Missing global.json",
       "result": "PASS",
-      "evidence": "runtime: all-fail copy → header UNKNOWN/Unavailable, not zero"
+      "evidence": "runtime: all-fail copy → header UNKNOWN/Unavailable, not zero",
+      "method": "runtime"
     },
     {
       "id": 6,
       "scenario": "Missing V1 summary",
       "result": "PASS",
-      "evidence": "runtime: all-fail copy → V1 panels degrade gracefully"
+      "evidence": "runtime: all-fail copy → V1 panels degrade gracefully",
+      "method": "runtime"
     },
     {
       "id": 7,
       "scenario": "Missing V2 summary",
       "result": "PASS",
-      "evidence": "runtime: partial copy → V2 card UNKNOWN/—%, PRODUCTION AUTHORITY NONE"
+      "evidence": "runtime: partial copy → V2 card UNKNOWN/—%, PRODUCTION AUTHORITY NONE",
+      "method": "runtime"
     },
     {
       "id": 8,
       "scenario": "Malformed subordinate JSON",
       "result": "PASS",
-      "evidence": "runtime: partial copy enigma-core malformed → its panel shows fail(), others render"
+      "evidence": "runtime: partial copy enigma-core malformed → its panel shows fail(), others render",
+      "method": "runtime"
     },
     {
       "id": 9,
       "scenario": "Valid JSON unexpected structure",
       "result": "PASS",
-      "method": "code_review",
-      "evidence": "renderers use optional chaining/?? and ||[]; missing keys resolve to Unknown/empty (demonstrated), same path as unexpected structure"
+      "method": "runtime",
+      "evidence": "runtime (GV2-3.1): valid JSON with components not an array -> core renderer threw -> controlled panel failure in [data-core-strip] only (totalErrors=1), all other panels rendered"
     },
     {
       "id": 10,
@@ -142,37 +149,43 @@
       "id": 11,
       "scenario": "All fixture requests failing",
       "result": "PASS",
-      "evidence": "runtime: all-fail copy → not blank, 6 failure panels, degraded banner, no zeros"
+      "evidence": "runtime: all-fail copy → not blank, 6 failure panels, degraded banner, no zeros",
+      "method": "runtime"
     },
     {
       "id": 12,
       "scenario": "One optional panel failing while others load",
       "result": "PASS",
-      "evidence": "runtime: partial copy → enigma panel fails, version/lanes/repos/alerts still render"
+      "evidence": "runtime: partial copy → enigma panel fails, version/lanes/repos/alerts still render; GV2-3.1 target-aware registration re-verified (badstruct: only core panel failed)",
+      "method": "runtime"
     },
     {
       "id": 13,
       "scenario": "Stale generated_at_utc",
       "result": "PASS",
-      "evidence": "runtime: stale copy (2026-06-01) → stale-warning shown (aria-live polite); correction added"
+      "evidence": "runtime: stale copy (2026-06-01) → stale-warning shown (aria-live polite); correction added",
+      "method": "runtime"
     },
     {
       "id": 14,
       "scenario": "Unknown/unavailable status values",
       "result": "PASS",
-      "evidence": "runtime: UNKNOWN/Unavailable rendered, never blank-crashed"
+      "evidence": "runtime: UNKNOWN/Unavailable rendered, never blank-crashed",
+      "method": "runtime"
     },
     {
       "id": 15,
       "scenario": "Numeric zero substituted for unknown",
       "result": "PASS",
-      "evidence": "runtime: unknown shows '—'/'UNKNOWN'/'Unavailable', never 0"
+      "evidence": "runtime: unknown shows '—'/'UNKNOWN'/'Unavailable', never 0",
+      "method": "runtime"
     },
     {
       "id": 16,
       "scenario": "Map iframe unavailable",
       "result": "PASS",
-      "evidence": "map-overlay (label/branch/QA) + 'Open full production map' fallback link always present; readable fallback, not broken empty region"
+      "evidence": "map-overlay (label/branch/QA) + 'Open full production map' fallback link always present; readable fallback, not broken empty region",
+      "method": "runtime"
     },
     {
       "id": 17,
@@ -192,7 +205,8 @@
       "id": 19,
       "scenario": "Long error text",
       "result": "PASS",
-      "evidence": "runtime: malformed-JSON error message rendered inside subsystem-error block, wraps, no horizontal overflow"
+      "evidence": "runtime: malformed-JSON error message rendered inside subsystem-error block, wraps, no horizontal overflow",
+      "method": "runtime"
     },
     {
       "id": 20,
@@ -295,5 +309,65 @@
     "Full manual keyboard keystroke traversal (Tab/Shift+Tab order) verified structurally + focus-rule, not via a complete manual keystroke session",
     "External map iframe behavior under production X-Frame-Options headers cannot be reproduced locally"
   ],
-  "qa_status": "GV2_3_PASS_WITH_CONDITIONS"
+  "qa_status": "GV2_3_PASS_WITH_CONDITIONS",
+  "evidence_method_breakdown": {
+    "note": "How each result was established, recorded honestly rather than all as runtime.",
+    "failure_cases_runtime_verified": 15,
+    "failure_cases_analogous_path_review": 1,
+    "failure_cases_code_review": 3,
+    "failure_cases_observed_plus_correction": 1,
+    "responsive_runtime_measured_viewports": [
+      "1440x900",
+      "1280x800",
+      "768x1024",
+      "390x844",
+      "320x568 (all 3 routes)"
+    ],
+    "responsive_breakpoint_equivalent_viewports": [
+      "1024x768 (single-col path, verified at 768)",
+      "430x932 (single-col path, verified at 390)"
+    ],
+    "keyboard_method": "structural + focus-rule verification (focusable set, skip link, :focus-visible, native semantics); full manual keystroke traversal = manual review",
+    "semantic_method": "DOM/accessibility-tree inspection; real screen-reader runtime NOT performed",
+    "contrast_method": "manual browser inspection; exact ratios = manual review"
+  },
+  "gv2_3_1_repair": {
+    "head_before": "e596ed376cb2d825533b1f1d1e82e6ecef185fe0",
+    "scope": "admin/v2-preview/godview-v2.js + admin/v2-preview/GV2_3_QA.json only",
+    "repairs": [
+      {
+        "id": 1,
+        "repair": "Page-aware timelines and alerts",
+        "runtime_evidence": "overview=2 timeline tracks & 6 alerts (V1+V2); /v1/=1 track & 2 V1 alerts; /v2/=1 track & 4 V2 alerts"
+      },
+      {
+        "id": 2,
+        "repair": "Target-aware renderer registration replacing silent catch",
+        "runtime_evidence": "missing targets = no-op (V1/V2 pages render fully); existing target throwing (components not array) = controlled panel failure in that target only (totalErrors=1) with all other panels functional; loaders removed on every page"
+      },
+      {
+        "id": 3,
+        "repair": "Freshness validation (fresh/stale/invalid-timestamp/missing-timestamp/invalid-threshold)",
+        "runtime_evidence": "fresh main = no warning + real date; invalid timestamp and invalid threshold both show exact required string (matchesExact=true); invalid timestamp 'updated' field shows Unavailable not 'Invalid Date'"
+      },
+      {
+        "id": 4,
+        "repair": "Honest QA evidence-method accounting",
+        "runtime_evidence": "this record: evidence_method_breakdown separates runtime / analogous-path / code-review / manual-review"
+      }
+    ],
+    "exact_invalid_freshness_string": "Freshness cannot be confirmed because the generation timestamp or freshness threshold is invalid.",
+    "console_errors": 0,
+    "unhandled_rejections": 0,
+    "contract_test_count": 25,
+    "contract_tests_passed": 25,
+    "changed_paths": [
+      "admin/v2-preview/godview-v2.js",
+      "admin/v2-preview/GV2_3_QA.json"
+    ],
+    "unexpected_changed_paths": [],
+    "fixture_files_modified": 0,
+    "schema_files_modified": 0,
+    "qa_status": "GV2_3_1_PASS_WITH_CONDITIONS"
+  }
 }
