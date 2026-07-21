@@ -144,3 +144,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+/* GV2-3 QA corrections */
+/* Responsive: prevent grid/flex blowout and horizontal overflow from long unbreakable tokens (e.g. GAP_… identifiers, SHA-256 strings) at small viewports. */
+.lane, .version-card, .repo-card, .timeline-track, .core-node, .lane-head > div { min-width: 0; }
+.task-list strong, .task-list span, .lane-title, .muted, .alert strong, .alert span,
+.phase strong, .phase span, .core-node strong, .core-node span, .repo-card h3,
+.stat .value, .command-card .value, .map-overlay strong, .status-line strong {
+  overflow-wrap: anywhere; word-break: break-word;
+}
+/* Accessibility: always-visible keyboard focus indicator. */
+:focus-visible { outline: 2px solid #bfdbfe; outline-offset: 2px; border-radius: 6px; }
+.skip-link:focus-visible { outline-offset: 0; }
