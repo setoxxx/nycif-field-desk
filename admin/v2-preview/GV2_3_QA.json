@@ -369,5 +369,171 @@
     "fixture_files_modified": 0,
     "schema_files_modified": 0,
     "qa_status": "GV2_3_1_PASS_WITH_CONDITIONS"
+  },
+  "gv2_3_2_repair": {
+    "head_before": "b257a0487b32f797c473e5bf2153157c551e327c",
+    "head_after": null,
+    "changed_paths": [
+      "admin/v2-preview/godview-v2.js",
+      "admin/v2-preview/GV2_3_QA.json"
+    ],
+    "unexpected_changed_paths": [],
+    "correction_1_strict_freshness": {
+      "exact_invalid_message": "Freshness cannot be confirmed because the generation timestamp or freshness threshold is invalid.",
+      "validation": "generated_at_utc must be a nonempty canonical UTC ISO string (YYYY-MM-DDTHH:MM:SS[.sss]Z, Z only), parse to finite, and round-trip to a real calendar date (rejects tz-less, offset, permissive non-ISO, impossible dates). freshness_threshold_hours must be a positive integer (rejects 0/negative/nonnumeric/fractional/missing). Missing metadata now uses the same invalid message (no separate missing-timestamp warning).",
+      "freshness_runtime_cases": [
+        {
+          "case": 1,
+          "name": "valid fresh",
+          "expected": "no warning",
+          "result": "PASS",
+          "method": "node harness on actual file fns + DOM (server) — warning hidden, real date shown"
+        },
+        {
+          "case": 2,
+          "name": "valid stale",
+          "expected": "stale warning",
+          "result": "PASS",
+          "method": "node harness + DOM — 'Status data may be stale…'"
+        },
+        {
+          "case": 3,
+          "name": "invalid timestamp",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness + DOM (exact match, updated='Unavailable')"
+        },
+        {
+          "case": 4,
+          "name": "missing timestamp",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 5,
+          "name": "threshold 0",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 6,
+          "name": "negative threshold",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 7,
+          "name": "nonnumeric threshold",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 8,
+          "name": "fractional threshold",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 9,
+          "name": "timezone-less timestamp",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 10,
+          "name": "offset timestamp",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 11,
+          "name": "impossible calendar date",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        }
+      ],
+      "freshness_cases_passed": 11,
+      "freshness_cases_total": 11,
+      "note": "Cases run against the actual validTimestamp/validThreshold/freshnessMessage source extracted from godview-v2.js; fresh/stale/invalid also confirmed end-to-end in the browser DOM."
+    },
+    "correction_2_alert_failure": {
+      "alert_runtime_cases": [
+        {
+          "case": 1,
+          "name": "V1 page, v1Alerts failed",
+          "result": "PASS",
+          "evidence": "controlled 'V1 alerts unavailable' block; no 'No alerts' message; no path leak"
+        },
+        {
+          "case": 2,
+          "name": "V2 page, v2Alerts failed",
+          "result": "PASS",
+          "evidence": "controlled 'V2 alerts unavailable' block; no empty message; no path leak"
+        },
+        {
+          "case": 3,
+          "name": "overview, only v1Alerts failed",
+          "result": "PASS",
+          "evidence": "V1 failure block + 4 valid V2 alerts preserved"
+        },
+        {
+          "case": 4,
+          "name": "overview, only v2Alerts failed",
+          "result": "PASS",
+          "evidence": "V2 failure block + 2 valid V1 alerts preserved"
+        },
+        {
+          "case": 5,
+          "name": "overview, both alert files failed",
+          "result": "PASS",
+          "evidence": "both failure blocks; no false empty message"
+        },
+        {
+          "case": 6,
+          "name": "successfully loaded empty alert arrays",
+          "result": "PASS",
+          "evidence": "'No alerts in fixture data.' shown; 0 failure blocks"
+        }
+      ],
+      "alert_cases_passed": 6,
+      "alert_cases_total": 6,
+      "failed_file_never_shown_as_empty": true,
+      "sanitization": "alert failure blocks use a generic message; no local paths, raw fixture bodies or private data exposed"
+    },
+    "correction_3_renderer_signal": {
+      "result": "PASS",
+      "induced_exception": "valid JSON, components not an array -> Enigma Core renderer throws TypeError (target [data-core-strip] exists)",
+      "controlled_panel_failure": "[data-core-strip] shows one sanitized 'Panel failed to render' block",
+      "other_panels_render": "version cards 2, lanes 2, repos 3, alerts 6",
+      "loaders_cleared": true,
+      "console_signal": "[GodView] Renderer failed: Enigma Core (TypeError)",
+      "console_signal_contains_only": "renderer name + exception type",
+      "no_raw_error_stack_path_or_fixture": true,
+      "exactly_one_emission_per_exception": true,
+      "emission_evidence": "godview-v2.js fetched once, enigma-core.json fetched once, navCount=1, one DOM failure block, direct single-call test emitted exactly 1; the console reader displayed the same emission twice (browser-tool display artifact, not a code double-log)"
+    },
+    "contract_test_count": 25,
+    "contract_tests_passed": 25,
+    "contract_tests_failed": 0,
+    "contract_test_errors": 0,
+    "contract_test_skips": 0,
+    "node_check": "OK",
+    "manual_review_conditions": [
+      "Real screen-reader (VoiceOver) runtime reading-order pass not performed",
+      "Exact automated contrast ratios not measured",
+      "Full manual keyboard keystroke traversal not performed",
+      "External map iframe behavior under production X-Frame-Options not reproducible locally",
+      "Browser-tool console reader displayed the single renderer signal twice; verified single emission via fetch/exec counts and a direct single-call test"
+    ],
+    "post_push_verification": "PENDING_COMPLETION_REPORT",
+    "qa_status": "GV2_3_2_PASS_WITH_CONDITIONS"
   }
 }
