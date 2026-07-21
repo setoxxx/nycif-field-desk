@@ -40,17 +40,14 @@ full recovery on reload; no Enigma console errors; surrounding GodView panels
 unaffected; 390px responsive clean; page not controlled by a service worker
 locally; fixture fetched with a unique `?v=` cache-bust.
 
-## Outstanding before merge (human confirmation only — no known defects)
-- [ ] Confirm native `<summary>` Enter/Space keyboard activation
-      (automation could not actuate synthetic key toggling; control is
-      Tab-reachable with a visible focus ring and is a native, spec-operable
-      element)
-- [ ] Confirm behavior at a true 320px viewport (Chrome clamped the automated
-      window to ~345px; panel verified fully responsive at 345px, and the
-      345px page-level overflow is pre-existing non-Enigma content)
+## Human confirmations completed
+- [x] Native `<summary>` Enter/Space keyboard activation confirmed by the product owner on 2026-07-21.
+- [x] Behavior at a true 320px viewport confirmed by the product owner on 2026-07-21: cards stack, long values wrap, tables remain internally scrollable, and the Enigma panel does not introduce page-level horizontal overflow.
+
+With both residual human checks complete, live browser QA is elevated to `GODVIEW_V2_1_BROWSER_QA_PASS`.
 
 ## Governance
-- **Merge requires explicit authorization** from the product owner.
-- **Deployment requires separate explicit authorization** (GitHub Pages deploys
-  the whole tree on push to `main`; this panel is public the instant it merges).
-- Merge only the reviewed commit (or a fast-forward that adds only this note).
+- **Merging PR #130 is a combined merge-and-deployment authorization** because `.github/workflows/static.yml` deploys the whole tree to GitHub Pages on every push to `main`.
+- The synthetic shadow panel becomes publicly reachable when the merge-triggered Pages deployment completes.
+- Merge and deployment require one explicit combined authorization from the product owner.
+- Merge only the reviewed implementation commit plus documentation-only validation records.
