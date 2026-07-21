@@ -1,0 +1,299 @@
+{
+  "bundle_schema_id": "nycif-godview-enigma-shadow-bundle",
+  "bundle_schema_version": 1,
+  "classification": "MOCK_FIXTURE_NON_OPERATIONAL",
+  "fixture": true,
+  "operational": false,
+  "synthetic_notice": "All values are fictional. No real source data, names, contacts, sensitive coordinates, or repository internals. Coordinates are explicitly synthetic.",
+  "enigma": {
+    "event_lane_schema_id": "enigma-event-lane",
+    "event_lane_schema_version": 1,
+    "run_id": "acba25512100f80b56fc3ccd14c65be55d94800cda77585c5f41a887e398f9be",
+    "input_artifact_sha256": "c96c6d5be8d08a12e7b5cdc1b207fa6b2430974c86803d8891675e76fd992c20",
+    "generated_at_utc": "2026-07-20T00:00:00Z",
+    "timezone_ready": true,
+    "timezone_ready_source": "fixture_synthetic",
+    "counts": {
+      "requested": 8,
+      "observations": 6,
+      "processing_results": 6,
+      "pre_observation_failures": 2,
+      "accepted": 3,
+      "rejected_or_blocked": 3,
+      "rejected": 3,
+      "accepted_distinct_occurrence_keys": 2,
+      "terminal_outcomes": 8,
+      "silent_loss": 0
+    },
+    "generated": {
+      "source_observations.json": "711430f6164e93803d93428bc1fab80f41e213bb197689307de8606d437c3038",
+      "processing_results.json": "4d2f4b668cfc48e6059d36e91326bf87de39ba819f35450477bc1ce614a63bbd",
+      "pre_observation_failures.json": "3921871aa0881e3e94830142ac90994452f670fe337eb50303ea9cc6d0f3ae37"
+    }
+  },
+  "source_observations": [
+    {
+      "schema_version": 1,
+      "observation_id": "dcb229817486f995e507b3135b2ca0fc3406453c27c69c05c2dec959276847c7",
+      "source_id": "mock-dataset-alpha",
+      "source_record_id": "MOCK-1001",
+      "source_artifact_sha256": "2fdceec5cd7cf785f9caedb75f09d901ed20eabb93dab14eac23ac579214372c",
+      "retrieved_at_utc": "2026-07-20T00:00:00Z",
+      "raw_value": {
+        "synthetic": true,
+        "note": "mock raw payload - never displayed"
+      },
+      "provenance": {
+        "source_id": "mock-dataset-alpha",
+        "source_record_id": "MOCK-1001",
+        "source_dataset_name": "Mock Dataset Alpha",
+        "source_note": "synthetic",
+        "retrieved_at_utc": "2026-07-20T00:00:00Z",
+        "retrieved_at_source": "snapshot_envelope"
+      },
+      "observation_hash": "1aac7d2ee6c3b8b100d11dab6cb45484ed5ab94e19c33dd9bcdda769c48ff28d"
+    },
+    {
+      "schema_version": 1,
+      "observation_id": "a29a69fa02d8720de5426f2d37a6c88987ca24d3bacc1e82acd2ff18b9fb3237",
+      "source_id": "mock-dataset-alpha",
+      "source_record_id": "MOCK-1001",
+      "source_artifact_sha256": "557ae2017297d4d9ef0270931c61ff658c418365aa8ef844b7d07ad3dcc93ac9",
+      "retrieved_at_utc": "2026-07-20T00:00:00Z",
+      "raw_value": {
+        "synthetic": true,
+        "note": "mock raw payload - never displayed"
+      },
+      "provenance": {
+        "source_id": "mock-dataset-alpha",
+        "source_record_id": "MOCK-1001",
+        "source_dataset_name": "Mock Dataset Alpha",
+        "source_note": "synthetic",
+        "retrieved_at_utc": "2026-07-20T00:00:00Z",
+        "retrieved_at_source": "snapshot_envelope"
+      },
+      "observation_hash": "529b93b9529eb91a3596894f4b37b64c9c96348e60648a5939eeb656c532da99"
+    },
+    {
+      "schema_version": 1,
+      "observation_id": "23236e821a40c003a0d3dd3d123e88c1b83c62aead11f6bb4f09c209021347ee",
+      "source_id": "mock-dataset-alpha",
+      "source_record_id": "MOCK-1002",
+      "source_artifact_sha256": "73fe64fbef8c5f2bc4e4f7bc28b26d1eae0c56661a4e938d95358005b2fb924d",
+      "retrieved_at_utc": "2026-07-20T00:00:00Z",
+      "raw_value": {
+        "synthetic": true,
+        "note": "mock raw payload - never displayed"
+      },
+      "provenance": {
+        "source_id": "mock-dataset-alpha",
+        "source_record_id": "MOCK-1002",
+        "source_dataset_name": "Mock Dataset Alpha",
+        "source_note": "synthetic",
+        "retrieved_at_utc": "2026-07-20T00:00:00Z",
+        "retrieved_at_source": "snapshot_envelope"
+      },
+      "observation_hash": "6886e8ff438c17a554374d14fd79dc4029ef1908e60ce64bdfff9b68cd96066b"
+    },
+    {
+      "schema_version": 1,
+      "observation_id": "2cd606573893446ffb86fa94e61c2ef503f7af0b2bb9f52b8ed28ac6255687f2",
+      "source_id": "mock-dataset-alpha",
+      "source_record_id": "MOCK-1003",
+      "source_artifact_sha256": "220369f06c3b9dbe3c14236b87483df0cbcfae4e3ad6fbcd6ea4031218221bb8",
+      "retrieved_at_utc": "2026-07-20T00:00:00Z",
+      "raw_value": {
+        "synthetic": true,
+        "note": "mock raw payload - never displayed"
+      },
+      "provenance": {
+        "source_id": "mock-dataset-alpha",
+        "source_record_id": "MOCK-1003",
+        "source_dataset_name": "Mock Dataset Alpha",
+        "source_note": "synthetic",
+        "retrieved_at_utc": "2026-07-20T00:00:00Z",
+        "retrieved_at_source": "snapshot_envelope"
+      },
+      "observation_hash": "25d506dbe03c73d7beddb497caa356034c2da971eb74648e77cf239c21a86c91"
+    },
+    {
+      "schema_version": 1,
+      "observation_id": "1834d5065cadeb065d561555b65257b5dc5a0e40a6039cff28dcec73b6fdd2c7",
+      "source_id": "mock-dataset-alpha",
+      "source_record_id": "MOCK-1004",
+      "source_artifact_sha256": "7d15f11138815463b9721f810813e0ccfea9ba67d6b7726f5f0163f55a45d7d3",
+      "retrieved_at_utc": "2026-07-20T00:00:00Z",
+      "raw_value": {
+        "synthetic": true,
+        "note": "mock raw payload - never displayed"
+      },
+      "provenance": {
+        "source_id": "mock-dataset-alpha",
+        "source_record_id": "MOCK-1004",
+        "source_dataset_name": "Mock Dataset Alpha",
+        "source_note": "synthetic",
+        "retrieved_at_utc": "2026-07-20T00:00:00Z",
+        "retrieved_at_source": "snapshot_envelope"
+      },
+      "observation_hash": "8ecd706d44782e85d80d4da5de47042883bf3c768d09ccc26d6cbd820a7dc34b"
+    },
+    {
+      "schema_version": 1,
+      "observation_id": "099252fed302955961e0758a68f16dd0d880e4c7a7ef8bc7a0548018ae81c42e",
+      "source_id": "mock-dataset-alpha",
+      "source_record_id": "MOCK-1005",
+      "source_artifact_sha256": "23978b20a1b361515eeacdc51ee971f32bc8607eb980c6ad7e0c90d2595aaa43",
+      "retrieved_at_utc": "2026-07-20T00:00:00Z",
+      "raw_value": {
+        "synthetic": true,
+        "note": "mock raw payload - never displayed"
+      },
+      "provenance": {
+        "source_id": "mock-dataset-alpha",
+        "source_record_id": "MOCK-1005",
+        "source_dataset_name": "Mock Dataset Alpha",
+        "source_note": "synthetic",
+        "retrieved_at_utc": "2026-07-20T00:00:00Z",
+        "retrieved_at_source": "snapshot_envelope"
+      },
+      "observation_hash": "86be970b24c17c979cb99874fb899675ad90d277966bbd70d4020c1b99e03084"
+    }
+  ],
+  "processing_results": [
+    {
+      "schema_version": 1,
+      "result_id": "0e405b9869cefa2cf895ca31bfc1f078fa18d539b5c9881beb1dbc18b5884c96",
+      "observation_id": "dcb229817486f995e507b3135b2ca0fc3406453c27c69c05c2dec959276847c7",
+      "disposition": "ACCEPTED",
+      "reason_code": "ACCEPTED_OK",
+      "normalized_value": {
+        "dataset": "mock-dataset-alpha",
+        "source_event_id": "MOCK-1001",
+        "event_date": "2026-09-01",
+        "title": "Mock Community Gathering A",
+        "start_date_time": "2026-09-01T19:00:00-04:00",
+        "end_date_time": "2026-09-01T21:00:00-04:00",
+        "timezone": "America/New_York",
+        "borough": "Manhattan",
+        "location": "Fictional Plaza (synthetic)",
+        "latitude": 40.0001,
+        "longitude": -74.0001,
+        "category": "community",
+        "interests": [
+          "photography",
+          "community"
+        ],
+        "tags": [
+          "mock",
+          "synthetic"
+        ]
+      },
+      "result_hash": "37c625c84190ebaf19d3ba46fd8a66bd4be6aecb00afa0de7de21cdf405c2f2d"
+    },
+    {
+      "schema_version": 1,
+      "result_id": "1db7efd18753fbf05290b5e5f8d9f2c10e3682963453fd488cb70e728a5cde8e",
+      "observation_id": "a29a69fa02d8720de5426f2d37a6c88987ca24d3bacc1e82acd2ff18b9fb3237",
+      "disposition": "ACCEPTED",
+      "reason_code": "ACCEPTED_OK",
+      "normalized_value": {
+        "dataset": "mock-dataset-alpha",
+        "source_event_id": "MOCK-1001",
+        "event_date": "2026-09-01",
+        "title": "Mock Community Gathering B",
+        "start_date_time": "2026-09-01T19:00:00-04:00",
+        "end_date_time": "2026-09-01T21:00:00-04:00",
+        "timezone": "America/New_York",
+        "borough": "Manhattan",
+        "location": "Fictional Plaza (synthetic)",
+        "latitude": null,
+        "longitude": null,
+        "category": "community",
+        "interests": [
+          "photography",
+          "community"
+        ],
+        "tags": [
+          "mock",
+          "synthetic"
+        ]
+      },
+      "result_hash": "c827c6edfb85fe09c30a085a7eac6554e05cf198668234bc760a02358cf9c999"
+    },
+    {
+      "schema_version": 1,
+      "result_id": "1d648848fd3c789c19809e198d2f1607120532808ae0ad5c3fcb9d180c27d82a",
+      "observation_id": "23236e821a40c003a0d3dd3d123e88c1b83c62aead11f6bb4f09c209021347ee",
+      "disposition": "ACCEPTED",
+      "reason_code": "ACCEPTED_OK",
+      "normalized_value": {
+        "dataset": "mock-dataset-alpha",
+        "source_event_id": "MOCK-1002",
+        "event_date": "2026-09-02",
+        "title": "Mock Market Popup",
+        "start_date_time": "2026-09-02T19:00:00-04:00",
+        "end_date_time": "2026-09-02T21:00:00-04:00",
+        "timezone": "America/New_York",
+        "borough": "Manhattan",
+        "location": "Fictional Plaza (synthetic)",
+        "latitude": null,
+        "longitude": null,
+        "category": "community",
+        "interests": [
+          "photography",
+          "community"
+        ],
+        "tags": [
+          "mock",
+          "synthetic"
+        ]
+      },
+      "result_hash": "9916f4b979bf133297347454a839d86ead4f4fd45309ca7ec5cadf98eb1521d8"
+    },
+    {
+      "schema_version": 1,
+      "result_id": "4643486dc7fa9dca2eeefc63e847948e4ec7052c6d8335a6e7749234d58f0a45",
+      "observation_id": "2cd606573893446ffb86fa94e61c2ef503f7af0b2bb9f52b8ed28ac6255687f2",
+      "disposition": "REJECTED",
+      "reason_code": "REJECTED_INVALID_EVENT_DATETIME",
+      "normalized_value": null,
+      "result_hash": "459671bba9a9b117c28b14194be7dd1a82bd4b73386e136fe8dee4deb5a17565"
+    },
+    {
+      "schema_version": 1,
+      "result_id": "f742667927fe6a489c2d30596454c13758742dec1d7e9c4f859f3ad582607d83",
+      "observation_id": "1834d5065cadeb065d561555b65257b5dc5a0e40a6039cff28dcec73b6fdd2c7",
+      "disposition": "BLOCKED",
+      "reason_code": "BLOCKED_CONFLICT",
+      "normalized_value": null,
+      "result_hash": "007765e53f9da29d44fd0a05bdbcf0e795fa8ae11c566cde38f66fc07d0961fc"
+    },
+    {
+      "schema_version": 1,
+      "result_id": "1078e8488844bd1947ed0f647eacf47402a03b669683a4eea51501dfe63ba17b",
+      "observation_id": "099252fed302955961e0758a68f16dd0d880e4c7a7ef8bc7a0548018ae81c42e",
+      "disposition": "REVIEW_REQUIRED",
+      "reason_code": "REVIEW_REQUIRED_MANUAL",
+      "normalized_value": null,
+      "result_hash": "cacc19ac927bbea5c3658d8e1f9f1e81e2078efc088ad3ba9d241acf3783eb16"
+    }
+  ],
+  "pre_observation_failures": [
+    {
+      "schema_version": 1,
+      "input_ordinal": 6,
+      "reason_code": "PREOBS_INVALID_RECORD_STRUCTURE",
+      "detail": "record is not a JSON object",
+      "raw_input_sha256": "a8ee78c30e166202b1616ac9186e0e0fe28085b3b8c7ff56230f39186eeab180",
+      "failure_hash": "02222c36af5dabafaf763968e150a37382f07b5010ca8fa984ad54a202e1eefc"
+    },
+    {
+      "schema_version": 1,
+      "input_ordinal": 7,
+      "reason_code": "PREOBS_MISSING_SOURCE_METADATA",
+      "detail": "record.source is missing dataset or source_event_id",
+      "raw_input_sha256": null,
+      "failure_hash": "f64b2d4445c3988c3a1e11a3fa5ee0a8c47df3ccfe1f6a37431cd6aff4ef3466"
+    }
+  ]
+}

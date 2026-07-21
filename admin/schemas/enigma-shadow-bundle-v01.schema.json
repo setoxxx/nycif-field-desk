@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:godview:enigma-shadow-bundle/v01",
+  "title": "GodView Enigma Shadow Status Bundle (v01)",
+  "description": "Closed schema for the synthetic, non-operational Enigma shadow diagnostic bundle rendered by the GodView Enigma Shadow Status panel. Mirrors the accepted CORE-2.1 event-lane output shape. This bundle is a MOCK fixture and is never production-authoritative.",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "sha256hex": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "sha256hexOrNull": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "canonicalUtc": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$" },
+    "isoDate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "safeText": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "safeTextOrNull": {
+      "type": ["string", "null"],
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "disposition": { "type": "string", "enum": ["ACCEPTED", "REJECTED", "BLOCKED", "REVIEW_REQUIRED"] },
+    "postReason": {
+      "type": "string",
+      "enum": ["ACCEPTED_OK", "REJECTED_MISSING_REQUIRED_FIELD", "REJECTED_INVALID_EVENT_DATETIME",
+        "REJECTED_INVALID_NORMALIZED_VALUE", "REJECTED_UNSUPPORTED_SCHEMA_VERSION",
+        "BLOCKED_DUPLICATE", "BLOCKED_CONFLICT", "REVIEW_REQUIRED_MANUAL"]
+    },
+    "preReason": {
+      "type": "string",
+      "enum": ["PREOBS_INVALID_RECORD_STRUCTURE", "PREOBS_MISSING_SOURCE_METADATA",
+        "PREOBS_INVALID_RETRIEVAL_TIMESTAMP", "PREOBS_OBSERVATION_CONTRACT_FAILURE"]
+    },
+    "normalizedEventValue": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["dataset", "source_event_id", "event_date", "title", "start_date_time",
+        "end_date_time", "timezone", "borough", "location", "latitude", "longitude",
+        "category", "interests", "tags"],
+      "properties": {
+        "dataset": { "$ref": "#/$defs/safeText", "minLength": 1 },
+        "source_event_id": { "$ref": "#/$defs/safeText", "minLength": 1 },
+        "event_date": { "$ref": "#/$defs/isoDate" },
+        "title": { "$ref": "#/$defs/safeText", "minLength": 1 },
+        "start_date_time": { "$ref": "#/$defs/safeText" },
+        "end_date_time": { "$ref": "#/$defs/safeTextOrNull" },
+        "timezone": { "$ref": "#/$defs/safeTextOrNull" },
+        "borough": { "$ref": "#/$defs/safeTextOrNull" },
+        "location": { "$ref": "#/$defs/safeTextOrNull" },
+        "latitude": { "type": ["number", "null"] },
+        "longitude": { "type": ["number", "null"] },
+        "category": { "$ref": "#/$defs/safeTextOrNull" },
+        "interests": { "type": ["array", "null"], "items": { "$ref": "#/$defs/safeText" } },
+        "tags": { "type": ["array", "null"], "items": { "$ref": "#/$defs/safeText" } }
+      }
+    }
+  },
+  "required": ["bundle_schema_id", "bundle_schema_version", "classification", "fixture",
+    "operational", "enigma", "source_observations", "processing_results", "pre_observation_failures"],
+  "properties": {
+    "bundle_schema_id": { "const": "nycif-godview-enigma-shadow-bundle" },
+    "bundle_schema_version": { "const": 1 },
+    "classification": { "const": "MOCK_FIXTURE_NON_OPERATIONAL" },
+    "fixture": { "const": true },
+    "operational": { "const": false },
+    "synthetic_notice": { "$ref": "#/$defs/safeText" },
+    "enigma": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_lane_schema_id", "event_lane_schema_version", "run_id",
+        "input_artifact_sha256", "generated_at_utc", "counts", "generated"],
+      "properties": {
+        "event_lane_schema_id": { "const": "enigma-event-lane" },
+        "event_lane_schema_version": { "const": 1 },
+        "run_id": { "$ref": "#/$defs/sha256hex" },
+        "input_artifact_sha256": { "$ref": "#/$defs/sha256hex" },
+        "generated_at_utc": { "$ref": "#/$defs/canonicalUtc" },
+        "timezone_ready": { "type": "boolean" },
+        "timezone_ready_source": { "$ref": "#/$defs/safeText" },
+        "counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requested", "observations", "processing_results", "pre_observation_failures",
+            "accepted", "rejected_or_blocked", "accepted_distinct_occurrence_keys",
+            "terminal_outcomes", "silent_loss"],
+          "properties": {
+            "requested": { "type": "integer", "minimum": 0 },
+            "observations": { "type": "integer", "minimum": 0 },
+            "processing_results": { "type": "integer", "minimum": 0 },
+            "pre_observation_failures": { "type": "integer", "minimum": 0 },
+            "accepted": { "type": "integer", "minimum": 0 },
+            "rejected_or_blocked": { "type": "integer", "minimum": 0 },
+            "rejected": { "type": "integer", "minimum": 0 },
+            "accepted_distinct_occurrence_keys": { "type": "integer", "minimum": 0 },
+            "terminal_outcomes": { "type": "integer", "minimum": 0 },
+            "silent_loss": { "type": "integer" }
+          }
+        },
+        "generated": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/sha256hex" }
+        }
+      }
+    },
+    "source_observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["schema_version", "observation_id", "source_id", "source_record_id",
+          "source_artifact_sha256", "retrieved_at_utc", "raw_value", "provenance", "observation_hash"],
+        "properties": {
+          "schema_version": { "const": 1 },
+          "observation_id": { "$ref": "#/$defs/sha256hex" },
+          "source_id": { "$ref": "#/$defs/safeText", "minLength": 1 },
+          "source_record_id": { "$ref": "#/$defs/safeText", "minLength": 1 },
+          "source_artifact_sha256": { "$ref": "#/$defs/sha256hex" },
+          "retrieved_at_utc": { "$ref": "#/$defs/canonicalUtc" },
+          "raw_value": { "type": "object" },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_id", "source_record_id", "source_dataset_name", "source_note",
+              "retrieved_at_utc", "retrieved_at_source"],
+            "properties": {
+              "source_id": { "$ref": "#/$defs/safeText", "minLength": 1 },
+              "source_record_id": { "$ref": "#/$defs/safeText", "minLength": 1 },
+              "source_dataset_name": { "$ref": "#/$defs/safeText" },
+              "source_note": { "$ref": "#/$defs/safeText" },
+              "retrieved_at_utc": { "$ref": "#/$defs/canonicalUtc" },
+              "retrieved_at_source": { "type": "string", "enum": ["record", "snapshot_envelope"] }
+            }
+          },
+          "observation_hash": { "$ref": "#/$defs/sha256hex" }
+        }
+      }
+    },
+    "processing_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["schema_version", "result_id", "observation_id", "disposition",
+          "reason_code", "normalized_value", "result_hash"],
+        "properties": {
+          "schema_version": { "const": 1 },
+          "result_id": { "$ref": "#/$defs/sha256hex" },
+          "observation_id": { "$ref": "#/$defs/sha256hex" },
+          "disposition": { "$ref": "#/$defs/disposition" },
+          "reason_code": { "$ref": "#/$defs/postReason" },
+          "normalized_value": { "$ref": "#/$defs/normalizedEventValue" },
+          "result_hash": { "$ref": "#/$defs/sha256hex" }
+        }
+      }
+    },
+    "pre_observation_failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["schema_version", "input_ordinal", "reason_code", "detail",
+          "raw_input_sha256", "failure_hash"],
+        "properties": {
+          "schema_version": { "const": 1 },
+          "input_ordinal": { "type": "integer", "minimum": 0 },
+          "reason_code": { "$ref": "#/$defs/preReason" },
+          "detail": { "$ref": "#/$defs/safeText" },
+          "raw_input_sha256": { "$ref": "#/$defs/sha256hexOrNull" },
+          "failure_hash": { "$ref": "#/$defs/sha256hex" }
+        }
+      }
+    }
+  }
+}
