@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:v1/timeline",
+  "title": "V1 timeline fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "in_progress",
+              "planned",
+              "locked",
+              "active",
+              "not_started"
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          }
+        },
+        "required": [
+          "name",
+          "status",
+          "detail"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "phases"
+  ]
+}

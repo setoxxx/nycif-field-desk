@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:v2/repositories",
+  "title": "V2 repositories fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "repositories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          },
+          "role": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          },
+          "branch": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          },
+          "ci": {
+            "type": "string",
+            "enum": [
+              "UNKNOWN",
+              "PENDING",
+              "PASS",
+              "FAIL"
+            ]
+          },
+          "authority": {
+            "type": "string",
+            "enum": [
+              "PREVIEW_ONLY",
+              "NOT_YET_IMPLEMENTED"
+            ]
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "public",
+              "private"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "IN_PROGRESS",
+              "PLANNED",
+              "LOCKED",
+              "COMPLETE",
+              "NOT_STARTED",
+              "NOT_AUTHORIZED",
+              "PROPOSED",
+              "BLOCKED",
+              "PENDING",
+              "DEGRADED",
+              "RETIRED"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://[^<>\\s]*$"
+          }
+        },
+        "required": [
+          "name",
+          "role",
+          "branch",
+          "ci",
+          "authority",
+          "visibility",
+          "status",
+          "url"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "repositories"
+  ]
+}

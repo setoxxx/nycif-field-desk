@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:v1/summary",
+  "title": "V1 summary fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "production_status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "DEGRADED",
+        "RETIRED"
+      ]
+    },
+    "production_health_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "original_scope_completion_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "authority": {
+      "const": "PRODUCTION"
+    },
+    "summary": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "remaining_work": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "IN_PROGRESS",
+              "PLANNED",
+              "LOCKED",
+              "COMPLETE",
+              "NOT_STARTED",
+              "NOT_AUTHORIZED",
+              "PROPOSED",
+              "BLOCKED",
+              "PENDING",
+              "DEGRADED",
+              "RETIRED"
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          }
+        },
+        "required": [
+          "title",
+          "status",
+          "detail"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "production_status",
+    "production_health_percent",
+    "original_scope_completion_percent",
+    "authority",
+    "summary",
+    "remaining_work"
+  ]
+}

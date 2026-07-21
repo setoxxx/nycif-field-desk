@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:v1/events",
+  "title": "V1 events fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "approved_event_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "major_event_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "review_event_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "IN_PROGRESS",
+        "PLANNED",
+        "LOCKED",
+        "COMPLETE",
+        "NOT_STARTED",
+        "NOT_AUTHORIZED",
+        "PROPOSED",
+        "BLOCKED",
+        "PENDING",
+        "DEGRADED",
+        "RETIRED"
+      ]
+    },
+    "source_note": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "approved_event_count",
+    "major_event_count",
+    "review_event_count",
+    "status",
+    "source_note"
+  ]
+}

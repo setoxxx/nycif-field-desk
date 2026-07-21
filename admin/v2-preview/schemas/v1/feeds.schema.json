@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:v1/feeds",
+  "title": "V1 feeds fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "active_branch": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "feed_root": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "major_feed": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "approved_manifest": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "fallback_behavior": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "IN_PROGRESS",
+        "PLANNED",
+        "LOCKED",
+        "COMPLETE",
+        "NOT_STARTED",
+        "NOT_AUTHORIZED",
+        "PROPOSED",
+        "BLOCKED",
+        "PENDING",
+        "DEGRADED",
+        "RETIRED"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "active_branch",
+    "feed_root",
+    "major_feed",
+    "approved_manifest",
+    "fallback_behavior",
+    "status"
+  ]
+}

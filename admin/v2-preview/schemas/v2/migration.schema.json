@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:v2/migration",
+  "title": "V2 migration fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "readiness_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "cutover_status": {
+      "const": "LOCKED"
+    },
+    "safeguards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "IN_PROGRESS",
+              "PLANNED",
+              "LOCKED",
+              "COMPLETE",
+              "NOT_STARTED",
+              "NOT_AUTHORIZED",
+              "PROPOSED",
+              "BLOCKED",
+              "PENDING",
+              "DEGRADED",
+              "RETIRED"
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          }
+        },
+        "required": [
+          "name",
+          "status",
+          "detail"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "readiness_percent",
+    "cutover_status",
+    "safeguards"
+  ]
+}
