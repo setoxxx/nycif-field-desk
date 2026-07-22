@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1709,
-  "usable_complaints": 1709,
+  "source_complaints": 1708,
+  "usable_complaints": 1708,
   "source_dispensaries": 250,
   "source_retailers": 4882,
   "correlation_locations": 5132,
-  "output_locations": 214,
-  "low_signal_excluded": 4918,
+  "output_locations": 223,
+  "low_signal_excluded": 4909,
   "radius_feet": [
     100,
     250,
@@ -22,19 +22,19 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 189,
+    "licensed_smoke_vape_retailer": 198,
     "legal_cannabis_dispensary": 25
   },
   "borough_counts": {
-    "Queens": 53,
-    "Bronx": 38,
-    "Brooklyn": 58,
-    "Manhattan": 62,
+    "Queens": 61,
+    "Brooklyn": 61,
+    "Bronx": 37,
+    "Manhattan": 61,
     "Staten Island": 3
   },
   "signal_tier_counts": {
-    "high": 22,
-    "moderate": 192
+    "high": 20,
+    "moderate": 203
   },
   "top_locations_sample": [
     {
@@ -58,28 +58,6 @@
       "complaints_365d_100ft": 4,
       "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-07-19"
-    },
-    {
-      "title": "BOSTON ROAD CANDY INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1737 BOSTON RD, BRONX, 10460",
-      "borough": "Bronx",
-      "signal_score": 34,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 6,
-      "last_complaint_date": "2026-07-04"
-    },
-    {
-      "title": "BOSTON ROAD CANDY INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1737 BOSTON RD, BRONX, 10460",
-      "borough": "Bronx",
-      "signal_score": 34,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 6,
-      "last_complaint_date": "2026-07-04"
     },
     {
       "title": "215 FINEST DELI & GRILL CORP",
@@ -113,6 +91,28 @@
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-07-19"
+    },
+    {
+      "title": "BOSTON ROAD CANDY INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1737 BOSTON RD, BRONX, 10460",
+      "borough": "Bronx",
+      "signal_score": 23,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-04"
+    },
+    {
+      "title": "BOSTON ROAD CANDY INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1737 BOSTON RD, BRONX, 10460",
+      "borough": "Bronx",
+      "signal_score": 23,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-04"
     },
     {
       "title": "401 NEW YORK DELI CORP",
@@ -179,28 +179,6 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-17"
-    },
-    {
-      "title": "FRESH FOOD FARM",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1310 2ND AVE, NEW YORK, 10065",
-      "borough": "Manhattan",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-27"
-    },
-    {
-      "title": "FRESH FOOD FARM",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1310 2ND AVE, NEW YORK, 10065",
-      "borough": "Manhattan",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-27"
     },
     {
       "title": "JAY NEWSSTAND",
@@ -311,8 +289,30 @@
       "complaints_365d_100ft": 1,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-06-27"
+    },
+    {
+      "title": "BLAZINUP, LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
+      "borough": "Manhattan",
+      "signal_score": 12,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 1,
+      "last_complaint_date": "2026-07-12"
+    },
+    {
+      "title": "CIGAR VAPE INC I",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "452 5 AVENUE, BROOKLYN, 11215",
+      "borough": "Brooklyn",
+      "signal_score": 12,
+      "signal_tier": "moderate",
+      "complaints_365d_100ft": 1,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-06-27"
     }
   ],
-  "generated_at": "2026-07-21T12:04:33.087Z",
+  "generated_at": "2026-07-22T12:08:23.901Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
