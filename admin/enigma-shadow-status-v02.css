@@ -1,0 +1,75 @@
+/* Enigma Shadow Program Status panel (v02) — GodView internal diagnostic.
+   Reuses the admin dashboard palette/utility classes (.panel .grid .stat .badge
+   .notice .value .label .muted). Only panel-local additions here. Read-only. */
+
+#enigma-shadow-status-section .enigma-shadow-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 14px;
+}
+
+#enigma-shadow-status-section .enigma-shadow-labels .badge {
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+#enigma-shadow-status-section .enigma-shadow-block {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line, rgba(255, 255, 255, .12));
+}
+
+#enigma-shadow-status-section .enigma-shadow-block:first-of-type {
+  border-top: 0;
+  margin-top: 6px;
+  padding-top: 0;
+}
+
+#enigma-shadow-status-section .enigma-shadow-block h3 {
+  margin: 0 0 10px;
+}
+
+#enigma-shadow-status-section .value {
+  overflow-wrap: anywhere;
+}
+
+#enigma-shadow-status-section .enigma-gate-tree,
+#enigma-shadow-status-section .enigma-parked {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#enigma-shadow-status-section .enigma-gate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px dotted var(--line, rgba(255, 255, 255, .12));
+}
+
+#enigma-shadow-status-section .enigma-gate-id {
+  font-weight: 800;
+  min-width: 72px;
+}
+
+#enigma-shadow-status-section .enigma-gate-label {
+  flex: 1 1 160px;
+  overflow-wrap: anywhere;
+}
+
+#enigma-shadow-status-section .enigma-parked li {
+  margin: 4px 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  #enigma-shadow-status-section .enigma-shadow-labels .badge {
+    font-size: 11px;
+  }
+  #enigma-shadow-status-section .enigma-gate-id {
+    min-width: 60px;
+  }
+}
