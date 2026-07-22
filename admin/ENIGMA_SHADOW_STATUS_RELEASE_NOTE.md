@@ -3,7 +3,7 @@
 **Branch:** `enigma/godview-shadow-status-v1`
 **Reviewed commit:** `08cefde5c37350a951a3956dc6aca65ca4bc446e`
 **Base (main):** `e99d0d6eb1f97f389c03619246fcaf61fb2de952`
-**Status:** shadow-only internal diagnostic · **V1 remains the sole publishing authority** · unmerged · undeployed
+**Status:** shadow-only internal diagnostic · **V1 remains the sole publishing authority** · merged (`4aabdbc`) · deployed to GitHub Pages
 
 A read-only Enigma V2 shadow-status panel added to the current GodView
 (`admin/index.html`). It renders a committed, fully synthetic
@@ -29,7 +29,7 @@ Not touched: root `index.html`, `app*.js`, `service-worker.js`,
 - [x] Regression review — `GODVIEW_V2_1_R1_ACCEPTED_WITH_CONDITIONS`
 - [x] Security / XSS review — no `innerHTML`/`insertAdjacentHTML`; hostile input rendered as text; no secret/PII/path leakage
 - [x] Automated tests — 28/28 pass (`python3 -B admin/tests/test_enigma_shadow_status.py`); `node --check` clean
-- [x] Live browser QA — `GODVIEW_V2_1_BROWSER_QA_PASS_WITH_CONDITIONS` (live Chromium via managed preview at `http://localhost:8000/admin/`)
+- [x] Live browser QA — `GODVIEW_V2_1_BROWSER_QA_PASS` (live Chromium via managed preview at `http://localhost:8000/admin/`)
 
 Live QA directly observed: panel renders; fixture loads; all processing metrics
 exact (accepted rows 3 vs distinct occurrence keys 2 shown separately;
