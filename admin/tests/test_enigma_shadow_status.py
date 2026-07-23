@@ -30,6 +30,13 @@ AUTHORIZED = {
     "admin/schemas/enigma-shadow-bundle-v01.schema.json",
     "admin/tests/test_enigma_shadow_status.py",
     "admin/index.html",
+    # v02 program-status panel (SHADOW-1 closeout). The v01 JS/CSS above stay in
+    # the tree, unreferenced, as rollback evidence; only these four paths are
+    # added — the allow-list stays closed to everything else.
+    "admin/enigma-shadow-status-v02.js",
+    "admin/enigma-shadow-status-v02.css",
+    "admin/tests/test_enigma_shadow_status_v02.py",
+    "admin/ENIGMA_SHADOW_STATUS_V02_RELEASE_NOTE.md",
 }
 PROTECTED_UNCHANGED = [
     "index.html", "app.js", "app-schema-v1-major-all-v01.js", "service-worker.js",

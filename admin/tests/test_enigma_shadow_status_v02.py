@@ -44,7 +44,13 @@ VALID_PROGRAM = {
     "authority": {"v1_is_sole_production_authority": True, "shadow_only": True, "synthetic_fixture_only": True,
                   "real_feed_authorized": False, "deployment_authorized": False,
                   "public_promotion_authorized": False, "publication_authorized": False},
-    "next_phase": {"name": "SHADOW-2 Gate A", "status": "not_authorized", "purpose": "real-data governance"},
+    "next_phase": {
+        "name": "SHADOW-2 Gate A",
+        "status": "not_authorized",
+        # Verbatim from build_enigma_shadow_program(); the panel renders this string.
+        "purpose": ("real-data governance, source selection, snapshot boundary, "
+                    "sanitization, retention, and comparison metrics"),
+    },
 }
 
 HARNESS = r"""
@@ -170,6 +176,172 @@ class ValidateProgramTests(unittest.TestCase):
     def test_comparison_or_promotion_started_rejected(self):
         self.assertIsNotNone(_node_validate(dict(VALID_PROGRAM, real_data_comparison="started")))
         self.assertIsNotNone(_node_validate(dict(VALID_PROGRAM, production_promotion="authorized")))
+
+
+@unittest.skipUnless(NODE, "Node not available; validateProgram behavior covered by browser QA")
+class ExactApprovedFactTests(unittest.TestCase):
+    """The panel must mirror the owner-accepted SHADOW-1 record EXACTLY.
+
+    Every case below is internally consistent — totals re-sum, fixture counts
+    reconcile, gate values are drawn from the supported vocabulary, authority
+    flags stay safe — and must still be rejected because an approved value was
+    substituted. Broad shape/arithmetic validation would accept all of them.
+    """
+
+    def assertRejected(self, program, label):
+        self.assertIsNotNone(_node_validate(program), "should be rejected: " + label)
+
+    def test_canonical_program_still_accepted(self):
+        self.assertIsNone(_node_validate(VALID_PROGRAM))
+
+    def test_panel_canonical_matches_test_fixture(self):
+        """The pinned CANONICAL_PROGRAM in the panel equals the generator record."""
+        harness = ("const api = require(process.env.JS);\n"
+                   "process.stdout.write(JSON.stringify({result: api.CANONICAL_PROGRAM}));")
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            h = Path(d) / "h.js"
+            h.write_text(harness, encoding="utf-8")
+            req = Path(d) / "req.json"
+            req.write_text("{}", encoding="utf-8")
+            env = dict(os.environ, JS=str(JS), REQ=str(req))
+            out = subprocess.run(["node", str(h)], capture_output=True, text=True, env=env, timeout=20)
+            self.assertEqual(out.returncode, 0, out.stderr[:200])
+            canonical = json.loads(out.stdout)["result"]
+        self.assertEqual(canonical, VALID_PROGRAM)
+
+    def test_status_change_rejected(self):
+        self.assertRejected(dict(VALID_PROGRAM, status="complete"), "status")
+        self.assertRejected(dict(VALID_PROGRAM, status="owner_accepted"), "status")
+
+    def test_owner_decision_change_rejected(self):
+        self.assertRejected(dict(VALID_PROGRAM, owner_decision="APPROVE"), "owner_decision")
+        self.assertRejected(
+            dict(VALID_PROGRAM, owner_decision="APPROVE SHADOW-ONLY — FIX BOTH MINORS"),
+            "owner_decision wording",
+        )
+
+    def test_synthetic_validation_change_rejected(self):
+        self.assertRejected(dict(VALID_PROGRAM, synthetic_validation="in_progress"), "synthetic_validation")
+
+    def test_each_gate_swapped_to_another_supported_state_rejected(self):
+        # Every substitution below uses a state the panel otherwise supports.
+        supported = ["complete", "accepted_with_conditions", "owner_accepted"]
+        for gate, approved in VALID_PROGRAM["gates"].items():
+            for state in supported:
+                if state == approved:
+                    continue
+                g = dict(VALID_PROGRAM["gates"])
+                g[gate] = state
+                self.assertRejected(dict(VALID_PROGRAM, gates=g), f"gate {gate}={state}")
+
+    def test_fully_swapped_gate_mapping_rejected(self):
+        g = {"A": "owner_accepted", "B": "complete", "C": "complete", "D": "complete",
+             "E": "accepted_with_conditions", "F": "complete"}
+        self.assertRejected(dict(VALID_PROGRAM, gates=g), "swapped gate mapping")
+
+    def test_extra_gate_rejected(self):
+        g = dict(VALID_PROGRAM["gates"], G="complete")
+        self.assertRejected(dict(VALID_PROGRAM, gates=g), "extra gate G")
+
+    def test_individual_test_totals_changed_but_still_summing_rejected(self):
+        # 1/1/1/1 -> 4 sums correctly; previously accepted.
+        self.assertRejected(
+            dict(VALID_PROGRAM, test_totals={"isolation": 1, "enigma_core": 1, "bundle_producer": 1,
+                                             "viewer": 1, "total": 4}),
+            "all totals changed, still sums",
+        )
+        # Shift between two suites, total unchanged at 329.
+        self.assertRejected(
+            dict(VALID_PROGRAM, test_totals={"isolation": 17, "enigma_core": 126, "bundle_producer": 125,
+                                             "viewer": 61, "total": 329}),
+            "isolation/enigma_core shifted, total unchanged",
+        )
+        # Every single-key perturbation with a compensating total.
+        for key in ("isolation", "enigma_core", "bundle_producer", "viewer"):
+            t = dict(VALID_PROGRAM["test_totals"])
+            t[key] += 1
+            t["total"] += 1
+            self.assertRejected(dict(VALID_PROGRAM, test_totals=t), f"test total {key}")
+
+    def test_string_typed_totals_rejected(self):
+        t = dict(VALID_PROGRAM["test_totals"], total="329")
+        self.assertRejected(dict(VALID_PROGRAM, test_totals=t), "total as string")
+
+    def test_individual_fixture_counts_changed_but_still_reconciling_rejected(self):
+        # requested 100 / accepted 97 / distinct 90 reconciles; previously accepted.
+        self.assertRejected(
+            dict(VALID_PROGRAM, fixture_accounting={
+                "requested": 100, "accepted_rows": 97, "distinct_occurrences": 90,
+                "in_viewport": 80, "outside_viewport": 5, "unpinnable": 5,
+                "duplicate_groups": 2, "silent_loss": 0}),
+            "inflated but reconciling fixture accounting",
+        )
+        # duplicate_groups is not part of the reconciliation identity at all.
+        f = dict(VALID_PROGRAM["fixture_accounting"], duplicate_groups=9)
+        self.assertRejected(dict(VALID_PROGRAM, fixture_accounting=f), "duplicate_groups 2 -> 9")
+        # requested/accepted_rows are likewise outside the identity.
+        for key in ("requested", "accepted_rows"):
+            f = dict(VALID_PROGRAM["fixture_accounting"])
+            f[key] += 1
+            self.assertRejected(dict(VALID_PROGRAM, fixture_accounting=f), f"fixture {key}")
+        # Reshuffle inside the identity: 4/0/3 -> 3/1/3 still totals 7.
+        f = dict(VALID_PROGRAM["fixture_accounting"], in_viewport=3, outside_viewport=1)
+        self.assertRejected(dict(VALID_PROGRAM, fixture_accounting=f), "viewport split reshuffled")
+
+    def test_parked_minors_must_match_exactly_and_in_order(self):
+        approved = VALID_PROGRAM["parked_minors"]
+        self.assertRejected(dict(VALID_PROGRAM, parked_minors=[]), "empty parked minors")
+        self.assertRejected(dict(VALID_PROGRAM, parked_minors=[approved[0]]), "one parked minor dropped")
+        self.assertRejected(dict(VALID_PROGRAM, parked_minors=list(reversed(approved))), "reordered")
+        self.assertRejected(dict(VALID_PROGRAM, parked_minors=approved + ["Third item"]), "extra item")
+        self.assertRejected(
+            dict(VALID_PROGRAM, parked_minors=["Fix JSON error wording", approved[1]]),
+            "reworded item",
+        )
+        self.assertRejected(dict(VALID_PROGRAM, parked_minors="two things"), "not a list")
+
+    def test_next_phase_name_and_purpose_pinned(self):
+        for name in ("SHADOW-2", "SHADOW-2 Gate B", "SHADOW-3 Gate A", "Real data comparison"):
+            n = dict(VALID_PROGRAM["next_phase"], name=name)
+            self.assertRejected(dict(VALID_PROGRAM, next_phase=n), f"next_phase.name={name}")
+        n = dict(VALID_PROGRAM["next_phase"], purpose="real-data governance")
+        self.assertRejected(dict(VALID_PROGRAM, next_phase=n), "truncated purpose")
+        n = dict(VALID_PROGRAM["next_phase"], purpose="production promotion planning")
+        self.assertRejected(dict(VALID_PROGRAM, next_phase=n), "substituted purpose")
+        n = dict(VALID_PROGRAM["next_phase"])
+        del n["purpose"]
+        self.assertRejected(dict(VALID_PROGRAM, next_phase=n), "missing purpose")
+
+    def test_every_authority_value_is_exact(self):
+        for key, approved in VALID_PROGRAM["authority"].items():
+            a = dict(VALID_PROGRAM["authority"])
+            a[key] = not approved
+            self.assertRejected(dict(VALID_PROGRAM, authority=a), f"authority {key} flipped")
+        # truthy/falsy substitutes must not satisfy strict equality
+        a = dict(VALID_PROGRAM["authority"], shadow_only=1)
+        self.assertRejected(dict(VALID_PROGRAM, authority=a), "shadow_only as 1")
+        a = dict(VALID_PROGRAM["authority"], deployment_authorized=0)
+        self.assertRejected(dict(VALID_PROGRAM, authority=a), "deployment_authorized as 0")
+        a = dict(VALID_PROGRAM["authority"])
+        del a["publication_authorized"]
+        self.assertRejected(dict(VALID_PROGRAM, authority=a), "authority key removed")
+        a = dict(VALID_PROGRAM["authority"], promotion_override=True)
+        self.assertRejected(dict(VALID_PROGRAM, authority=a), "extra authority key")
+
+    def test_missing_pinned_block_rejected(self):
+        for key in ("program", "status", "owner_decision", "synthetic_validation",
+                    "real_data_comparison", "production_promotion", "gates", "test_totals",
+                    "fixture_accounting", "parked_minors", "authority", "next_phase"):
+            p = dict(VALID_PROGRAM)
+            del p[key]
+            self.assertRejected(p, f"missing {key}")
+
+    def test_harmless_additive_top_level_metadata_ignored(self):
+        """Unknown top-level keys are neither read nor rendered, so they cannot
+        change what the panel asserts and are tolerated."""
+        p = dict(VALID_PROGRAM, generated_note="additive", schema_version="1.0.0")
+        self.assertIsNone(_node_validate(p))
 
 
 if __name__ == "__main__":
