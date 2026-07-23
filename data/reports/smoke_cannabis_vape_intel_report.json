@@ -4,25 +4,25 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-22",
-  "matched_rows": 1732,
-  "mapped_total": 1708,
+  "since_date": "2025-07-23",
+  "matched_rows": 1742,
+  "mapped_total": 1718,
   "needs_review": 24,
-  "rejected": 298268,
+  "rejected": 298258,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 483,
-    "cannabis_related_complaint": 1225
+    "vape_complaint": 486,
+    "cannabis_related_complaint": 1232
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 483,
-    "cannabis_marijuana_weed": 1225
+    "vape_electronic_cigarette": 486,
+    "cannabis_marijuana_weed": 1232
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 441,
-    "Maintenance or Facility": 282,
-    "Obstruction": 632,
-    "Cannabis Retailer": 294,
+    "Smoking or Vaping": 444,
+    "Maintenance or Facility": 278,
+    "Cannabis Retailer": 295,
+    "Obstruction": 642,
     "Consumer Complaint": 42,
     "Overgrown Tree/Branches": 1,
     "Drug Activity": 1,
@@ -37,17 +37,19 @@
     "Street Condition": 2
   },
   "descriptor_counts": {
-    "Allowed in Smoke Free Area": 433,
-    "Grass/Weeds": 282,
-    "Weeds or Grass": 631,
-    "Unlicensed": 113,
-    "E-Cigarette Sales": 32,
-    "Suspicious Activity": 32,
-    "Sales to Minors Under 21": 113,
-    "Too Close to a School": 17,
+    "Allowed in Smoke Free Area": 434,
+    "Grass/Weeds": 278,
+    "Unlicensed": 111,
+    "Weeds or Grass": 641,
+    "Smoking, Cigar, or Vape Store": 12,
+    "Ashtray in Smoke-Free Area": 3,
+    "Too Close to a House of Worship": 8,
     "Product Concerns": 12,
     "Sign Inadequate": 6,
-    "Smoking, Cigar, or Vape Store": 10,
+    "Suspicious Activity": 31,
+    "Sales to Minors Under 21": 114,
+    "Too Close to a School": 19,
+    "E-Cigarette Sales": 30,
     "Hitting Phone/Cable Lines": 1,
     "Use Indoor": 1,
     "Loud Talking": 2,
@@ -55,11 +57,9 @@
     "Loud Music/Party": 2,
     "Branch or Limb Has Fallen Down": 2,
     "Trees and Sidewalks Program": 1,
-    "Too Close to a House of Worship": 7,
     "Water Meter Broken/Leaking - Private Residence (CMR)": 2,
     "Hydrant Leaking (WC1)": 1,
     "With License Plate": 1,
-    "Ashtray in Smoke-Free Area": 1,
     "Trash or Recycling": 1,
     "No Access": 1,
     "Loud Television": 1,
@@ -74,9 +74,9 @@
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298268
+      "count": 298258
     }
   ],
-  "generated_at": "2026-07-22T12:08:23.466Z",
+  "generated_at": "2026-07-23T12:06:58.052Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }
