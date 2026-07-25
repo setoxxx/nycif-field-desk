@@ -1,15 +1,15 @@
 {
   "venue_file": "data/nycif_nightlife_spots.json",
   "source_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json",
-  "queried_since": "2025-07-24T00:00:00",
+  "queried_since": "2025-07-25T00:00:00",
   "source_venues": 10653,
   "usable_venues": 10653,
   "invalid_venue_coordinates": 0,
   "source_complaints": 250000,
   "usable_complaints": 250000,
-  "matched_venues": 10312,
-  "output_venues": 6915,
-  "low_signal_excluded": 3738,
+  "matched_venues": 10314,
+  "output_venues": 6902,
+  "low_signal_excluded": 3751,
   "threshold": {
     "min_trend_score": 12,
     "min_365d_100ft": 3,
@@ -29,19 +29,19 @@
   "top_boroughs": [
     {
       "value": "Manhattan",
-      "count": 3697
+      "count": 3690
     },
     {
       "value": "Brooklyn",
-      "count": 1711
+      "count": 1709
     },
     {
       "value": "Queens",
-      "count": 1104
+      "count": 1101
     },
     {
       "value": "Bronx",
-      "count": 346
+      "count": 345
     },
     {
       "value": "Staten Island",
@@ -51,19 +51,19 @@
   "top_subtypes": [
     {
       "value": "Restaurants with nightlife potential",
-      "count": 4019
+      "count": 4008
     },
     {
       "value": "Bars / taverns",
-      "count": 2490
-    },
-    {
-      "value": "Hotel / event spaces",
-      "count": 167
+      "count": 2488
     },
     {
       "value": "Lounges / clubs",
-      "count": 167
+      "count": 168
+    },
+    {
+      "value": "Hotel / event spaces",
+      "count": 166
     },
     {
       "value": "Beer / wine gathering spots",
@@ -89,37 +89,37 @@
   "top_tiers": [
     {
       "value": "moderate",
-      "count": 3220
+      "count": 3216
     },
     {
       "value": "very_high",
-      "count": 1679
+      "count": 1676
     },
     {
       "value": "high",
-      "count": 1476
+      "count": 1473
     },
     {
       "value": "low",
-      "count": 540
+      "count": 537
     }
   ],
   "top_descriptors": [
     {
       "value": "Loud Music/Party",
-      "count": 6835
+      "count": 6823
     },
     {
       "value": "Loud Talking",
-      "count": 5144
+      "count": 5141
     },
     {
       "value": "Banging/Pounding",
-      "count": 4419
+      "count": 4383
     },
     {
       "value": "Car/Truck Music",
-      "count": 2455
+      "count": 2450
     }
   ],
   "top_venues_sample": [
@@ -127,7 +127,7 @@
       "title": "SPICY EMPIRE SKEWER HOT POT",
       "address": "147-10 45TH AVE, 147-10 45TH AVE, FLUSHING",
       "borough": "Queens",
-      "trend_score": 2164,
+      "trend_score": 2079,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 327,
       "complaints_365d_250ft": 328,
@@ -137,137 +137,137 @@
       "title": "BLUE MOUNTAIN HEIGHTS LLC",
       "address": "499 W 158TH ST, STORE 1,2, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1827,
+      "trend_score": 1822,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 320,
-      "complaints_365d_250ft": 478,
-      "last_complaint_date": "2026-07-22"
+      "complaints_365d_100ft": 319,
+      "complaints_365d_250ft": 468,
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "BUS STOP DINER",
       "address": "3341 BROADWAY, STORE 1, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1674,
+      "trend_score": 1679,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 264,
-      "complaints_365d_250ft": 347,
-      "last_complaint_date": "2026-07-22"
+      "complaints_365d_100ft": 267,
+      "complaints_365d_250ft": 350,
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "THE GROWLER BITES AND BREWS",
       "address": "55 STONE ST, 55 STONE ST, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1467,
+      "trend_score": 1449,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 258,
-      "complaints_365d_250ft": 292,
+      "complaints_365d_100ft": 253,
+      "complaints_365d_250ft": 286,
       "last_complaint_date": "2026-07-22"
     },
     {
       "title": "MAD DOG & BEANS",
       "address": "83 PEARL ST, 83 PEARL ST, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1452,
+      "trend_score": 1434,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 263,
-      "complaints_365d_250ft": 269,
+      "complaints_365d_100ft": 258,
+      "complaints_365d_250ft": 263,
       "last_complaint_date": "2026-07-22"
     },
     {
       "title": "REVOLUTION TACO & TEQUILA",
       "address": "53 STONE ST, 53 STONE ST, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1447,
+      "trend_score": 1429,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 257,
-      "complaints_365d_250ft": 281,
+      "complaints_365d_100ft": 252,
+      "complaints_365d_250ft": 275,
       "last_complaint_date": "2026-07-22"
     },
     {
       "title": "THE CAULDRON",
       "address": "19 S WILLIAM ST, 19 S WILLIAM ST, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1431,
+      "trend_score": 1413,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 257,
-      "complaints_365d_250ft": 272,
+      "complaints_365d_100ft": 252,
+      "complaints_365d_250ft": 266,
       "last_complaint_date": "2026-07-22"
     },
     {
       "title": "GOLDSOUNDS",
       "address": "44 WILSON AVE, 44 WILSON AVE, BROOKLYN",
       "borough": "Brooklyn",
-      "trend_score": 1366,
+      "trend_score": 1369,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 238,
-      "complaints_365d_250ft": 280,
-      "last_complaint_date": "2026-07-21"
+      "complaints_365d_100ft": 236,
+      "complaints_365d_250ft": 278,
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "LA LONCHERIA & YOURS SINCERELY",
       "address": "41 WILSON AVE, 41 WILSON AVE, BROOKLYN",
       "borough": "Brooklyn",
-      "trend_score": 1317,
+      "trend_score": 1306,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 236,
-      "complaints_365d_250ft": 255,
-      "last_complaint_date": "2026-07-21"
+      "complaints_365d_100ft": 233,
+      "complaints_365d_250ft": 253,
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "FRENCH DINER",
       "address": "188 ORCHARD ST, 188 ORCHARD ST, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1311,
+      "trend_score": 1290,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 289,
-      "complaints_365d_250ft": 393,
-      "last_complaint_date": "2026-07-22"
+      "complaints_365d_100ft": 281,
+      "complaints_365d_250ft": 384,
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "SAMI & SUSU",
       "address": "190 ORCHARD ST, 190 ORCHARD ST, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1308,
+      "trend_score": 1287,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 289,
-      "complaints_365d_250ft": 387,
-      "last_complaint_date": "2026-07-22"
+      "complaints_365d_100ft": 281,
+      "complaints_365d_250ft": 378,
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "CLAW DADDY'S",
       "address": "185 ORCHARD ST, 185 ORCHARD ST, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1238,
+      "trend_score": 1218,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 271,
-      "complaints_365d_250ft": 402,
-      "last_complaint_date": "2026-07-19"
+      "complaints_365d_100ft": 264,
+      "complaints_365d_250ft": 393,
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "ROCKWOOD'S",
       "address": "192 ALLEN ST, GROUND FLOOR, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1238,
+      "trend_score": 1218,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 271,
-      "complaints_365d_250ft": 402,
-      "last_complaint_date": "2026-07-19"
+      "complaints_365d_100ft": 264,
+      "complaints_365d_250ft": 393,
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "CAFE ERZULIE",
       "address": "894 BROADWAY, GROUND FLOOR, BROOKLYN",
       "borough": "Brooklyn",
-      "trend_score": 1198,
+      "trend_score": 1194,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 179,
-      "complaints_365d_250ft": 295,
-      "last_complaint_date": "2026-07-22"
+      "complaints_365d_250ft": 296,
+      "last_complaint_date": "2026-07-24"
     },
     {
       "title": "COPA",
       "address": "895 BROADWAY, 895 BROADWAY, BROOKLYN",
       "borough": "Brooklyn",
-      "trend_score": 1133,
+      "trend_score": 1127,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 181,
       "complaints_365d_250ft": 246,
@@ -277,37 +277,37 @@
       "title": "MAMA SUSHI",
       "address": "237 DYCKMAN ST, SEAMAN & BROADWAY, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1131,
+      "trend_score": 1127,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 117,
       "complaints_365d_250ft": 313,
-      "last_complaint_date": "2026-07-19"
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "IL SOLE RESTAURANT",
       "address": "229 233 DYCKMAN ST, SEMAN AVENUE & BROADWAY, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1123,
+      "trend_score": 1119,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 117,
       "complaints_365d_250ft": 313,
-      "last_complaint_date": "2026-07-19"
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "SA'TACOS CORP",
       "address": "231A DYCKMAN ST, 231A DYCKMAN ST, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1123,
+      "trend_score": 1119,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 117,
       "complaints_365d_250ft": 313,
-      "last_complaint_date": "2026-07-19"
+      "last_complaint_date": "2026-07-23"
     },
     {
       "title": "ANOTHER BAR LLC",
       "address": "899 BROADWAY, 899 BROADWAY, BROOKLYN",
       "borough": "Brooklyn",
-      "trend_score": 1057,
+      "trend_score": 1051,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 157,
       "complaints_365d_250ft": 254,
@@ -317,27 +317,27 @@
       "title": "BECKETT'S RESTAURANT",
       "address": "81 PEARL STREET, HANOVER SQ. &COENTIES SLIP, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 971,
+      "trend_score": 959,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 136,
-      "complaints_365d_250ft": 269,
+      "complaints_365d_100ft": 134,
+      "complaints_365d_250ft": 263,
       "last_complaint_date": "2026-07-22"
     },
     {
       "title": "ULYSSES",
       "address": "91 97 PEARL ST, AKA 48 STONE ST, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 971,
+      "trend_score": 959,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 136,
-      "complaints_365d_250ft": 269,
+      "complaints_365d_100ft": 134,
+      "complaints_365d_250ft": 263,
       "last_complaint_date": "2026-07-22"
     },
     {
       "title": "BAR FREDA",
       "address": "801 SENECA AVE, 801 SENECA AVE, RIDGEWOOD",
       "borough": "Queens",
-      "trend_score": 863,
+      "trend_score": 857,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 166,
       "complaints_365d_250ft": 174,
@@ -347,33 +347,33 @@
       "title": "THE DUBLINER",
       "address": "21 23 S WILLIAM STREET, 21 23 S WILLIAM STREET, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 859,
+      "trend_score": 850,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 103,
-      "complaints_365d_250ft": 269,
+      "complaints_365d_100ft": 101,
+      "complaints_365d_250ft": 263,
       "last_complaint_date": "2026-07-22"
     },
     {
       "title": "TAQUERIA EMILIO 2 CORP",
       "address": "667 E 187TH ST, 667 E 187TH ST, BRONX",
       "borough": "Bronx",
-      "trend_score": 846,
+      "trend_score": 840,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 154,
       "complaints_365d_250ft": 175,
       "last_complaint_date": "2026-07-19"
     },
     {
-      "title": "HARRY'S CAFE",
-      "address": "62 STONE ST, 62 STONE ST, NEW YORK",
-      "borough": "Manhattan",
-      "trend_score": 825,
+      "title": "EL SASON IDEAL RESTAURANT",
+      "address": "148 W BURNSIDE AVENUE, LORING PLACE & BURNSIDE, BRONX",
+      "borough": "Bronx",
+      "trend_score": 817,
       "trend_tier": "very_high",
-      "complaints_365d_100ft": 99,
-      "complaints_365d_250ft": 295,
-      "last_complaint_date": "2026-07-22"
+      "complaints_365d_100ft": 0,
+      "complaints_365d_250ft": 678,
+      "last_complaint_date": "2026-07-23"
     }
   ],
   "data_note": "311 complaints are public complaint records and an activity proxy, not proof of wrongdoing, venue popularity, or legal violation.",
-  "generated_at": "2026-07-24T11:57:48.499Z"
+  "generated_at": "2026-07-25T11:38:45.232Z"
 }

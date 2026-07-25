@@ -4,75 +4,72 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-07-24",
-  "matched_rows": 1746,
-  "mapped_total": 1721,
-  "needs_review": 25,
-  "rejected": 298254,
+  "since_date": "2025-07-25",
+  "matched_rows": 1791,
+  "mapped_total": 1765,
+  "needs_review": 26,
+  "rejected": 298209,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 486,
-    "cannabis_related_complaint": 1235
+    "cannabis_related_complaint": 1287,
+    "vape_complaint": 478
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 486,
-    "cannabis_marijuana_weed": 1235
+    "cannabis_marijuana_weed": 1287,
+    "vape_electronic_cigarette": 478
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 445,
-    "Obstruction": 640,
-    "Maintenance or Facility": 287,
-    "Cannabis Retailer": 294,
-    "Consumer Complaint": 41,
+    "Obstruction": 659,
+    "Cannabis Retailer": 326,
+    "Smoking or Vaping": 438,
+    "Maintenance or Facility": 290,
+    "Consumer Complaint": 40,
     "Overgrown Tree/Branches": 1,
     "Drug Activity": 1,
-    "Noise - Street/Sidewalk": 4,
+    "Noise - Street/Sidewalk": 3,
     "Damaged Tree": 2,
     "Root/Sewer/Sidewalk Condition": 1,
     "Water Conservation": 2,
     "Water System": 1,
-    "Abandoned Vehicle": 1,
-    "Blocked Driveway": 1
+    "Abandoned Vehicle": 1
   },
   "descriptor_counts": {
-    "Allowed in Smoke Free Area": 434,
-    "Weeds or Grass": 639,
-    "Grass/Weeds": 287,
+    "Weeds or Grass": 659,
+    "Suspicious Activity": 33,
+    "Sales to Minors Under 21": 130,
+    "Allowed in Smoke Free Area": 427,
+    "Grass/Weeds": 290,
+    "Unlicensed": 122,
+    "Too Close to a House of Worship": 10,
     "Product Concerns": 13,
-    "Sales to Minors Under 21": 116,
-    "Too Close to a House of Worship": 8,
-    "E-Cigarette Sales": 29,
-    "Unlicensed": 109,
+    "E-Cigarette Sales": 28,
     "Sign Inadequate": 7,
     "Smoking, Cigar, or Vape Store": 12,
     "Ashtray in Smoke-Free Area": 3,
-    "Suspicious Activity": 30,
     "Too Close to a School": 18,
     "Hitting Phone/Cable Lines": 1,
     "Use Indoor": 1,
     "Loud Talking": 2,
     "Workplace Policy Not Provided or Inadequate": 1,
-    "Loud Music/Party": 2,
+    "Loud Music/Party": 1,
     "Branch or Limb Has Fallen Down": 2,
     "Trees and Sidewalks Program": 1,
     "Water Meter Broken/Leaking - Private Residence (CMR)": 2,
     "Hydrant Leaking (WC1)": 1,
-    "With License Plate": 1,
-    "Trash or Recycling": 1,
-    "No Access": 1
+    "With License Plate": 1
   },
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 25
+      "count": 26
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 298254
+      "count": 298209
     }
   ],
-  "generated_at": "2026-07-24T11:58:21.705Z",
+  "generated_at": "2026-07-25T11:39:20.438Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }
