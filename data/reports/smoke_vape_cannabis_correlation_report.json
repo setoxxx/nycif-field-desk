@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1765,
-  "usable_complaints": 1765,
+  "source_complaints": 1783,
+  "usable_complaints": 1783,
   "source_dispensaries": 250,
   "source_retailers": 4882,
   "correlation_locations": 5132,
-  "output_locations": 222,
-  "low_signal_excluded": 4910,
+  "output_locations": 221,
+  "low_signal_excluded": 4911,
   "radius_feet": [
     100,
     250,
@@ -23,19 +23,19 @@
   "min_signal_score": 3,
   "location_kind_counts": {
     "licensed_smoke_vape_retailer": 194,
-    "legal_cannabis_dispensary": 28
+    "legal_cannabis_dispensary": 27
   },
   "borough_counts": {
-    "Queens": 61,
-    "Manhattan": 59,
-    "Brooklyn": 66,
+    "Queens": 65,
+    "Manhattan": 56,
+    "Brooklyn": 64,
     "Bronx": 33,
     "Staten Island": 3
   },
   "signal_tier_counts": {
     "very_high": 2,
     "high": 27,
-    "moderate": 193
+    "moderate": 192
   },
   "top_locations_sample": [
     {
@@ -314,6 +314,6 @@
       "last_complaint_date": "2026-07-22"
     }
   ],
-  "generated_at": "2026-07-25T11:39:20.849Z",
+  "generated_at": "2026-07-26T11:40:27.872Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
