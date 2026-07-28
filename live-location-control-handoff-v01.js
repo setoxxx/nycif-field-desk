@@ -36,6 +36,15 @@
       target.setAttribute('data-live-handoff', 'true');
     }
 
+    function labelLiveLocationMarker() {
+      document.querySelectorAll('.user-location-shell, .nycif-live-location-shell').forEach(marker => {
+        if (marker.getAttribute('role') === 'button' || marker.hasAttribute('tabindex')) {
+          marker.setAttribute('aria-label', 'Your live location');
+          marker.setAttribute('title', 'Your live location');
+        }
+      });
+    }
+
     function stopLegacyMapMotion() {
       try { map?.stop?.(); } catch (_) {}
       try { map?.closePopup?.(); } catch (_) {}
@@ -51,6 +60,7 @@
       } else {
         controller.start();
       }
+      window.setTimeout(labelLiveLocationMarker, 0);
     }
 
     function onDelegatedLiveClick(event) {
@@ -66,6 +76,10 @@
         return;
       }
       activateLiveControl(event);
+    }
+
+    function onMapLayerAdd() {
+      window.setTimeout(labelLiveLocationMarker, 0);
     }
 
     function handOffControl() {
@@ -94,6 +108,8 @@
         getButton: () => activeButton
       });
 
+      labelLiveLocationMarker();
+
       if (restoreFocus) {
         replacement.focus({ preventScroll: true });
       }
@@ -101,14 +117,17 @@
 
     function afterInitialActivation() {
       window.setTimeout(handOffControl, 0);
+      window.setTimeout(labelLiveLocationMarker, 0);
     }
 
     initialButton.addEventListener('click', afterInitialActivation);
     document.addEventListener('click', onDelegatedLiveClick, true);
+    map?.on?.('layeradd', onMapLayerAdd);
 
     window.addEventListener('pagehide', () => {
       observer?.disconnect();
       document.removeEventListener('click', onDelegatedLiveClick, true);
+      map?.off?.('layeradd', onMapLayerAdd);
     }, { once: true });
   }
 
