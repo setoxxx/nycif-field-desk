@@ -52,7 +52,14 @@ jobs:
           exit 1
 
       - name: Run desktop keyboard, accessibility, and performance gates
-        run: node tests/desktop-release-gates.mjs
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          set +e
+          node tests/desktop-release-gates.mjs 2>&1 | tee artifacts/desktop-release-gates.log
+          status=${PIPESTATUS[0]}
+          cp /tmp/nycif-desktop-server.log artifacts/server.log || true
+          exit "$status"
 
       - name: Upload desktop QA evidence
         if: always()
