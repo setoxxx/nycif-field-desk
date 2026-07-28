@@ -5,8 +5,9 @@ on:
     paths:
       - "index.html"
       - "live-location-tracking-v01.js"
+      - "live-location-control-handoff-v01.js"
       - "tests/live-location-tracking.test.cjs"
-      - "tests/live-location-tracking.playwright.mjs"
+      - "tests/live-location-tracking-v02.playwright.mjs"
       - ".github/workflows/live-location-tracking.yml"
 
 permissions:
@@ -56,7 +57,7 @@ jobs:
         run: |
           mkdir -p artifacts/live-location
           set +e
-          node tests/live-location-tracking.playwright.mjs 2>&1 | tee artifacts/live-location/live-location-gates.log
+          node tests/live-location-tracking-v02.playwright.mjs 2>&1 | tee artifacts/live-location/live-location-gates.log
           status=${PIPESTATUS[0]}
           cp /tmp/nycif-live-location-server.log artifacts/live-location/server.log || true
           exit "$status"
