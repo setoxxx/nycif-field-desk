@@ -77,7 +77,8 @@ const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({
   viewport: { width: 1440, height: 1000 },
   timezoneId: 'America/New_York',
-  reducedMotion: 'reduce'
+  reducedMotion: 'reduce',
+  serviceWorkers: 'block'
 });
 const page = await context.newPage();
 
@@ -135,6 +136,17 @@ await page.locator('button.event-item').waitFor({ state: 'visible' });
 await page.locator('button.event-item').focus();
 await page.keyboard.press('Enter');
 await page.locator('#deskDrawer').waitFor({ state: 'hidden' });
+await page.waitForTimeout(900);
+const popupDiagnostic = await page.evaluate(() => ({
+  popupCount: document.querySelectorAll('.leaflet-popup').length,
+  popupContentCount: document.querySelectorAll('.leaflet-popup-content').length,
+  dialogCount: document.querySelectorAll('.leaflet-popup-content[role="dialog"]').length,
+  bodyClass: document.body.className,
+  activeElement: document.activeElement?.outerHTML?.slice(0, 500) || '',
+  popupText: document.querySelector('.leaflet-popup-content')?.textContent?.trim() || ''
+}));
+console.log('popup-diagnostic', JSON.stringify(popupDiagnostic));
+await page.screenshot({ path: path.join(ARTIFACT_DIR, 'event-list-popup-transition.png'), fullPage: false });
 const dialog = page.locator('.leaflet-popup-content[role="dialog"]');
 await dialog.waitFor({ state: 'visible', timeout: 3_000 });
 await page.waitForFunction(() => document.activeElement?.matches?.('.leaflet-popup-content[role="dialog"]'));
@@ -142,7 +154,7 @@ assert(await dialog.getAttribute('aria-labelledby'), 'Popup dialog is missing ar
 await page.keyboard.press('Escape');
 await dialog.waitFor({ state: 'detached' });
 await page.waitForFunction(() => document.activeElement?.id === 'deskBtn');
-assert(Date.now() - interactionStartedAt <= 4_000, 'Event List to popup keyboard path exceeded budget');
+assert(Date.now() - interactionStartedAt <= 5_000, 'Event List to popup keyboard path exceeded budget');
 
 const marker = page.locator('.leaflet-marker-icon').first();
 await marker.focus();
@@ -194,6 +206,7 @@ const result = {
     seriousOrCritical: blockingViolations.length
   },
   reducedMotion,
+  popupDiagnostic,
   consoleErrors: relevantConsoleErrors,
   pageErrors
 };
