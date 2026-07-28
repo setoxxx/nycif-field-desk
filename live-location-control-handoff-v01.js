@@ -3,46 +3,59 @@
 
   function install() {
     const controller = window.NYCIF_LIVE_LOCATION_CONTROLLER;
-    const initialButton = document.getElementById('locateBtn');
+    const locateBtn = document.getElementById('locateBtn');
     const map = window.NYCIF_MAIN_MAP;
 
-    if (!controller || !initialButton || typeof initialButton.cloneNode !== 'function') {
-      return;
+    if (!controller || !locateBtn) return;
+
+    let syncing = false;
+    let buttonObserver = null;
+    let bodyObserver = null;
+
+    function setAttributeIfChanged(element, name, value) {
+      if (element.getAttribute(name) !== value) element.setAttribute(name, value);
     }
 
-    let activeButton = initialButton;
-    let handedOff = false;
-    let observer = null;
-
-    const mirroredAttributes = [
-      'aria-label',
-      'aria-pressed',
-      'title',
-      'data-live-tracking',
-      'data-live-following'
-    ];
-
-    function syncFromControllerButton(source, target) {
-      mirroredAttributes.forEach(name => {
-        const value = source.getAttribute(name);
-        if (value == null) {
-          target.removeAttribute(name);
-        } else {
-          target.setAttribute(name, value);
-        }
-      });
-      target.className = source.className;
-      target.disabled = source.disabled;
-      target.setAttribute('data-live-handoff', 'true');
+    function removeSeparateStopControl() {
+      document.getElementById('liveLocationStopBtn')?.remove();
     }
 
-    function labelLiveLocationMarker() {
+    function labelLocationMarkers() {
       document.querySelectorAll('.user-location-shell, .nycif-live-location-shell').forEach(marker => {
         if (marker.getAttribute('role') === 'button' || marker.hasAttribute('tabindex')) {
-          marker.setAttribute('aria-label', 'Your live location');
-          marker.setAttribute('title', 'Your live location');
+          setAttributeIfChanged(marker, 'aria-label', 'Your live location');
+          setAttributeIfChanged(marker, 'title', 'Your live location');
         }
       });
+    }
+
+    function cleanLocationUi() {
+      removeSeparateStopControl();
+      labelLocationMarkers();
+    }
+
+    function syncSingleControlState() {
+      if (syncing) return;
+      syncing = true;
+      try {
+        const state = controller.getState();
+        const tracking = Boolean(state.tracking);
+        const following = Boolean(state.following);
+
+        if (locateBtn.dataset.liveTracking !== String(tracking)) locateBtn.dataset.liveTracking = String(tracking);
+        if (locateBtn.dataset.liveFollowing !== String(following)) locateBtn.dataset.liveFollowing = String(following);
+        setAttributeIfChanged(locateBtn, 'aria-pressed', tracking ? 'true' : 'false');
+
+        let label = 'Start live GPS tracking';
+        if (tracking && following) label = 'Stop live GPS tracking';
+        else if (tracking) label = 'Recenter and resume live GPS tracking';
+
+        setAttributeIfChanged(locateBtn, 'aria-label', label);
+        setAttributeIfChanged(locateBtn, 'title', label);
+        cleanLocationUi();
+      } finally {
+        syncing = false;
+      }
     }
 
     function stopLegacyMapMotion() {
@@ -50,90 +63,71 @@
       try { map?.closePopup?.(); } catch (_) {}
     }
 
-    function activateLiveControl(event) {
+    function activateSingleControl(event) {
+      const target = event.target?.closest?.('#locateBtn');
+      if (!target) return;
+
       event.preventDefault();
       event.stopImmediatePropagation();
       stopLegacyMapMotion();
+
       const state = controller.getState();
-      if (state.tracking) {
-        controller.resumeFollowing();
-      } else {
-        controller.start();
-      }
-      window.setTimeout(labelLiveLocationMarker, 0);
+      if (!state.tracking) controller.start();
+      else if (!state.following) controller.resumeFollowing();
+      else controller.stop();
+
+      window.setTimeout(syncSingleControlState, 0);
     }
 
-    function onDelegatedLiveClick(event) {
-      const target = event.target?.closest?.('#locateBtn[data-live-handoff="true"]');
-      if (!target) {
-        return;
-      }
-      activateLiveControl(event);
-    }
+    function closeLegacyLocationPopup(event) {
+      const popup = event?.popup;
+      const source = popup?._source;
+      const className = String(source?.options?.icon?.options?.className || '');
+      const content = popup?.getContent?.();
+      const contentText = typeof content === 'string' ? content : String(content?.textContent || '');
 
-    function onLiveControlKeydown(event) {
-      if (event.key !== 'Enter' && event.key !== ' ') {
-        return;
-      }
-      activateLiveControl(event);
-    }
-
-    function onMapLayerAdd() {
-      window.setTimeout(labelLiveLocationMarker, 0);
-    }
-
-    function handOffControl() {
-      if (handedOff || !controller.getState().tracking) {
-        return;
-      }
-
-      const source = activeButton;
-      const replacement = source.cloneNode(true);
-      syncFromControllerButton(source, replacement);
-      replacement.addEventListener('keydown', onLiveControlKeydown);
-
-      const restoreFocus = document.activeElement === source;
-      source.replaceWith(replacement);
-      activeButton = replacement;
-      handedOff = true;
-
-      observer = new MutationObserver(() => syncFromControllerButton(source, replacement));
-      observer.observe(source, {
-        attributes: true,
-        attributeFilter: mirroredAttributes
-      });
-
-      window.NYCIF_LIVE_LOCATION_HANDOFF = Object.freeze({
-        isActive: () => handedOff,
-        getButton: () => activeButton
-      });
-
-      labelLiveLocationMarker();
-
-      if (restoreFocus) {
-        replacement.focus({ preventScroll: true });
+      if (className.includes('user-location-shell') || /you are here/i.test(contentText)) {
+        try { map?.closePopup?.(popup); } catch (_) {}
       }
     }
 
-    function afterInitialActivation() {
-      window.setTimeout(handOffControl, 0);
-      window.setTimeout(labelLiveLocationMarker, 0);
+    function onLayerAdd() {
+      window.setTimeout(cleanLocationUi, 0);
     }
 
-    initialButton.addEventListener('click', afterInitialActivation);
-    document.addEventListener('click', onDelegatedLiveClick, true);
-    map?.on?.('layeradd', onMapLayerAdd);
+    document.addEventListener('click', activateSingleControl, true);
+    map?.on?.('popupopen', closeLegacyLocationPopup);
+    map?.on?.('layeradd', onLayerAdd);
+
+    buttonObserver = new MutationObserver(syncSingleControlState);
+    buttonObserver.observe(locateBtn, {
+      attributes: true,
+      attributeFilter: ['aria-label', 'aria-pressed', 'title', 'data-live-tracking', 'data-live-following']
+    });
+
+    if (document.body) {
+      bodyObserver = new MutationObserver(cleanLocationUi);
+      bodyObserver.observe(document.body, { childList: true, subtree: true });
+    }
+
+    cleanLocationUi();
+    syncSingleControlState();
+
+    window.NYCIF_LIVE_LOCATION_HANDOFF = Object.freeze({
+      isActive: () => true,
+      getButton: () => locateBtn,
+      mode: 'single-control'
+    });
 
     window.addEventListener('pagehide', () => {
-      observer?.disconnect();
-      document.removeEventListener('click', onDelegatedLiveClick, true);
-      map?.off?.('layeradd', onMapLayerAdd);
+      buttonObserver?.disconnect();
+      bodyObserver?.disconnect();
+      document.removeEventListener('click', activateSingleControl, true);
+      map?.off?.('popupopen', closeLegacyLocationPopup);
+      map?.off?.('layeradd', onLayerAdd);
     }, { once: true });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', install, { once: true });
-  } else {
-    install();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
+  else install();
 })();
