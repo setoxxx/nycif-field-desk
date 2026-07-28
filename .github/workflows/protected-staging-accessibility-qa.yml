@@ -34,5 +34,5 @@ jobs:
       - name: Validate accessibility JavaScript syntax
         run: node --check accessibility-v01.js
 
-      - name: Run accessibility contract tests
-        run: python3 -m pytest -q tests/test_protected_staging_accessibility_contract.py
+      - name: Run dependency-free accessibility contract tests
+        run: python3 tests/test_protected_staging_accessibility_contract.py
