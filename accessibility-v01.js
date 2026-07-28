@@ -165,6 +165,44 @@
     };
   }
 
+  function markerNearestMapCenter() {
+    const map = byId('map');
+    if (!map) return null;
+    const mapRect = map.getBoundingClientRect();
+    const centerX = mapRect.left + mapRect.width / 2;
+    const centerY = mapRect.top + mapRect.height / 2;
+    const markers = [...document.querySelectorAll('.leaflet-marker-icon')].filter(marker => {
+      const rect = marker.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
+    let nearest = null;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    markers.forEach(marker => {
+      const rect = marker.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const distance = Math.hypot(x - centerX, y - centerY);
+      if (distance < nearestDistance) {
+        nearest = marker;
+        nearestDistance = distance;
+      }
+    });
+    return nearest;
+  }
+
+  function chooseStackedEvent(eventTitle) {
+    if (!eventTitle) return;
+    window.setTimeout(() => {
+      const options = [...document.querySelectorAll('.popup-stack-item')];
+      const selected = options.find(option => {
+        const label = option.getAttribute('aria-label') || '';
+        const title = option.querySelector('.popup-stack-title')?.textContent?.trim() || '';
+        return title === eventTitle || label.startsWith(`${eventTitle},`);
+      });
+      selected?.click();
+    }, 50);
+  }
+
   function installReducedMotionListActivationFallback() {
     if (!reduceMotion) return;
 
@@ -175,6 +213,7 @@
       if (!(button instanceof HTMLButtonElement)) return;
 
       const eventId = button.dataset.id || '';
+      const eventTitle = button.querySelector('strong')?.textContent?.trim() || '';
       if (!eventId || state.retryingEventId === eventId) return;
 
       clearTimeout(state.reducedMotionRetryTimer);
@@ -184,12 +223,12 @@
         const desk = byId('deskDrawer');
         if (!desk?.hidden) return;
 
-        const escapedId = window.CSS?.escape ? CSS.escape(eventId) : eventId.replace(/["\\]/g, '\\$&');
-        const currentButton = document.querySelector(`button.event-item[data-id="${escapedId}"]`);
-        if (!(currentButton instanceof HTMLButtonElement)) return;
+        const marker = markerNearestMapCenter();
+        if (!(marker instanceof HTMLElement)) return;
 
         state.retryingEventId = eventId;
-        currentButton.click();
+        marker.click();
+        chooseStackedEvent(eventTitle);
         window.setTimeout(() => {
           if (state.retryingEventId === eventId) state.retryingEventId = null;
         }, 1500);
