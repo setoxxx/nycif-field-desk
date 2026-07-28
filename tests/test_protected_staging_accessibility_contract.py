@@ -58,7 +58,9 @@ def test_reduced_motion_list_activation_survives_marker_rebuild():
     assert "installReducedMotionListActivationFallback" in SCRIPT
     assert "reducedMotionRetryTimer" in SCRIPT
     assert "retryingEventId" in SCRIPT
-    assert "currentButton.click()" in SCRIPT
+    assert "markerNearestMapCenter" in SCRIPT
+    assert "marker.click()" in SCRIPT
+    assert "chooseStackedEvent" in SCRIPT
     assert "if (document.querySelector('.leaflet-popup')) return" in SCRIPT
 
 
