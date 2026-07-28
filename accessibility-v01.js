@@ -156,7 +156,13 @@
     const originalPanTo = map.panTo.bind(map);
     map.panTo = (latlng, options = {}) => originalPanTo(latlng, { ...options, animate: false });
     const originalFlyTo = map.flyTo.bind(map);
-    map.flyTo = (latlng, zoom, options = {}) => originalFlyTo(latlng, zoom, { ...options, animate: false });
+    map.flyTo = (latlng, zoom, options = {}) => {
+      const target = window.L?.latLng ? L.latLng(latlng) : null;
+      const sameCenter = target && map.getCenter().distanceTo(target) < 1;
+      const sameZoom = zoom == null || Math.abs(map.getZoom() - zoom) < 0.01;
+      if (sameCenter && sameZoom) return map;
+      return originalFlyTo(latlng, zoom, { ...options, animate: false });
+    };
   }
 
   function installReducedMotionListActivationFallback() {
