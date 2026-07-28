@@ -62,3 +62,18 @@ def test_accessibility_assets_are_loaded_after_runtime():
     accessibility_position = INDEX.index("accessibility-v01.js")
     assert accessibility_position > runtime_position
     assert "accessibility-v01.css" in INDEX
+
+
+def run_contract_tests():
+    tests = [
+        value
+        for name, value in sorted(globals().items())
+        if name.startswith("test_") and callable(value)
+    ]
+    for test in tests:
+        test()
+    print(f"{len(tests)} accessibility contract tests passed")
+
+
+if __name__ == "__main__":
+    run_contract_tests()
