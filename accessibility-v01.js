@@ -20,6 +20,19 @@
     window.requestAnimationFrame(() => node.focus({ preventScroll: true }));
   }
 
+  function focusPopupContent(content) {
+    if (!(content instanceof HTMLElement)) return;
+    const attempt = () => {
+      if (!content.isConnected || document.activeElement === content) return;
+      content.focus({ preventScroll: true });
+    };
+    window.requestAnimationFrame(() => {
+      attempt();
+      window.setTimeout(attempt, 75);
+      window.setTimeout(attempt, 250);
+    });
+  }
+
   function logicalPopupRestoreTarget() {
     const desk = byId('deskDrawer');
     if (state.lastInvokerWasInDesk && desk?.hidden) return byId('deskBtn');
@@ -112,7 +125,7 @@
 
     if (close) close.setAttribute('aria-label', 'Close event details');
     state.openPopup = popup;
-    focusSafely(content);
+    focusPopupContent(content);
   }
 
   function restorePopupFocus() {
