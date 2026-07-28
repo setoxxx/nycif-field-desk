@@ -31,9 +31,10 @@
     });
     target.className = source.className;
     target.disabled = source.disabled;
+    target.setAttribute('data-live-handoff', 'true');
   }
 
-  function onLiveControlClick(event) {
+  function activateLiveControl(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
     const state = controller.getState();
@@ -44,6 +45,13 @@
     }
   }
 
+  function onLiveControlKeydown(event) {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+    activateLiveControl(event);
+  }
+
   function handOffControl() {
     if (handedOff || !controller.getState().tracking) {
       return;
@@ -52,7 +60,8 @@
     const source = activeButton;
     const replacement = source.cloneNode(true);
     syncFromControllerButton(source, replacement);
-    replacement.addEventListener('click', onLiveControlClick);
+    replacement.addEventListener('click', activateLiveControl);
+    replacement.addEventListener('keydown', onLiveControlKeydown);
 
     const restoreFocus = document.activeElement === source;
     source.replaceWith(replacement);
@@ -63,6 +72,11 @@
     observer.observe(source, {
       attributes: true,
       attributeFilter: mirroredAttributes
+    });
+
+    window.NYCIF_LIVE_LOCATION_HANDOFF = Object.freeze({
+      isActive: () => handedOff,
+      getButton: () => activeButton
     });
 
     if (restoreFocus) {
