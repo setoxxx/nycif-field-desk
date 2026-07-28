@@ -1,0 +1,31 @@
+name: Civic Action Category QA
+
+on:
+  pull_request:
+    paths:
+      - "event-feed-schema-v1.js"
+      - "tests/test_event_feed_schema_civic_category.js"
+      - ".github/workflows/civic-action-category-qa.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  civic-category-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate event schema JavaScript syntax
+        run: node --check event-feed-schema-v1.js
+
+      - name: Run civic-action category regression checks
+        run: node tests/test_event_feed_schema_civic_category.js
