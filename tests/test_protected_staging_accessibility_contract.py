@@ -38,7 +38,9 @@ def test_markers_and_popups_support_keyboard_and_focus():
     assert "marker.setAttribute('aria-haspopup', 'dialog')" in SCRIPT
     assert "event.key === ' '" in SCRIPT
     assert "content.setAttribute('role', 'dialog')" in SCRIPT
-    assert "focusSafely(content)" in SCRIPT
+    assert "focusPopupContent(content)" in SCRIPT
+    assert "window.setTimeout(attempt, 75)" in SCRIPT
+    assert "window.setTimeout(attempt, 250)" in SCRIPT
     assert "logicalPopupRestoreTarget" in SCRIPT
     assert "lastInvokerWasInDesk" in SCRIPT
     assert "return byId('deskBtn')" in SCRIPT
