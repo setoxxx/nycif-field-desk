@@ -267,18 +267,24 @@
     document.addEventListener('keydown', event => {
       if (event.key !== 'Escape') return;
       if (state.openPopup) {
+        event.preventDefault();
+        event.stopPropagation();
         window.NYCIF_MAIN_MAP?.closePopup();
         return;
       }
       if (desk && !desk.hidden) {
+        event.preventDefault();
+        event.stopPropagation();
         closeDesk?.click();
         return;
       }
       if (layers && !layers.hidden) {
+        event.preventDefault();
+        event.stopPropagation();
         layersButton?.click();
         focusSafely(layersButton);
       }
-    });
+    }, true);
   }
 
   function installObservers() {
