@@ -4,6 +4,7 @@
   function install() {
     const controller = window.NYCIF_LIVE_LOCATION_CONTROLLER;
     const initialButton = document.getElementById('locateBtn');
+    const map = window.NYCIF_MAIN_MAP;
 
     if (!controller || !initialButton || typeof initialButton.cloneNode !== 'function') {
       return;
@@ -35,15 +36,29 @@
       target.setAttribute('data-live-handoff', 'true');
     }
 
+    function stopLegacyMapMotion() {
+      try { map?.stop?.(); } catch (_) {}
+      try { map?.closePopup?.(); } catch (_) {}
+    }
+
     function activateLiveControl(event) {
       event.preventDefault();
       event.stopImmediatePropagation();
+      stopLegacyMapMotion();
       const state = controller.getState();
       if (state.tracking) {
         controller.resumeFollowing();
       } else {
         controller.start();
       }
+    }
+
+    function onDelegatedLiveClick(event) {
+      const target = event.target?.closest?.('#locateBtn[data-live-handoff="true"]');
+      if (!target) {
+        return;
+      }
+      activateLiveControl(event);
     }
 
     function onLiveControlKeydown(event) {
@@ -61,7 +76,6 @@
       const source = activeButton;
       const replacement = source.cloneNode(true);
       syncFromControllerButton(source, replacement);
-      replacement.addEventListener('click', activateLiveControl);
       replacement.addEventListener('keydown', onLiveControlKeydown);
 
       const restoreFocus = document.activeElement === source;
@@ -90,9 +104,11 @@
     }
 
     initialButton.addEventListener('click', afterInitialActivation);
+    document.addEventListener('click', onDelegatedLiveClick, true);
 
     window.addEventListener('pagehide', () => {
       observer?.disconnect();
+      document.removeEventListener('click', onDelegatedLiveClick, true);
     }, { once: true });
   }
 
