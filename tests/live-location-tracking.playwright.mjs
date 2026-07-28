@@ -59,7 +59,7 @@ function feedPayload(url) {
 }
 
 const transparentPng = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2n1cAAAAASUVORK5CYII=',
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC0lEQVR42mP8/x8AAusB9Wl2n1cAAAAASUVORK5CYII=',
   'base64'
 );
 
@@ -206,6 +206,11 @@ try {
   await locate.focus();
   await page.keyboard.press('Enter');
   await page.waitForFunction(() => window.NYCIF_LIVE_LOCATION_CONTROLLER.getState().following === true);
+  await page.waitForFunction(() => {
+    const center = window.NYCIF_MAIN_MAP.getCenter();
+    return Math.abs(center.lat - 40.7140) < 0.00001
+      && Math.abs(center.lng + 74.0040) < 0.00001;
+  });
   const centerAfterResume = await page.evaluate(() => {
     const center = window.NYCIF_MAIN_MAP.getCenter();
     return { lat: center.lat, lng: center.lng };
