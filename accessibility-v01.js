@@ -249,6 +249,23 @@
     }, true);
   }
 
+  function closeLivePopup() {
+    const livePopup = document.querySelector('.leaflet-popup');
+    if (!(livePopup instanceof HTMLElement)) return false;
+
+    const close = livePopup.querySelector('.leaflet-popup-close-button');
+    if (close instanceof HTMLElement) close.click();
+    else window.NYCIF_MAIN_MAP?.closePopup();
+
+    window.setTimeout(() => {
+      if (!document.querySelector('.leaflet-popup')) {
+        state.openPopup = null;
+        focusSafely(logicalPopupRestoreTarget());
+      }
+    }, 0);
+    return true;
+  }
+
   function installPanelFocusManagement() {
     const deskButton = byId('deskBtn');
     const desk = byId('deskDrawer');
@@ -266,12 +283,10 @@
 
     document.addEventListener('keydown', event => {
       if (event.key !== 'Escape') return;
-      if (state.openPopup) {
+      if (document.querySelector('.leaflet-popup')) {
         event.preventDefault();
-        event.stopPropagation();
-        const close = state.openPopup.querySelector('.leaflet-popup-close-button');
-        if (close instanceof HTMLElement) close.click();
-        else window.NYCIF_MAIN_MAP?.closePopup();
+        event.stopImmediatePropagation();
+        closeLivePopup();
         return;
       }
       if (desk && !desk.hidden) {
