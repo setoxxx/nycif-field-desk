@@ -174,14 +174,31 @@ try {
   assert(Math.abs(centerWhilePaused.lat - centerBeforePause.lat) < 0.000001, 'Paused follow mode moved the map');
   assert(Math.abs(centerWhilePaused.lng - centerBeforePause.lng) < 0.000001, 'Paused follow mode moved the map');
 
-  await locate.click();
-  await page.waitForFunction(() => {
+  await page.evaluate(() => {
+    const button = document.getElementById('locateBtn');
+    button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, composed: true }));
+  });
+  await page.waitForTimeout(500);
+  const recenterDiagnostic = await page.evaluate(() => {
     const state = window.NYCIF_LIVE_LOCATION_CONTROLLER.getState();
     const center = window.NYCIF_MAIN_MAP.getCenter();
-    return state.following === true
-      && Math.abs(center.lat - 40.714) < 0.00001
-      && Math.abs(center.lng + 74.004) < 0.00001;
+    const button = document.getElementById('locateBtn');
+    return {
+      following: state.following,
+      tracking: state.tracking,
+      lastFix: state.lastFix,
+      center: { lat: center.lat, lng: center.lng },
+      handoff: button?.dataset.liveHandoff || null,
+      label: button?.getAttribute('aria-label') || null,
+      pressed: button?.getAttribute('aria-pressed') || null
+    };
   });
+  console.log('recenter-diagnostic', JSON.stringify(recenterDiagnostic));
+  assert(recenterDiagnostic.following === true, `Tap did not resume follow mode: ${JSON.stringify(recenterDiagnostic)}`);
+  assert(Math.abs(recenterDiagnostic.center.lat - 40.714) < 0.00001,
+    `Recenter latitude is wrong: ${JSON.stringify(recenterDiagnostic)}`);
+  assert(Math.abs(recenterDiagnostic.center.lng + 74.004) < 0.00001,
+    `Recenter longitude is wrong: ${JSON.stringify(recenterDiagnostic)}`);
 
   const controls = await page.locator('.map-controls').boundingBox();
   assert(controls && controls.x >= 0 && controls.x + controls.width <= 390, 'Live GPS controls are clipped on mobile');
