@@ -5,6 +5,8 @@ ROOT = Path(__file__).resolve().parents[1]
 INDEX = (ROOT / "index.html").read_text(encoding="utf-8")
 SCRIPT = (ROOT / "accessibility-v01.js").read_text(encoding="utf-8")
 STYLES = (ROOT / "accessibility-v01.css").read_text(encoding="utf-8")
+DESKTOP_TEST = (ROOT / "tests" / "desktop-release-gates.mjs").read_text(encoding="utf-8")
+DESKTOP_WORKFLOW = (ROOT / ".github" / "workflows" / "desktop-release-gates.yml").read_text(encoding="utf-8")
 
 
 def test_map_has_region_semantics_and_text_alternative_path():
@@ -36,8 +38,12 @@ def test_markers_and_popups_support_keyboard_and_focus():
     assert "marker.setAttribute('aria-haspopup', 'dialog')" in SCRIPT
     assert "event.key === ' '" in SCRIPT
     assert "content.setAttribute('role', 'dialog')" in SCRIPT
-    assert "focusSafely(content)" in SCRIPT
-    assert "focusSafely(state.lastInvoker)" in SCRIPT
+    assert "focusPopupContent(content)" in SCRIPT
+    assert "window.setTimeout(attempt, 75)" in SCRIPT
+    assert "window.setTimeout(attempt, 250)" in SCRIPT
+    assert "logicalPopupRestoreTarget" in SCRIPT
+    assert "lastInvokerWasInDesk" in SCRIPT
+    assert "return byId('deskBtn')" in SCRIPT
     assert "event.key !== 'Escape'" in SCRIPT
 
 
@@ -48,6 +54,16 @@ def test_nested_event_card_links_are_separated():
     assert ".event-item-wrap" in STYLES
     assert "min-height: 44px" in STYLES
     assert "min-width: 44px" in STYLES
+
+
+def test_reduced_motion_list_activation_survives_marker_rebuild():
+    assert "installReducedMotionListActivationFallback" in SCRIPT
+    assert "reducedMotionRetryTimer" in SCRIPT
+    assert "retryingEventId" in SCRIPT
+    assert "markerNearestMapCenter" in SCRIPT
+    assert "marker.click()" in SCRIPT
+    assert "chooseStackedEvent" in SCRIPT
+    assert "if (document.querySelector('.leaflet-popup')) return" in SCRIPT
 
 
 def test_popup_keeps_engagement_controls_visible():
@@ -86,6 +102,25 @@ def test_accessibility_assets_are_loaded_after_runtime():
     accessibility_position = INDEX.index("accessibility-v01.js")
     assert accessibility_position > runtime_position
     assert "accessibility-v01.css" in INDEX
+
+
+def test_desktop_browser_gate_covers_required_release_path():
+    for evidence in (
+        "#layersBtn",
+        "#deskBtn",
+        "button.event-item",
+        "leaflet-popup-content[role=\"dialog\"]",
+        "page.keyboard.press('Escape')",
+        "page.keyboard.press('Space')",
+        "AxeBuilder",
+        "seriousOrCritical",
+        "INIT_BUDGET_MS",
+        "reducedMotion",
+    ):
+        assert evidence in DESKTOP_TEST
+    assert "playwright" in DESKTOP_WORKFLOW
+    assert "desktop-release-gates.mjs" in DESKTOP_WORKFLOW
+    assert "actions/upload-artifact@v4" in DESKTOP_WORKFLOW
 
 
 def run_contract_tests():

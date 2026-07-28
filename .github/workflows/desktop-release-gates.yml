@@ -1,0 +1,71 @@
+name: Desktop Release Gates
+
+on:
+  pull_request:
+    paths:
+      - "index.html"
+      - "accessibility-v01.js"
+      - "accessibility-v01.css"
+      - "app-schema-v1-major-all-v01.js"
+      - "event-feed-schema-v1.js"
+      - "tests/desktop-release-gates.mjs"
+      - "tests/test_protected_staging_accessibility_contract.py"
+      - ".github/workflows/desktop-release-gates.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  desktop-browser-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install browser QA dependencies
+        run: |
+          npm install --no-save playwright@1.54.1 @axe-core/playwright@4.10.2
+          npx playwright install chromium
+
+      - name: Start exact reviewed runtime
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/nycif-desktop-server.log 2>&1 &
+          for attempt in {1..20}; do
+            if curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/nycif-desktop-server.log
+          exit 1
+
+      - name: Run desktop keyboard, accessibility, and performance gates
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          set +e
+          node tests/desktop-release-gates.mjs 2>&1 | tee artifacts/desktop-release-gates.log
+          status=${PIPESTATUS[0]}
+          cp /tmp/nycif-desktop-server.log artifacts/server.log || true
+          exit "$status"
+
+      - name: Upload desktop QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-release-gates
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 30

@@ -4,8 +4,11 @@
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const state = {
     lastInvoker: null,
+    lastInvokerWasInDesk: false,
     openPopup: null,
-    announceTimer: null
+    announceTimer: null,
+    reducedMotionRetryTimer: null,
+    retryingEventId: null
   };
 
   function byId(id) {
@@ -15,6 +18,25 @@
   function focusSafely(node) {
     if (!node || typeof node.focus !== 'function' || !node.isConnected) return;
     window.requestAnimationFrame(() => node.focus({ preventScroll: true }));
+  }
+
+  function focusPopupContent(content) {
+    if (!(content instanceof HTMLElement)) return;
+    const attempt = () => {
+      if (!content.isConnected || document.activeElement === content) return;
+      content.focus({ preventScroll: true });
+    };
+    window.requestAnimationFrame(() => {
+      attempt();
+      window.setTimeout(attempt, 75);
+      window.setTimeout(attempt, 250);
+    });
+  }
+
+  function logicalPopupRestoreTarget() {
+    const desk = byId('deskDrawer');
+    if (state.lastInvokerWasInDesk && desk?.hidden) return byId('deskBtn');
+    return state.lastInvoker;
   }
 
   function setPressedState(container, activeClass, currentValue) {
@@ -86,6 +108,10 @@
     const close = popup.querySelector('.leaflet-popup-close-button');
     if (!content) return;
 
+    clearTimeout(state.reducedMotionRetryTimer);
+    state.reducedMotionRetryTimer = null;
+    state.retryingEventId = null;
+
     content.setAttribute('role', 'dialog');
     content.setAttribute('aria-modal', 'false');
     content.tabIndex = -1;
@@ -99,13 +125,13 @@
 
     if (close) close.setAttribute('aria-label', 'Close event details');
     state.openPopup = popup;
-    focusSafely(content);
+    focusPopupContent(content);
   }
 
   function restorePopupFocus() {
     if (state.openPopup && !state.openPopup.isConnected) {
       state.openPopup = null;
-      focusSafely(state.lastInvoker);
+      focusSafely(logicalPopupRestoreTarget());
     }
   }
 
@@ -143,7 +169,101 @@
     const originalPanTo = map.panTo.bind(map);
     map.panTo = (latlng, options = {}) => originalPanTo(latlng, { ...options, animate: false });
     const originalFlyTo = map.flyTo.bind(map);
-    map.flyTo = (latlng, zoom, options = {}) => originalFlyTo(latlng, zoom, { ...options, animate: false });
+    map.flyTo = (latlng, zoom, options = {}) => {
+      const target = window.L?.latLng ? L.latLng(latlng) : null;
+      const sameCenter = target && map.getCenter().distanceTo(target) < 1;
+      const sameZoom = zoom == null || Math.abs(map.getZoom() - zoom) < 0.01;
+      if (sameCenter && sameZoom) return map;
+      return originalFlyTo(latlng, zoom, { ...options, animate: false });
+    };
+  }
+
+  function markerNearestMapCenter() {
+    const map = byId('map');
+    if (!map) return null;
+    const mapRect = map.getBoundingClientRect();
+    const centerX = mapRect.left + mapRect.width / 2;
+    const centerY = mapRect.top + mapRect.height / 2;
+    const markers = [...document.querySelectorAll('.leaflet-marker-icon')].filter(marker => {
+      const rect = marker.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
+    let nearest = null;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    markers.forEach(marker => {
+      const rect = marker.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const distance = Math.hypot(x - centerX, y - centerY);
+      if (distance < nearestDistance) {
+        nearest = marker;
+        nearestDistance = distance;
+      }
+    });
+    return nearest;
+  }
+
+  function chooseStackedEvent(eventTitle) {
+    if (!eventTitle) return;
+    window.setTimeout(() => {
+      const options = [...document.querySelectorAll('.popup-stack-item')];
+      const selected = options.find(option => {
+        const label = option.getAttribute('aria-label') || '';
+        const title = option.querySelector('.popup-stack-title')?.textContent?.trim() || '';
+        return title === eventTitle || label.startsWith(`${eventTitle},`);
+      });
+      selected?.click();
+    }, 50);
+  }
+
+  function installReducedMotionListActivationFallback() {
+    if (!reduceMotion) return;
+
+    document.addEventListener('click', event => {
+      const target = event.target;
+      if (!(target instanceof Element) || target.closest('a')) return;
+      const button = target.closest('button.event-item');
+      if (!(button instanceof HTMLButtonElement)) return;
+
+      const eventId = button.dataset.id || '';
+      const eventTitle = button.querySelector('strong')?.textContent?.trim() || '';
+      if (!eventId || state.retryingEventId === eventId) return;
+
+      clearTimeout(state.reducedMotionRetryTimer);
+      state.reducedMotionRetryTimer = window.setTimeout(() => {
+        state.reducedMotionRetryTimer = null;
+        if (document.querySelector('.leaflet-popup')) return;
+        const desk = byId('deskDrawer');
+        if (!desk?.hidden) return;
+
+        const marker = markerNearestMapCenter();
+        if (!(marker instanceof HTMLElement)) return;
+
+        state.retryingEventId = eventId;
+        marker.click();
+        chooseStackedEvent(eventTitle);
+        window.setTimeout(() => {
+          if (state.retryingEventId === eventId) state.retryingEventId = null;
+        }, 1500);
+      }, 750);
+    }, true);
+  }
+
+  function closeLivePopup() {
+    const livePopup = document.querySelector('.leaflet-popup');
+    if (!(livePopup instanceof HTMLElement)) return false;
+
+    const close = livePopup.querySelector('.leaflet-popup-close-button');
+    if (close instanceof HTMLElement) close.click();
+    else window.NYCIF_MAIN_MAP?.closePopup();
+
+    window.setTimeout(() => {
+      if (!document.querySelector('.leaflet-popup')) {
+        state.openPopup = null;
+        focusSafely(logicalPopupRestoreTarget());
+      }
+    }, 0);
+    return true;
   }
 
   function installPanelFocusManagement() {
@@ -163,19 +283,25 @@
 
     document.addEventListener('keydown', event => {
       if (event.key !== 'Escape') return;
-      if (state.openPopup) {
-        window.NYCIF_MAIN_MAP?.closePopup();
+      if (document.querySelector('.leaflet-popup')) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        closeLivePopup();
         return;
       }
       if (desk && !desk.hidden) {
+        event.preventDefault();
+        event.stopPropagation();
         closeDesk?.click();
         return;
       }
       if (layers && !layers.hidden) {
+        event.preventDefault();
+        event.stopPropagation();
         layersButton?.click();
         focusSafely(layersButton);
       }
-    });
+    }, true);
   }
 
   function installObservers() {
@@ -206,6 +332,7 @@
     const target = event.target;
     if (target instanceof HTMLElement && target.matches('.leaflet-marker-icon, .marker-cluster, button.event-item')) {
       state.lastInvoker = target;
+      state.lastInvokerWasInDesk = Boolean(target.closest('#deskDrawer'));
     }
   });
 
@@ -213,6 +340,7 @@
   normalizeSelectionStates();
   announceResultChanges();
   installReducedMotion();
+  installReducedMotionListActivationFallback();
   installPanelFocusManagement();
   installObservers();
 })();
