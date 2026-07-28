@@ -37,7 +37,7 @@ jobs:
       - name: Install browser QA dependencies
         run: |
           npm install --no-save playwright@1.54.1 @axe-core/playwright@4.10.2
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
 
       - name: Start exact reviewed runtime
         run: |
