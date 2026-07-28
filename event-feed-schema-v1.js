@@ -47,6 +47,13 @@
   // says Fitness. League/competitive sports are never Fitness / Wellness.
   const SPORTS_OVERRIDE = /softball|baseball|basketball|soccer|football|hockey|tennis|lacrosse|cricket|volleyball|kickball|rugby|little league|league sports?|sports? league|competitive sports?/;
 
+  // Strong civic-action terms must override a conflicting backend category.
+  // Generic rally/march terms are also civic unless the wording clearly means
+  // a road race, pep rally, market rally or marching-band event.
+  const CIVIC_ACTION_STRONG = /\b(?:protests?|protesting|protesters?|demonstrations?|demonstrators?|rally[- ]demonstrations?|pickets?|picketing|sit[- ]?ins?|die[- ]?ins?|walkouts?|vigils?)\b/;
+  const CIVIC_RALLY_OR_MARCH = /\b(?:rall(?:y|ies)|march(?:es|ed|ing|ers?)?)\b/;
+  const CIVIC_ACTION_FALSE_POSITIVE = /\b(?:road|car|auto|automobile|motorcycle|motorbike|bike|pep|sports?|team|stock|market)\s+rall(?:y|ies)\b|\brall(?:y|ies)\s+(?:race|racing|raid)\b|\bmarching\s+band\b/;
+
   const norm = v => String(v ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
   const hasOwn = (obj, key) => Object.hasOwn(obj, key);
 
@@ -68,7 +75,21 @@
 
   function classificationText(row) {
     const categories = Array.isArray(row.categories) ? row.categories.join(' ') : (row.categories || '');
-    return norm([row.category, categories, row.title, row.name, row.event_type, row.type, row.event_agency, row.street_closure_type, row.location, row.display_location].filter(Boolean).join(' '));
+    return norm([
+      row.category,
+      categories,
+      row.title,
+      row.name,
+      row.event_type,
+      row.type,
+      row.event_agency,
+      row.street_closure_type,
+      row.location,
+      row.display_location,
+      row.nycif?.event_type,
+      row.nycif?.classification_reason,
+      row.nycif?.major_reason
+    ].filter(Boolean).join(' '));
   }
 
   // League and competitive sports must never surface as Fitness / Wellness.
@@ -77,6 +98,23 @@
       return 'sports';
     }
     return category;
+  }
+
+  // Protests, demonstrations and related civic actions must never surface under
+  // Markets / Fairs solely because an upstream category was incorrect.
+  function enforceCivicAction(category, row) {
+    const text = classificationText(row);
+    if (CIVIC_ACTION_STRONG.test(text)) {
+      return 'civic';
+    }
+    if (CIVIC_RALLY_OR_MARCH.test(text) && !CIVIC_ACTION_FALSE_POSITIVE.test(text)) {
+      return 'civic';
+    }
+    return category;
+  }
+
+  function enforceCategoryOverrides(category, row) {
+    return enforceSportsFitness(enforceCivicAction(category, row), row);
   }
 
   const CHIP_DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -217,7 +255,7 @@
     return {
       id: String(id),
       title: String(row.title || row.name || row.search_label || 'Untitled event'),
-      category: enforceSportsFitness(inferCategory(row, preferDirect), row),
+      category: enforceCategoryOverrides(inferCategory(row, preferDirect), row),
       start_date_time: row.start_date_time || row.start || null,
       end_date_time: row.end_date_time || row.end || null,
       timezone: String(row.timezone || DEFAULT_TIMEZONE),
@@ -244,7 +282,7 @@
     return {
       id: String(row.id || `${dataLayer}:${row.source?.dataset || 'unknown'}:${row.source?.source_event_id || index}`),
       title: String(row.title || 'Untitled event'),
-      category: enforceSportsFitness(CATEGORY_ALIASES[norm(row.category)] || inferCategory(row, dataLayer === 'approved_staged'), row),
+      category: enforceCategoryOverrides(CATEGORY_ALIASES[norm(row.category)] || inferCategory(row, dataLayer === 'approved_staged'), row),
       start_date_time: row.start_date_time ?? null,
       end_date_time: row.end_date_time ?? null,
       timezone: String(row.timezone || DEFAULT_TIMEZONE),
@@ -309,6 +347,8 @@
     safeExternalUrl,
     inferCategory,
     enforceSportsFitness,
+    enforceCivicAction,
+    enforceCategoryOverrides,
     validCalendarDate,
     dateChipModel
   };
