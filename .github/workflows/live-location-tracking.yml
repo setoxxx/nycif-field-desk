@@ -1,0 +1,72 @@
+name: Live Location Tracking QA
+
+on:
+  pull_request:
+    paths:
+      - "index.html"
+      - "live-location-tracking-v01.js"
+      - "live-location-control-handoff-v01.js"
+      - "tests/live-location-tracking.test.cjs"
+      - "tests/live-location-tracking-v02.playwright.mjs"
+      - ".github/workflows/live-location-tracking.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  live-location-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run deterministic controller tests
+        run: node tests/live-location-tracking.test.cjs
+
+      - name: Install browser QA dependencies
+        run: |
+          npm install --no-save playwright@1.54.1 @axe-core/playwright@4.10.2
+          npx playwright install chromium
+
+      - name: Start exact reviewed runtime
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/nycif-live-location-server.log 2>&1 &
+          for attempt in {1..20}; do
+            if curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/nycif-live-location-server.log
+          exit 1
+
+      - name: Run mobile and desktop rendered live GPS gates
+        shell: bash
+        run: |
+          mkdir -p artifacts/live-location
+          set +e
+          node tests/live-location-tracking-v02.playwright.mjs 2>&1 | tee artifacts/live-location/live-location-gates.log
+          status=${PIPESTATUS[0]}
+          cp /tmp/nycif-live-location-server.log artifacts/live-location/server.log || true
+          exit "$status"
+
+      - name: Upload live GPS QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-location-tracking-qa
+          path: artifacts/live-location/
+          if-no-files-found: warn
+          retention-days: 30
