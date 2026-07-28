@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1801,
-  "usable_complaints": 1801,
+  "source_complaints": 1841,
+  "usable_complaints": 1841,
   "source_dispensaries": 250,
   "source_retailers": 4882,
   "correlation_locations": 5132,
-  "output_locations": 230,
-  "low_signal_excluded": 4902,
+  "output_locations": 233,
+  "low_signal_excluded": 4899,
   "radius_feet": [
     100,
     250,
@@ -23,21 +23,32 @@
   "min_signal_score": 3,
   "location_kind_counts": {
     "licensed_smoke_vape_retailer": 202,
-    "legal_cannabis_dispensary": 28
+    "legal_cannabis_dispensary": 31
   },
   "borough_counts": {
-    "Queens": 64,
-    "Manhattan": 62,
-    "Brooklyn": 66,
-    "Bronx": 35,
-    "Staten Island": 3
+    "Brooklyn": 61,
+    "Queens": 66,
+    "Manhattan": 67,
+    "Bronx": 34,
+    "Staten Island": 5
   },
   "signal_tier_counts": {
-    "very_high": 2,
+    "very_high": 3,
     "high": 29,
-    "moderate": 199
+    "moderate": 201
   },
   "top_locations_sample": [
+    {
+      "title": "NOSTRAND DELI & GROCERY",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "669 NOSTRAND AVE, BROOKLYN, 11216",
+      "borough": "Brooklyn",
+      "signal_score": 53,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 7,
+      "last_complaint_date": "2026-07-26"
+    },
     {
       "title": "NEW FIREHOUSE DELI AND GRILL INC",
       "location_kind": "licensed_smoke_vape_retailer",
@@ -61,59 +72,59 @@
       "last_complaint_date": "2026-07-21"
     },
     {
-      "title": "FREEDOM NEWS I, INC.",
+      "title": "GARDENIA DELI",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "address": "404 8 AVENUE, NEW YORK, 10001",
       "borough": "Manhattan",
-      "signal_score": 31,
+      "signal_score": 41,
       "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-22"
-    },
-    {
-      "title": "FREEDOM NEWS I, INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "signal_score": 31,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-22"
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-26"
     },
     {
       "title": "GARDENIA DELI",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "404 8 AVENUE, NEW YORK, 10001",
       "borough": "Manhattan",
-      "signal_score": 31,
+      "signal_score": 41,
       "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-25"
-    },
-    {
-      "title": "GARDENIA DELI",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "404 8 AVENUE, NEW YORK, 10001",
-      "borough": "Manhattan",
-      "signal_score": 31,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-25"
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-26"
     },
     {
       "title": "SAAD NEWSSTAND",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "8 AVENUE, NEW YORK, 10001",
       "borough": "Manhattan",
+      "signal_score": 41,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-26"
+    },
+    {
+      "title": "FREEDOM NEWS I, INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
       "signal_score": 31,
       "signal_tier": "high",
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-25"
+      "last_complaint_date": "2026-07-22"
+    },
+    {
+      "title": "FREEDOM NEWS I, INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-07-22"
     },
     {
       "title": "SUNAC NATURAL",
@@ -180,6 +191,17 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-17"
+    },
+    {
+      "title": "THE HOOTCH LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "CONCEPCION RANOCCHIA 1662 1ST AVE, NEW YORK, 10028 4770",
+      "borough": "Manhattan",
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-26"
     },
     {
       "title": "15th Street Snacks & More Corp",
@@ -281,39 +303,17 @@
       "last_complaint_date": "2026-07-21"
     },
     {
-      "title": "KNICKERBOCKER FRESH MARKET INCORPORATED",
+      "title": "SAMMY GOURMET DELI 2 INC.",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "341 KNICKERBOCKER AVE, BROOKLYN, 11237",
-      "borough": "Brooklyn",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-15"
-    },
-    {
-      "title": "RIVERBEND CANDY STORE",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "2289 5 AVENUE, NEW YORK, 10037",
-      "borough": "Manhattan",
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-11"
-    },
-    {
-      "title": "SHAKTI PETROLEUM CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "15409 UNION TPKE, FLUSHING, 11367",
+      "address": "16903 JAMAICA AVE, JAMAICA, 11432",
       "borough": "Queens",
       "signal_score": 21,
       "signal_tier": "high",
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-06-30"
+      "last_complaint_date": "2026-07-26"
     }
   ],
-  "generated_at": "2026-07-27T13:26:49.936Z",
+  "generated_at": "2026-07-28T12:18:28.709Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
