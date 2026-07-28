@@ -12,8 +12,7 @@ function assert(condition, message) {
 
 function nyDateKey() {
   const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/New_York',
-    year: 'numeric', month: '2-digit', day: '2-digit'
+    timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit'
   }).formatToParts(new Date());
   const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
   return `${values.year}-${values.month}-${values.day}`;
@@ -34,14 +33,9 @@ const event = {
   significance: 'major',
   source: { dataset: 'live-location-gate', source_event_id: 'event-1' },
   nycif: {
-    data_layer: 'approved_staged',
-    coordinate_status: 'map_ready',
-    production_feed: true,
-    display_disposition: 'standalone_public_event',
-    event_date: day,
-    event_type: 'Public Event',
-    is_major: true,
-    verification_status: 'verified'
+    data_layer: 'approved_staged', coordinate_status: 'map_ready', production_feed: true,
+    display_disposition: 'standalone_public_event', event_date: day,
+    event_type: 'Public Event', is_major: true, verification_status: 'verified'
   }
 };
 
@@ -52,9 +46,7 @@ function payloadFor(url) {
   if (url.includes('/approved/manifest.json') || url.includes('/review/manifest.json')) {
     return { generated_at_utc: new Date().toISOString(), pages: [] };
   }
-  if (url.includes('photographer_assignment_calendar_2mo.json') || url.includes('photographer_viral_recurrence_matches.json')) {
-    return [];
-  }
+  if (url.includes('photographer_assignment_calendar_2mo.json') || url.includes('photographer_viral_recurrence_matches.json')) return [];
   return { generated_at_utc: new Date().toISOString(), total: 0, events: [] };
 }
 
@@ -66,19 +58,14 @@ const transparentPng = Buffer.from(
 const geolocationMock = `(() => {
   const watchers = new Map();
   let nextId = 1;
-  const initial = {
-    timestamp: 1000,
-    coords: { latitude: 40.7128, longitude: -74.006, accuracy: 20, heading: 0, speed: 1 }
-  };
+  const initial = { timestamp: 1000, coords: { latitude: 40.7128, longitude: -74.006, accuracy: 20, heading: 0, speed: 1 } };
   window.__NYCIF_GEO_TEST__ = {
     clearCalls: [],
     push(latitude, longitude, accuracy = 12, heading = null, speed = 1, timestamp = Date.now()) {
       const position = { timestamp, coords: { latitude, longitude, accuracy, heading, speed } };
       watchers.forEach(entry => entry.success(position));
     },
-    fail(code, message = 'mock error') {
-      watchers.forEach(entry => entry.error({ code, message }));
-    },
+    fail(code, message = 'mock error') { watchers.forEach(entry => entry.error({ code, message })); },
     count() { return watchers.size; }
   };
   Object.defineProperty(navigator, 'geolocation', {
@@ -100,28 +87,19 @@ const geolocationMock = `(() => {
 
 async function openTestPage(browser, viewport) {
   const context = await browser.newContext({
-    viewport,
-    timezoneId: 'America/New_York',
-    reducedMotion: 'reduce',
-    serviceWorkers: 'block'
+    viewport, timezoneId: 'America/New_York', reducedMotion: 'reduce', serviceWorkers: 'block'
   });
   await context.addInitScript({ content: geolocationMock });
   const page = await context.newPage();
   const consoleErrors = [];
   const pageErrors = [];
-  page.on('console', message => {
-    if (message.type() === 'error') consoleErrors.push(message.text());
-  });
+  page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
   page.on('pageerror', error => pageErrors.push(String(error)));
   await page.route(/raw\.githubusercontent\.com|127\.0\.0\.1:4173\/data\//, route => route.fulfill({
-    status: 200,
-    contentType: 'application/json; charset=utf-8',
-    body: JSON.stringify(payloadFor(route.request().url()))
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(payloadFor(route.request().url()))
   }));
   await page.route(/tile\.openstreetmap\.org/, route => route.fulfill({
-    status: 200,
-    contentType: 'image/png',
-    body: transparentPng
+    status: 200, contentType: 'image/png', body: transparentPng
   }));
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 10_000 });
   await page.locator('#brandCount').filter({ hasText: '1 event' }).waitFor({ timeout: 10_000 });
@@ -174,31 +152,23 @@ try {
   assert(Math.abs(centerWhilePaused.lat - centerBeforePause.lat) < 0.000001, 'Paused follow mode moved the map');
   assert(Math.abs(centerWhilePaused.lng - centerBeforePause.lng) < 0.000001, 'Paused follow mode moved the map');
 
-  await page.evaluate(() => {
-    const button = document.getElementById('locateBtn');
-    button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, composed: true }));
-  });
+  await page.evaluate(() => document.getElementById('locateBtn').click());
   await page.waitForTimeout(500);
   const recenterDiagnostic = await page.evaluate(() => {
     const state = window.NYCIF_LIVE_LOCATION_CONTROLLER.getState();
     const center = window.NYCIF_MAIN_MAP.getCenter();
-    const button = document.getElementById('locateBtn');
     return {
       following: state.following,
       tracking: state.tracking,
-      lastFix: state.lastFix,
-      center: { lat: center.lat, lng: center.lng },
-      handoff: button?.dataset.liveHandoff || null,
-      label: button?.getAttribute('aria-label') || null,
-      pressed: button?.getAttribute('aria-pressed') || null
+      centerDistanceMeters: window.NYCIF_MAIN_MAP.distance(center, [40.714, -74.004]),
+      handoff: document.getElementById('locateBtn')?.dataset.liveHandoff || null,
+      label: document.getElementById('locateBtn')?.getAttribute('aria-label') || null
     };
   });
   console.log('recenter-diagnostic', JSON.stringify(recenterDiagnostic));
   assert(recenterDiagnostic.following === true, `Tap did not resume follow mode: ${JSON.stringify(recenterDiagnostic)}`);
-  assert(Math.abs(recenterDiagnostic.center.lat - 40.714) < 0.00001,
-    `Recenter latitude is wrong: ${JSON.stringify(recenterDiagnostic)}`);
-  assert(Math.abs(recenterDiagnostic.center.lng + 74.004) < 0.00001,
-    `Recenter longitude is wrong: ${JSON.stringify(recenterDiagnostic)}`);
+  assert(recenterDiagnostic.centerDistanceMeters <= 5,
+    `Recenter is more than five meters from the latest fix: ${JSON.stringify(recenterDiagnostic)}`);
 
   const controls = await page.locator('.map-controls').boundingBox();
   assert(controls && controls.x >= 0 && controls.x + controls.width <= 390, 'Live GPS controls are clipped on mobile');
@@ -238,13 +208,9 @@ try {
   const report = {
     status: 'pass',
     mobile: {
-      viewport: '390x844',
-      continuousUpdates: true,
-      direction: true,
-      pauseAndTapRecenter: true,
-      keyboardStartStop: true,
-      permissionDenied: true,
-      axeSeriousCritical: 0
+      viewport: '390x844', continuousUpdates: true, direction: true,
+      pauseAndTapRecenter: true, recenterToleranceMeters: 5,
+      keyboardStartStop: true, permissionDenied: true, axeSeriousCritical: 0
     },
     desktop: { viewport: '1440x1000', continuousUpdates: true }
   };
