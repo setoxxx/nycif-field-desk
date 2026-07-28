@@ -18,31 +18,33 @@
   <link rel="stylesheet" href="./fielddesk-v02.css?v=public-map-v10">
   <link rel="stylesheet" href="./weekstrip-v06-safe.css?v=public-map-v10">
   <link rel="stylesheet" href="./public-map-v01.css?v=public-map-v10">
+  <link rel="stylesheet" href="./accessibility-v01.css?v=protected-staging-a11y-v01">
   <script src="./public-display-mode-v01.js?v=public-map-v10"></script>
 </head>
 <body class="public-map-page">
+  <a class="a11y-skip-link" href="#deskBtn">Skip to event list controls</a>
   <main id="app" class="app">
     <section class="map-shell" aria-label="NYC In Focus public event map">
-      <div id="map" class="map" role="application" aria-label="NYC event map"></div>
+      <div id="map" class="map" role="region" tabindex="0" aria-label="Interactive NYC event map. Use the Event List button for an equivalent text list."></div>
 
       <div class="brand-header-row" aria-label="NYC In Focus header">
         <div class="brand-card" aria-label="NYC In Focus Event Map status">
           <div class="brand-mark">NYCIF</div>
           <div>
             <strong>NYC</strong>
-            <span id="brandCount">Loading NYC events…</span>
+            <span id="brandCount" role="status" aria-live="polite">Loading NYC events…</span>
           </div>
         </div>
       </div>
 
-      <div id="viewBanner" class="view-banner" hidden></div>
-      <div id="indexStatus" class="index-status" hidden></div>
+      <div id="viewBanner" class="view-banner" role="status" aria-live="polite" hidden></div>
+      <div id="indexStatus" class="index-status" role="status" aria-live="polite" hidden></div>
 
-      <div id="dateChips" class="date-chips" aria-label="Choose a day"></div>
+      <div id="dateChips" class="date-chips" role="group" aria-label="Choose a day"></div>
 
       <div class="map-controls" aria-label="Map controls">
         <button id="layersBtn" class="pill layers-pill" type="button" aria-expanded="false" aria-controls="layersPanel">
-          <span>☰</span><b>Filters</b>
+          <span aria-hidden="true">☰</span><b>Filters</b>
         </button>
         <button id="locateBtn" class="locate-btn" type="button" aria-label="Show my location" title="Show my location">⌖</button>
         <button id="bugBtn" class="bug-btn" type="button" aria-label="Report a problem" title="Report a problem">🐞</button>
@@ -101,7 +103,7 @@
 
       <button id="deskBtn" class="desk-btn" type="button" aria-expanded="false" aria-controls="deskDrawer">Event List</button>
 
-      <aside id="deskDrawer" class="desk-drawer" aria-label="Event list" hidden>
+      <aside id="deskDrawer" class="desk-drawer" aria-label="Event list" hidden tabindex="-1">
         <header class="desk-header">
           <div>
             <p>NYC In Focus</p>
@@ -112,14 +114,14 @@
 
         <label class="search">
           <span class="sr-only">Search events</span>
-          <input id="searchInput" type="search" placeholder="Search title, location, borough" autocomplete="off">
+          <input id="searchInput" type="search" placeholder="Search title, location, borough" autocomplete="off" aria-describedby="listMeta">
         </label>
 
-        <div class="boroughs" id="boroughs"></div>
+        <div class="boroughs" id="boroughs" role="group" aria-label="Filter by borough"></div>
 
         <label class="sort">
           <span>Sort</span>
-          <select id="sortSelect">
+          <select id="sortSelect" aria-label="Sort events">
             <option value="priority">Highlights</option>
             <option value="near">Near me</option>
             <option value="time">Time</option>
@@ -128,13 +130,13 @@
           </select>
         </label>
 
-        <div id="listMeta" class="list-meta">Loading events...</div>
-        <div id="eventList" class="event-list"></div>
+        <div id="listMeta" class="list-meta" role="status" aria-live="polite" aria-atomic="true">Loading events...</div>
+        <div id="eventList" class="event-list" aria-label="Event results"></div>
         <button id="loadMoreBtn" class="load-all" type="button" hidden>Show 100 more</button>
       </aside>
 
       <div class="public-intro-v01"><strong>NYC In Focus:</strong> Discover public events across the five boroughs — today and the week ahead. Confirm details before you go.</div>
-      <div id="status" class="status">Loading the NYC In Focus event map…</div>
+      <div id="status" class="status" role="status" aria-live="polite" aria-atomic="true">Loading the NYC In Focus event map…</div>
       <pre id="debugPanel" class="debug-panel" hidden></pre>
     </section>
   </main>
@@ -151,6 +153,7 @@
   <script src="./field-desk-operator-layer-v01.js?v=public-map-v10"></script>
   <script src="./admin-whats-new-v01.js?v=public-map-v10"></script>
   <script src="./nycif-tip-jar-v01.js?v=06"></script>
+  <script src="./accessibility-v01.js?v=protected-staging-a11y-v01"></script>
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("./service-worker.js").catch(function () {});
