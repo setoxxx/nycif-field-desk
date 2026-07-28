@@ -121,10 +121,31 @@ await page.locator('#layersBtn').focus();
 await page.keyboard.press('Enter');
 await page.locator('#layersPanel').waitFor({ state: 'visible' });
 assert((await page.locator('#layersBtn').getAttribute('aria-expanded')) === 'true', 'Filters did not expose expanded state');
+
+const categoryCount = await page.locator('[data-cat]').count();
+const civicToggle = page.locator('[data-cat="civic"]');
+assert(await civicToggle.isChecked(), 'Civic category did not start enabled');
+await civicToggle.focus();
+await page.keyboard.press('Space');
+assert(!(await civicToggle.isChecked()), 'Category checkbox did not respond to Space');
+
+await page.locator('#resetFiltersBtn').focus();
+await page.keyboard.press('Enter');
+await page.waitForFunction(() => document.querySelectorAll('[data-cat]:checked').length === 0);
+assert(!(await page.locator('#newsDeskToggle').isChecked()), 'Clear Filters did not disable News Desk');
+assert((await page.locator('#editorsPicksSelect').inputValue()) === 'all', 'Clear Filters did not reset Editor’s Picks');
+await page.locator('#brandCount').filter({ hasText: '0 events' }).waitFor();
+
+await page.locator('#enableAllCategoriesBtn').focus();
+await page.keyboard.press('Enter');
+await page.waitForFunction(expected => document.querySelectorAll('[data-cat]:checked').length === expected, categoryCount);
+assert(await page.locator('#newsDeskToggle').isChecked(), 'Enable All did not restore News Desk');
+await page.locator('#brandCount').filter({ hasText: '1 event' }).waitFor();
+
 await page.keyboard.press('Escape');
 await page.locator('#layersPanel').waitFor({ state: 'hidden' });
 await page.waitForFunction(() => document.activeElement?.id === 'layersBtn');
-assert(Date.now() - interactionStartedAt <= INTERACTION_BUDGET_MS, 'Filter keyboard interaction exceeded budget');
+assert(Date.now() - interactionStartedAt <= 4_000, 'Filter/reset keyboard interaction exceeded budget');
 
 interactionStartedAt = Date.now();
 await page.locator('#deskBtn').focus();
@@ -190,6 +211,83 @@ const axe = await new AxeBuilder({ page }).analyze();
 const blockingViolations = axe.violations.filter(item => item.impact === 'critical' || item.impact === 'serious');
 assert(blockingViolations.length === 0, `Axe found blocking violations: ${blockingViolations.map(item => item.id).join(', ')}`);
 
+// A 720x500 CSS viewport is the reflow equivalent of viewing a 1440x1000
+// desktop viewport at 200% browser zoom. Maps are two-dimensional content, but
+// all surrounding controls and overlays must remain reachable and operable.
+await page.setViewportSize({ width: 720, height: 500 });
+await page.reload({ waitUntil: 'domcontentloaded', timeout: INIT_BUDGET_MS });
+await page.locator('#brandCount').filter({ hasText: '1 event' }).waitFor({ timeout: INIT_BUDGET_MS });
+for (const selector of ['#dateChips', '#layersBtn', '#deskBtn', '#map']) {
+  assert(await page.locator(selector).isVisible(), `${selector} is not visible at 200% reflow equivalent`);
+}
+
+const reflowMetrics = await page.evaluate(() => ({
+  viewport: { width: window.innerWidth, height: window.innerHeight },
+  documentWidth: document.documentElement.scrollWidth,
+  clientWidth: document.documentElement.clientWidth
+}));
+assert(reflowMetrics.documentWidth <= reflowMetrics.clientWidth + 1, 'Unexpected page-level horizontal overflow at 200% reflow equivalent');
+
+await page.locator('#layersBtn').focus();
+await page.keyboard.press('Enter');
+await page.locator('#layersPanel').waitFor({ state: 'visible' });
+const panelMetrics = await page.locator('#layersPanel').evaluate(element => {
+  const rect = element.getBoundingClientRect();
+  const style = getComputedStyle(element);
+  return {
+    left: rect.left,
+    right: rect.right,
+    top: rect.top,
+    width: rect.width,
+    viewportWidth: window.innerWidth,
+    overflowY: style.overflowY,
+    scrollHeight: element.scrollHeight,
+    clientHeight: element.clientHeight
+  };
+});
+assert(panelMetrics.left >= -1 && panelMetrics.right <= panelMetrics.viewportWidth + 1, 'Filters panel is clipped horizontally at 200% reflow equivalent');
+assert(panelMetrics.top >= -1, 'Filters panel begins off-screen at 200% reflow equivalent');
+await page.keyboard.press('Escape');
+await page.locator('#layersPanel').waitFor({ state: 'hidden' });
+
+await page.locator('#deskBtn').focus();
+await page.keyboard.press('Enter');
+await page.locator('#deskDrawer').waitFor({ state: 'visible' });
+await page.waitForFunction(() => document.activeElement?.id === 'searchInput');
+const drawerMetrics = await page.locator('#deskDrawer').evaluate(element => {
+  const rect = element.getBoundingClientRect();
+  return {
+    left: rect.left,
+    right: rect.right,
+    width: rect.width,
+    viewportWidth: window.innerWidth,
+    scrollHeight: element.scrollHeight,
+    clientHeight: element.clientHeight
+  };
+});
+assert(drawerMetrics.left >= -1 && drawerMetrics.right <= drawerMetrics.viewportWidth + 1, 'Event List is clipped horizontally at 200% reflow equivalent');
+await page.keyboard.press('Escape');
+await page.locator('#deskDrawer').waitFor({ state: 'hidden' });
+await page.waitForFunction(() => document.activeElement?.id === 'deskBtn');
+
+const reflowMarker = page.locator('.leaflet-marker-icon').first();
+await reflowMarker.focus();
+await page.keyboard.press('Space');
+const reflowDialog = page.locator('.leaflet-popup-content[role="dialog"]');
+await reflowDialog.waitFor({ state: 'visible' });
+const dialogMetrics = await reflowDialog.evaluate(element => {
+  const rect = element.getBoundingClientRect();
+  return { left: rect.left, right: rect.right, viewportWidth: window.innerWidth };
+});
+assert(dialogMetrics.left >= -1 && dialogMetrics.right <= dialogMetrics.viewportWidth + 1, 'Event popup is clipped horizontally at 200% reflow equivalent');
+await page.keyboard.press('Escape');
+await reflowDialog.waitFor({ state: 'detached' });
+
+const reflowAxe = await new AxeBuilder({ page }).analyze();
+const reflowBlockingViolations = reflowAxe.violations.filter(item => item.impact === 'critical' || item.impact === 'serious');
+assert(reflowBlockingViolations.length === 0, `Axe found blocking reflow violations: ${reflowBlockingViolations.map(item => item.id).join(', ')}`);
+await page.screenshot({ path: path.join(ARTIFACT_DIR, 'desktop-200-percent-reflow.png'), fullPage: false });
+
 const relevantConsoleErrors = consoleErrors.filter(text => !/favicon|tile/i.test(text));
 assert(pageErrors.length === 0, `Page errors detected: ${pageErrors.join(' | ')}`);
 assert(relevantConsoleErrors.length === 0, `Console errors detected: ${relevantConsoleErrors.join(' | ')}`);
@@ -201,9 +299,25 @@ const result = {
   viewport: { width: 1440, height: 1000 },
   initializedMs,
   interactionBudgetMs: INTERACTION_BUDGET_MS,
+  resetKeyboardPath: {
+    categorySpaceActivation: true,
+    clearFiltersEnterActivation: true,
+    enableAllEnterActivation: true,
+    restoredEventCount: 1
+  },
   axe: {
     violations: axe.violations.length,
     seriousOrCritical: blockingViolations.length
+  },
+  reflow200PercentEquivalent: {
+    cssViewport: { width: 720, height: 500 },
+    sourceDesktopViewport: { width: 1440, height: 1000 },
+    pageHorizontalOverflow: false,
+    filtersOperable: true,
+    eventListOperable: true,
+    popupOperable: true,
+    seriousOrCriticalAxe: reflowBlockingViolations.length,
+    metrics: { reflowMetrics, panelMetrics, drawerMetrics, dialogMetrics }
   },
   reducedMotion,
   popupDiagnostic,
