@@ -25,7 +25,7 @@ def test_dynamic_statuses_are_polite_live_regions():
 
 def test_filter_groups_and_sort_have_accessible_names():
     assert 'id="dateChips" class="date-chips" role="group"' in INDEX
-    assert 'id="boroughs" role="group" aria-label="Filter by borough"' in INDEX
+    assert 'class="boroughs" id="boroughs" role="group" aria-label="Filter by borough"' in INDEX
     assert 'id="sortSelect" aria-label="Sort events"' in INDEX
     assert "aria-pressed" in SCRIPT
     assert "aria-current" in SCRIPT
