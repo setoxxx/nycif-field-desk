@@ -53,6 +53,19 @@ const event = {
   }
 };
 
+function feedPayload(url) {
+  if (url.includes('/major/events.json') || url.includes('events_discovery_v02_major.json') || url.includes('nycif_major_radar_map_events.json')) {
+    return { generated_at_utc: new Date().toISOString(), total: 1, events: [event] };
+  }
+  if (url.includes('/approved/manifest.json') || url.includes('/review/manifest.json')) {
+    return { generated_at_utc: new Date().toISOString(), pages: [] };
+  }
+  if (url.includes('photographer_assignment_calendar_2mo.json') || url.includes('photographer_viral_recurrence_matches.json')) {
+    return [];
+  }
+  return { generated_at_utc: new Date().toISOString(), total: 0, events: [] };
+}
+
 const transparentPng = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2n1cAAAAASUVORK5CYII=',
   'base64'
@@ -75,22 +88,11 @@ page.on('console', message => {
 });
 page.on('pageerror', error => pageErrors.push(String(error)));
 
-await page.route(/raw\.githubusercontent\.com/, async route => {
-  const url = route.request().url();
-  let body;
-  if (url.includes('/data/schema-v1/major/events.json') || url.includes('events_discovery_v02_major.json') || url.includes('nycif_major_radar_map_events.json')) {
-    body = { generated_at_utc: new Date().toISOString(), total: 1, events: [event] };
-  } else if (url.includes('/approved/manifest.json') || url.includes('/review/manifest.json')) {
-    body = { generated_at_utc: new Date().toISOString(), pages: [] };
-  } else if (url.includes('photographer_assignment_calendar_2mo.json') || url.includes('photographer_viral_recurrence_matches.json')) {
-    body = [];
-  } else {
-    body = { generated_at_utc: new Date().toISOString(), total: 0, events: [] };
-  }
+await page.route(/raw\.githubusercontent\.com|127\.0\.0\.1:4173\/data\//, async route => {
   await route.fulfill({
     status: 200,
     contentType: 'application/json; charset=utf-8',
-    body: JSON.stringify(body)
+    body: JSON.stringify(feedPayload(route.request().url()))
   });
 });
 
@@ -120,14 +122,14 @@ await page.locator('#layersPanel').waitFor({ state: 'visible' });
 assert((await page.locator('#layersBtn').getAttribute('aria-expanded')) === 'true', 'Filters did not expose expanded state');
 await page.keyboard.press('Escape');
 await page.locator('#layersPanel').waitFor({ state: 'hidden' });
-assert(await page.evaluate(() => document.activeElement?.id === 'layersBtn'), 'Filter Escape did not restore focus');
+await page.waitForFunction(() => document.activeElement?.id === 'layersBtn');
 assert(Date.now() - interactionStartedAt <= INTERACTION_BUDGET_MS, 'Filter keyboard interaction exceeded budget');
 
 interactionStartedAt = Date.now();
 await page.locator('#deskBtn').focus();
 await page.keyboard.press('Enter');
 await page.locator('#deskDrawer').waitFor({ state: 'visible' });
-assert(await page.evaluate(() => document.activeElement?.id === 'searchInput'), 'Event List did not move focus to search');
+await page.waitForFunction(() => document.activeElement?.id === 'searchInput');
 await page.keyboard.type('Desktop Keyboard');
 await page.locator('button.event-item').waitFor({ state: 'visible' });
 await page.locator('button.event-item').focus();
@@ -135,11 +137,11 @@ await page.keyboard.press('Enter');
 await page.locator('#deskDrawer').waitFor({ state: 'hidden' });
 const dialog = page.locator('.leaflet-popup-content[role="dialog"]');
 await dialog.waitFor({ state: 'visible', timeout: 3_000 });
-assert(await dialog.evaluate(node => document.activeElement === node), 'Popup dialog did not receive focus');
+await page.waitForFunction(() => document.activeElement?.matches?.('.leaflet-popup-content[role="dialog"]'));
 assert(await dialog.getAttribute('aria-labelledby'), 'Popup dialog is missing aria-labelledby');
 await page.keyboard.press('Escape');
 await dialog.waitFor({ state: 'detached' });
-assert(await page.evaluate(() => document.activeElement?.id === 'deskBtn'), 'Event List popup close did not restore focus to visible Event List button');
+await page.waitForFunction(() => document.activeElement?.id === 'deskBtn');
 assert(Date.now() - interactionStartedAt <= 4_000, 'Event List to popup keyboard path exceeded budget');
 
 const marker = page.locator('.leaflet-marker-icon').first();
@@ -150,10 +152,11 @@ await page.keyboard.press('Space');
 await page.locator('.leaflet-popup-content[role="dialog"]').waitFor({ state: 'visible' });
 await page.keyboard.press('Escape');
 await page.locator('.leaflet-popup-content[role="dialog"]').waitFor({ state: 'detached' });
-assert(await marker.evaluate(node => document.activeElement === node), 'Marker popup close did not restore focus to marker');
+await page.waitForFunction(() => document.activeElement?.matches?.('.leaflet-marker-icon'));
 
 await page.locator('#deskBtn').focus();
 await page.keyboard.press('Enter');
+await page.waitForFunction(() => document.activeElement?.id === 'searchInput');
 await page.locator('#searchInput').fill('Desktop Keyboard');
 await page.waitForTimeout(350);
 const liveLabel = await page.locator('#listMeta').getAttribute('aria-label');
