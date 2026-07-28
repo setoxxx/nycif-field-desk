@@ -269,7 +269,9 @@
       if (state.openPopup) {
         event.preventDefault();
         event.stopPropagation();
-        window.NYCIF_MAIN_MAP?.closePopup();
+        const close = state.openPopup.querySelector('.leaflet-popup-close-button');
+        if (close instanceof HTMLElement) close.click();
+        else window.NYCIF_MAIN_MAP?.closePopup();
         return;
       }
       if (desk && !desk.hidden) {
