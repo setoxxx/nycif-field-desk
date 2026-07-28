@@ -40,6 +40,7 @@ def test_markers_and_popups_support_keyboard_and_focus():
     assert "content.setAttribute('role', 'dialog')" in SCRIPT
     assert "focusSafely(content)" in SCRIPT
     assert "logicalPopupRestoreTarget" in SCRIPT
+    assert "lastInvokerWasInDesk" in SCRIPT
     assert "return byId('deskBtn')" in SCRIPT
     assert "event.key !== 'Escape'" in SCRIPT
 
@@ -51,6 +52,14 @@ def test_nested_event_card_links_are_separated():
     assert ".event-item-wrap" in STYLES
     assert "min-height: 44px" in STYLES
     assert "min-width: 44px" in STYLES
+
+
+def test_reduced_motion_list_activation_survives_marker_rebuild():
+    assert "installReducedMotionListActivationFallback" in SCRIPT
+    assert "reducedMotionRetryTimer" in SCRIPT
+    assert "retryingEventId" in SCRIPT
+    assert "currentButton.click()" in SCRIPT
+    assert "if (document.querySelector('.leaflet-popup')) return" in SCRIPT
 
 
 def test_popup_keeps_engagement_controls_visible():
