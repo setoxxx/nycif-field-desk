@@ -17,6 +17,13 @@
     window.requestAnimationFrame(() => node.focus({ preventScroll: true }));
   }
 
+  function logicalPopupRestoreTarget() {
+    const invoker = state.lastInvoker;
+    const desk = invoker?.closest?.('#deskDrawer');
+    if (desk && desk.hidden) return byId('deskBtn');
+    return invoker;
+  }
+
   function setPressedState(container, activeClass, currentValue) {
     if (!container) return;
     container.querySelectorAll('button').forEach(button => {
@@ -105,7 +112,7 @@
   function restorePopupFocus() {
     if (state.openPopup && !state.openPopup.isConnected) {
       state.openPopup = null;
-      focusSafely(state.lastInvoker);
+      focusSafely(logicalPopupRestoreTarget());
     }
   }
 
