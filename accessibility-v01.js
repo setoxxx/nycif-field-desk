@@ -4,8 +4,11 @@
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const state = {
     lastInvoker: null,
+    lastInvokerWasInDesk: false,
     openPopup: null,
-    announceTimer: null
+    announceTimer: null,
+    reducedMotionRetryTimer: null,
+    retryingEventId: null
   };
 
   function byId(id) {
@@ -18,10 +21,9 @@
   }
 
   function logicalPopupRestoreTarget() {
-    const invoker = state.lastInvoker;
-    const desk = invoker?.closest?.('#deskDrawer');
-    if (desk && desk.hidden) return byId('deskBtn');
-    return invoker;
+    const desk = byId('deskDrawer');
+    if (state.lastInvokerWasInDesk && desk?.hidden) return byId('deskBtn');
+    return state.lastInvoker;
   }
 
   function setPressedState(container, activeClass, currentValue) {
@@ -93,6 +95,10 @@
     const close = popup.querySelector('.leaflet-popup-close-button');
     if (!content) return;
 
+    clearTimeout(state.reducedMotionRetryTimer);
+    state.reducedMotionRetryTimer = null;
+    state.retryingEventId = null;
+
     content.setAttribute('role', 'dialog');
     content.setAttribute('aria-modal', 'false');
     content.tabIndex = -1;
@@ -151,6 +157,38 @@
     map.panTo = (latlng, options = {}) => originalPanTo(latlng, { ...options, animate: false });
     const originalFlyTo = map.flyTo.bind(map);
     map.flyTo = (latlng, zoom, options = {}) => originalFlyTo(latlng, zoom, { ...options, animate: false });
+  }
+
+  function installReducedMotionListActivationFallback() {
+    if (!reduceMotion) return;
+
+    document.addEventListener('click', event => {
+      const target = event.target;
+      if (!(target instanceof Element) || target.closest('a')) return;
+      const button = target.closest('button.event-item');
+      if (!(button instanceof HTMLButtonElement)) return;
+
+      const eventId = button.dataset.id || '';
+      if (!eventId || state.retryingEventId === eventId) return;
+
+      clearTimeout(state.reducedMotionRetryTimer);
+      state.reducedMotionRetryTimer = window.setTimeout(() => {
+        state.reducedMotionRetryTimer = null;
+        if (document.querySelector('.leaflet-popup')) return;
+        const desk = byId('deskDrawer');
+        if (!desk?.hidden) return;
+
+        const escapedId = window.CSS?.escape ? CSS.escape(eventId) : eventId.replace(/["\\]/g, '\\$&');
+        const currentButton = document.querySelector(`button.event-item[data-id="${escapedId}"]`);
+        if (!(currentButton instanceof HTMLButtonElement)) return;
+
+        state.retryingEventId = eventId;
+        currentButton.click();
+        window.setTimeout(() => {
+          if (state.retryingEventId === eventId) state.retryingEventId = null;
+        }, 1500);
+      }, 750);
+    }, true);
   }
 
   function installPanelFocusManagement() {
@@ -213,6 +251,7 @@
     const target = event.target;
     if (target instanceof HTMLElement && target.matches('.leaflet-marker-icon, .marker-cluster, button.event-item')) {
       state.lastInvoker = target;
+      state.lastInvokerWasInDesk = Boolean(target.closest('#deskDrawer'));
     }
   });
 
@@ -220,6 +259,7 @@
   normalizeSelectionStates();
   announceResultChanges();
   installReducedMotion();
+  installReducedMotionListActivationFallback();
   installPanelFocusManagement();
   installObservers();
 })();
