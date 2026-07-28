@@ -50,6 +50,30 @@ def test_nested_event_card_links_are_separated():
     assert "min-width: 44px" in STYLES
 
 
+def test_popup_keeps_engagement_controls_visible():
+    for selector in (
+        "body.public-map-page.nycif-popup-open .brand-header-row",
+        "body.public-map-page.nycif-popup-open .date-chips",
+        "body.public-map-page.nycif-popup-open .map-controls",
+        "body.public-map-page.nycif-popup-open .desk-btn",
+    ):
+        assert selector in STYLES
+    assert "z-index: 2700 !important" in STYLES
+    assert "body.public-map-page.nycif-popup-open .layers-panel" in STYLES
+    assert "body.public-map-page.nycif-popup-open .desk-drawer" in STYLES
+
+
+def test_popup_close_icon_is_compact_with_accessible_touch_target():
+    selector = "body.public-map-page .nycif-event-popup .leaflet-popup-close-button"
+    assert selector in STYLES
+    assert "width: 44px !important" in STYLES
+    assert "height: 44px !important" in STYLES
+    assert f"{selector}::before" in STYLES
+    assert "width: 24px" in STYLES
+    assert "height: 24px" in STYLES
+    assert 'content: "\\00d7"' in STYLES
+
+
 def test_visible_focus_and_reduced_motion_are_enforced():
     assert ":focus-visible" in STYLES
     assert "prefers-reduced-motion: reduce" in STYLES
