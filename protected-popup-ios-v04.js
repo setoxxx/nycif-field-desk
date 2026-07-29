@@ -15,6 +15,9 @@
   const gap = 10;
   const dateGap = 14;
   const mobileDownShift = 34;
+  const adsenseClient = 'ca-pub-4214710733598120';
+  const adsenseSlot = '9032704835';
+  const adsenseLayoutKey = '-dv+8j-26-cn+v1';
 
   function cssNumber(name) {
     const value = parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name));
@@ -25,8 +28,87 @@
     return max < min ? min : Math.min(max, Math.max(min, value));
   }
 
+  function ensureStyles() {
+    if (document.getElementById('nycif-popup-adsense-v04-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'nycif-popup-adsense-v04-styles';
+    style.textContent = `
+      .nycif-sponsored-card {
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 250px;
+        margin: 10px 0;
+        padding: 8px;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+      }
+      .nycif-sponsored-label {
+        display: block;
+        margin: 0 0 4px;
+        color: #667085;
+        font: 500 10px/1.2 Arial, sans-serif;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+      }
+      .nycif-sponsored-card .adsbygoogle {
+        width: 100%;
+        min-width: 234px;
+      }
+      .nycif-sponsored-card[data-ad-empty="true"] {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function activateAd(card, ad) {
+    requestAnimationFrame(() => {
+      if (!card.isConnected || ad.dataset.nycifRequested === '1') return;
+      ad.dataset.nycifRequested = '1';
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (error) {
+        card.dataset.adEmpty = 'true';
+        console.warn('[NYCIF popup ad] AdSense request failed', error);
+      }
+    });
+
+    const observer = new MutationObserver(() => {
+      const status = ad.getAttribute('data-ad-status');
+      if (status === 'unfilled') card.dataset.adEmpty = 'true';
+      if (status === 'filled') card.dataset.adEmpty = 'false';
+    });
+    observer.observe(ad, { attributes: true, attributeFilter: ['data-ad-status'] });
+  }
+
+  function sponsorCard(slot) {
+    const card = document.createElement('article');
+    card.className = 'nycif-sponsored-card';
+    card.dataset.slot = String(slot);
+    card.setAttribute('aria-label', 'Sponsored advertisement');
+
+    const label = document.createElement('span');
+    label.className = 'nycif-sponsored-label';
+    label.textContent = 'Sponsored';
+
+    const ad = document.createElement('ins');
+    ad.className = 'adsbygoogle';
+    ad.style.display = 'block';
+    ad.setAttribute('data-ad-format', 'fluid');
+    ad.setAttribute('data-ad-layout-key', adsenseLayoutKey);
+    ad.setAttribute('data-ad-client', adsenseClient);
+    ad.setAttribute('data-ad-slot', adsenseSlot);
+
+    card.append(label, ad);
+    activateAd(card, ad);
+    return card;
+  }
+
   function ensureSponsor(popupEl) {
-    popupEl.querySelectorAll('.nycif-sponsored-card').forEach(node => node.remove());
+    if (popupEl.querySelector('.nycif-sponsored-card')) return;
+
     const stack = popupEl.querySelector('.popup-stack-scroll');
     if (stack) {
       const items = [...stack.querySelectorAll(':scope > .popup-stack-item')];
@@ -37,18 +119,10 @@
       });
       return;
     }
+
     const content = popupEl.querySelector('.leaflet-popup-content');
     const event = content?.querySelector(':scope > .popup-card:not(.popup-card--picker)');
     if (content && event) event.after(sponsorCard(1));
-  }
-
-  function sponsorCard(slot) {
-    const card = document.createElement('article');
-    card.className = 'nycif-sponsored-card';
-    card.dataset.slot = String(slot);
-    card.setAttribute('aria-label', 'Sponsored placement');
-    card.innerHTML = '<span class="nycif-sponsored-label">Sponsored</span><strong>Advertise with NYC In Focus</strong><span>Local advertising placement</span>';
-    return card;
   }
 
   function positionPopup(popup) {
@@ -112,6 +186,7 @@
     }
     if (instance.__nycifIosPopupV04) return;
     instance.__nycifIosPopupV04 = true;
+    ensureStyles();
     instance.on('popupopen', event => {
       [0, 100, 300, 700].forEach(delay => setTimeout(() => positionPopup(event.popup), delay));
     });
