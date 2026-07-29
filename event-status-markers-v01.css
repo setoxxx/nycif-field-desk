@@ -1,0 +1,110 @@
+/* NYCIF protected staging marker-status QA. Gated by event-status JS; public-map default remains unchanged. */
+.marker.nycif-marker--live {
+  position: relative;
+  opacity: 1;
+  filter: none;
+  border-color: rgba(34, 197, 94, 0.78);
+  box-shadow:
+    0 0 0 2px rgba(34, 197, 94, 0.18),
+    0 12px 26px rgba(0, 0, 0, 0.28);
+}
+
+.marker.nycif-marker--live::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    rgba(34, 197, 94, 0.40) 0%,
+    rgba(34, 197, 94, 0.22) 42%,
+    rgba(34, 197, 94, 0) 74%
+  );
+  animation: nycif-live-corona 2.4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.marker.nycif-marker--live::after {
+  content: "Live";
+  position: absolute;
+  left: 50%;
+  bottom: -14px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 13px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgba(5, 46, 22, 0.92);
+  color: #dcfce7;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.24);
+}
+
+.marker.nycif-marker--ended,
+.marker.marker--past {
+  opacity: 0.42;
+  filter: saturate(0.55);
+}
+
+.marker.nycif-marker--unknown {
+  opacity: 0.72;
+  filter: saturate(0.82);
+}
+
+.nycif-status-line {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 0 7px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.08);
+  color: #111827;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.nycif-status-line--live,
+.nycif-list-status--live {
+  background: rgba(34, 197, 94, 0.16) !important;
+  color: #166534 !important;
+}
+
+.nycif-status-line--ended,
+.nycif-list-status--ended {
+  background: rgba(107, 114, 128, 0.14) !important;
+  color: #4b5563 !important;
+}
+
+.nycif-status-line--unknown,
+.nycif-list-status--unknown {
+  background: rgba(17, 24, 39, 0.08) !important;
+  color: #4b5563 !important;
+}
+
+@keyframes nycif-live-corona {
+  0%, 100% {
+    opacity: 0.42;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.92;
+    transform: scale(1.16);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker.nycif-marker--live::before {
+    animation: none;
+    opacity: 0.65;
+    transform: none;
+  }
+}
