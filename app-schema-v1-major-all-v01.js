@@ -1599,38 +1599,25 @@
     state.pagesTotal[layer] = windowPages.length;
     const urlFor = layer === 'review' ? FEEDS.reviewPage : FEEDS.approvedPage;
     const dataLayer = layer === 'review' ? 'review_supplemental' : 'approved_staged';
-
-    const pageResults = await Promise.all(windowPages.map(async page => {
+    for (const page of windowPages) {
       if (token !== state.loadToken) {
-        return null;
+        return;
       }
       try {
-        const cursor = page.cursor || String(page.page || '').replace('.json', '');
-        const json = await fetchJson(urlFor(cursor), `${layer}-${page.page || cursor}`);
+        const json = await fetchJson(urlFor(page.cursor || page.page.replace('.json', '')), `${layer}-${page.page}`);
         if (token !== state.loadToken) {
-          return null;
+          return;
         }
         const envelope = SCHEMA.projectEnvelope(json, dataLayer, json.generated_at_utc);
-        return envelope.events;
+        upsertEvents(envelope.events);
+        state.pagesLoaded[layer] += 1;
+        updateIndexLabel();
+        scheduleRender();
       } catch (err) {
         state.errors.push(String(err.message || err));
         console.error('[NYCIF] page load failed:', layer, page.page, err);
-        return null;
       }
-    }));
-
-    if (token !== state.loadToken) {
-      return;
     }
-
-    const successfulPages = pageResults.filter(Boolean);
-    const events = successfulPages.flat();
-    if (events.length) {
-      upsertEvents(events);
-    }
-    state.pagesLoaded[layer] += successfulPages.length;
-    updateIndexLabel();
-    scheduleRender();
   }
 
   async function loadPagesForCurrentWindow(token) {
