@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const CANONICAL_SOURCE_URL = 'https://data.ny.gov/resource/gttd-5u6y.json';
 const SOURCE_LABEL = 'NYS Registered Retail Dealers of Adult-use Cannabis Products';
@@ -22,6 +23,10 @@ function clean(value) {
 
 function norm(value) {
   return clean(value).toLowerCase();
+}
+
+function keyText(value) {
+  return norm(value).replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
 function numberFrom(value) {
@@ -136,6 +141,76 @@ function normalize(row, index) {
   return { status: 'mapped', location_quality: coords.quality, lat: coords.lat, lng: coords.lng, ...base };
 }
 
+function semanticLocationKey(item) {
+  return [
+    keyText(item.title),
+    keyText(item.address),
+    Number(item.lat).toFixed(5),
+    Number(item.lng).toFixed(5)
+  ].join('|');
+}
+
+function qualityScore(item) {
+  const rank = {
+    source_georeference: 40,
+    source_coordinates: 30,
+    source_location_object: 20,
+    source_coordinates_reversed: 10
+  };
+  return (rank[item.location_quality] || 0) + (clean(item.address) ? 4 : 0) + (clean(item.title) ? 2 : 0) + (clean(item.borough) ? 1 : 0);
+}
+
+function mergeTrace(keeper, removed) {
+  const ids = new Set([
+    keeper.raw_source_id,
+    ...(keeper.duplicate_source_ids || []),
+    removed.raw_source_id,
+    ...(removed.duplicate_source_ids || [])
+  ].map(clean).filter(Boolean));
+  keeper.duplicate_source_ids = [...ids]
+    .filter(id => id !== keeper.raw_source_id)
+    .sort((a, b) => a.localeCompare(b));
+  keeper.source_record_count = Number(keeper.source_record_count || 1) + Number(removed.source_record_count || 1);
+  return keeper;
+}
+
+function chooseKeeper(a, b) {
+  if (qualityScore(b) > qualityScore(a)) return mergeTrace({ ...b }, a);
+  return mergeTrace({ ...a }, b);
+}
+
+function dedupeMappedLocations(items) {
+  const byId = new Map();
+  let duplicateIdRowsCollapsed = 0;
+  for (const item of items) {
+    const enriched = { ...item, source_record_count: 1, duplicate_source_ids: [] };
+    const existing = byId.get(item.id);
+    if (!existing) byId.set(item.id, enriched);
+    else {
+      duplicateIdRowsCollapsed += 1;
+      byId.set(item.id, chooseKeeper(existing, enriched));
+    }
+  }
+
+  const bySemantic = new Map();
+  let duplicateSemanticLocationsCollapsed = 0;
+  for (const item of byId.values()) {
+    const key = semanticLocationKey(item);
+    const existing = bySemantic.get(key);
+    if (!existing) bySemantic.set(key, item);
+    else {
+      duplicateSemanticLocationsCollapsed += 1;
+      bySemantic.set(key, chooseKeeper(existing, item));
+    }
+  }
+
+  return {
+    mapped: [...bySemantic.values()],
+    duplicate_id_rows_collapsed: duplicateIdRowsCollapsed,
+    duplicate_semantic_locations_collapsed: duplicateSemanticLocationsCollapsed
+  };
+}
+
 async function fetchOfficialSource(sourceUrl) {
   if (!sourceUrl) {
     return {
@@ -172,17 +247,30 @@ async function main() {
 
   const { rows, limitation } = await fetchOfficialSource(DEFAULT_SOURCE_URL);
   const normalized = rows.map((row, index) => normalize(row, index));
-  const mapped = normalized.filter(item => item.status === 'mapped');
+  const mappedBeforeDedupe = normalized.filter(item => item.status === 'mapped');
+  const dedupe = dedupeMappedLocations(mappedBeforeDedupe);
+  const mapped = dedupe.mapped;
   const needsReview = normalized.filter(item => item.status === 'needs_review');
   const rejected = normalized.filter(item => item.status === 'rejected');
+  const ids = mapped.map(item => item.id);
+  const semanticKeys = mapped.map(semanticLocationKey);
+  const duplicateOutputIds = ids.length - new Set(ids).size;
+  const duplicateOutputSemanticLocations = semanticKeys.length - new Set(semanticKeys).size;
+  const qaPass = mapped.length > 0 && duplicateOutputIds === 0 && duplicateOutputSemanticLocations === 0;
 
   const report = {
+    qa_pass: qaPass,
     source_url: CANONICAL_SOURCE_URL,
     queried_url: DEFAULT_SOURCE_URL,
     source_note: SOURCE_NOTE,
     source_rows: rows.length,
     nyc_county_filter: [...NYC_COUNTIES].sort(),
+    mapped_before_dedupe: mappedBeforeDedupe.length,
     mapped_total: mapped.length,
+    duplicate_id_rows_collapsed: dedupe.duplicate_id_rows_collapsed,
+    duplicate_semantic_locations_collapsed: dedupe.duplicate_semantic_locations_collapsed,
+    duplicate_output_ids: duplicateOutputIds,
+    duplicate_output_semantic_locations: duplicateOutputSemanticLocations,
     needs_review: needsReview.length,
     rejected: rejected.length,
     borough_counts: countBy(mapped, 'borough'),
@@ -202,9 +290,15 @@ async function main() {
   console.log(`Wrote ${OUT_FILE}`);
   console.log(`Wrote ${REVIEW_FILE}`);
   console.log(`Wrote ${REPORT_FILE}`);
+  if (!qaPass) process.exitCode = 1;
 }
 
-main().catch(error => {
-  console.error(error);
-  process.exit(1);
-});
+export { semanticLocationKey, dedupeMappedLocations };
+
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  main().catch(error => {
+    console.error(error);
+    process.exit(1);
+  });
+}
