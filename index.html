@@ -21,8 +21,11 @@
   <link rel="stylesheet" href="./accessibility-v01.css?v=protected-staging-a11y-v01">
   <link rel="stylesheet" href="./event-status-markers-v01.css?v=protected-status-markers-v01">
   <link rel="stylesheet" href="./protected-popup-qa-v01.css?v=release-20260729-a198eae">
+  <link rel="stylesheet" href="./tip-jar-motion-safety-v01.css?v=release-blockers-v01">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4214710733598120" crossorigin="anonymous"></script>
   <script src="./public-display-mode-v01.js?v=public-map-v10"></script>
+  <script src="./nyc-calendar-runtime-v01.js?v=release-blockers-v01"></script>
+  <script src="./public-feed-policy-v01.js?v=release-blockers-v01"></script>
 </head>
 <body class="public-map-page">
   <a class="a11y-skip-link" href="#deskBtn">Skip to event list controls</a>
@@ -50,7 +53,7 @@
           <span aria-hidden="true">☰</span><b>Filters</b>
         </button>
         <button id="locateBtn" class="locate-btn" type="button" aria-label="Show my location" title="Show my location">⌖</button>
-        <button id="bugBtn" class="bug-btn" type="button" aria-label="Report a problem" title="Report a problem">🐞</button>
+        <button id="bugBtn" class="bug-btn" type="button" aria-label="Report a problem" title="Report a problem">🔞</button>
         <button id="nearMeBtn" class="near-me-btn" type="button" hidden
           aria-label="Near me alerts (coming soon)" title="Near me alerts — coming in the app">Near Me</button>
       </div>
@@ -150,10 +153,11 @@
   <script src="./public-map-defaults-v01.js?v=public-map-v10"></script>
   <script src="./discovery-patch-v02.js?v=public-map-v10"></script>
   <script src="./event-feed-schema-v1.js?v=public-map-v10"></script>
+  <script src="./public-release-guard-v01.js?v=release-blockers-v01"></script>
   <script src="./news-desk-editors-picks-v01.js?v=public-map-v10"></script>
   <script src="./event-status-markers-v01.js?v=protected-status-markers-v02"></script>
   <script src="./protected-feed-performance-v01.js?v=release-20260729-a198eae"></script>
-  <script src="./app-schema-v1-major-all-v01.js?v=release-20260729-a198eae"></script>
+  <script src="./app-schema-v1-major-all-v01.js?v=release-blockers-v01"></script>
   <script src="./protected-popup-qa-v01.js?v=protected-popup-qa-v03"></script>
   <script src="./protected-popup-ios-v04.js?v=release-20260729-a198eae"></script>
   <script src="./panel-dismiss-v01.js?v=release-20260729-a198eae"></script>
@@ -162,7 +166,19 @@
   <script src="./public-approved-overlays-v01.js?v=public-map-v10"></script>
   <script src="./field-desk-operator-layer-v01.js?v=public-map-v10"></script>
   <script src="./admin-whats-new-v01.js?v=public-map-v10"></script>
-  <script src="./nycif-tip-jar-v01.js?v=06"></script>
+  <script src="./tip-jar-motion-policy-v01.js?v=release-blockers-v01"></script>
+  <script src="./nycif-tip-jar-v01.js?v=release-blockers-v01"></script>
+  <script>
+    (function () {
+      var policy = window.NYCIF_TIP_JAR_MOTION_POLICY;
+      if (!policy) return;
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function () { policy.restore(); }, { once: true });
+      } else {
+        policy.restore();
+      }
+    })();
+  </script>
   <script src="./accessibility-v01.js?v=protected-staging-a11y-v01"></script>
   <script>
     if ("serviceWorker" in navigator) {
