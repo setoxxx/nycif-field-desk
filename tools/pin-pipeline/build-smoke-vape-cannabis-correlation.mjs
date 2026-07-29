@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const COMPLAINT_FILE = 'data/nycif_smoke_cannabis_vape_intel.json';
 const DISPENSARY_FILE = 'data/nycif_legal_cannabis_dispensaries.json';
@@ -17,6 +18,10 @@ const MIN_SIGNAL_SCORE = Number(process.env.NYCIF_SMOKE_CORRELATION_MIN_SCORE ||
 
 function clean(value) {
   return String(value ?? '').replace(/\s+/g, ' ').trim();
+}
+
+function keyText(value) {
+  return clean(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
 function numberFrom(value) {
@@ -89,6 +94,50 @@ function normalizeLocation(row, index, kind) {
     license_type: clean(row.license_type || row.license),
     source_url: clean(row.source_url),
     raw: row
+  };
+}
+
+function semanticLocationKey(location) {
+  return [
+    keyText(location.location_kind),
+    keyText(location.title),
+    keyText(location.address),
+    Number(location.lat).toFixed(5),
+    Number(location.lng).toFixed(5)
+  ].join('|');
+}
+
+function dedupeLocations(locations) {
+  const bySemanticLocation = new Map();
+  let duplicateLocationsCollapsed = 0;
+
+  for (const location of locations) {
+    const key = semanticLocationKey(location);
+    const existing = bySemanticLocation.get(key);
+    if (!existing) {
+      bySemanticLocation.set(key, {
+        ...location,
+        source_record_count: 1,
+        duplicate_source_ids: []
+      });
+      continue;
+    }
+
+    duplicateLocationsCollapsed += 1;
+    existing.source_record_count += 1;
+    const ids = new Set([
+      existing.id,
+      ...(existing.duplicate_source_ids || []),
+      location.id
+    ].map(clean).filter(Boolean));
+    existing.duplicate_source_ids = [...ids]
+      .filter(id => id !== existing.id)
+      .sort((a, b) => a.localeCompare(b));
+  }
+
+  return {
+    locations: [...bySemanticLocation.values()],
+    duplicate_locations_collapsed: duplicateLocationsCollapsed
   };
 }
 
@@ -216,18 +265,26 @@ async function main() {
   const retailersRaw = await readJsonArray(RETAILER_FILE);
 
   const complaints = complaintsRaw.map(normalizeComplaint).filter(Boolean);
-  const locations = [
+  const locationsBeforeDedupe = [
     ...dispensariesRaw.map((row, index) => normalizeLocation(row, index, 'legal_cannabis_dispensary')).filter(Boolean),
     ...retailersRaw.map((row, index) => normalizeLocation(row, index, 'licensed_smoke_vape_retailer')).filter(Boolean)
   ];
+  const dedupe = dedupeLocations(locationsBeforeDedupe);
+  const locations = dedupe.locations;
 
   const grid = buildComplaintGrid(complaints);
   const now = new Date();
   const scored = locations.map(location => scoreLocation(location, nearbyComplaints(location, grid), now));
   const output = scored.filter(item => item.include).sort((a, b) => b.signal_score - a.signal_score || a.title.localeCompare(b.title));
   const needsReview = scored.filter(item => !item.include).map(item => ({ status: 'rejected', reason: 'low_signal', ...item })).slice(0, 5000);
+  const outputIds = output.map(item => item.id).filter(Boolean);
+  const duplicateOutputIds = outputIds.length - new Set(outputIds).size;
+  const outputSemanticKeys = output.map(semanticLocationKey);
+  const duplicateOutputSemanticLocations = outputSemanticKeys.length - new Set(outputSemanticKeys).size;
+  const qaPass = output.length > 0 && duplicateOutputIds === 0 && duplicateOutputSemanticLocations === 0;
 
   const report = {
+    qa_pass: qaPass,
     complaint_file: COMPLAINT_FILE,
     dispensary_file: DISPENSARY_FILE,
     retailer_file: RETAILER_FILE,
@@ -235,8 +292,12 @@ async function main() {
     usable_complaints: complaints.length,
     source_dispensaries: dispensariesRaw.length,
     source_retailers: retailersRaw.length,
+    correlation_locations_before_dedupe: locationsBeforeDedupe.length,
     correlation_locations: locations.length,
+    semantic_duplicate_locations_collapsed: dedupe.duplicate_locations_collapsed,
     output_locations: output.length,
+    duplicate_output_ids: duplicateOutputIds,
+    duplicate_output_semantic_locations: duplicateOutputSemanticLocations,
     low_signal_excluded: scored.length - output.length,
     radius_feet: RADII_FEET,
     windows_days: WINDOWS_DAYS,
@@ -249,6 +310,7 @@ async function main() {
       location_kind: item.location_kind,
       address: item.address,
       borough: item.borough,
+      source_record_count: item.source_record_count,
       signal_score: item.signal_score,
       signal_tier: item.signal_tier,
       complaints_365d_100ft: item.complaints_365d_100ft,
@@ -267,9 +329,15 @@ async function main() {
   console.log(`Wrote ${OUT_FILE}`);
   console.log(`Wrote ${REVIEW_FILE}`);
   console.log(`Wrote ${REPORT_FILE}`);
+  if (!qaPass) process.exitCode = 1;
 }
 
-main().catch(error => {
-  console.error(error);
-  process.exit(1);
-});
+export { semanticLocationKey, dedupeLocations };
+
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  main().catch(error => {
+    console.error(error);
+    process.exit(1);
+  });
+}

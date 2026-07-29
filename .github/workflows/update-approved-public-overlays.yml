@@ -4,12 +4,30 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '17 10 * * *'
+  pull_request:
+    paths:
+      - '.github/workflows/update-approved-public-overlays.yml'
+      - 'tools/pin-pipeline/run-approved-public-overlays.mjs'
+      - 'tools/pin-pipeline/build-legal-cannabis-dispensaries.mjs'
+      - 'tools/pin-pipeline/test-legal-cannabis-dispensaries.mjs'
+      - 'tools/pin-pipeline/build-smoke-vape-cannabis-correlation.mjs'
+      - 'tools/pin-pipeline/test-smoke-vape-cannabis-correlation.mjs'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/update-approved-public-overlays.yml'
+      - 'tools/pin-pipeline/run-approved-public-overlays.mjs'
+      - 'tools/pin-pipeline/build-legal-cannabis-dispensaries.mjs'
+      - 'tools/pin-pipeline/test-legal-cannabis-dispensaries.mjs'
+      - 'tools/pin-pipeline/build-smoke-vape-cannabis-correlation.mjs'
+      - 'tools/pin-pipeline/test-smoke-vape-cannabis-correlation.mjs'
 
 permissions:
   contents: write
 
 concurrency:
-  group: update-approved-public-overlays
+  group: update-approved-public-overlays-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -27,13 +45,57 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Verify overlay identity builders
+        run: |
+          node tools/pin-pipeline/test-legal-cannabis-dispensaries.mjs
+          node tools/pin-pipeline/test-smoke-vape-cannabis-correlation.mjs
+
       - name: Rebuild approved public overlay data
         run: node tools/pin-pipeline/run-approved-public-overlays.mjs
+
+      - name: Validate public overlay output identity
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const configs = [
+            ['data/nycif_active_nightlife_feed.json', 'data/reports/active_nightlife_feed_report.json', 'feed_records'],
+            ['data/nycif_legal_cannabis_dispensaries.json', 'data/reports/legal_cannabis_dispensaries_report.json', 'mapped_total'],
+            ['data/nycif_smoke_vape_cannabis_correlation.json', 'data/reports/smoke_vape_cannabis_correlation_report.json', 'output_locations']
+          ];
+          const semantic = row => [
+            String(row.location_kind || '').toLowerCase(),
+            String(row.title || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(),
+            String(row.address || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(),
+            Number(row.lat).toFixed(5),
+            Number(row.lng).toFixed(5)
+          ].join('|');
+          for (const [dataPath, reportPath, countKey] of configs) {
+            const rows = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+            const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+            if (!Array.isArray(rows) || rows.length < 1) throw new Error(`${dataPath} is empty`);
+            if (Number(report[countKey]) !== rows.length) throw new Error(`${dataPath} count does not match ${reportPath}`);
+            const ids = rows.map(row => String(row.id || row.raw_source_id || row.license_number || '')).filter(Boolean);
+            if (ids.length !== rows.length) throw new Error(`${dataPath} contains missing canonical IDs`);
+            if (new Set(ids).size !== ids.length) throw new Error(`${dataPath} contains duplicate IDs`);
+            const keys = rows.map(semantic);
+            if (new Set(keys).size !== keys.length) throw new Error(`${dataPath} contains duplicate semantic public markers`);
+          }
+          const legalReport = JSON.parse(fs.readFileSync('data/reports/legal_cannabis_dispensaries_report.json', 'utf8'));
+          if (legalReport.qa_pass !== true || legalReport.duplicate_output_ids !== 0 || legalReport.duplicate_output_semantic_locations !== 0) {
+            throw new Error('Legal cannabis canonical identity report did not pass');
+          }
+          const correlationReport = JSON.parse(fs.readFileSync('data/reports/smoke_vape_cannabis_correlation_report.json', 'utf8'));
+          if (correlationReport.qa_pass !== true || correlationReport.duplicate_output_ids !== 0 || correlationReport.duplicate_output_semantic_locations !== 0) {
+            throw new Error('Correlation semantic dedupe report did not pass');
+          }
+          console.log('Approved public overlay outputs are duplicate-clean and count-aligned.');
+          NODE
 
       - name: Show generated changes
         run: git status --short
 
       - name: Commit updated generated overlay data
+        if: github.event_name != 'pull_request'
         run: |
           if git diff --quiet; then
             echo "No generated overlay changes to commit."
@@ -71,5 +133,5 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Update approved public overlay data"
+          git commit -m "Update duplicate-clean approved public overlay data"
           git push
