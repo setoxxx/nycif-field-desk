@@ -27,6 +27,59 @@
     return window.NYCIF_MAIN_MAP || null;
   }
 
+  function transformOffset(el) {
+    const transform = window.getComputedStyle(el).transform;
+    if (!transform || transform === 'none') {
+      return { x: 0, y: 0 };
+    }
+
+    try {
+      const matrix = new DOMMatrixReadOnly(transform);
+      return { x: matrix.m41 || 0, y: matrix.m42 || 0 };
+    } catch {
+      const match = transform.match(/matrix\(([^)]+)\)/);
+      if (!match) {
+        return { x: 0, y: 0 };
+      }
+      const parts = match[1].split(',').map(part => Number(part.trim()));
+      return { x: parts[4] || 0, y: parts[5] || 0 };
+    }
+  }
+
+  function accumulatedPaneOffset(fromEl, stopEl) {
+    let x = 0;
+    let y = 0;
+    let el = fromEl;
+    while (el && el !== stopEl && el.nodeType === 1) {
+      const offset = transformOffset(el);
+      x += offset.x;
+      y += offset.y;
+      el = el.parentElement;
+    }
+    return { x, y };
+  }
+
+  function centerPopupElement(popupEl) {
+    const map = mapInstance();
+    const container = map?.getContainer?.();
+    if (!map || !container || !popupEl?.parentElement) {
+      return;
+    }
+
+    const containerWidth = container.clientWidth || window.innerWidth;
+    const containerHeight = container.clientHeight || window.innerHeight;
+    const paneOffset = accumulatedPaneOffset(popupEl.parentElement, container);
+    const centerX = (containerWidth / 2) - paneOffset.x;
+    const centerY = (containerHeight / 2) - paneOffset.y;
+
+    popupEl.style.setProperty('--nycif-popup-left', `${Math.round(centerX)}px`);
+    popupEl.style.setProperty('--nycif-popup-top', `${Math.round(centerY)}px`);
+    popupEl.style.left = `${Math.round(centerX)}px`;
+    popupEl.style.top = `${Math.round(centerY)}px`;
+    popupEl.style.bottom = 'auto';
+    popupEl.style.right = 'auto';
+  }
+
   function returnFromPopup(popup, popupEl) {
     const stackedBack = popupEl?.querySelector?.('.nycif-popup-back');
     if (stackedBack) {
@@ -91,10 +144,19 @@
     }
 
     ensureReturnButton(popup, popupEl);
+    centerPopupElement(popupEl);
 
     const map = mapInstance();
     map?.getContainer?.()?.classList.add('nycif-popup-qa-map-visible');
     map?.invalidateSize?.({ animate: false });
+  }
+
+  function syncOpenPopup() {
+    const map = mapInstance();
+    const popup = map?._popup;
+    if (popup?.getElement?.()) {
+      syncPopup(popup);
+    }
   }
 
   function install() {
@@ -119,10 +181,16 @@
       document.body.classList.remove('nycif-popup-qa-open');
     });
 
-    const openPopup = map._popup;
-    if (openPopup) {
-      syncPopup(openPopup);
-    }
+    map.on('move zoom zoomend resize viewreset', () => {
+      window.requestAnimationFrame(syncOpenPopup);
+    });
+
+    window.addEventListener('resize', syncOpenPopup);
+    window.addEventListener('orientationchange', () => {
+      window.setTimeout(syncOpenPopup, 120);
+    });
+
+    syncOpenPopup();
   }
 
   ready(install);
