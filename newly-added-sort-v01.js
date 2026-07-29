@@ -16,9 +16,14 @@
   const sourceDayKeys = new Map();
   let applying = false;
 
-  function dayOf(value) {
+  function leadingDay(value) {
     const match = /^(\d{4}-\d{2}-\d{2})/.exec(String(value || ''));
     return match ? match[1] : '';
+  }
+
+  function occurrenceDay(value) {
+    const text = String(value || '');
+    return leadingDay(text) || (/@(\d{4}-\d{2}-\d{2})$/.exec(text)?.[1] || '');
   }
 
   function sourceIdFrom(value) {
@@ -29,7 +34,7 @@
 
   function recordSignals(record) {
     const firstSeen = Date.parse(record.first_seen_utc || '') || 0;
-    const day = dayOf(record.start_date || record.start_date_time || record.id);
+    const day = occurrenceDay(record.start_date || record.start_date_time || record.id);
     const id = String(record.id || '');
     if (id) {
       exactIds.set(id, Math.max(exactIds.get(id) || 0, firstSeen));
@@ -48,7 +53,7 @@
   function rankForCard(card) {
     const id = String(card.dataset.id || '');
     if (exactIds.has(id)) return exactIds.get(id) || 1;
-    const day = dayOf(id);
+    const day = occurrenceDay(id);
     const sourceId = sourceIdFrom(id);
     if (sourceId && day) return sourceDayKeys.get(`${sourceId}|${day}`) || 0;
     return 0;
