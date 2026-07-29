@@ -15,8 +15,9 @@
     return;
   }
 
-  const POPUP_VERSION = 'protected-popup-qa-v02';
+  const POPUP_VERSION = 'protected-popup-qa-v03';
   const SPONSOR_AFTER_EVERY = 3;
+  const EDGE_GAP = 10;
 
   function ready(fn) {
     if (document.body) {
@@ -28,6 +29,29 @@
 
   function mapInstance() {
     return window.NYCIF_MAIN_MAP || null;
+  }
+
+  function numericCssVar(name) {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const value = Number.parseFloat(raw);
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  function runtimeEnvironment() {
+    const viewport = window.visualViewport;
+    return {
+      viewportWidth: viewport?.width || window.innerWidth || document.documentElement.clientWidth,
+      viewportHeight: viewport?.height || window.innerHeight || document.documentElement.clientHeight,
+      offsetLeft: viewport?.offsetLeft || 0,
+      offsetTop: viewport?.offsetTop || 0,
+      safeLeft: numericCssVar('--nycif-safe-left'),
+      safeRight: numericCssVar('--nycif-safe-right'),
+      safeTop: numericCssVar('--nycif-safe-top'),
+      safeBottom: numericCssVar('--nycif-safe-bottom'),
+      orientation: matchMedia('(orientation: landscape)').matches ? 'landscape' : 'portrait',
+      touch: matchMedia('(pointer: coarse)').matches,
+      standalone: Boolean(navigator.standalone) || matchMedia('(display-mode: standalone)').matches
+    };
   }
 
   function returnFromPopup(popup, popupEl) {
@@ -122,25 +146,41 @@
 
   function centerPopup(popup, popupEl) {
     const map = mapInstance();
-    if (!map || !popupEl || !window.L) {
+    const container = map?.getContainer?.();
+    if (!map || !container || !popupEl || !window.L) {
       return;
     }
 
     popup.options.autoPan = false;
     popup.options.keepInView = false;
 
-    const size = map.getSize?.();
-    if (!size || !Number.isFinite(size.x) || !Number.isFinite(size.y)) {
-      return;
-    }
+    const env = runtimeEnvironment();
+    const containerRect = container.getBoundingClientRect();
+    const visibleLeft = env.offsetLeft + env.safeLeft + EDGE_GAP;
+    const visibleTop = env.offsetTop + env.safeTop + EDGE_GAP;
+    const visibleRight = env.offsetLeft + env.viewportWidth - env.safeRight - EDGE_GAP;
+    const visibleBottom = env.offsetTop + env.viewportHeight - env.safeBottom - EDGE_GAP;
+    const usableWidth = Math.max(1, visibleRight - visibleLeft);
+    const usableHeight = Math.max(1, visibleBottom - visibleTop);
+    const visibleCenterX = visibleLeft + usableWidth / 2;
+    const visibleCenterY = visibleTop + usableHeight / 2;
+    const mapPoint = window.L.point(
+      visibleCenterX - containerRect.left,
+      visibleCenterY - containerRect.top
+    );
+    const centerPoint = map.containerPointToLayerPoint(mapPoint);
 
-    const centerPoint = map.containerPointToLayerPoint(window.L.point(size.x / 2, size.y / 2));
     popupEl.style.left = `${Math.round(centerPoint.x)}px`;
     popupEl.style.top = `${Math.round(centerPoint.y)}px`;
     popupEl.style.right = 'auto';
     popupEl.style.bottom = 'auto';
     popupEl.style.transform = 'translate(-50%, -50%)';
+    popupEl.style.setProperty('--nycif-popup-max-height', `${Math.floor(usableHeight - 20)}px`);
     popupEl.dataset.nycifPopupCentered = 'true';
+    popupEl.dataset.nycifViewportMode = window.visualViewport ? 'visual-viewport' : 'layout-viewport';
+    popupEl.dataset.nycifOrientation = env.orientation;
+    popupEl.dataset.nycifTouch = env.touch ? 'true' : 'false';
+    popupEl.dataset.nycifStandalone = env.standalone ? 'true' : 'false';
   }
 
   function syncPopup(popup) {
@@ -178,6 +218,10 @@
     }
   }
 
+  function requestPopupSync() {
+    window.requestAnimationFrame(syncActivePopup);
+  }
+
   function install() {
     document.body.classList.add('nycif-popup-qa-enabled');
     document.body.dataset.nycifPopupQaVersion = POPUP_VERSION;
@@ -202,13 +246,14 @@
       document.body.classList.remove('nycif-popup-qa-open');
     });
 
-    map.on('move zoom resize moveend zoomend', () => {
-      window.requestAnimationFrame(syncActivePopup);
-    });
+    map.on('move zoom resize moveend zoomend', requestPopupSync);
+    window.addEventListener('resize', requestPopupSync, { passive: true });
+    window.addEventListener('orientationchange', requestPopupSync, { passive: true });
 
-    window.addEventListener('resize', () => {
-      window.requestAnimationFrame(syncActivePopup);
-    });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', requestPopupSync, { passive: true });
+      window.visualViewport.addEventListener('scroll', requestPopupSync, { passive: true });
+    }
 
     syncActivePopup();
   }
