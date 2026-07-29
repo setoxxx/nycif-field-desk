@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-rc-public-map-v11';
+const CACHE_NAME = 'nycif-rc-public-map-v12';
 const APP_SHELL = [
   './',
   './index.html',
@@ -18,6 +18,7 @@ const APP_SHELL = [
   './event-feed-schema-v1.js',
   './news-desk-editors-picks-v01.js',
   './app-schema-v1-major-all-v01.js',
+  './newly-added-sort-v01.js',
   './public-approved-overlays-v01.js',
   './field-desk-operator-layer-v01.js',
   './admin-whats-new-v01.js',
@@ -25,7 +26,7 @@ const APP_SHELL = [
   './service-worker.js',
 ];
 
-const NETWORK_FIRST_RE = /\/(?:index\.html|discovery-patch-v02\.js|public-map-defaults-v01\.js|public-display-mode-v01\.js|nyc-calendar-runtime-v01\.js|public-feed-policy-v01\.js|public-release-guard-v01\.js|tip-jar-motion-policy-v01\.js|tip-jar-motion-safety-v01\.css|service-worker\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js|app-schema-v1-major-all-v01\.js|event-feed-schema-v1\.js|field-desk-operator-layer-v01\.js|news-desk-editors-picks-v01\.js|nycif-tip-jar-v01\.js)$/;
+const NETWORK_FIRST_RE = /\/(?:index\.html|discovery-patch-v02\.js|public-map-defaults-v01\.js|public-display-mode-v01\.js|nyc-calendar-runtime-v01\.js|public-feed-policy-v01\.js|public-release-guard-v01\.js|tip-jar-motion-policy-v01\.js|tip-jar-motion-safety-v01\.css|service-worker\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js|app-schema-v1-major-all-v01\.js|newly-added-sort-v01\.js|event-feed-schema-v1\.js|field-desk-operator-layer-v01\.js|news-desk-editors-picks-v01\.js|nycif-tip-jar-v01\.js)$/;
 
 function isNetworkFirst(url) {
   return (url.origin === location.origin && NETWORK_FIRST_RE.test(url.pathname))
