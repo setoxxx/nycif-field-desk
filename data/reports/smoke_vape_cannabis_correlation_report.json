@@ -2,13 +2,13 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1841,
-  "usable_complaints": 1841,
+  "source_complaints": 1848,
+  "usable_complaints": 1848,
   "source_dispensaries": 250,
   "source_retailers": 4882,
   "correlation_locations": 5132,
-  "output_locations": 233,
-  "low_signal_excluded": 4899,
+  "output_locations": 228,
+  "low_signal_excluded": 4904,
   "radius_feet": [
     100,
     250,
@@ -22,20 +22,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "licensed_smoke_vape_retailer": 202,
-    "legal_cannabis_dispensary": 31
+    "licensed_smoke_vape_retailer": 195,
+    "legal_cannabis_dispensary": 33
   },
   "borough_counts": {
     "Brooklyn": 61,
-    "Queens": 66,
+    "Queens": 63,
     "Manhattan": 67,
-    "Bronx": 34,
+    "Bronx": 32,
     "Staten Island": 5
   },
   "signal_tier_counts": {
     "very_high": 3,
-    "high": 29,
-    "moderate": 201
+    "high": 27,
+    "moderate": 198
   },
   "top_locations_sample": [
     {
@@ -70,6 +70,17 @@
       "complaints_365d_100ft": 5,
       "complaints_365d_250ft": 5,
       "last_complaint_date": "2026-07-21"
+    },
+    {
+      "title": "THE HOOTCH LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "CONCEPCION RANOCCHIA 1662 1ST AVE, NEW YORK, 10028 4770",
+      "borough": "Manhattan",
+      "signal_score": 42,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-27"
     },
     {
       "title": "GARDENIA DELI",
@@ -193,17 +204,6 @@
       "last_complaint_date": "2026-07-17"
     },
     {
-      "title": "THE HOOTCH LLC",
-      "location_kind": "legal_cannabis_dispensary",
-      "address": "CONCEPCION RANOCCHIA 1662 1ST AVE, NEW YORK, 10028 4770",
-      "borough": "Manhattan",
-      "signal_score": 22,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-26"
-    },
-    {
       "title": "15th Street Snacks & More Corp",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "992 E 15TH ST, BROOKLYN, 11230",
@@ -314,6 +314,6 @@
       "last_complaint_date": "2026-07-26"
     }
   ],
-  "generated_at": "2026-07-28T12:18:28.709Z",
+  "generated_at": "2026-07-29T12:26:22.862Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
