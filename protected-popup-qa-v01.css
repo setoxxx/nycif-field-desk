@@ -4,25 +4,23 @@ body.nycif-popup-qa-enabled .leaflet-popup-pane {
 }
 
 body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered {
-  /* Pixel values are set by JS after compensating for Leaflet pane transforms. */
-  left: var(--nycif-popup-left, 0px) !important;
-  top: var(--nycif-popup-top, 0px) !important;
+  position: absolute !important;
   right: auto !important;
   bottom: auto !important;
   transform: translate(-50%, -50%) !important;
   margin: 0 !important;
-  width: min(440px, calc(100vw - 28px));
+  width: min(430px, calc(100vw - 28px));
   max-width: calc(100vw - 28px);
-  min-width: 0 !important;
+  min-width: min(330px, calc(100vw - 28px));
   pointer-events: auto;
-  z-index: 1200;
+  z-index: 980;
 }
 
 body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-content-wrapper {
   position: relative;
   width: 100%;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.98);
+  background: rgba(255, 255, 255, 0.985);
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
   overflow: hidden;
 }
@@ -30,7 +28,7 @@ body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popu
 body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-content {
   width: auto !important;
   max-width: 100%;
-  max-height: min(68dvh, 520px);
+  max-height: min(68dvh, 540px);
   margin: 0 !important;
   padding: 42px 15px 15px;
   overflow: auto;
@@ -91,17 +89,58 @@ body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popu
   display: none !important;
 }
 
-body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered::after {
-  content: "";
-  position: absolute;
-  inset: -10px;
-  border-radius: 28px;
-  pointer-events: none;
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .nycif-sponsored-card {
+  display: grid;
+  gap: 3px;
+  min-height: 64px;
+  margin: 8px 0 0;
+  padding: 10px 11px;
+  border: 1px dashed rgba(68, 84, 107, 0.35);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(245, 247, 250, 0.98), rgba(238, 242, 247, 0.98));
+  color: #111827;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .popup-stack-scroll .nycif-sponsored-card {
+  margin: 6px 0;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .nycif-sponsored-label {
+  width: max-content;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.1);
+  color: #4b5563;
+  font-size: 9px;
+  font-weight: 1000;
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .nycif-sponsored-card strong {
+  display: block;
+  font-size: 12px;
+  line-height: 1.16;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .nycif-sponsored-card span:last-child {
+  display: block;
+  color: #4b5563;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+@media (min-width: 840px) {
+  body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered.nycif-popup-has-ad {
+    width: min(560px, calc(100vw - 40px));
+  }
 }
 
 @media (max-width: 720px) {
   body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered {
     width: min(370px, calc(100vw - 18px));
+    min-width: min(310px, calc(100vw - 18px));
     max-width: calc(100vw - 18px);
   }
 
