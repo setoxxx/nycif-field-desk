@@ -4,6 +4,12 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '17 10 * * *'
+  pull_request:
+    paths:
+      - '.github/workflows/update-approved-public-overlays.yml'
+      - 'tools/pin-pipeline/run-approved-public-overlays.mjs'
+      - 'tools/pin-pipeline/build-smoke-vape-cannabis-correlation.mjs'
+      - 'tools/pin-pipeline/test-smoke-vape-cannabis-correlation.mjs'
   push:
     branches:
       - main
@@ -17,7 +23,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-approved-public-overlays
+  group: update-approved-public-overlays-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -78,6 +84,7 @@ jobs:
         run: git status --short
 
       - name: Commit updated generated overlay data
+        if: github.event_name != 'pull_request'
         run: |
           if git diff --quiet; then
             echo "No generated overlay changes to commit."
