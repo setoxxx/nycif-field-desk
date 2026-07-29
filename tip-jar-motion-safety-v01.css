@@ -1,0 +1,12 @@
+/* Public-release safety: no unsolicited flashing or strobing engagement controls. */
+.nycif-tip-jar.shake .nycif-tip-jar-btn,
+.nycif-tip-jar.shake .nycif-tip-jar-emoji {
+  animation: none !important;
+}
+
+.nycif-tip-jar-btn:hover,
+.nycif-tip-jar-btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(251, 191, 36, .75);
+  box-shadow: 0 0 0 4px rgba(251, 191, 36, .18), 0 8px 24px rgba(0, 0, 0, .22);
+}
