@@ -41,6 +41,17 @@
     return match ? match[1] : '';
   }
 
+  function nycDateKey(date) {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/New_York',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).formatToParts(date || new Date());
+    const byType = Object.fromEntries(parts.map(part => [part.type, part.value]));
+    return `${byType.year}-${byType.month}-${byType.day}`;
+  }
+
   function parseClock(value, endOfDay) {
     const text = String(value || '').trim();
     if (!text) {
@@ -70,27 +81,74 @@
     return null;
   }
 
+  function firstDateOnly(...values) {
+    for (const value of values) {
+      const day = dateOnly(value);
+      if (day) {
+        return day;
+      }
+    }
+    return '';
+  }
+
+  function endInfoFor(event, startDay) {
+    const explicitRaw = event?.end_date_time || event?.end || '';
+    const explicitEnd = parseClock(explicitRaw, true);
+    const explicitEndDay = dateOnly(explicitRaw);
+
+    if (explicitEnd) {
+      return {
+        date: explicitEnd,
+        // A marker can only be "Live now" when the feed gives a real end time.
+        // Date-only end values are useful for "ended" after the date passes,
+        // but they are not precise enough to claim the event is happening now.
+        liveReliable: hasMeaningfulTime(explicitRaw),
+        endedReliable: hasMeaningfulTime(explicitRaw) || Boolean(explicitEndDay && (!startDay || explicitEndDay > startDay))
+      };
+    }
+
+    const uiEndDay = firstDateOnly(event?.endDay);
+    if (uiEndDay && startDay && uiEndDay > startDay) {
+      return {
+        date: parseClock(uiEndDay, true),
+        liveReliable: false,
+        endedReliable: true
+      };
+    }
+
+    return { date: null, liveReliable: false, endedReliable: false };
+  }
+
   function eventStatus(event, now = new Date()) {
     const startRaw = event?.start_date_time || event?.start || event?.date || event?.dateKey || event?.startDay || '';
-    const endRaw = event?.end_date_time || event?.end || event?.endDay || '';
     const start = parseClock(startRaw, false);
-    const end = parseClock(endRaw, true);
+    const startDay = firstDateOnly(startRaw, event?.date, event?.dateKey, event?.startDay);
+    const end = endInfoFor(event, startDay);
+    const today = nycDateKey(now);
 
-    if (end && now > end) {
+    if (end.date && end.endedReliable && now > end.date) {
       return 'ended';
     }
     if (start && now < start) {
       return 'upcoming';
     }
-    if (start && end && now >= start && now <= end) {
+    if (start && end.date && end.liveReliable && now >= start && now <= end.date) {
       return 'live';
     }
 
     // No reliable end time: never imply an indefinite live event.
-    if (start && !end) {
+    // Same-day single-time rows such as "10:00 AM" become unknown after start,
+    // not live-until-midnight. Older single-time rows can safely recede as ended.
+    if (start) {
+      if (startDay && today > startDay) {
+        return 'ended';
+      }
       return now < start ? 'upcoming' : 'unknown';
     }
 
+    if (startDay && today > startDay) {
+      return 'ended';
+    }
     return 'unknown';
   }
 
