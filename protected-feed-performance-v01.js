@@ -90,44 +90,4 @@
     }
     return response;
   };
-
-  const listingPattern = /^(\d[\d,]*) event(s)?( · | today| tomorrow| on )/i;
-  const relabel = node => {
-    if (!node || typeof node.textContent !== 'string') {
-      return;
-    }
-    const text = node.textContent.trim();
-    if (!listingPattern.test(text)) {
-      return;
-    }
-    node.textContent = text.replace(listingPattern, (_, count, plural, suffix) => {
-      const noun = Number(count.replace(/,/g, '')) === 1 ? 'event listing' : 'event listings';
-      return `${count} ${noun}${suffix}`;
-    });
-  };
-
-  const watchedIds = new Set(['brandCount', 'listMeta', 'status']);
-  const observer = new MutationObserver(records => {
-    records.forEach(record => {
-      const target = record.target.nodeType === Node.TEXT_NODE ? record.target.parentElement : record.target;
-      if (target?.id && watchedIds.has(target.id)) {
-        relabel(target);
-      }
-    });
-  });
-
-  const start = () => {
-    watchedIds.forEach(id => {
-      const node = document.getElementById(id);
-      if (!node) return;
-      relabel(node);
-      observer.observe(node, { childList: true, characterData: true, subtree: true });
-    });
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start, { once: true });
-  } else {
-    start();
-  }
 })();
