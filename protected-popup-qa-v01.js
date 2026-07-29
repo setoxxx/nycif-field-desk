@@ -15,6 +15,9 @@
     return;
   }
 
+  const POPUP_VERSION = 'protected-popup-qa-v02';
+  const SPONSOR_AFTER_EVERY = 3;
+
   function ready(fn) {
     if (document.body) {
       fn();
@@ -25,59 +28,6 @@
 
   function mapInstance() {
     return window.NYCIF_MAIN_MAP || null;
-  }
-
-  function transformOffset(el) {
-    const transform = window.getComputedStyle(el).transform;
-    if (!transform || transform === 'none') {
-      return { x: 0, y: 0 };
-    }
-
-    try {
-      const matrix = new DOMMatrixReadOnly(transform);
-      return { x: matrix.m41 || 0, y: matrix.m42 || 0 };
-    } catch {
-      const match = transform.match(/matrix\(([^)]+)\)/);
-      if (!match) {
-        return { x: 0, y: 0 };
-      }
-      const parts = match[1].split(',').map(part => Number(part.trim()));
-      return { x: parts[4] || 0, y: parts[5] || 0 };
-    }
-  }
-
-  function accumulatedPaneOffset(fromEl, stopEl) {
-    let x = 0;
-    let y = 0;
-    let el = fromEl;
-    while (el && el !== stopEl && el.nodeType === 1) {
-      const offset = transformOffset(el);
-      x += offset.x;
-      y += offset.y;
-      el = el.parentElement;
-    }
-    return { x, y };
-  }
-
-  function centerPopupElement(popupEl) {
-    const map = mapInstance();
-    const container = map?.getContainer?.();
-    if (!map || !container || !popupEl?.parentElement) {
-      return;
-    }
-
-    const containerWidth = container.clientWidth || window.innerWidth;
-    const containerHeight = container.clientHeight || window.innerHeight;
-    const paneOffset = accumulatedPaneOffset(popupEl.parentElement, container);
-    const centerX = (containerWidth / 2) - paneOffset.x;
-    const centerY = (containerHeight / 2) - paneOffset.y;
-
-    popupEl.style.setProperty('--nycif-popup-left', `${Math.round(centerX)}px`);
-    popupEl.style.setProperty('--nycif-popup-top', `${Math.round(centerY)}px`);
-    popupEl.style.left = `${Math.round(centerX)}px`;
-    popupEl.style.top = `${Math.round(centerY)}px`;
-    popupEl.style.bottom = 'auto';
-    popupEl.style.right = 'auto';
   }
 
   function returnFromPopup(popup, popupEl) {
@@ -126,6 +76,73 @@
     popupEl.querySelector('.leaflet-popup-content-wrapper')?.appendChild(button);
   }
 
+  function sponsoredCard(slotIndex) {
+    const card = document.createElement('article');
+    card.className = 'nycif-sponsored-card';
+    card.dataset.slot = String(slotIndex);
+    card.setAttribute('aria-label', 'Sponsored advertising placeholder');
+    card.innerHTML = [
+      '<span class="nycif-sponsored-label">Sponsored</span>',
+      '<strong>Advertise with NYC In Focus</strong>',
+      '<span>Reach people planning where to go next in New York City.</span>'
+    ].join('');
+    return card;
+  }
+
+  function syncSponsoredSlots(popupEl) {
+    popupEl?.querySelectorAll?.('.nycif-sponsored-card').forEach(card => card.remove());
+    if (!popupEl) {
+      return;
+    }
+
+    const stackScroll = popupEl.querySelector('.popup-stack-scroll');
+    if (stackScroll) {
+      const items = [...stackScroll.querySelectorAll('.popup-stack-item')];
+      if (!items.length) {
+        return;
+      }
+      let slot = 1;
+      items.forEach((item, index) => {
+        const shouldInsert = items.length === 1
+          ? index === 0
+          : (index + 1) % SPONSOR_AFTER_EVERY === 0;
+        if (shouldInsert) {
+          item.after(sponsoredCard(slot));
+          slot += 1;
+        }
+      });
+      return;
+    }
+
+    const card = popupEl.querySelector('.popup-card:not(.popup-card--picker)');
+    if (card) {
+      card.appendChild(sponsoredCard(1));
+    }
+  }
+
+  function centerPopup(popup, popupEl) {
+    const map = mapInstance();
+    if (!map || !popupEl || !window.L) {
+      return;
+    }
+
+    popup.options.autoPan = false;
+    popup.options.keepInView = false;
+
+    const size = map.getSize?.();
+    if (!size || !Number.isFinite(size.x) || !Number.isFinite(size.y)) {
+      return;
+    }
+
+    const centerPoint = map.containerPointToLayerPoint(window.L.point(size.x / 2, size.y / 2));
+    popupEl.style.left = `${Math.round(centerPoint.x)}px`;
+    popupEl.style.top = `${Math.round(centerPoint.y)}px`;
+    popupEl.style.right = 'auto';
+    popupEl.style.bottom = 'auto';
+    popupEl.style.transform = 'translate(-50%, -50%)';
+    popupEl.dataset.nycifPopupCentered = 'true';
+  }
+
   function syncPopup(popup) {
     const popupEl = popup?.getElement?.();
     if (!popupEl) {
@@ -133,6 +150,7 @@
     }
 
     document.body.classList.add('nycif-popup-qa-enabled', 'nycif-popup-qa-open');
+    document.body.dataset.nycifPopupQaVersion = POPUP_VERSION;
     popupEl.classList.add('nycif-popup-qa-centered');
     popupEl.setAttribute('role', popupEl.getAttribute('role') || 'dialog');
     popupEl.setAttribute('aria-modal', 'false');
@@ -144,53 +162,55 @@
     }
 
     ensureReturnButton(popup, popupEl);
-    centerPopupElement(popupEl);
+    syncSponsoredSlots(popupEl);
+    centerPopup(popup, popupEl);
 
     const map = mapInstance();
     map?.getContainer?.()?.classList.add('nycif-popup-qa-map-visible');
     map?.invalidateSize?.({ animate: false });
   }
 
-  function syncOpenPopup() {
+  function syncActivePopup() {
     const map = mapInstance();
     const popup = map?._popup;
-    if (popup?.getElement?.()) {
+    if (popup?.isOpen?.()) {
       syncPopup(popup);
     }
   }
 
   function install() {
     document.body.classList.add('nycif-popup-qa-enabled');
+    document.body.dataset.nycifPopupQaVersion = POPUP_VERSION;
     const map = mapInstance();
     if (!map) {
       window.setTimeout(install, 60);
       return;
     }
-    if (map.__nycifProtectedPopupQaInstalled) {
+    if (map.__nycifProtectedPopupQaInstalled === POPUP_VERSION) {
       return;
     }
-    map.__nycifProtectedPopupQaInstalled = true;
+    map.__nycifProtectedPopupQaInstalled = POPUP_VERSION;
 
     map.on('popupopen', event => {
       window.setTimeout(() => syncPopup(event.popup), 0);
-      window.setTimeout(() => syncPopup(event.popup), 220);
-      window.setTimeout(() => syncPopup(event.popup), 620);
+      window.setTimeout(() => syncPopup(event.popup), 120);
+      window.setTimeout(() => syncPopup(event.popup), 320);
+      window.setTimeout(() => syncPopup(event.popup), 700);
     });
 
     map.on('popupclose', () => {
       document.body.classList.remove('nycif-popup-qa-open');
     });
 
-    map.on('move zoom zoomend resize viewreset', () => {
-      window.requestAnimationFrame(syncOpenPopup);
+    map.on('move zoom resize moveend zoomend', () => {
+      window.requestAnimationFrame(syncActivePopup);
     });
 
-    window.addEventListener('resize', syncOpenPopup);
-    window.addEventListener('orientationchange', () => {
-      window.setTimeout(syncOpenPopup, 120);
+    window.addEventListener('resize', () => {
+      window.requestAnimationFrame(syncActivePopup);
     });
 
-    syncOpenPopup();
+    syncActivePopup();
   }
 
   ready(install);
