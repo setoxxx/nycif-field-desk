@@ -8,8 +8,8 @@
   "source_complaints": 250000,
   "usable_complaints": 250000,
   "matched_venues": 10300,
-  "output_venues": 6859,
-  "low_signal_excluded": 3794,
+  "output_venues": 6853,
+  "low_signal_excluded": 3800,
   "threshold": {
     "min_trend_score": 12,
     "min_365d_100ft": 3,
@@ -29,29 +29,29 @@
   "top_boroughs": [
     {
       "value": "Manhattan",
-      "count": 3649
+      "count": 3647
     },
     {
       "value": "Brooklyn",
-      "count": 1703
+      "count": 1702
     },
     {
       "value": "Queens",
-      "count": 1104
+      "count": 1103
     },
     {
       "value": "Bronx",
-      "count": 348
+      "count": 347
     },
     {
       "value": "Staten Island",
-      "count": 55
+      "count": 54
     }
   ],
   "top_subtypes": [
     {
       "value": "Restaurants with nightlife potential",
-      "count": 3978
+      "count": 3972
     },
     {
       "value": "Bars / taverns",
@@ -89,37 +89,37 @@
   "top_tiers": [
     {
       "value": "moderate",
-      "count": 3182
+      "count": 3183
     },
     {
       "value": "very_high",
-      "count": 1680
+      "count": 1673
     },
     {
       "value": "high",
-      "count": 1447
+      "count": 1450
     },
     {
       "value": "low",
-      "count": 550
+      "count": 547
     }
   ],
   "top_descriptors": [
     {
       "value": "Loud Music/Party",
-      "count": 6779
+      "count": 6775
     },
     {
       "value": "Loud Talking",
-      "count": 5044
+      "count": 5041
     },
     {
       "value": "Banging/Pounding",
-      "count": 4216
+      "count": 4212
     },
     {
       "value": "Car/Truck Music",
-      "count": 2430
+      "count": 2429
     }
   ],
   "top_venues_sample": [
@@ -127,7 +127,7 @@
       "title": "SPICY EMPIRE SKEWER HOT POT",
       "address": "147-10 45TH AVE, 147-10 45TH AVE, FLUSHING",
       "borough": "Queens",
-      "trend_score": 1789,
+      "trend_score": 1754,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 327,
       "complaints_365d_250ft": 328,
@@ -137,7 +137,7 @@
       "title": "BLUE MOUNTAIN HEIGHTS LLC",
       "address": "499 W 158TH ST, STORE 1,2, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1725,
+      "trend_score": 1712,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 305,
       "complaints_365d_250ft": 443,
@@ -147,7 +147,7 @@
       "title": "BUS STOP DINER",
       "address": "3341 BROADWAY, STORE 1, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1680,
+      "trend_score": 1665,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 274,
       "complaints_365d_250ft": 356,
@@ -164,16 +164,6 @@
       "last_complaint_date": "2026-07-25"
     },
     {
-      "title": "GOLDSOUNDS",
-      "address": "44 WILSON AVE, 44 WILSON AVE, BROOKLYN",
-      "borough": "Brooklyn",
-      "trend_score": 1327,
-      "trend_tier": "very_high",
-      "complaints_365d_100ft": 224,
-      "complaints_365d_250ft": 267,
-      "last_complaint_date": "2026-07-27"
-    },
-    {
       "title": "MAD DOG & BEANS",
       "address": "83 PEARL ST, 83 PEARL ST, NEW YORK",
       "borough": "Manhattan",
@@ -182,6 +172,16 @@
       "complaints_365d_100ft": 246,
       "complaints_365d_250ft": 252,
       "last_complaint_date": "2026-07-26"
+    },
+    {
+      "title": "GOLDSOUNDS",
+      "address": "44 WILSON AVE, 44 WILSON AVE, BROOKLYN",
+      "borough": "Brooklyn",
+      "trend_score": 1322,
+      "trend_tier": "very_high",
+      "complaints_365d_100ft": 224,
+      "complaints_365d_250ft": 267,
+      "last_complaint_date": "2026-07-27"
     },
     {
       "title": "REVOLUTION TACO & TEQUILA",
@@ -227,7 +227,7 @@
       "title": "LA LONCHERIA & YOURS SINCERELY",
       "address": "41 WILSON AVE, 41 WILSON AVE, BROOKLYN",
       "borough": "Brooklyn",
-      "trend_score": 1275,
+      "trend_score": 1270,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 221,
       "complaints_365d_250ft": 241,
@@ -277,7 +277,7 @@
       "title": "MAMA SUSHI",
       "address": "237 DYCKMAN ST, SEAMAN & BROADWAY, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1091,
+      "trend_score": 1031,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 125,
       "complaints_365d_250ft": 326,
@@ -287,7 +287,7 @@
       "title": "IL SOLE RESTAURANT",
       "address": "229 233 DYCKMAN ST, SEMAN AVENUE & BROADWAY, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1083,
+      "trend_score": 1023,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 125,
       "complaints_365d_250ft": 326,
@@ -297,7 +297,7 @@
       "title": "SA'TACOS CORP",
       "address": "231A DYCKMAN ST, 231A DYCKMAN ST, NEW YORK",
       "borough": "Manhattan",
-      "trend_score": 1083,
+      "trend_score": 1023,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 125,
       "complaints_365d_250ft": 326,
@@ -344,16 +344,6 @@
       "last_complaint_date": "2026-07-26"
     },
     {
-      "title": "UNA PIZZA NAPOLETANA",
-      "address": "175 ORCHARD ST, 175 ORCHARD ST, NEW YORK",
-      "borough": "Manhattan",
-      "trend_score": 831,
-      "trend_tier": "very_high",
-      "complaints_365d_100ft": 109,
-      "complaints_365d_250ft": 392,
-      "last_complaint_date": "2026-07-28"
-    },
-    {
       "title": "BAR FREDA",
       "address": "801 SENECA AVE, 801 SENECA AVE, RIDGEWOOD",
       "borough": "Queens",
@@ -364,10 +354,20 @@
       "last_complaint_date": "2026-07-25"
     },
     {
+      "title": "UNA PIZZA NAPOLETANA",
+      "address": "175 ORCHARD ST, 175 ORCHARD ST, NEW YORK",
+      "borough": "Manhattan",
+      "trend_score": 826,
+      "trend_tier": "very_high",
+      "complaints_365d_100ft": 109,
+      "complaints_365d_250ft": 392,
+      "last_complaint_date": "2026-07-28"
+    },
+    {
       "title": "TAQUERIA EMILIO 2 CORP",
       "address": "667 E 187TH ST, 667 E 187TH ST, BRONX",
       "borough": "Bronx",
-      "trend_score": 814,
+      "trend_score": 811,
       "trend_tier": "very_high",
       "complaints_365d_100ft": 136,
       "complaints_365d_250ft": 158,
@@ -375,5 +375,5 @@
     }
   ],
   "data_note": "311 complaints are public complaint records and an activity proxy, not proof of wrongdoing, venue popularity, or legal violation.",
-  "generated_at": "2026-07-29T12:24:20.607Z"
+  "generated_at": "2026-07-29T23:22:21.800Z"
 }
