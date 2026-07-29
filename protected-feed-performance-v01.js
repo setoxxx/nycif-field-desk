@@ -86,7 +86,11 @@
 
     const response = await fetchFeed(url, init);
     if (/\/(approved|review)\/manifest\.json$/i.test(new URL(url).pathname)) {
-      prefetchManifestPages(url, response);
+      // Hold the manifest response until its page files are warm. The main
+      // runtime then consumes those cached responses back-to-back, allowing
+      // its 40 ms render scheduler to collapse page-level updates into one
+      // consolidated marker/list redraw per layer.
+      await prefetchManifestPages(url, response);
     }
     return response;
   };
