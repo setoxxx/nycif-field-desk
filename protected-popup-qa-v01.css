@@ -14,14 +14,18 @@ body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered {
   min-width: min(330px, calc(100vw - 28px));
   pointer-events: auto;
   z-index: 980;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.985);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+  overflow: hidden;
 }
 
 body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-content-wrapper {
   position: relative;
   width: 100%;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.985);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+  background: transparent;
+  box-shadow: none;
   overflow: hidden;
 }
 
