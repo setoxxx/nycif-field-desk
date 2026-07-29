@@ -111,12 +111,10 @@
 
     const stack = popupEl.querySelector('.popup-stack-scroll');
     if (stack) {
-      const items = [...stack.querySelectorAll(':scope > .popup-stack-item')];
-      items.forEach((item, index) => {
-        if ((items.length === 1 && index === 0) || (items.length > 1 && (index + 1) % 3 === 0)) {
-          item.after(sponsorCard(index + 1));
-        }
-      });
+      const firstItem = stack.querySelector(':scope > .popup-stack-item');
+      if (firstItem) {
+        stack.insertBefore(sponsorCard(1), firstItem);
+      }
       return;
     }
 
