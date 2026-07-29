@@ -1,0 +1,101 @@
+/* Protected popup QA overlay. Gated by protected-popup-qa-v01.js; public map defaults remain unchanged. */
+body.nycif-popup-qa-enabled .leaflet-popup-pane {
+  pointer-events: none;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered {
+  left: 50% !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  width: min(420px, calc(100vw - 28px));
+  max-width: calc(100vw - 28px);
+  pointer-events: auto;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-content-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+  overflow: hidden;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-content {
+  width: auto !important;
+  max-width: 100%;
+  max-height: min(68dvh, 520px);
+  margin: 0 !important;
+  padding: 42px 15px 15px;
+  overflow: auto;
+  text-align: left;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .popup-card {
+  min-width: 0;
+  max-width: none;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-tip-container {
+  display: none;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-close-button,
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .nycif-popup-return {
+  position: absolute !important;
+  top: 8px !important;
+  z-index: 1002;
+  display: grid !important;
+  place-items: center;
+  width: 30px !important;
+  height: 30px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(5, 7, 11, 0.95) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-close-button {
+  right: 8px !important;
+  line-height: 29px !important;
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  text-align: center !important;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .nycif-popup-return {
+  right: 44px !important;
+  padding: 0 !important;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .nycif-popup-return svg {
+  width: 18px;
+  height: 18px;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .nycif-popup-return:focus-visible,
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-close-button:focus-visible {
+  outline: 3px solid rgba(212, 0, 0, 0.42) !important;
+  outline-offset: 2px;
+}
+
+body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-content-wrapper > .nycif-popup-back {
+  display: none !important;
+}
+
+@media (max-width: 720px) {
+  body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered {
+    top: 52% !important;
+    width: min(370px, calc(100vw - 18px));
+    max-width: calc(100vw - 18px);
+  }
+
+  body.nycif-popup-qa-enabled .leaflet-popup.nycif-popup-qa-centered .leaflet-popup-content {
+    max-height: min(72dvh, 560px);
+    padding: 42px 13px 13px;
+  }
+}
