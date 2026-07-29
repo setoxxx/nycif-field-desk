@@ -10,6 +10,7 @@
   const FEED_RE = /^https:\/\/raw\.githubusercontent\.com\/setoxxx\/nycif-live-feeds\//i;
   const PREFETCH_CONCURRENCY = 4;
   const prefetched = new Map();
+  const manifestWarmups = new Map();
   const originalFetch = window.fetch.bind(window);
 
   const normalizeFeedUrl = input => {
@@ -70,22 +71,59 @@
     }
   };
 
+  const warmManifest = manifestUrl => {
+    if (!manifestUrl || manifestWarmups.has(manifestUrl)) {
+      return manifestWarmups.get(manifestUrl);
+    }
+    const warmup = (async () => {
+      const response = await queuePrefetch(manifestUrl);
+      if (response) {
+        await prefetchManifestPages(manifestUrl, response);
+      }
+      return response;
+    })().catch(() => null);
+    manifestWarmups.set(manifestUrl, warmup);
+    return warmup;
+  };
+
+  const warmSiblingManifests = url => {
+    try {
+      const parsed = new URL(url);
+      const marker = '/major/';
+      const at = parsed.pathname.indexOf(marker);
+      if (at < 0) return;
+      const root = parsed.pathname.slice(0, at);
+      warmManifest(`${parsed.origin}${root}/approved/manifest.json`);
+      warmManifest(`${parsed.origin}${root}/review/manifest.json`);
+    } catch {
+      // Startup warming is optional and fail-soft.
+    }
+  };
+
   window.fetch = async (input, init = {}) => {
     const url = normalizeFeedUrl(input);
     if (!url) {
       return originalFetch(input, init);
     }
 
+    const pathname = new URL(url).pathname;
+    if (/\/major\//i.test(pathname)) {
+      warmSiblingManifests(url);
+    }
+
     const prefetchedResponse = prefetched.get(url);
     if (prefetchedResponse) {
       const response = await prefetchedResponse;
       if (response) {
+        if (/\/(approved|review)\/manifest\.json$/i.test(pathname)) {
+          await (manifestWarmups.get(url) || prefetchManifestPages(url, response));
+        }
         return response.clone();
       }
     }
 
     const response = await fetchFeed(url, init);
-    if (/\/(approved|review)\/manifest\.json$/i.test(new URL(url).pathname)) {
+    if (/\/(approved|review)\/manifest\.json$/i.test(pathname)) {
       // Hold the manifest response until its page files are warm. The main
       // runtime then consumes those cached responses back-to-back, allowing
       // its 40 ms render scheduler to collapse page-level updates into one
