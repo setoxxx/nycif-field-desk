@@ -8,9 +8,38 @@ on:
       - "accessibility-v01.css"
       - "app-schema-v1-major-all-v01.js"
       - "event-feed-schema-v1.js"
+      - "nyc-calendar-runtime-v01.js"
+      - "public-feed-policy-v01.js"
+      - "public-release-guard-v01.js"
+      - "tip-jar-motion-policy-v01.js"
+      - "tip-jar-motion-safety-v01.css"
+      - "nycif-tip-jar-v01.js"
+      - "service-worker.js"
       - "tests/desktop-release-gates.mjs"
+      - "tests/public-release-blockers.test.mjs"
       - "tests/test_protected_staging_accessibility_contract.py"
       - ".github/workflows/desktop-release-gates.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "index.html"
+      - "accessibility-v01.js"
+      - "accessibility-v01.css"
+      - "app-schema-v1-major-all-v01.js"
+      - "event-feed-schema-v1.js"
+      - "nyc-calendar-runtime-v01.js"
+      - "public-feed-policy-v01.js"
+      - "public-release-guard-v01.js"
+      - "tip-jar-motion-policy-v01.js"
+      - "tip-jar-motion-safety-v01.css"
+      - "nycif-tip-jar-v01.js"
+      - "service-worker.js"
+      - "tests/desktop-release-gates.mjs"
+      - "tests/public-release-blockers.test.mjs"
+      - "tests/test_protected_staging_accessibility_contract.py"
+      - ".github/workflows/desktop-release-gates.yml"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -33,6 +62,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      - name: Run public release blocker contracts
+        run: node tests/public-release-blockers.test.mjs
 
       - name: Install browser QA dependencies
         run: |
