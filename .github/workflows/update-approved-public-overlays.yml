@@ -8,6 +8,8 @@ on:
     paths:
       - '.github/workflows/update-approved-public-overlays.yml'
       - 'tools/pin-pipeline/run-approved-public-overlays.mjs'
+      - 'tools/pin-pipeline/build-legal-cannabis-dispensaries.mjs'
+      - 'tools/pin-pipeline/test-legal-cannabis-dispensaries.mjs'
       - 'tools/pin-pipeline/build-smoke-vape-cannabis-correlation.mjs'
       - 'tools/pin-pipeline/test-smoke-vape-cannabis-correlation.mjs'
   push:
@@ -16,6 +18,8 @@ on:
     paths:
       - '.github/workflows/update-approved-public-overlays.yml'
       - 'tools/pin-pipeline/run-approved-public-overlays.mjs'
+      - 'tools/pin-pipeline/build-legal-cannabis-dispensaries.mjs'
+      - 'tools/pin-pipeline/test-legal-cannabis-dispensaries.mjs'
       - 'tools/pin-pipeline/build-smoke-vape-cannabis-correlation.mjs'
       - 'tools/pin-pipeline/test-smoke-vape-cannabis-correlation.mjs'
 
@@ -41,8 +45,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Verify correlation semantic dedupe
-        run: node tools/pin-pipeline/test-smoke-vape-cannabis-correlation.mjs
+      - name: Verify overlay identity builders
+        run: |
+          node tools/pin-pipeline/test-legal-cannabis-dispensaries.mjs
+          node tools/pin-pipeline/test-smoke-vape-cannabis-correlation.mjs
 
       - name: Rebuild approved public overlay data
         run: node tools/pin-pipeline/run-approved-public-overlays.mjs
@@ -69,12 +75,17 @@ jobs:
             if (!Array.isArray(rows) || rows.length < 1) throw new Error(`${dataPath} is empty`);
             if (Number(report[countKey]) !== rows.length) throw new Error(`${dataPath} count does not match ${reportPath}`);
             const ids = rows.map(row => String(row.id || row.raw_source_id || row.license_number || '')).filter(Boolean);
+            if (ids.length !== rows.length) throw new Error(`${dataPath} contains missing canonical IDs`);
             if (new Set(ids).size !== ids.length) throw new Error(`${dataPath} contains duplicate IDs`);
             const keys = rows.map(semantic);
             if (new Set(keys).size !== keys.length) throw new Error(`${dataPath} contains duplicate semantic public markers`);
           }
+          const legalReport = JSON.parse(fs.readFileSync('data/reports/legal_cannabis_dispensaries_report.json', 'utf8'));
+          if (legalReport.qa_pass !== true || legalReport.duplicate_output_ids !== 0 || legalReport.duplicate_output_semantic_locations !== 0) {
+            throw new Error('Legal cannabis canonical identity report did not pass');
+          }
           const correlationReport = JSON.parse(fs.readFileSync('data/reports/smoke_vape_cannabis_correlation_report.json', 'utf8'));
-          if (correlationReport.qa_pass !== true || correlationReport.duplicate_output_semantic_locations !== 0) {
+          if (correlationReport.qa_pass !== true || correlationReport.duplicate_output_ids !== 0 || correlationReport.duplicate_output_semantic_locations !== 0) {
             throw new Error('Correlation semantic dedupe report did not pass');
           }
           console.log('Approved public overlay outputs are duplicate-clean and count-aligned.');
