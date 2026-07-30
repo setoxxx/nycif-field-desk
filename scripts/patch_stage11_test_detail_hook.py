@@ -17,7 +17,12 @@ def replace_variant(text: str, variants: tuple[str, ...], new: str, label: str) 
 
 def main() -> int:
     text = TEST.read_text(encoding="utf-8")
-    if "NYCIF_DISPLAY_AUDIT.renderDetail" in text and "auditDisplay=1" in text:
+    if (
+        "NYCIF_DISPLAY_AUDIT" in text
+        and "renderDetail" in text
+        and "auditDisplay=1" in text
+        and "#nycif-display-audit-host .popup-card" in text
+    ):
         print("Stage 11 detail-hook fixture already installed")
         return 0
 
