@@ -1,10 +1,10 @@
 name: Apply Runtime Visibility Parity Once
 
 on:
-  push:
-    branches:
-      - feature/full-runtime-visibility-parity
+  pull_request:
+    branches: [main]
     paths:
+      - scripts/patch_runtime_visibility_parity.py
       - .github/workflows/apply-runtime-visibility-parity-once.yml
   workflow_dispatch:
 
@@ -28,8 +28,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          p = Path('app-schema-v1-major-all-v01.js')
-          text = p.read_text(encoding='utf-8')
+          text = Path('app-schema-v1-major-all-v01.js').read_text(encoding='utf-8')
           checks = {
               'cluster_default_on': "get('clusters') !== '0'" in text,
               'all_cluster_candidates': 'useCluster\n      ? eligibleInScope' in text,
@@ -59,9 +58,9 @@ jobs:
                   'cluster_mode_represents_all_map_eligible_events_in_scope': True,
                   'no_cluster_diagnostic_mode_retains_soft_cap': 600,
                   'marker_event_accounting_exposed': True,
-                  'same_runtime_list_map_parity_flag_exposed': True,
+                  'same_runtime_list_map_parity_flag_exposed': True
               },
-              'scope_boundary': 'No unrelated design, navigation, launch, category, event significance, or source-ingestion changes.',
+              'scope_boundary': 'No unrelated design, navigation, launch, category, event significance, or source-ingestion changes.'
           }
           open('data/reports/runtime_visibility_implementation_certificate.json', 'w', encoding='utf-8').write(json.dumps(report, indent=2, sort_keys=True) + '\n')
           PY
