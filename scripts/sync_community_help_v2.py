@@ -231,6 +231,8 @@ def build_digital() -> list[dict[str, Any]]:
             services.append("Job-readiness assistance")
         if text(raw.get("digital_literacy")).lower() in {"yes", "true", "1"}:
             services.append("Digital-literacy assistance")
+        provider_url = text(raw.get("url"))
+        safe_source = provider_url if provider_url.startswith("https://") else source
         item = location(
             row_id=f"digital-{raw.get('oid')}-{raw.get('location_name')}",
             title=text(raw.get("location_name")),
@@ -241,7 +243,7 @@ def build_digital() -> list[dict[str, Any]]:
             phone=text(raw.get("full_location_phone_number")),
             hours="; ".join(text(raw.get(key)) for key in ("mon_open", "tue_open", "wed_open", "thu_open", "fri_open", "sat_open", "sun_open") if text(raw.get(key))),
             access_note="; ".join(part for part in [text(raw.get("access_notes")), text(raw.get("wheelchair_access_notes")), text(raw.get("access_requirements"))] if part),
-            source_url=text(raw.get("url")) or source,
+            source_url=safe_source,
             lat=number(raw.get("latitude")),
             lng=number(raw.get("longitude")),
         )
