@@ -1,17 +1,16 @@
 name: Run Runtime Visibility Parity Once
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - .github/workflows/run-runtime-visibility-parity-once.yml
   workflow_dispatch:
+  issues:
+    types: [opened]
 
 permissions:
   contents: write
 
 jobs:
   patch-test-certify:
+    if: github.event_name == 'workflow_dispatch' || github.event.issue.title == 'RUN RUNTIME VISIBILITY PARITY'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
