@@ -7,6 +7,7 @@ on:
       - tests/same-snapshot-feed-browser-parity.mjs
       - scripts/patch_stage10_parity_diagnostics.py
       - scripts/patch_stage10_test_id_differences.py
+      - scripts/patch_stage10_expected_display_disposition.py
       - .stage10-parity-trigger
 
 permissions:
@@ -45,6 +46,7 @@ jobs:
         run: |
           python scripts/patch_stage10_parity_diagnostics.py
           python scripts/patch_stage10_test_id_differences.py
+          python scripts/patch_stage10_expected_display_disposition.py
           node --check app-schema-v1-major-all-v01.js
           node --check tests/same-snapshot-feed-browser-parity.mjs
       - name: Install Chromium runtime
@@ -92,6 +94,7 @@ jobs:
             tests/same-snapshot-feed-browser-parity.mjs \
             scripts/patch_stage10_parity_diagnostics.py \
             scripts/patch_stage10_test_id_differences.py \
+            scripts/patch_stage10_expected_display_disposition.py \
             data/reports/stage10_same_snapshot_feed_browser_parity.json
           if git diff --cached --quiet; then exit 0; fi
           git config user.name 'github-actions[bot]'
