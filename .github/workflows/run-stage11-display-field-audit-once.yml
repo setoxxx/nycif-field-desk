@@ -1,0 +1,116 @@
+name: Stage 11 Representative Display Field Audit
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - scripts/patch_stage11_public_display_fields.py
+      - scripts/patch_stage11_public_display_fields_v2.py
+      - scripts/patch_stage11_public_classification_fields.py
+      - tests/stage11-public-display-fields.mjs
+      - tests/stage11_real_snapshot_field_inventory.py
+      - .stage11-display-trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stage11-display-field-audit
+  cancel-in-progress: true
+
+jobs:
+  display-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/stage11-display-field-audit
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: setoxxx/nycif-live-feeds
+          ref: main
+          path: _live_feeds
+          fetch-depth: 1
+      - name: Record live snapshot SHA
+        run: echo "NYCIF_LIVE_FEEDS_SHA=$(git -C _live_feeds rev-parse HEAD)" >> "$GITHUB_ENV"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install narrowly scoped presentation repair
+        run: |
+          python scripts/patch_stage11_public_display_fields_v2.py
+          python scripts/patch_stage11_public_classification_fields.py
+          node --check event-feed-schema-v1.js
+          node --check app-schema-v1-major-all-v01.js
+      - name: Run real-snapshot field inventory
+        env:
+          NYCIF_LIVE_FEEDS_ROOT: ${{ github.workspace }}/_live_feeds
+        run: python tests/stage11_real_snapshot_field_inventory.py
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright@1.54.1
+          npx playwright install chromium
+      - name: Start exact Field Desk runtime
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/stage11-server.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/stage11-server.log
+          exit 1
+      - name: Run browser display-field audit
+        run: node tests/stage11-public-display-fields.mjs
+      - name: Run existing release regressions
+        run: |
+          node tests/public-release-blockers.test.mjs
+          python tests/test_protected_staging_accessibility_contract.py
+      - name: Verify Stage 11 evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          browser=json.loads(Path('data/reports/stage11_public_display_field_audit.json').read_text())
+          real=json.loads(Path('data/reports/stage11_real_snapshot_field_inventory.json').read_text())
+          assert browser['qa_pass'] is True
+          assert real['qa_pass'] is True
+          assert browser['implemented_category_count'] == 17
+          assert browser['borough_count'] == 5
+          assert browser['navigation_changed'] is False
+          assert browser['launch_authorized'] is False
+          assert real['launch_authorized'] is False
+          PY
+      - name: Commit Stage 11 implementation and evidence
+        run: |
+          git add \
+            app-schema-v1-major-all-v01.js \
+            event-feed-schema-v1.js \
+            scripts/patch_stage11_public_display_fields.py \
+            scripts/patch_stage11_public_display_fields_v2.py \
+            scripts/patch_stage11_public_classification_fields.py \
+            tests/stage11-public-display-fields.mjs \
+            tests/stage11_real_snapshot_field_inventory.py \
+            data/reports/stage11_public_display_field_audit.json \
+            data/reports/stage11_real_snapshot_field_inventory.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Complete Stage 11 representative display audit [skip ci]'
+          git fetch origin feature/stage11-display-field-audit
+          git rebase origin/feature/stage11-display-field-audit
+          git push origin HEAD:feature/stage11-display-field-audit
+      - name: Upload Stage 11 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage11-representative-display-field-audit
+          path: |
+            data/reports/stage11_public_display_field_audit.json
+            data/reports/stage11_real_snapshot_field_inventory.json
+            /tmp/stage11-server.log
+          if-no-files-found: warn
