@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-rc-public-map-v10';
+const CACHE_NAME = 'nycif-rc-public-map-v11';
 const APP_SHELL = [
   './',
   './index.html',
@@ -14,13 +14,22 @@ const APP_SHELL = [
   './news-desk-editors-picks-v01.js',
   './app-schema-v1-major-all-v01.js',
   './public-approved-overlays-v01.js',
+  './community-help-v01.js',
   './field-desk-operator-layer-v01.js',
   './admin-whats-new-v01.js',
   './nycif-tip-jar-v01.js',
+  './data/community-help/benefits.json',
+  './data/community-help/food.json',
+  './data/community-help/health.json',
+  './data/community-help/jobs.json',
+  './data/community-help/naloxone.json',
+  './data/community-help/shelter.json',
+  './data/community-help/youth.json',
+  './data/community-help/links.json',
   './service-worker.js',
 ];
 
-const NETWORK_FIRST_RE = /\/(?:index\.html|discovery-patch-v02\.js|public-map-defaults-v01\.js|public-display-mode-v01\.js|service-worker\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js|app-schema-v1-major-all-v01\.js|event-feed-schema-v1\.js|field-desk-operator-layer-v01\.js|news-desk-editors-picks-v01\.js|nycif-tip-jar-v01\.js)$/;
+const NETWORK_FIRST_RE = /\/(?:index\.html|discovery-patch-v02\.js|public-map-defaults-v01\.js|public-display-mode-v01\.js|service-worker\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js|community-help-v01\.js|app-schema-v1-major-all-v01\.js|event-feed-schema-v1\.js|field-desk-operator-layer-v01\.js|news-desk-editors-picks-v01\.js|nycif-tip-jar-v01\.js|data\/community-help\/[^/]+\.json)$/;
 
 function isNetworkFirst(url) {
   return (url.origin === location.origin && NETWORK_FIRST_RE.test(url.pathname))
