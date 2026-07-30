@@ -248,7 +248,7 @@ assert.ok(indexSource.indexOf('public-release-guard-v01.js') < indexSource.index
 assert.ok(indexSource.indexOf('tip-jar-motion-policy-v01.js') < indexSource.indexOf('nycif-tip-jar-v01.js'));
 assert.ok(indexSource.indexOf('nycif-tip-jar-v01.js') < indexSource.indexOf('policy.restore()'));
 assert.match(indexSource, /DOMContentLoaded[\s\S]*policy\.restore\(\)/);
-assert.match(serviceWorkerSource, /nycif-rc-public-map-v11/);
+assert.match(serviceWorkerSource, /nycif-rc-public-map-v12/);
 for (const asset of [
   'nyc-calendar-runtime-v01.js',
   'public-feed-policy-v01.js',
