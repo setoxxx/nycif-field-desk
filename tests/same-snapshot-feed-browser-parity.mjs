@@ -154,12 +154,12 @@ try {
   await page.waitForFunction(() => {
     const summary = window.NYCIF_UNIFIED_VIEWER?.getSummary?.();
     return summary?.feedPhase === 'ok' && summary?.indexComplete === true;
-  }, { timeout: TIMEOUT });
+  }, null, { timeout: TIMEOUT });
 
   await page.evaluate(() => {
     window.NYCIF_MAIN_MAP?.fitBounds([[40.45, -74.30], [40.95, -73.65]], { padding: [0, 0], animate: false });
   });
-  await page.waitForTimeout(1200);
+  await page.waitForTimeout(1600);
 
   const actual = await page.evaluate(() => window.NYCIF_UNIFIED_VIEWER.getSummary());
   const selectedDate = actual.selectedDate || nyDateKey();
