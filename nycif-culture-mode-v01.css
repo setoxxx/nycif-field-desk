@@ -1,0 +1,70 @@
+/* NYCIF Culture Mode — staging overlay styles. Scoped with nycif-culture-* /
+   nycif-hood-* so they never touch public-map styles. */
+
+.nycif-culture-pill.is-on {
+  background: #b3261e;
+  border-color: #b3261e;
+  color: #fff;
+}
+
+/* Neighborhood name labels — big, bold, borough-colored, decluttered in JS. */
+.leaflet-tooltip.nycif-culture-hood-label {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  color: #2b2f36;
+  font-family: "Arial Black", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  white-space: normal;
+  max-width: 150px;
+  text-align: center;
+  line-height: 0.98;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0 0 4px #fff, 0 0 7px #fff;
+  pointer-events: none;
+}
+.leaflet-tooltip.nycif-culture-hood-label::before { display: none; }
+.leaflet-tooltip.nycif-hood-manhattan { color: #e8590c; }
+.leaflet-tooltip.nycif-hood-brooklyn { color: #1971c2; }
+.leaflet-tooltip.nycif-hood-queens { color: #c2255c; }
+.leaflet-tooltip.nycif-hood-bronx { color: #2f9e44; }
+.leaflet-tooltip.nycif-hood-staten-island { color: #7048e8; }
+
+/* Universal pet pins + unverified name-match pins. */
+.nycif-culture-universal-pin,
+.nycif-culture-namematch-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 800;
+  background: #fff;
+}
+.nycif-culture-universal-pin { border: 1.5px solid #6b7280; font-size: 14px; }
+.nycif-culture-namematch-pin { border: 2px dashed #d9a41a; color: #a9791a; font-size: 13px; background: rgba(255,255,255,0.85); }
+
+/* Small legend shown while Culture is on. */
+.nycif-culture-legend {
+  position: absolute;
+  z-index: 1000;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+  max-width: min(520px, calc(100% - 24px));
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.16);
+  font: 600 12px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #1f2937;
+}
+.nycif-culture-legend .k { display: inline-flex; align-items: center; gap: 5px; color: #475467; }
+.nycif-culture-legend .dot { width: 11px; height: 11px; border-radius: 50%; background: #b3261e; border: 2px solid #fff; box-shadow: 0 0 0 1px #b3261e; }
+.nycif-culture-legend .q { width: 15px; height: 15px; border-radius: 50%; border: 2px dashed #d9a41a; color: #a9791a; font-weight: 800; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; }
