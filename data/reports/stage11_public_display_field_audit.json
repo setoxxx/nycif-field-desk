@@ -1,0 +1,36 @@
+{
+  "artifact_type": "stage11_public_display_field_audit",
+  "schema_version": "1.0.0",
+  "generated_at_utc": "2026-07-30T17:58:52.617Z",
+  "fixture_date": "2026-07-30",
+  "implemented_category_count": 17,
+  "borough_count": 5,
+  "display_policy": {
+    "cost": "display only when supplied; otherwise omit",
+    "source": "show dataset label; link only an absolute safe public URL",
+    "verification": "show public verification status when supplied",
+    "internal_fields": "never render"
+  },
+  "equations": {
+    "nonpublic_roles_hidden": true,
+    "all_implemented_categories_listed": true,
+    "all_boroughs_represented": true,
+    "internal_notes_suppressed": true,
+    "list_shows_time": true,
+    "list_shows_free_and_verified": true,
+    "popup_core_fields": true,
+    "popup_values": true,
+    "source_link_safe": true,
+    "directions_available_for_map_ready": true,
+    "list_only_explained": true,
+    "missing_time_explained": true,
+    "multi_day_labeled": true,
+    "unsafe_source_url_rejected": true,
+    "no_page_errors": true
+  },
+  "page_errors": [],
+  "public_surface_scope": "list cards and event popups only",
+  "navigation_changed": false,
+  "launch_authorized": false,
+  "qa_pass": true
+}

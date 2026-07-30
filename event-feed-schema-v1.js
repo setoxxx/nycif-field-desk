@@ -210,7 +210,8 @@
     const nested = row.source && typeof row.source === 'object' ? row.source : null;
     return {
       dataset: nested?.dataset ?? row.source_dataset ?? null,
-      sourceEventId: nested?.source_event_id ?? row.source_event_id ?? null
+      sourceEventId: nested?.source_event_id ?? row.source_event_id ?? null,
+      sourceUrl: nested?.url ?? nested?.source_url ?? row.official_url ?? row.source_url ?? row.url ?? null
     };
   }
 
@@ -222,10 +223,11 @@
     return base;
   }
 
-  function buildLegacySourceObject(dataset, sourceEventId) {
+  function buildLegacySourceObject(dataset, sourceEventId, sourceUrl) {
     return {
       dataset: dataset == null ? null : String(dataset),
-      source_event_id: sourceEventId == null ? null : String(sourceEventId)
+      source_event_id: sourceEventId == null ? null : String(sourceEventId),
+      url: sourceUrl == null || sourceUrl === '' ? null : String(sourceUrl)
     };
   }
 
@@ -248,7 +250,7 @@
     const preferDirect = dataLayer === 'approved_staged';
     const { latKeys, lngKeys } = coordKeyLists(dataLayer);
     const coords = validNycCoords(firstCoordValue(row, latKeys), firstCoordValue(row, lngKeys));
-    const { dataset, sourceEventId } = resolveSourceFields(row);
+    const { dataset, sourceEventId, sourceUrl } = resolveSourceFields(row);
     const base = buildLegacyBaseId(row, index, dataLayer, dataset, sourceEventId);
     const day = preserveDate(row);
     const id = day ? `${base}@${day}` : base;
@@ -264,7 +266,14 @@
       latitude: coords.lat,
       longitude: coords.lng,
       significance: row.significance ?? null,
-      source: buildLegacySourceObject(dataset, sourceEventId),
+      event_role: row.event_role ?? row.nycif?.event_role ?? 'public_event',
+      parent_event_id: row.parent_event_id ?? row.nycif?.parent_event_id ?? null,
+      interests: Array.isArray(row.interests) ? row.interests.map(String) : [],
+      tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+      cost: row.cost ?? row.price ?? row.admission ?? null,
+      is_free: row.is_free ?? row.free ?? null,
+      official_url: row.official_url ?? row.source_url ?? row.url ?? sourceUrl ?? null,
+      source: buildLegacySourceObject(dataset, sourceEventId, sourceUrl),
       nycif: buildLegacyNycifBlock(row, dataLayer, day, coords)
     };
   }
@@ -291,9 +300,19 @@
       latitude: coords.lat,
       longitude: coords.lng,
       significance: row.significance ?? null,
+      event_role: row.event_role ?? nycif.event_role ?? 'public_event',
+      parent_event_id: row.parent_event_id ?? nycif.parent_event_id ?? null,
+      interests: Array.isArray(row.interests) ? row.interests.map(String) : [],
+      tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+      cost: row.cost ?? row.price ?? row.admission ?? nycif.cost ?? null,
+      is_free: row.is_free ?? row.free ?? nycif.is_free ?? null,
+      official_url: row.official_url ?? row.source_url ?? row.url ?? row.source.url ?? row.source.source_url ?? null,
       source: {
         dataset: row.source.dataset == null ? null : String(row.source.dataset),
-        source_event_id: row.source.source_event_id == null ? null : String(row.source.source_event_id)
+        source_event_id: row.source.source_event_id == null ? null : String(row.source.source_event_id),
+        url: row.source.url == null && row.source.source_url == null
+          ? null
+          : String(row.source.url ?? row.source.source_url)
       },
       nycif
     };
