@@ -2072,6 +2072,13 @@
     await bootFeeds();
     // News Desk + Editor's Picks signals load after the core feed (non-blocking).
     loadNewsDeskSignals();
+    const parityAuditEnabled = (() => {
+      try {
+        return new URL(location.href).searchParams.get('auditParity') === '1';
+      } catch {
+        return false;
+      }
+    })();
     window.NYCIF_UNIFIED_VIEWER = {
       version: VERSION,
       getSummary: () => ({
@@ -2086,6 +2093,10 @@
         markerEvents: state.markerEvents,
         visible: state.events.filter(eventMatches).length,
         mapEligibleVisible: state.events.filter(e => eventMatches(e) && markerEligible(e)).length,
+        ...(parityAuditEnabled ? {
+          visibleIds: state.events.filter(eventMatches).map(e => e.id).sort(),
+          mapEligibleVisibleIds: state.events.filter(e => eventMatches(e) && markerEligible(e)).map(e => e.id).sort()
+        } : {}),
         markerParityComplete: state.markerEvents >= state.events.filter(e => eventMatches(e) && markerEligible(e)).length,
         peakMarkerObjects: state.peakMarkerObjects,
         cluster: useCluster,
