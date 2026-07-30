@@ -7,6 +7,7 @@ on:
       - scripts/patch_stage11_public_display_fields.py
       - scripts/patch_stage11_public_display_fields_v2.py
       - scripts/patch_stage11_public_classification_fields.py
+      - scripts/patch_stage11_test_popup_selector.py
       - tests/stage11-public-display-fields.mjs
       - tests/stage11_real_snapshot_field_inventory.py
       - .stage11-display-trigger
@@ -45,8 +46,10 @@ jobs:
         run: |
           python scripts/patch_stage11_public_display_fields_v2.py
           python scripts/patch_stage11_public_classification_fields.py
+          python scripts/patch_stage11_test_popup_selector.py
           node --check event-feed-schema-v1.js
           node --check app-schema-v1-major-all-v01.js
+          node --check tests/stage11-public-display-fields.mjs
       - name: Run real-snapshot field inventory
         env:
           NYCIF_LIVE_FEEDS_ROOT: ${{ github.workspace }}/_live_feeds
@@ -93,6 +96,7 @@ jobs:
             scripts/patch_stage11_public_display_fields.py \
             scripts/patch_stage11_public_display_fields_v2.py \
             scripts/patch_stage11_public_classification_fields.py \
+            scripts/patch_stage11_test_popup_selector.py \
             tests/stage11-public-display-fields.mjs \
             tests/stage11_real_snapshot_field_inventory.py \
             data/reports/stage11_public_display_field_audit.json \
