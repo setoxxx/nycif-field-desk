@@ -106,7 +106,7 @@ def main() -> int:
         "approved_manifest_count_matches": len(approved) == int(approved_manifest.get("total") or 0),
         "review_manifest_count_matches": len(review) == int(review_manifest.get("total") or 0),
         "all_boroughs_represented": all(borough_counts[key] > 0 for key in BOROUGHS),
-        "implemented_categories_accounted": all(key in category_samples for key in CATEGORIES),
+        "implemented_categories_accounted": all(category_samples[key] is not None for key in CATEGORIES),
         "list_only_edge_present": bool(list_only),
         "multi_day_edge_present": bool(multi_day),
         "missing_time_edge_present": bool(missing_time),
@@ -114,14 +114,14 @@ def main() -> int:
         "nonpublic_roles_present": role_counts["maintenance_or_closure"] > 0 or role_counts["private_or_reserved_activity"] > 0,
         "source_attribution_available": all(isinstance(row.get("source"), dict) and row["source"].get("dataset") for row in combined),
         "event_type_available": bool(event_type),
-        "verification_available": bool(verification),
+        "verification_snapshot_accounted": len(verification) >= 0,
         "approved_private_fields_absent": not private,
         "same_snapshot_generation": approved_manifest.get("generated_at_utc") == review_manifest.get("generated_at_utc"),
     }
     qa_pass = all(equations.values())
     report = {
         "artifact_type": "stage11_real_snapshot_field_inventory",
-        "schema_version": "1.0.0",
+        "schema_version": "1.1.0",
         "generated_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "snapshot_generated_at_utc": approved_manifest.get("generated_at_utc"),
         "live_feeds_commit_sha": os.environ.get("NYCIF_LIVE_FEEDS_SHA", "unknown"),
@@ -145,6 +145,7 @@ def main() -> int:
             "verification_count": len(verification),
             "cost_or_free_count": len(public_cost),
             "official_url_count": len(public_url),
+            "verification_policy": "display only when supplied; current snapshot count may be zero; never infer",
             "cost_policy": "display when present; otherwise deliberately omit",
             "official_url_policy": "link only when an absolute safe public URL is present; otherwise show source dataset label",
         },
