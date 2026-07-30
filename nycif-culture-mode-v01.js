@@ -59,7 +59,11 @@
   const tagLabel = (t) => TAG_LABELS[t] || t;
   const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  const state = { feed: null, on: false, labels: [], layers: null, map: null, loaded: false, error: null };
+  const state = {
+    feed: null, on: false, labels: [], layers: null, map: null, loaded: false, error: null,
+    hiddenEventLayers: [], // event-environment overlays detached while Culture is on
+    filterState: { business: true, universal: true, nameMatch: true, labels: true },
+  };
 
   function loadJson(url) {
     return fetch(url, { cache: 'no-store' }).then((r) => {
@@ -189,18 +193,112 @@
     renderLabels(state.feed);
   }
 
-  function setOn(on) {
+  // ---- Environment switch: Culture and Events are mutually exclusive. --------
+
+  function isOwnLayer(l) {
+    return !!state.layers && Object.values(state.layers).some((lg) => lg === l);
+  }
+
+  // Show only the culture sublayers whose filter checkbox is on.
+  function applyFilterVisibility() {
+    if (!state.on || !state.layers || !state.map) return;
+    const map = state.map;
+    [['business'], ['universal'], ['nameMatch'], ['labels']].forEach(([k]) => {
+      const lg = state.layers[k];
+      if (!lg) return;
+      if (state.filterState[k]) lg.addTo(map); else map.removeLayer(lg);
+    });
+    if (state.filterState.labels) requestAnimationFrame(declutter);
+  }
+
+  // Turn the event map OFF: detach every non-basemap overlay currently on the
+  // map (the event environment), remember them, then show the culture layers.
+  function enterCulture() {
+    const L = window.L;
+    ensureLayers();
+    state.hiddenEventLayers = [];
+    state.map.eachLayer((l) => {
+      if (l instanceof L.TileLayer) return;              // keep the base map
+      if (L.GridLayer && l instanceof L.GridLayer) return;
+      if (isOwnLayer(l)) return;                          // never our own layers
+      state.hiddenEventLayers.push(l);
+    });
+    state.hiddenEventLayers.forEach((l) => state.map.removeLayer(l));
+    applyFilterVisibility();
+    state.map.on('moveend zoomend', declutter);
+    requestAnimationFrame(declutter);
+  }
+
+  // Turn the event map back ON: remove culture layers, re-attach the events.
+  function exitCulture() {
+    if (state.layers) Object.values(state.layers).forEach((lg) => state.map.removeLayer(lg));
+    (state.hiddenEventLayers || []).forEach((l) => { try { l.addTo(state.map); } catch (e) { /* ignore */ } });
+    state.hiddenEventLayers = [];
+    state.map.off('moveend zoomend', declutter);
+  }
+
+  function setMode(on) {
+    if (on === state.on) return;
     state.on = on;
     const btn = document.getElementById('cultureModeBtn');
-    if (btn) { btn.setAttribute('aria-pressed', String(on)); btn.classList.toggle('is-on', on); btn.querySelector('b').textContent = on ? 'Hide Culture' : 'Culture'; }
+    if (btn) {
+      btn.setAttribute('aria-pressed', String(on));
+      btn.classList.toggle('is-on', on);
+      // The button flips to "Events" so people know they can switch back.
+      btn.innerHTML = on ? '<span>📅</span><b>Events</b>' : '<span>🎭</span><b>Culture</b>';
+      btn.title = on ? 'Switch back to the event map' : 'Switch to the culture map';
+    }
     const legend = document.getElementById('cultureLegend');
     if (legend) legend.hidden = !on;
-    if (!state.layers || !state.map) return;
-    Object.values(state.layers).forEach((lg) => {
-      if (on) lg.addTo(state.map); else state.map.removeLayer(lg);
+    applyPanelMode(on);
+    if (!state.map) return;
+    if (on) enterCulture(); else exitCulture();
+  }
+
+  // ---- Filters panel: partition at the "Show help resources" divider. -------
+  // Everything ABOVE the Community Help block = event filters (hidden in Culture
+  // mode). The help block + the culture filters below it belong to Culture.
+
+  function ensureCultureFilters() {
+    const panel = document.getElementById('layersPanel');
+    if (!panel || document.getElementById('nycif-culture-filters')) return;
+    const block = document.createElement('div');
+    block.id = 'nycif-culture-filters';
+    block.className = 'nycif-culture-filter-block';
+    block.hidden = true;
+    block.innerHTML =
+      '<hr><p class="panel-label">Culture layer</p>' +
+      '<label class="check"><input type="checkbox" data-culture-layer="business" checked> <span>🏬 Cultural businesses</span></label>' +
+      '<label class="check"><input type="checkbox" data-culture-layer="universal" checked> <span>🐾 Pet stores &amp; parks <small>for everyone</small></span></label>' +
+      '<label class="check"><input type="checkbox" data-culture-layer="nameMatch" checked> <span>❓ Unverified name matches</span></label>' +
+      '<label class="check"><input type="checkbox" data-culture-layer="labels" checked> <span>🏷️ Neighborhood labels</span></label>';
+    const divider = document.getElementById('nycifCommunityHelpBlock');
+    if (divider && divider.parentNode === panel) panel.insertBefore(block, divider.nextSibling);
+    else panel.appendChild(block);
+    block.querySelectorAll('input[data-culture-layer]').forEach((inp) => {
+      inp.addEventListener('change', () => {
+        state.filterState[inp.getAttribute('data-culture-layer')] = inp.checked;
+        applyFilterVisibility();
+      });
     });
-    if (on) { state.map.on('moveend zoomend', declutter); requestAnimationFrame(declutter); }
-    else { state.map.off('moveend zoomend', declutter); }
+  }
+
+  function applyPanelMode(on) {
+    const panel = document.getElementById('layersPanel');
+    if (!panel) return;
+    ensureCultureFilters();
+    // The divider is the Community Help block if present, else the culture block.
+    const divider = document.getElementById('nycifCommunityHelpBlock')
+      || document.getElementById('nycif-culture-filters');
+    let beforeDivider = true;
+    Array.from(panel.children).forEach((child) => {
+      if (child === divider) beforeDivider = false;
+      if (child.id === 'nycif-culture-filters') return; // handled below
+      // Hide event filters (everything above the divider) while Culture is on.
+      if (beforeDivider) child.classList.toggle('nycif-hidden-in-culture', on);
+    });
+    const cf = document.getElementById('nycif-culture-filters');
+    if (cf) cf.hidden = !on;
   }
 
   function makeButton() {
@@ -211,15 +309,25 @@
     btn.type = 'button';
     btn.className = 'pill nycif-culture-pill';
     btn.setAttribute('aria-pressed', 'false');
+    btn.title = 'Switch to the culture map';
     btn.innerHTML = '<span>🎭</span><b>Culture</b>';
     btn.addEventListener('click', () => {
       if (state.error) { alert('Culture layer unavailable: ' + state.error); return; }
       if (!state.loaded) return;
-      setOn(!state.on);
+      setMode(!state.on);
     });
+    // Place the Culture control to the LEFT, stacked directly on top of the
+    // Filters button: wrap both in a vertical stack where Filters used to sit.
     const filters = document.getElementById('layersBtn');
-    if (filters && filters.parentNode === controls) controls.insertBefore(btn, filters.nextSibling);
-    else controls.appendChild(btn);
+    if (filters && filters.parentNode === controls) {
+      const stack = document.createElement('div');
+      stack.className = 'nycif-culture-stack';
+      controls.insertBefore(stack, filters);
+      stack.appendChild(btn);      // Culture on top
+      stack.appendChild(filters);  // Filters below
+    } else {
+      controls.appendChild(btn);
+    }
 
     const legend = document.createElement('div');
     legend.id = 'cultureLegend';

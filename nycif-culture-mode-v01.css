@@ -7,6 +7,20 @@
   color: #fff;
 }
 
+/* Culture control sits to the left, stacked directly on top of Filters. */
+.nycif-culture-stack {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+}
+
+/* Event-only filters are hidden while the Culture environment is active. */
+.nycif-hidden-in-culture { display: none !important; }
+
+/* Culture filters live below the "Show help resources" divider in the panel. */
+.nycif-culture-filter-block .panel-label { color: #b3261e; }
+
 /* Neighborhood name labels — big, bold, borough-colored, decluttered in JS. */
 .leaflet-tooltip.nycif-culture-hood-label {
   background: transparent;
