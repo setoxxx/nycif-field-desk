@@ -17,20 +17,20 @@ def main() -> int:
   return categoryOf(event) === 'media' && (role === 'street_closure' || role === 'supporting_permit');
 }"""
     new = """function sourceVisible(event) {
-  const nycif = event.nycif && typeof event.nycif === 'object' ? event.nycif : {};
-  if (nycif.display_disposition === 'list_only') return false;
   const role = roleOf(event);
   if (role === 'maintenance_or_closure') return false;
   if (role === 'public_event') return true;
+  const nycif = event.nycif && typeof event.nycif === 'object' ? event.nycif : {};
+  if (nycif.display_disposition === 'list_only') return false;
   return categoryOf(event) === 'media' && (role === 'street_closure' || role === 'supporting_permit');
 }"""
     if new in text:
-        print("Stage 10 display-disposition expectation already installed")
+        print("Stage 10 role-aware display-disposition expectation already installed")
         return 0
     if text.count(old) != 1:
         raise RuntimeError(f"expected one Stage 10 sourceVisible block, found {text.count(old)}")
     TEST.write_text(text.replace(old, new, 1), encoding="utf-8")
-    print("Stage 10 display-disposition expectation installed")
+    print("Stage 10 role-aware display-disposition expectation installed")
     return 0
 
 
