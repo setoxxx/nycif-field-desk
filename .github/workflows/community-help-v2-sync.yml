@@ -1,0 +1,68 @@
+name: Community Help v2 Sync
+
+on:
+  push:
+    branches:
+      - feature/community-help-stages-1-5
+    paths:
+      - scripts/sync_community_help_v2.py
+      - scripts/sync_community_help_v2_fixed.py
+      - .github/workflows/community-help-v2-sync.yml
+  pull_request:
+    paths:
+      - scripts/sync_community_help_v2.py
+      - scripts/sync_community_help_v2_fixed.py
+      - data/community-help/**
+      - community-help-v01.js
+      - scripts/validate_community_help.py
+      - service-worker.js
+      - tests/public-release-blockers.test.mjs
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 * * 1'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build authoritative public-location files
+        run: python scripts/sync_community_help_v2_fixed.py
+      - name: Validate Community Help
+        run: python scripts/validate_community_help.py
+      - name: Validate JavaScript and release contracts
+        run: |
+          node --check community-help-v01.js
+          node tests/public-release-blockers.test.mjs
+      - name: Upload generated evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: community-help-v2-generated
+          path: |
+            data/community-help/homebase.json
+            data/community-help/senior.json
+            data/community-help/family.json
+            data/community-help/digital.json
+            data/community-help/restroom.json
+            data/community-help/sync-summary-v2.json
+          if-no-files-found: error
+      - name: Commit generated files to execution branch
+        if: github.event_name == 'push' && github.ref_name == 'feature/community-help-stages-1-5'
+        run: |
+          if git diff --quiet -- data/community-help; then
+            echo 'Generated data is already current.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/community-help
+          git commit -m 'Refresh source-driven Community Help v2 data [skip ci]'
+          git push

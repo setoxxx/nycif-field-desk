@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nycif-rc-public-map-v11';
+const CACHE_NAME = 'nycif-rc-public-map-v12';
 const APP_SHELL = [
   './',
   './index.html',
@@ -34,7 +34,13 @@ const APP_SHELL = [
   './data/community-help/naloxone.json',
   './data/community-help/shelter.json',
   './data/community-help/youth.json',
+  './data/community-help/homebase.json',
+  './data/community-help/senior.json',
+  './data/community-help/family.json',
+  './data/community-help/digital.json',
+  './data/community-help/restroom.json',
   './data/community-help/links.json',
+  './data/community-help/sync-summary-v2.json',
   './service-worker.js',
 ];
 
@@ -62,7 +68,6 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (url.origin !== location.origin && url.hostname !== 'raw.githubusercontent.com') return;
-
   if (isNetworkFirst(url)) {
     event.respondWith(
       fetch(event.request).then((response) => {
@@ -73,7 +78,6 @@ self.addEventListener('fetch', (event) => {
     );
     return;
   }
-
   event.respondWith(
     caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
       const copy = response.clone();

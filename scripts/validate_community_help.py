@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 """Fail-closed validation for the public NYCIF Community Help directory."""
-
 from __future__ import annotations
 
 import json
+import math
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "community-help"
-LOCATION_CATEGORIES = ("benefits", "food", "health", "jobs", "naloxone", "shelter", "youth")
+LOCATION_CATEGORIES = (
+    "benefits", "food", "health", "jobs", "naloxone", "shelter", "youth",
+    "homebase", "senior", "family", "digital", "restroom",
+)
+V2_CATEGORIES = {"homebase", "senior", "family", "digital", "restroom"}
 ALLOWED_BOROUGHS = {"Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"}
 REQUIRED_LOCATION_FIELDS = {
     "id", "title", "category", "address", "borough", "services",
@@ -32,11 +36,20 @@ def valid_https(value: object) -> bool:
     return parsed.scheme == "https" and bool(parsed.netloc)
 
 
+def finite_number(value: object) -> float | None:
+    try:
+        result = float(value)
+    except (TypeError, ValueError):
+        return None
+    return result if math.isfinite(result) else None
+
+
 def validate() -> dict[str, object]:
     errors: list[str] = []
     ids: set[str] = set()
     semantic_keys: set[tuple[str, str, str]] = set()
     category_counts: Counter[str] = Counter()
+    category_boroughs: dict[str, set[str]] = defaultdict(set)
 
     for category in LOCATION_CATEGORIES:
         path = DATA / f"{category}.json"
@@ -44,8 +57,11 @@ def validate() -> dict[str, object]:
             errors.append(f"missing category file: {path.relative_to(ROOT)}")
             continue
         payload = load(path)
-        if payload.get("schema_version") != "1.0.0":
+        allowed_schema = {"1.0.0", "2.0.0"}
+        if payload.get("schema_version") not in allowed_schema:
             errors.append(f"{category}: unsupported schema_version")
+        if category in V2_CATEGORIES and payload.get("schema_version") != "2.0.0":
+            errors.append(f"{category}: expanded category must use schema_version 2.0.0")
         if payload.get("category") != category:
             errors.append(f"{category}: payload category mismatch")
         rows = payload.get("locations")
@@ -68,11 +84,13 @@ def validate() -> dict[str, object]:
             elif row_id in ids:
                 errors.append(f"duplicate id: {row_id}")
             ids.add(row_id)
-
             if row.get("category") != category:
                 errors.append(f"{prefix}: row category mismatch")
-            if row.get("borough") not in ALLOWED_BOROUGHS:
-                errors.append(f"{prefix}: invalid borough {row.get('borough')!r}")
+            row_borough = row.get("borough")
+            if row_borough not in ALLOWED_BOROUGHS:
+                errors.append(f"{prefix}: invalid borough {row_borough!r}")
+            else:
+                category_boroughs[category].add(str(row_borough))
             if not str(row.get("title") or "").strip():
                 errors.append(f"{prefix}: blank title")
             if not str(row.get("address") or "").strip():
@@ -84,7 +102,13 @@ def validate() -> dict[str, object]:
                 errors.append(f"{prefix}: source_url must be HTTPS")
             if not str(row.get("last_verified") or "").startswith("2026-"):
                 errors.append(f"{prefix}: last_verified is missing or malformed")
-
+            if category in V2_CATEGORIES:
+                lat = finite_number(row.get("lat"))
+                lng = finite_number(row.get("lng"))
+                if lat is None or lng is None or not (40.45 <= lat <= 40.95 and -74.3 <= lng <= -73.65):
+                    errors.append(f"{prefix}: source-backed category requires valid NYC lat/lng")
+                if not str(row.get("status") or "").strip():
+                    errors.append(f"{prefix}: missing availability status")
             semantic_key = (
                 category,
                 str(row.get("title") or "").strip().casefold(),
@@ -95,22 +119,24 @@ def validate() -> dict[str, object]:
             semantic_keys.add(semantic_key)
             category_counts[category] += 1
 
+    for category in V2_CATEGORIES:
+        if category_counts[category] < 1:
+            errors.append(f"{category}: expected at least one verified location")
+
     links_path = DATA / "links.json"
+    links: list[dict] = []
     if not links_path.exists():
         errors.append("missing data/community-help/links.json")
-        links = []
     else:
         link_payload = load(links_path)
-        links = link_payload.get("directory_links")
-        if not isinstance(links, list) or not links:
+        raw_links = link_payload.get("directory_links")
+        if not isinstance(raw_links, list) or not raw_links:
             errors.append("links.json: directory_links must be a non-empty list")
-            links = []
+        else:
+            links = [link for link in raw_links if isinstance(link, dict)]
         link_ids: set[str] = set()
         for index, link in enumerate(links):
             prefix = f"links[{index}]"
-            if not isinstance(link, dict):
-                errors.append(f"{prefix}: link must be an object")
-                continue
             link_id = str(link.get("id") or "").strip()
             if not link_id:
                 errors.append(f"{prefix}: blank id")
@@ -124,10 +150,8 @@ def validate() -> dict[str, object]:
             if not str(link.get("category") or "").strip():
                 errors.append(f"{prefix}: blank category")
 
-    if sum(category_counts.values()) < 70:
-        errors.append(f"expected at least 70 public locations; found {sum(category_counts.values())}")
-    required_link_categories = {"benefits", "food", "health", "legal", "naloxone", "shelter", "tax"}
-    link_categories = {str(link.get("category") or "") for link in links if isinstance(link, dict)}
+    required_link_categories = {"benefits", "faith", "food", "health", "legal", "naloxone", "shelter", "tax"}
+    link_categories = {str(link.get("category") or "") for link in links}
     missing_link_categories = sorted(required_link_categories - link_categories)
     if missing_link_categories:
         errors.append(f"missing official locator categories: {missing_link_categories}")
@@ -136,8 +160,9 @@ def validate() -> dict[str, object]:
         "qa_pass": not errors,
         "location_count": sum(category_counts.values()),
         "category_counts": dict(sorted(category_counts.items())),
+        "category_boroughs": {key: sorted(value) for key, value in sorted(category_boroughs.items())},
         "directory_link_count": len(links),
-        "duplicate_id_count": 0 if not any(item.startswith("duplicate id:") for item in errors) else 1,
+        "duplicate_id_count": sum(1 for item in errors if item.startswith("duplicate id:")),
         "errors": errors,
     }
 

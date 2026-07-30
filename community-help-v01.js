@@ -1,19 +1,29 @@
 (() => {
+  'use strict';
+
   const DATA_ROOT = './data/community-help';
   const LINKS_URL = `${DATA_ROOT}/links.json`;
-  const DATA_CATEGORIES = ['benefits', 'food', 'shelter', 'naloxone', 'jobs', 'youth', 'health'];
-  const CACHE_KEY = 'nycif-community-help-geocodes-v01';
+  const DATA_CATEGORIES = [
+    'benefits', 'food', 'shelter', 'naloxone', 'jobs', 'youth', 'health',
+    'homebase', 'senior', 'family', 'digital', 'restroom',
+  ];
+  const CACHE_KEY = 'nycif-community-help-geocodes-v02';
   const GEOSEARCH_URL = 'https://geosearch.planninglabs.nyc/v2/search';
   const CATEGORY_META = {
     benefits: { label: 'Benefits / SNAP', icon: '🧾', color: '#1d4ed8' },
     food: { label: 'Free Food', icon: '🥫', color: '#b45309' },
-    shelter: { label: 'Shelter / Housing', icon: '🏠', color: '#7c3aed' },
+    shelter: { label: 'Shelter Intake', icon: '🏠', color: '#7c3aed' },
+    homebase: { label: 'Homebase / Housing Help', icon: '🔑', color: '#6d28d9' },
     naloxone: { label: 'Narcan / Harm Reduction', icon: '🛟', color: '#be123c' },
     jobs: { label: 'Jobs / Workforce', icon: '💼', color: '#047857' },
-    tax: { label: 'Free Tax Help', icon: '🧮', color: '#0f766e' },
     youth: { label: 'Youth Services', icon: '🧑‍🤝‍🧑', color: '#9333ea' },
     faith: { label: 'Faith & Community', icon: '🤝', color: '#6d28d9' },
     health: { label: 'Health Services', icon: '⚕️', color: '#0369a1' },
+    senior: { label: 'Older-Adult Services', icon: '🧓', color: '#9a3412' },
+    family: { label: 'Family Justice Centers', icon: '🫶', color: '#9f1239' },
+    digital: { label: 'Computers / Wi-Fi', icon: '💻', color: '#075985' },
+    restroom: { label: 'Public Restrooms', icon: '🚻', color: '#374151' },
+    tax: { label: 'Free Tax Help', icon: '🧮', color: '#0f766e' },
     legal: { label: 'Legal Help', icon: '⚖️', color: '#334155' },
   };
 
@@ -26,15 +36,15 @@
     busy: new Set(),
   };
 
-  function esc(value) {
-    return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
-  }
+  const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (ch) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[ch]));
 
   function loadCache() {
     try {
       const parsed = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
       return parsed && typeof parsed === 'object' ? parsed : {};
-    } catch {
+    } catch (_) {
       return {};
     }
   }
@@ -45,105 +55,85 @@
 
   function isNYCoord(lat, lng) {
     return Number.isFinite(lat) && Number.isFinite(lng)
-      && lat >= 40.4774 && lat <= 40.9176 && lng >= -74.2591 && lng <= -73.7004;
+      && lat >= 40.45 && lat <= 40.95 && lng >= -74.3 && lng <= -73.65;
   }
 
-  function expectedBoroughTokens(borough) {
-    const key = String(borough || '').toLowerCase();
+  function expectedBoroughTokens(value) {
+    const key = String(value || '').toLowerCase();
     if (key === 'manhattan') return ['manhattan', 'new york'];
     if (key === 'staten island') return ['staten island', 'richmond'];
     return [key];
   }
 
-  function candidateText(feature) {
-    const p = feature && feature.properties ? feature.properties : {};
-    return [p.label, p.name, p.borough, p.locality, p.county, p.region, p.postalcode]
+  function featureText(feature) {
+    const props = feature?.properties || {};
+    return [props.label, props.name, props.borough, props.locality, props.county, props.postalcode]
       .filter(Boolean).join(' ').toLowerCase();
   }
 
-  function validForBorough(feature, borough, zip) {
-    const coords = feature && feature.geometry && feature.geometry.coordinates;
-    if (!Array.isArray(coords) || coords.length !== 2) return false;
-    const lng = Number(coords[0]);
-    const lat = Number(coords[1]);
-    if (!isNYCoord(lat, lng)) return false;
-    const text = candidateText(feature);
-    if (!expectedBoroughTokens(borough).some((token) => token && text.includes(token))) return false;
-    if (zip && /\b\d{5}\b/.test(text) && !text.includes(zip)) return false;
-    return true;
-  }
-
-  function cleanAddress(address) {
-    return String(address || '')
-      .replace(/\b(?:\d+(?:st|nd|rd|th)?\s+)?(?:floor|fl\.?|level|room|suite|building|lobby)\b.*?(?=,|$)/gi, '')
-      .replace(/\s+,/g, ',')
-      .replace(/,\s*,/g, ',')
-      .replace(/\s+/g, ' ')
-      .trim();
-  }
-
   async function geocode(row) {
-    if (Number.isFinite(Number(row.lat)) && Number.isFinite(Number(row.lng))) {
-      return { lat: Number(row.lat), lng: Number(row.lng), label: row.address };
-    }
-    if (state.geocodeCache[row.id] && isNYCoord(state.geocodeCache[row.id].lat, state.geocodeCache[row.id].lng)) {
-      return state.geocodeCache[row.id];
-    }
-    const query = cleanAddress(row.address);
-    const url = `${GEOSEARCH_URL}?${new URLSearchParams({ text: query, size: '8' })}`;
-    const response = await fetch(url, { headers: { Accept: 'application/json' } });
+    const directLat = Number(row.lat);
+    const directLng = Number(row.lng);
+    if (isNYCoord(directLat, directLng)) return { lat: directLat, lng: directLng, label: row.address };
+    const cached = state.geocodeCache[row.id];
+    if (cached && isNYCoord(Number(cached.lat), Number(cached.lng))) return cached;
+    const query = String(row.address || '').replace(/\s+/g, ' ').trim();
+    const response = await fetch(`${GEOSEARCH_URL}?${new URLSearchParams({ text: query, size: '8' })}`, {
+      headers: { Accept: 'application/json' },
+    });
     if (!response.ok) throw new Error(`GeoSearch HTTP ${response.status}`);
     const payload = await response.json();
-    const zipMatch = String(row.address || '').match(/\b(\d{5})\b/);
-    const zip = zipMatch ? zipMatch[1] : '';
-    const features = (payload.features || []).filter((feature) => validForBorough(feature, row.borough, zip));
-    features.sort((a, b) => Number((b.properties || {}).confidence || 0) - Number((a.properties || {}).confidence || 0));
-    const hit = features[0];
+    const zip = (query.match(/\b\d{5}\b/) || [''])[0];
+    const hit = (payload.features || []).find((feature) => {
+      const coords = feature?.geometry?.coordinates;
+      if (!Array.isArray(coords) || coords.length !== 2) return false;
+      if (!isNYCoord(Number(coords[1]), Number(coords[0]))) return false;
+      const haystack = featureText(feature);
+      if (!expectedBoroughTokens(row.borough).some((token) => token && haystack.includes(token))) return false;
+      return !(zip && /\b\d{5}\b/.test(haystack) && !haystack.includes(zip));
+    });
     if (!hit) throw new Error(`No borough-safe coordinate for ${row.address}`);
     const point = {
       lat: Number(hit.geometry.coordinates[1]),
       lng: Number(hit.geometry.coordinates[0]),
-      label: (hit.properties || {}).label || row.address,
-      verifiedBorough: row.borough,
+      label: hit.properties?.label || row.address,
     };
     state.geocodeCache[row.id] = point;
     saveCache();
     return point;
   }
 
-  function directionsUrl(address) {
-    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address || '')}`;
-  }
-
   function rowMatchesCategory(row, category) {
     if (row.category === category) return true;
     const services = (row.services || []).join(' ').toLowerCase();
     if (category === 'faith') return services.includes('faith-based') || services.includes('community support');
-    if (category === 'health') return row.category === 'naloxone' || services.includes('health');
     return false;
   }
 
   function popupHtml(row, category) {
     const meta = CATEGORY_META[category] || CATEGORY_META.benefits;
-    const serviceList = (row.services || []).map((item) => `<li>${esc(item)}</li>`).join('');
-    const phoneDigits = String(row.phone || '').replace(/[^0-9+]/g, '');
+    const services = (row.services || []).map((item) => `<li>${esc(item)}</li>`).join('');
+    const phone = String(row.phone || '').replace(/[^0-9+]/g, '');
     const urgent = row.category === 'naloxone'
       ? '<p class="nycif-help-urgent"><strong>Overdose emergency:</strong> Call 911, give naloxone if available, and stay with the person.</p>'
-      : '';
+      : row.category === 'family'
+        ? '<p class="nycif-help-urgent"><strong>Immediate danger:</strong> Call 911. Use a safer device when seeking help if your device may be monitored.</p>'
+        : '';
     return `<article class="nycif-help-popup">
       <div class="nycif-help-tag">${esc(meta.icon)} ${esc(meta.label)}</div>
       <h2>${esc(row.title)}</h2>
       <p>${esc(row.address)}</p>
+      ${row.status && row.status !== 'active' ? `<p><strong>Status:</strong> ${esc(row.status)}</p>` : ''}
       ${row.hours ? `<p><strong>Hours:</strong> ${esc(row.hours)}</p>` : ''}
-      ${serviceList ? `<ul>${serviceList}</ul>` : ''}
+      ${services ? `<ul>${services}</ul>` : ''}
       ${row.access_note ? `<p class="nycif-help-note">${esc(row.access_note)}</p>` : ''}
       ${urgent}
       <div class="nycif-help-actions">
-        ${row.phone ? `<a href="tel:${esc(phoneDigits)}">Call ${esc(row.phone)}</a>` : ''}
-        <a href="${esc(directionsUrl(row.address))}" target="_blank" rel="noopener">Directions</a>
+        ${row.phone ? `<a href="tel:${esc(phone)}">Call ${esc(row.phone)}</a>` : ''}
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(row.address || '')}" target="_blank" rel="noopener">Directions</a>
         <a href="${esc(row.source_url)}" target="_blank" rel="noopener">Official details</a>
       </div>
-      <p class="nycif-help-verified">Verified ${esc(row.last_verified || '')}. Confirm hours before travel.</p>
+      <p class="nycif-help-verified">Verified ${esc(row.last_verified || '')}. Confirm availability before travel.</p>
     </article>`;
   }
 
@@ -155,7 +145,7 @@
       iconSize: [36, 36], iconAnchor: [18, 18], popupAnchor: [0, -19],
     });
     return L.marker([point.lat, point.lng], { icon, title: row.title, zIndexOffset: 980 })
-      .bindPopup(popupHtml(row, category), { maxWidth: 360, minWidth: 260 });
+      .bindPopup(popupHtml(row, category), { maxWidth: 370, minWidth: 260 });
   }
 
   function installStyles() {
@@ -168,12 +158,12 @@
     document.head.appendChild(style);
   }
 
-  function setHelpStatus(text) {
-    const el = document.getElementById('nycifCommunityHelpStatus');
-    if (el) el.textContent = text || '';
+  function setStatus(message) {
+    const node = document.getElementById('nycifCommunityHelpStatus');
+    if (node) node.textContent = message || '';
   }
 
-  function visibleCategoryKeys() {
+  function visibleCategories() {
     const keys = new Set(DATA_CATEGORIES);
     keys.add('faith');
     return Object.keys(CATEGORY_META).filter((key) => keys.has(key));
@@ -185,36 +175,34 @@
     const block = document.createElement('div');
     block.id = 'nycifCommunityHelpBlock';
     block.className = 'nycif-community-help-block';
-    const categories = visibleCategoryKeys();
-    const checks = categories.map((key) => {
+    const checks = visibleCategories().map((key) => {
       const meta = CATEGORY_META[key];
       return `<label class="check"><input type="checkbox" data-help-category="${esc(key)}"> <span>${esc(meta.icon)} ${esc(meta.label)}</span></label>`;
     }).join('');
     const links = state.directoryLinks.map((link) => `<a class="nycif-help-link" href="${esc(link.url)}" target="_blank" rel="noopener">${esc(link.title)}<small>${esc(link.description || '')}</small></a>`).join('');
     block.innerHTML = `<hr><p class="panel-label">Community Help</p>
       <label class="check nycif-help-master"><input type="checkbox" id="nycifCommunityHelpMaster"> <span>🧭 Show help resources</span></label>
-      <p class="nycif-help-intro">Public places for food, benefits, shelter intake, Narcan, jobs, youth support and more. Choose only what you need.</p>
+      <p class="nycif-help-intro">Verified public service locations and official live locators. Permanent resources are separate from events.</p>
       <div class="nycif-help-grid" id="nycifCommunityHelpCategories" hidden>${checks}</div>
       <div class="nycif-help-status" id="nycifCommunityHelpStatus"></div>
       <div class="nycif-help-links" id="nycifCommunityHelpLinks" hidden>${links}</div>`;
     panel.appendChild(block);
-
-    const master = document.getElementById('nycifCommunityHelpMaster');
-    const categoryBox = document.getElementById('nycifCommunityHelpCategories');
-    const linksBox = document.getElementById('nycifCommunityHelpLinks');
+    const master = block.querySelector('#nycifCommunityHelpMaster');
+    const categories = block.querySelector('#nycifCommunityHelpCategories');
+    const locatorLinks = block.querySelector('#nycifCommunityHelpLinks');
     master.addEventListener('change', () => {
-      categoryBox.hidden = !master.checked;
-      linksBox.hidden = !master.checked;
+      categories.hidden = !master.checked;
+      locatorLinks.hidden = !master.checked;
       if (!master.checked) {
         block.querySelectorAll('[data-help-category]').forEach((input) => { input.checked = false; });
-        [...state.enabled].forEach((key) => disableCategory(key));
-        setHelpStatus('');
+        [...state.enabled].forEach(disableCategory);
+        setStatus('');
       } else {
-        setHelpStatus('Choose a category to place verified public resources on the map.');
+        setStatus('Choose a category. Official locator links remain available for categories without a reliable static pin file.');
       }
     });
     block.querySelectorAll('[data-help-category]').forEach((input) => {
-      input.addEventListener('change', () => input.checked ? enableCategory(input.dataset.helpCategory) : disableCategory(input.dataset.helpCategory));
+      input.addEventListener('change', () => (input.checked ? enableCategory(input.dataset.helpCategory) : disableCategory(input.dataset.helpCategory)));
     });
   }
 
@@ -229,8 +217,7 @@
       const response = await fetch(`${DATA_ROOT}/${source}.json?cache=${Date.now()}`, { cache: 'no-store', headers: { Accept: 'application/json' } });
       if (!response.ok) throw new Error(`${source} resources HTTP ${response.status}`);
       const payload = await response.json();
-      const rows = Array.isArray(payload.locations) ? payload.locations : [];
-      state.categoryRows.set(source, rows);
+      state.categoryRows.set(source, Array.isArray(payload.locations) ? payload.locations : []);
     }
     return state.categoryRows.get(source).filter((row) => rowMatchesCategory(row, category));
   }
@@ -242,35 +229,32 @@
     const existing = state.layers.get(category);
     if (existing) { existing.addTo(map); return; }
     state.busy.add(category);
-    let rows = [];
     try {
-      rows = await rowsForCategory(category);
-    } catch (error) {
-      state.busy.delete(category);
-      state.enabled.delete(category);
-      setHelpStatus(`Could not load ${CATEGORY_META[category].label}. Use the official links below.`);
-      if (window.console) console.error('[NYCIF Community Help]', error);
-      return;
-    }
-    const layer = L.layerGroup().addTo(map);
-    state.layers.set(category, layer);
-    let added = 0;
-    let failed = 0;
-    for (const row of rows) {
-      if (!state.enabled.has(category)) break;
-      setHelpStatus(`Loading ${CATEGORY_META[category].label}: ${added + failed + 1} of ${rows.length}…`);
-      try {
-        const point = await geocode(row);
-        if (state.enabled.has(category)) markerFor(row, point, category).addTo(layer);
-        added += 1;
-      } catch (error) {
-        failed += 1;
-        if (window.console) console.warn('[NYCIF Community Help]', row.id, error);
+      const rows = await rowsForCategory(category);
+      const layer = L.layerGroup().addTo(map);
+      state.layers.set(category, layer);
+      let added = 0;
+      let failed = 0;
+      for (const row of rows) {
+        if (!state.enabled.has(category)) break;
+        setStatus(`Loading ${CATEGORY_META[category].label}: ${added + failed + 1} of ${rows.length}…`);
+        try {
+          const point = await geocode(row);
+          if (state.enabled.has(category)) markerFor(row, point, category).addTo(layer);
+          added += 1;
+        } catch (error) {
+          failed += 1;
+          console.warn('[NYCIF Community Help]', row.id, error);
+        }
       }
-      await new Promise((resolve) => setTimeout(resolve, 90));
+      if (state.enabled.has(category)) setStatus(`${CATEGORY_META[category].label}: ${added} public locations loaded${failed ? `; ${failed} need coordinate review` : ''}.`);
+    } catch (error) {
+      state.enabled.delete(category);
+      setStatus(`Could not load ${CATEGORY_META[category].label}. Use the official locator links below.`);
+      console.error('[NYCIF Community Help]', error);
+    } finally {
+      state.busy.delete(category);
     }
-    state.busy.delete(category);
-    if (state.enabled.has(category)) setHelpStatus(`${CATEGORY_META[category].label}: ${added} public locations loaded${failed ? `; ${failed} need coordinate review` : ''}.`);
   }
 
   function disableCategory(category) {
@@ -289,7 +273,7 @@
       state.directoryLinks = Array.isArray(payload.directory_links) ? payload.directory_links : [];
       installControls();
     } catch (error) {
-      if (window.console) console.error('[NYCIF Community Help]', error);
+      console.error('[NYCIF Community Help]', error);
     }
   }
 
