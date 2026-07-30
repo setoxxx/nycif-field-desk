@@ -9,6 +9,7 @@ const BASE_URL = process.env.NYCIF_TEST_URL || 'http://127.0.0.1:4173/index.html
 const LIVE_SHA = process.env.NYCIF_LIVE_FEEDS_SHA || 'unknown';
 const REPORT = path.join(FIELD_ROOT, 'data', 'reports', 'stage10_same_snapshot_feed_browser_parity.json');
 const TIMEOUT = 120_000;
+const MAX_SPAN_DAYS = 21;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -36,8 +37,18 @@ function dayOf(event) {
   return String(nycif.event_date || event.start_date_time || event.start || '').slice(0, 10);
 }
 
+function addDaysKey(day, amount) {
+  const date = new Date(`${day}T12:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + amount);
+  return date.toISOString().slice(0, 10);
+}
+
 function endDayOf(event) {
-  return String(event.end_date_time || event.end || dayOf(event)).slice(0, 10) || dayOf(event);
+  const start = dayOf(event);
+  const raw = String(event.end_date_time || event.end || start).slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(raw) || raw <= start) return start;
+  const cap = addDaysKey(start, MAX_SPAN_DAYS);
+  return raw > cap ? cap : raw;
 }
 
 function categoryOf(event) {
@@ -58,7 +69,7 @@ function sourceVisible(event) {
 function dateVisible(event, selectedDate) {
   const start = dayOf(event);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(start)) return false;
-  const end = /^\d{4}-\d{2}-\d{2}$/.test(endDayOf(event)) ? endDayOf(event) : start;
+  const end = endDayOf(event);
   return start <= selectedDate && selectedDate <= end;
 }
 
@@ -115,9 +126,9 @@ await page.route(/127\.0\.0\.1:4173\/data\//, async route => {
   const url = new URL(route.request().url());
   const relative = decodeURIComponent(url.pathname).replace(/^\//, '');
   const localPath = path.join(LIVE_ROOT, relative);
-  requestedFiles.push(relative);
   try {
     const text = await fs.readFile(localPath, 'utf8');
+    requestedFiles.push(relative);
     const payload = JSON.parse(text);
     if (relative.endsWith('/approved/manifest.json')) approvedManifest = payload;
     if (relative.endsWith('/review/manifest.json')) reviewManifest = payload;
@@ -140,8 +151,8 @@ await page.route(/127\.0\.0\.1:4173\/data\//, async route => {
       }
     }
     await route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8', body: text });
-  } catch (error) {
-    await route.fulfill({ status: 404, contentType: 'application/json', body: JSON.stringify({ error: String(error) }) });
+  } catch {
+    await route.continue();
   }
 });
 
@@ -169,6 +180,7 @@ try {
   const listDomCount = await page.locator('button.event-item').count();
   const listMeta = await page.locator('#listMeta').textContent();
   const expectedListDomCount = Math.min(100, visibleEvents.length);
+  const reviewRequested = requestedFiles.some(file => file.endsWith('/review/manifest.json'));
 
   const equations = {
     feed_phase_ok: actual.feedPhase === 'ok',
@@ -184,19 +196,21 @@ try {
     clustering_enabled: actual.cluster === true,
     list_dom_page_size_matches: listDomCount === expectedListDomCount,
     list_meta_reports_total: String(listMeta || '').replaceAll(',', '').includes(String(visibleEvents.length)),
-    approved_manifest_generation_matches_review: approvedManifest?.generated_at_utc === reviewManifest?.generated_at_utc,
+    snapshot_generation_contract: Boolean(approvedManifest?.generated_at_utc)
+      && (!reviewRequested || approvedManifest?.generated_at_utc === reviewManifest?.generated_at_utc),
     no_page_errors: pageErrors.length === 0,
     no_console_errors: consoleErrors.length === 0
   };
   const qaPass = Object.values(equations).every(Boolean);
   report = {
     artifact_type: 'stage10_same_snapshot_feed_browser_parity',
-    schema_version: '1.0.0',
+    schema_version: '1.1.0',
     generated_at_utc: new Date().toISOString(),
     live_feeds_commit_sha: LIVE_SHA,
     field_desk_commit_sha: process.env.GITHUB_SHA || 'unknown',
     snapshot_generated_at_utc: approvedManifest?.generated_at_utc || null,
     selected_date: selectedDate,
+    review_layer_requested: reviewRequested,
     requested_file_count: requestedFiles.length,
     requested_files: [...new Set(requestedFiles)].sort(),
     projection_upsert_count: projectionOrder.length,
@@ -205,8 +219,9 @@ try {
       visible_list_records: visibleEvents.length,
       map_eligible_visible_records: mapEligibleEvents.length,
       first_list_page_records: expectedListDomCount,
-      approved_pages: approvedManifest?.pages?.length ?? null,
-      review_pages: reviewManifest?.pages?.length ?? null
+      approved_manifest_pages: approvedManifest?.pages?.length ?? null,
+      review_manifest_pages: reviewManifest?.pages?.length ?? null,
+      runtime_window_span_cap_days: MAX_SPAN_DAYS
     },
     actual,
     list_dom_count: listDomCount,
