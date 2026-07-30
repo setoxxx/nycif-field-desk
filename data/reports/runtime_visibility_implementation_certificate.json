@@ -1,0 +1,14 @@
+{
+  "artifact_type": "nycif_runtime_visibility_implementation_certificate",
+  "generated_at_utc": "2026-07-30T15:04:17.762817+00:00",
+  "qa_pass": true,
+  "repairs": {
+    "cluster_mode_represents_all_map_eligible_events_in_scope": true,
+    "clustering_default_enabled": true,
+    "marker_event_accounting_exposed": true,
+    "no_cluster_diagnostic_mode_retains_soft_cap": 600,
+    "same_runtime_list_map_parity_flag_exposed": true
+  },
+  "scope_boundary": "No unrelated design, navigation, launch, category, event significance, or source-ingestion changes.",
+  "systemic_defect": "editorial-priority truncation before spatial grouping hid map-eligible ordinary events above the 600-event soft cap"
+}

@@ -178,6 +178,7 @@
     timings: {},
     errors: [],
     markerObjects: 0,
+    markerEvents: 0,
     peakMarkerObjects: 0,
     indexComplete: false,
     pagesLoaded: { approved: 0, review: 0 },
@@ -273,9 +274,12 @@
 
   const clusterEnabled = (() => {
     try {
-      return new URL(location.href).searchParams.get('clusters') === '1';
+      // Clustering is the production default so every map-eligible event can be
+      // represented without dropping lower-priority neighborhood events. The
+      // explicit ?clusters=0 escape hatch remains available for diagnostics.
+      return new URL(location.href).searchParams.get('clusters') !== '0';
     } catch {
-      return false;
+      return true;
     }
   })();
   const useCluster = clusterEnabled && typeof L.markerClusterGroup === 'function';
@@ -1161,7 +1165,13 @@
     const mapReady = visible.filter(e => markerEligible(e));
     const bounds = expandedBounds();
     const inView = bounds ? mapReady.filter(e => bounds.contains([e.lat, e.lng])) : mapReady;
-    const candidates = (inView.length ? inView : mapReady).slice(0, MARKER_SOFT_CAP);
+    const eligibleInScope = inView.length ? inView : mapReady;
+    // With clustering available, represent every eligible event in scope. The
+    // legacy soft cap is retained only for the explicit no-cluster diagnostic
+    // mode, where rendering thousands of independent DOM markers is unsafe.
+    const candidates = useCluster
+      ? eligibleInScope
+      : eligibleInScope.slice(0, MARKER_SOFT_CAP);
     candidates.forEach(e => {
       e.marker = null;
     });
@@ -1178,6 +1188,7 @@
     }
     else batch.forEach(marker => markers.addLayer(marker));
     state.markerObjects = batch.length;
+    state.markerEvents = candidates.length;
     state.peakMarkerObjects = Math.max(state.peakMarkerObjects, batch.length);
     state.timings.markerUpdateMs = Math.round(performance.now() - t0);
     return batch;
@@ -1368,7 +1379,7 @@
     const mapEligibleCount = visible.filter(e => markerEligible(e)).length;
     const dateLabel = friendlyDateLabel(selectedDateKey());
     let meta = `${visible.length.toLocaleString()} event${visible.length === 1 ? '' : 's'} ${dateLabel === 'today' || dateLabel === 'tomorrow' ? dateLabel : `on ${dateLabel}`}`;
-    if (drawn.length < mapEligibleCount) {
+    if (state.markerEvents < mapEligibleCount) {
       meta += ' · move or zoom the map to see more pins';
     }
     els.listMeta.textContent = meta;
@@ -1400,6 +1411,9 @@
         total: state.events.length,
         filtered: visible.length,
         markers: drawn.length,
+        markerEvents: state.markerEvents,
+        mapEligibleVisible: mapEligibleCount,
+        markerParityComplete: state.markerEvents >= mapEligibleCount,
         peakMarkerObjects: state.peakMarkerObjects,
         indexComplete: state.indexComplete,
         pagesLoaded: state.pagesLoaded,
@@ -1983,6 +1997,10 @@
         mapReady: state.events.filter(e => e.mapReady).length,
         listOnly: state.events.filter(e => !e.mapReady).length,
         markerObjects: state.markerObjects,
+        markerEvents: state.markerEvents,
+        visible: state.events.filter(eventMatches).length,
+        mapEligibleVisible: state.events.filter(e => eventMatches(e) && markerEligible(e)).length,
+        markerParityComplete: state.markerEvents >= state.events.filter(e => eventMatches(e) && markerEligible(e)).length,
         peakMarkerObjects: state.peakMarkerObjects,
         cluster: useCluster,
         indexComplete: state.indexComplete,
