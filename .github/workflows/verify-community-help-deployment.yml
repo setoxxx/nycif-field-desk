@@ -1,0 +1,63 @@
+name: Verify Community Help Deployment
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  verify-live-pages:
+    if: github.event.issue.title == 'VERIFY COMMUNITY HELP DEPLOYMENT'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for and verify published GitHub Pages assets
+        id: verify
+        run: |
+          set -euo pipefail
+          base='https://setoxxx.github.io/nycif-field-desk'
+          for attempt in $(seq 1 30); do
+            index="$(curl --fail --silent --show-error --location --max-time 20 "$base/?verify=$GITHUB_RUN_ID" || true)"
+            script="$(curl --fail --silent --show-error --location --max-time 20 "$base/community-help-v01.js?verify=$GITHUB_RUN_ID" || true)"
+            links="$(curl --fail --silent --show-error --location --max-time 20 "$base/data/community-help/links.json?verify=$GITHUB_RUN_ID" || true)"
+            if grep -q 'community-help-v01.js' <<<"$index" \
+              && grep -q 'nycifCommunityHelpMaster' <<<"$script" \
+              && grep -q 'tax-prep-locator' <<<"$links"; then
+              echo "verified=true" >> "$GITHUB_OUTPUT"
+              echo "Published Pages contains the Community Help shell, controller and official locator data."
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Published Pages did not expose all Community Help assets within the verification window." >&2
+          exit 1
+
+      - name: Report verification result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERIFIED: ${{ steps.verify.outputs.verified }}
+        run: |
+          if [ "$VERIFIED" = 'true' ]; then
+            body='Community Help deployment verification passed: published GitHub Pages serves the updated map shell, Community Help controller and official resource-locator JSON.'
+          else
+            body='Community Help deployment verification failed. The production branch remains intact, but the published Pages assets were not all observable during the verification window.'
+          fi
+          gh issue comment "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --body "$body"
+          gh issue close "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --reason completed
+
+      - name: Remove this one-time deployment verifier
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WORKFLOW_PATH: .github/workflows/verify-community-help-deployment.yml
+        run: |
+          sha="$(gh api "repos/${{ github.repository }}/contents/${WORKFLOW_PATH}?ref=main" --jq .sha 2>/dev/null || true)"
+          if [ -n "$sha" ]; then
+            gh api --method DELETE "repos/${{ github.repository }}/contents/${WORKFLOW_PATH}" \
+              -f message='Remove completed Community Help deployment verifier' \
+              -f sha="$sha" \
+              -f branch='main'
+          fi
