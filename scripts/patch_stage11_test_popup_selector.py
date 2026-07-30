@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Correct the Stage 11 fixture to select Leaflet's visible popup content."""
+"""Correct the Stage 11 popup selector unless the detail-hook fixture superseded it."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -10,6 +10,9 @@ TEST = ROOT / "tests" / "stage11-public-display-fields.mjs"
 
 def main() -> int:
     text = TEST.read_text(encoding="utf-8")
+    if "NYCIF_DISPLAY_AUDIT" in text and "#nycif-display-audit-host .popup-card" in text:
+        print("Stage 11 popup selector superseded by deterministic detail hook")
+        return 0
     candidates = (
         '.leaflet-popup-content[role="dialog"]',
         '.leaflet-popup-content [role="dialog"]',
