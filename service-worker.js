@@ -6,17 +6,24 @@ const APP_SHELL = [
   './fielddesk-v02.css',
   './weekstrip-v06-safe.css',
   './public-map-v01.css',
+  './tip-jar-motion-safety-v01.css',
+  './accessibility-v01.css',
   './public-display-mode-v01.js',
   './public-approved-overlays-capture-v01.js',
   './public-map-defaults-v01.js',
+  './public-feed-policy-v01.js',
   './discovery-patch-v02.js',
   './event-feed-schema-v1.js',
+  './nyc-calendar-runtime-v01.js',
+  './public-release-guard-v01.js',
   './news-desk-editors-picks-v01.js',
   './app-schema-v1-major-all-v01.js',
+  './accessibility-v01.js',
   './public-approved-overlays-v01.js',
   './community-help-v01.js',
   './field-desk-operator-layer-v01.js',
   './admin-whats-new-v01.js',
+  './tip-jar-motion-policy-v01.js',
   './nycif-tip-jar-v01.js',
   './data/community-help/benefits.json',
   './data/community-help/food.json',
@@ -29,7 +36,7 @@ const APP_SHELL = [
   './service-worker.js',
 ];
 
-const NETWORK_FIRST_RE = /\/(?:index\.html|discovery-patch-v02\.js|public-map-defaults-v01\.js|public-display-mode-v01\.js|service-worker\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js|community-help-v01\.js|app-schema-v1-major-all-v01\.js|event-feed-schema-v1\.js|field-desk-operator-layer-v01\.js|news-desk-editors-picks-v01\.js|nycif-tip-jar-v01\.js|data\/community-help\/[^/]+\.json)$/;
+const NETWORK_FIRST_RE = /\/(?:index\.html|discovery-patch-v02\.js|public-map-defaults-v01\.js|public-display-mode-v01\.js|public-feed-policy-v01\.js|public-release-guard-v01\.js|nyc-calendar-runtime-v01\.js|service-worker\.js|public-approved-overlays-v01\.js|public-approved-overlays-capture-v01\.js|community-help-v01\.js|accessibility-v01\.js|app-schema-v1-major-all-v01\.js|event-feed-schema-v1\.js|field-desk-operator-layer-v01\.js|news-desk-editors-picks-v01\.js|tip-jar-motion-policy-v01\.js|nycif-tip-jar-v01\.js|data\/community-help\/[^/]+\.json)$/;
 
 function isNetworkFirst(url) {
   return (url.origin === location.origin && NETWORK_FIRST_RE.test(url.pathname))
