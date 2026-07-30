@@ -1,0 +1,94 @@
+name: Stage 10 Same-Snapshot Feed Browser Parity
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - tests/same-snapshot-feed-browser-parity.mjs
+      - .stage10-parity-trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stage10-same-snapshot-parity
+  cancel-in-progress: true
+
+jobs:
+  browser-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out Field Desk audit branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/stage10-same-snapshot-browser-parity
+          fetch-depth: 0
+      - name: Check out exact live-feeds main snapshot
+        uses: actions/checkout@v4
+        with:
+          repository: setoxxx/nycif-live-feeds
+          ref: main
+          path: _live_feeds
+          fetch-depth: 1
+      - name: Record live-feeds snapshot SHA
+        run: echo "NYCIF_LIVE_FEEDS_SHA=$(git -C _live_feeds rev-parse HEAD)" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Chromium runtime
+        run: |
+          npm install --no-save playwright@1.54.1
+          npx playwright install chromium
+      - name: Start exact Field Desk runtime
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/stage10-server.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/stage10-server.log
+          exit 1
+      - name: Run same-snapshot browser parity audit
+        env:
+          NYCIF_LIVE_FEEDS_ROOT: ${{ github.workspace }}/_live_feeds
+        run: node tests/same-snapshot-feed-browser-parity.mjs
+      - name: Verify Stage 10 certificate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('data/reports/stage10_same_snapshot_feed_browser_parity.json').read_text())
+          assert p['qa_pass'] is True
+          assert p['actual']['feedPhase'] == 'ok'
+          assert p['actual']['feedSource'] == 'primary'
+          assert p['actual']['indexComplete'] is True
+          assert p['actual']['markerParityComplete'] is True
+          assert p['expected']['unique_runtime_records'] == p['actual']['total']
+          assert p['expected']['visible_list_records'] == p['actual']['visible']
+          assert p['expected']['map_eligible_visible_records'] == p['actual']['mapEligibleVisible']
+          assert p['actual']['markerEvents'] == p['actual']['mapEligibleVisible']
+          assert p['launch_authorized'] is False
+          PY
+      - name: Commit Stage 10 evidence
+        run: |
+          git add data/reports/stage10_same_snapshot_feed_browser_parity.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Generate Stage 10 feed-browser parity certificate [skip ci]'
+          git fetch origin feature/stage10-same-snapshot-browser-parity
+          git rebase origin/feature/stage10-same-snapshot-browser-parity
+          git push origin HEAD:feature/stage10-same-snapshot-browser-parity
+      - name: Upload Stage 10 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage10-same-snapshot-feed-browser-parity
+          path: |
+            data/reports/stage10_same_snapshot_feed_browser_parity.json
+            /tmp/stage10-server.log
+          if-no-files-found: warn
