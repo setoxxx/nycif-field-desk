@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Enable canonical-ID difference reporting in the Stage 10 browser audit."""
+"""Enable canonical-ID and mismatched-record reporting in the Stage 10 audit."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -17,8 +17,8 @@ def replace_once(text: str, old: str, new: str, label: str) -> str:
 
 def main() -> int:
     text = TEST.read_text(encoding="utf-8")
-    if "expected_only_visible_ids" in text and "auditParity=1" in text:
-        print("Stage 10 ID differences already enabled")
+    if "expected_only_visible_records" in text and "auditParity=1" in text:
+        print("Stage 10 record differences already enabled")
         return 0
     text = replace_once(
         text,
@@ -39,8 +39,32 @@ def main() -> int:
   const actualOnlyVisibleIds = [...actualVisibleIds].filter(id => !expectedVisibleIds.has(id)).sort();
   const expectedOnlyMapIds = [...expectedMapIds].filter(id => !actualMapIds.has(id)).sort();
   const actualOnlyMapIds = [...actualMapIds].filter(id => !expectedMapIds.has(id)).sort();
+  const auditRecord = id => {
+    const event = ingestedById.get(id) || {};
+    const nycif = event.nycif && typeof event.nycif === 'object' ? event.nycif : {};
+    const source = event.source && typeof event.source === 'object' ? event.source : {};
+    return {
+      id,
+      title: event.title || null,
+      start_date_time: event.start_date_time || null,
+      end_date_time: event.end_date_time || null,
+      category: event.category || null,
+      event_role: event.event_role || null,
+      parent_event_id: event.parent_event_id || null,
+      borough: event.borough || null,
+      latitude: event.latitude ?? event.lat ?? null,
+      longitude: event.longitude ?? event.lng ?? null,
+      source_dataset: source.dataset || null,
+      source_event_id: source.source_event_id || null,
+      coordinate_status: nycif.coordinate_status || null,
+      display_disposition: nycif.display_disposition || null,
+      event_date: nycif.event_date || null,
+      data_layer: nycif.data_layer || null,
+      status: event.status || event.event_status || nycif.lifecycle_status || null
+    };
+  };
   const listDomCount""",
-        "ID set differences",
+        "ID and field differences",
     )
     text = replace_once(
         text,
@@ -51,13 +75,17 @@ def main() -> int:
       expected_only_visible_ids: expectedOnlyVisibleIds,
       actual_only_visible_ids: actualOnlyVisibleIds,
       expected_only_map_ids: expectedOnlyMapIds,
-      actual_only_map_ids: actualOnlyMapIds
+      actual_only_map_ids: actualOnlyMapIds,
+      expected_only_visible_records: expectedOnlyVisibleIds.map(auditRecord),
+      actual_only_visible_records: actualOnlyVisibleIds.map(auditRecord),
+      expected_only_map_records: expectedOnlyMapIds.map(auditRecord),
+      actual_only_map_records: actualOnlyMapIds.map(auditRecord)
     },
     list_dom_count:""",
         "difference report",
     )
     TEST.write_text(text, encoding="utf-8")
-    print("Stage 10 canonical ID difference reporting enabled")
+    print("Stage 10 canonical ID and field difference reporting enabled")
     return 0
 
 
