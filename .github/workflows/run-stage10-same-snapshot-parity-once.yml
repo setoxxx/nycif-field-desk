@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - tests/same-snapshot-feed-browser-parity.mjs
+      - scripts/patch_stage10_parity_diagnostics.py
+      - scripts/patch_stage10_test_id_differences.py
       - .stage10-parity-trigger
 
 permissions:
@@ -39,6 +41,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install opt-in parity diagnostics
+        run: |
+          python scripts/patch_stage10_parity_diagnostics.py
+          python scripts/patch_stage10_test_id_differences.py
+          node --check app-schema-v1-major-all-v01.js
+          node --check tests/same-snapshot-feed-browser-parity.mjs
       - name: Install Chromium runtime
         run: |
           npm install --no-save playwright@1.54.1
@@ -71,11 +79,20 @@ jobs:
           assert p['expected']['visible_list_records'] == p['actual']['visible']
           assert p['expected']['map_eligible_visible_records'] == p['actual']['mapEligibleVisible']
           assert p['actual']['markerEvents'] == p['actual']['mapEligibleVisible']
+          assert not p['differences']['expected_only_visible_ids']
+          assert not p['differences']['actual_only_visible_ids']
+          assert not p['differences']['expected_only_map_ids']
+          assert not p['differences']['actual_only_map_ids']
           assert p['launch_authorized'] is False
           PY
-      - name: Commit Stage 10 evidence
+      - name: Commit Stage 10 implementation and evidence
         run: |
-          git add data/reports/stage10_same_snapshot_feed_browser_parity.json
+          git add \
+            app-schema-v1-major-all-v01.js \
+            tests/same-snapshot-feed-browser-parity.mjs \
+            scripts/patch_stage10_parity_diagnostics.py \
+            scripts/patch_stage10_test_id_differences.py \
+            data/reports/stage10_same_snapshot_feed_browser_parity.json
           if git diff --cached --quiet; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
