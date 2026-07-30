@@ -176,7 +176,6 @@
   function visibleCategoryKeys() {
     const keys = new Set(DATA_CATEGORIES);
     keys.add('faith');
-    state.directoryLinks.forEach((link) => keys.add(link.category));
     return Object.keys(CATEGORY_META).filter((key) => keys.has(key));
   }
 
