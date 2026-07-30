@@ -1,0 +1,28 @@
+name: Community Source Probe
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/probe_community_sources.py'
+      - '.github/workflows/community-source-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe-official-sources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Probe official NYC source catalog and known datasets
+        run: python scripts/probe_community_sources.py
+      - name: Upload source probe
+        uses: actions/upload-artifact@v4
+        with:
+          name: community-source-probe
+          path: artifacts/community-source-probe/
+          if-no-files-found: error
