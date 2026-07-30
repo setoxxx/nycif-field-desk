@@ -363,6 +363,39 @@
     return endDay > cap ? cap : endDay;
   }
 
+  function sourceDisplayLabel(value) {
+    const dataset = String(value || '').trim();
+    const known = {
+      'nyc-citywide-events-calendar-api': 'NYC Citywide Events Calendar',
+      'nyc-parks-bigapps-events': 'NYC Parks',
+      'tvpp-9vvx': 'NYC Permitted Events',
+      'nyc-permitted-events': 'NYC Permitted Events'
+    };
+    if (known[dataset]) return known[dataset];
+    return dataset
+      .replace(/[-_]+/g, ' ')
+      .replace(/\b\w/g, letter => letter.toUpperCase())
+      .trim();
+  }
+
+  function publicCostLabel(schemaEvent, nycif) {
+    const free = schemaEvent.is_free ?? nycif.is_free;
+    if (free === true || norm(free) === 'true' || norm(free) === 'yes' || norm(free) === 'free') {
+      return 'Free';
+    }
+    const raw = schemaEvent.cost ?? schemaEvent.price ?? schemaEvent.admission ?? nycif.cost;
+    return raw == null || String(raw).trim() === '' ? '' : String(raw).trim();
+  }
+
+  function publicVerificationLabel(value) {
+    const key = norm(value);
+    if (!key) return '';
+    if (key === 'verified') return 'Verified';
+    if (key === 'official source') return 'Official source';
+    if (key === 'pending' || key === 'needs review') return 'Pending verification';
+    return String(value).replace(/[_-]+/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
+  }
+
   function toUiEvent(schemaEvent) {
     const nycif = schemaEvent.nycif || {};
     const catKey = CATEGORY_META[schemaEvent.category] ? schemaEvent.category : 'general';
@@ -412,6 +445,11 @@
       isMajor: schemaEvent.significance === 'major' || !!nycif.is_major,
       photoPick: !!nycif.photo_pick,
       verification_status: nycif.verification_status,
+      verificationLabel: publicVerificationLabel(nycif.verification_status),
+      eventTypeLabel: String(nycif.event_type || schemaEvent.event_type || '').trim(),
+      costLabel: publicCostLabel(schemaEvent, nycif),
+      sourceLabel: sourceDisplayLabel(schemaEvent.source?.dataset),
+      officialUrl: SCHEMA.safeExternalUrl(schemaEvent.official_url || schemaEvent.source?.url),
       major_reason: nycif.major_reason,
       major_score: nycif.major_score || 0,
       searchText: norm([
@@ -1034,8 +1072,23 @@
     };
     addRow('Date', formatDateSpan(e));
     addRow('Time', formatTimeRange(e));
+    addRow('Type', e.eventTypeLabel);
     addRow('Borough', e.borough);
     addRow('Location', e.location);
+    addRow('Cost', e.costLabel);
+    addRow('Verification', e.verificationLabel);
+    const addSourceRow = () => {
+      if (!e.sourceLabel) return;
+      const wrap = document.createElement('div');
+      appendText(wrap, 'dt', 'Source');
+      const dd = document.createElement('dd');
+      if (!appendSafeLink(dd, e.officialUrl, e.sourceLabel)) {
+        dd.textContent = e.sourceLabel;
+      }
+      wrap.appendChild(dd);
+      dl.appendChild(wrap);
+    };
+    addSourceRow();
     root.appendChild(dl);
     if (e.mapReady) {
       const actions = document.createElement('div');
@@ -1047,6 +1100,33 @@
       appendText(root, 'div', 'Location being confirmed.', 'popup-pending');
     }
     return root;
+  }
+
+  const displayAuditEnabled = (() => {
+    try {
+      return new URL(location.href).searchParams.get('auditDisplay') === '1';
+    } catch {
+      return false;
+    }
+  })();
+
+  if (displayAuditEnabled) {
+    window.NYCIF_DISPLAY_AUDIT = {
+      renderDetail(id) {
+        const event = state.byId.get(String(id || ''));
+        if (!event) return false;
+        let host = document.getElementById('nycif-display-audit-host');
+        if (!host) {
+          host = document.createElement('section');
+          host.id = 'nycif-display-audit-host';
+          host.setAttribute('aria-label', 'Display audit detail');
+          document.body.appendChild(host);
+        }
+        clearChildren(host);
+        host.appendChild(popupRoot(event));
+        return true;
+      }
+    };
   }
 
   function makeStackMarker(events) {
@@ -1220,6 +1300,12 @@
     if (e.isMajor && !e.medal) {
       appendText(tags, 'span', '⭐ Featured', 'item-tag featured');
     }
+    if (e.verificationLabel === 'Verified' || e.verificationLabel === 'Official source') {
+      appendText(tags, 'span', '✓ Verified', 'item-tag verified');
+    }
+    if (e.costLabel === 'Free') {
+      appendText(tags, 'span', 'Free', 'item-tag free');
+    }
     if (!e.mapReady) {
       appendText(tags, 'span', 'Location being confirmed', 'item-tag pending');
     }
@@ -1230,7 +1316,7 @@
     top.appendChild(tags);
     button.appendChild(top);
     appendText(button, 'strong', e.title);
-    appendText(button, 'span', formatDateSpan(e));
+    appendText(button, 'span', `${formatDateSpan(e)} · ${formatTimeRange(e)}`, 'item-when');
     appendText(button, 'small', [e.borough, e.location].filter(Boolean).join(' • '));
     if (e.mapReady) {
       const actions = document.createElement('span');

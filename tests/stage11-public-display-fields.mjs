@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from 'playwright';
 
-const BASE_URL = process.env.NYCIF_TEST_URL || 'http://127.0.0.1:4173/index.html?resetFilters=1';
+const BASE_URL = process.env.NYCIF_TEST_URL || 'http://127.0.0.1:4173/index.html?resetFilters=1&auditDisplay=1';
 const REPORT = 'data/reports/stage11_public_display_field_audit.json';
 const categories = ['sports', 'fitness', 'parks', 'arts', 'market', 'civic', 'media', 'government', 'education', 'family', 'services', 'environment', 'volunteer', 'jobs', 'housing', 'general', 'tours'];
 const boroughs = ['Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'];
@@ -109,8 +109,9 @@ try {
   const civicText = await civic.innerText();
   equations.list_shows_time = civicText.includes('12:00 PM') && civicText.includes('2:00 PM');
   equations.list_shows_free_and_verified = civicText.includes('Free') && civicText.includes('Verified');
-  await civic.click();
-  const popup = page.locator('.leaflet-popup-content[role="dialog"]');
+  const civicOpened = await page.evaluate(id => window.NYCIF_DISPLAY_AUDIT?.renderDetail(id), `stage11-civic@${today}`);
+  assert(civicOpened === true, 'Stage 11 civic detail audit hook did not open');
+  const popup = page.locator('#nycif-display-audit-host .popup-card');
   await popup.waitFor({ state: 'visible' });
   const popupText = await popup.innerText();
   equations.popup_core_fields = ['Date', 'Time', 'Type', 'Borough', 'Location', 'Cost', 'Verification', 'Source'].every(label => popupText.includes(label));
@@ -139,8 +140,9 @@ try {
 
   await page.locator('#searchInput').fill('Stage 11 sports');
   await page.waitForTimeout(250);
-  await page.locator(`[data-id="stage11-sports@${today}"]`).click();
-  await popup.waitFor({ state: 'visible' });
+  const sportsOpened = await page.evaluate(id => window.NYCIF_DISPLAY_AUDIT?.renderDetail(id), `stage11-sports@${today}`);
+  assert(sportsOpened === true, 'Stage 11 sports detail audit hook did not open');
+  await popup.locator('h2').filter({ hasText: 'Stage 11 sports display event' }).waitFor({ state: 'visible' });
   equations.unsafe_source_url_rejected = await popup.locator('a[href^="javascript:"]').count() === 0
     && (await popup.innerText()).includes('Synthetic Sports Source');
   equations.no_page_errors = pageErrors.length === 0;
