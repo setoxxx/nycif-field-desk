@@ -10,6 +10,7 @@ on:
       - scripts/patch_stage11_test_popup_selector.py
       - scripts/patch_stage11_display_audit_hook.py
       - scripts/patch_stage11_test_detail_hook.py
+      - scripts/patch_stage11_source_label_regex.py
       - tests/stage11-public-display-fields.mjs
       - tests/stage11_real_snapshot_field_inventory.py
       - .stage11-display-trigger
@@ -47,6 +48,7 @@ jobs:
       - name: Install narrowly scoped presentation repair
         run: |
           python scripts/patch_stage11_public_display_fields_v2.py
+          python scripts/patch_stage11_source_label_regex.py
           python scripts/patch_stage11_public_classification_fields.py
           python scripts/patch_stage11_test_popup_selector.py
           python scripts/patch_stage11_display_audit_hook.py
@@ -103,6 +105,7 @@ jobs:
             scripts/patch_stage11_test_popup_selector.py \
             scripts/patch_stage11_display_audit_hook.py \
             scripts/patch_stage11_test_detail_hook.py \
+            scripts/patch_stage11_source_label_regex.py \
             tests/stage11-public-display-fields.mjs \
             tests/stage11_real_snapshot_field_inventory.py \
             data/reports/stage11_public_display_field_audit.json \
