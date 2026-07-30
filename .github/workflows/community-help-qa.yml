@@ -1,0 +1,69 @@
+name: Community Help QA
+
+on:
+  pull_request:
+    paths:
+      - 'community-help-v01.js'
+      - 'data/community-help/**'
+      - 'scripts/validate_community_help.py'
+      - 'index.html'
+      - 'service-worker.js'
+      - '.github/workflows/community-help-qa.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'community-help-v01.js'
+      - 'data/community-help/**'
+      - 'scripts/validate_community_help.py'
+      - 'index.html'
+      - 'service-worker.js'
+      - '.github/workflows/community-help-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-community-help:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate public service directory
+        run: python scripts/validate_community_help.py
+
+      - name: Validate JavaScript syntax
+        run: node --check community-help-v01.js
+
+      - name: Verify public shell and offline wiring
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          index = Path('index.html').read_text(encoding='utf-8')
+          worker = Path('service-worker.js').read_text(encoding='utf-8')
+          required = [
+              'community-help-v01.js',
+              'data/community-help/benefits.json',
+              'data/community-help/food.json',
+              'data/community-help/health.json',
+              'data/community-help/jobs.json',
+              'data/community-help/naloxone.json',
+              'data/community-help/shelter.json',
+              'data/community-help/youth.json',
+              'data/community-help/links.json',
+          ]
+          if 'community-help-v01.js' not in index:
+              raise SystemExit('index.html does not load Community Help')
+          missing = [item for item in required if item not in worker]
+          if missing:
+              raise SystemExit(f'service worker missing Community Help assets: {missing}')
+          print('Community Help public shell and offline wiring verified.')
+          PY

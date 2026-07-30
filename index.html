@@ -18,27 +18,31 @@
   <link rel="stylesheet" href="./fielddesk-v02.css?v=public-map-v10">
   <link rel="stylesheet" href="./weekstrip-v06-safe.css?v=public-map-v10">
   <link rel="stylesheet" href="./public-map-v01.css?v=public-map-v10">
+  <link rel="stylesheet" href="./tip-jar-motion-safety-v01.css?v=public-map-v11">
+  <link rel="stylesheet" href="./accessibility-v01.css?v=public-map-v11">
   <script src="./public-display-mode-v01.js?v=public-map-v10"></script>
 </head>
 <body class="public-map-page">
+  <a class="a11y-skip-link" href="#deskBtn">Skip to the event list</a>
   <main id="app" class="app">
-    <section class="map-shell" aria-label="NYC In Focus public event map">
-      <div id="map" class="map" role="application" aria-label="NYC event map"></div>
+    <section class="map-shell" aria-label="NYC In Focus event and community help map">
+      <p id="mapTextAlternative" class="sr-only">Use the Event List button for an equivalent text list.</p>
+      <div id="map" class="map" role="region" tabindex="0" aria-label="NYC event and community help map" aria-describedby="mapTextAlternative"></div>
 
       <div class="brand-header-row" aria-label="NYC In Focus header">
-        <div class="brand-card" aria-label="NYC In Focus Event Map status">
+        <div class="brand-card" aria-label="NYC In Focus City Map status">
           <div class="brand-mark">NYCIF</div>
           <div>
             <strong>NYC</strong>
-            <span id="brandCount">Loading NYC events…</span>
+            <span id="brandCount" role="status" aria-live="polite">Loading NYC events…</span>
           </div>
         </div>
       </div>
 
-      <div id="viewBanner" class="view-banner" hidden></div>
-      <div id="indexStatus" class="index-status" hidden></div>
+      <div id="viewBanner" class="view-banner" role="status" aria-live="polite" hidden></div>
+      <div id="indexStatus" class="index-status" role="status" aria-live="polite" hidden></div>
 
-      <div id="dateChips" class="date-chips" aria-label="Choose a day"></div>
+      <div id="dateChips" class="date-chips" role="group" aria-label="Choose a day"></div>
 
       <div class="map-controls" aria-label="Map controls">
         <button id="layersBtn" class="pill layers-pill" type="button" aria-expanded="false" aria-controls="layersPanel">
@@ -115,11 +119,11 @@
           <input id="searchInput" type="search" placeholder="Search title, location, borough" autocomplete="off">
         </label>
 
-        <div class="boroughs" id="boroughs"></div>
+        <div class="boroughs" id="boroughs" role="group" aria-label="Filter by borough"></div>
 
         <label class="sort">
           <span>Sort</span>
-          <select id="sortSelect">
+          <select id="sortSelect" aria-label="Sort events">
             <option value="priority">Highlights</option>
             <option value="near">Near me</option>
             <option value="time">Time</option>
@@ -128,13 +132,13 @@
           </select>
         </label>
 
-        <div id="listMeta" class="list-meta">Loading events...</div>
+        <div id="listMeta" class="list-meta" role="status" aria-live="polite">Loading events...</div>
         <div id="eventList" class="event-list"></div>
         <button id="loadMoreBtn" class="load-all" type="button" hidden>Show 100 more</button>
       </aside>
 
-      <div class="public-intro-v01"><strong>NYC In Focus:</strong> Discover public events across the five boroughs — today and the week ahead. Confirm details before you go.</div>
-      <div id="status" class="status">Loading the NYC In Focus event map…</div>
+      <div class="public-intro-v01"><strong>NYC In Focus:</strong> Discover public events and find verified community help across the five boroughs. Confirm details before you go.</div>
+      <div id="status" class="status" role="status" aria-live="polite">Loading the NYC In Focus city map…</div>
       <pre id="debugPanel" class="debug-panel" hidden></pre>
     </section>
   </main>
@@ -143,15 +147,27 @@
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" integrity="sha384-eXVCORTRlv4FUUgS/xmOyr66XBVraen8ATNLMESp92FKXLAMiKkerixTiBvXriZr" crossorigin="anonymous"></script>
   <script src="./public-approved-overlays-capture-v01.js?v=public-map-v10"></script>
   <script src="./public-map-defaults-v01.js?v=public-map-v10"></script>
+  <script src="./public-feed-policy-v01.js?v=public-map-v11"></script>
   <script src="./discovery-patch-v02.js?v=public-map-v10"></script>
   <script src="./event-feed-schema-v1.js?v=public-map-v10"></script>
+  <script src="./nyc-calendar-runtime-v01.js?v=public-map-v11"></script>
+  <script src="./public-release-guard-v01.js?v=public-map-v11"></script>
   <script src="./news-desk-editors-picks-v01.js?v=public-map-v10"></script>
   <script src="./app-schema-v1-major-all-v01.js?v=public-map-v10"></script>
+  <script src="./live-location-tracking-v01.js?v=protected-staging-live-gps-v01"></script>
+  <script src="./live-location-control-handoff-v01.js?v=protected-staging-live-gps-v01"></script>
+  <script src="./accessibility-v01.js?v=public-map-v11"></script>
   <script src="./public-approved-overlays-v01.js?v=public-map-v10"></script>
+  <script src="./community-help-v01.js?v=community-help-v1"></script>
   <script src="./field-desk-operator-layer-v01.js?v=public-map-v10"></script>
   <script src="./admin-whats-new-v01.js?v=public-map-v10"></script>
+  <script src="./tip-jar-motion-policy-v01.js?v=public-map-v11"></script>
   <script src="./nycif-tip-jar-v01.js?v=06"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const policy = window.NYCIF_TIP_JAR_MOTION_POLICY;
+      if (policy && typeof policy.restore === 'function') policy.restore();
+    }, { once: true });
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("./service-worker.js").catch(function () {});
     }
