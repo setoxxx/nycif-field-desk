@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Correct the Stage 11 fixture to select the dialog inside Leaflet's wrapper."""
+"""Correct the Stage 11 fixture to select Leaflet's visible popup content."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -10,14 +10,18 @@ TEST = ROOT / "tests" / "stage11-public-display-fields.mjs"
 
 def main() -> int:
     text = TEST.read_text(encoding="utf-8")
-    old = ".leaflet-popup-content[role=\"dialog\"]"
-    new = ".leaflet-popup-content [role=\"dialog\"]"
-    if new in text:
+    candidates = (
+        '.leaflet-popup-content[role="dialog"]',
+        '.leaflet-popup-content [role="dialog"]',
+    )
+    new = '.leaflet-popup-content'
+    if new in text and all(old not in text for old in candidates):
         print("Stage 11 popup selector already corrected")
         return 0
-    if text.count(old) != 1:
-        raise RuntimeError(f"expected one Stage 11 popup selector, found {text.count(old)}")
-    TEST.write_text(text.replace(old, new, 1), encoding="utf-8")
+    matches = [old for old in candidates if old in text]
+    if len(matches) != 1:
+        raise RuntimeError(f"expected one Stage 11 popup selector variant, found {matches}")
+    TEST.write_text(text.replace(matches[0], new, 1), encoding="utf-8")
     print("Stage 11 popup selector corrected")
     return 0
 
