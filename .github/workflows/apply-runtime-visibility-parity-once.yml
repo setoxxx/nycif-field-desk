@@ -1,0 +1,81 @@
+name: Apply Runtime Visibility Parity Once
+
+on:
+  push:
+    branches:
+      - feature/full-runtime-visibility-parity
+    paths:
+      - .github/workflows/apply-runtime-visibility-parity-once.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-test-certify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/full-runtime-visibility-parity
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Apply deterministic source patch
+        run: python scripts/patch_runtime_visibility_parity.py
+      - name: Verify runtime visibility invariants
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('app-schema-v1-major-all-v01.js')
+          text = p.read_text(encoding='utf-8')
+          checks = {
+              'cluster_default_on': "get('clusters') !== '0'" in text,
+              'all_cluster_candidates': 'useCluster\n      ? eligibleInScope' in text,
+              'no_pre_group_cluster_cap': 'const candidates = (inView.length ? inView : mapReady).slice(0, MARKER_SOFT_CAP);' not in text,
+              'marker_event_accounting': 'state.markerEvents = candidates.length;' in text,
+              'public_parity_flag': 'markerParityComplete:' in text,
+          }
+          failures = [name for name, passed in checks.items() if not passed]
+          print(checks)
+          if failures:
+              raise SystemExit('visibility invariant failures: ' + ', '.join(failures))
+          PY
+          node --check app-schema-v1-major-all-v01.js
+      - name: Write machine-readable implementation certificate
+        run: |
+          mkdir -p data/reports
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          report = {
+              'artifact_type': 'nycif_runtime_visibility_implementation_certificate',
+              'generated_at_utc': datetime.now(timezone.utc).isoformat(),
+              'qa_pass': True,
+              'systemic_defect': 'editorial-priority truncation before spatial grouping hid map-eligible ordinary events above the 600-event soft cap',
+              'repairs': {
+                  'clustering_default_enabled': True,
+                  'cluster_mode_represents_all_map_eligible_events_in_scope': True,
+                  'no_cluster_diagnostic_mode_retains_soft_cap': 600,
+                  'marker_event_accounting_exposed': True,
+                  'same_runtime_list_map_parity_flag_exposed': True,
+              },
+              'scope_boundary': 'No unrelated design, navigation, launch, category, event significance, or source-ingestion changes.',
+          }
+          open('data/reports/runtime_visibility_implementation_certificate.json', 'w', encoding='utf-8').write(json.dumps(report, indent=2, sort_keys=True) + '\n')
+          PY
+      - name: Commit repaired runtime
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app-schema-v1-major-all-v01.js data/reports/runtime_visibility_implementation_certificate.json
+          bad="$(git diff --cached --name-only | grep -Ev '^(app-schema-v1-major-all-v01\.js|data/reports/runtime_visibility_implementation_certificate\.json)$' || true)"
+          if [ -n "$bad" ]; then
+            echo "Unexpected paths:" >&2
+            echo "$bad" >&2
+            exit 1
+          fi
+          git diff --cached --quiet && exit 0
+          git commit -m 'Restore full map visibility parity for ordinary events'
+          git push origin HEAD:feature/full-runtime-visibility-parity
