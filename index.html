@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="NYC In Focus">
-  <title>NYC In Focus · NYC Event Map</title>
+  <title>NYC In Focus · NYC Event & Community Help Map</title>
 
   <link rel="preconnect" href="https://raw.githubusercontent.com">
   <link rel="preconnect" href="https://{s}.tile.openstreetmap.org">
@@ -22,11 +22,11 @@
 </head>
 <body class="public-map-page">
   <main id="app" class="app">
-    <section class="map-shell" aria-label="NYC In Focus public event map">
-      <div id="map" class="map" role="application" aria-label="NYC event map"></div>
+    <section class="map-shell" aria-label="NYC In Focus event and community help map">
+      <div id="map" class="map" role="application" aria-label="NYC event and community help map"></div>
 
       <div class="brand-header-row" aria-label="NYC In Focus header">
-        <div class="brand-card" aria-label="NYC In Focus Event Map status">
+        <div class="brand-card" aria-label="NYC In Focus City Map status">
           <div class="brand-mark">NYCIF</div>
           <div>
             <strong>NYC</strong>
@@ -133,8 +133,8 @@
         <button id="loadMoreBtn" class="load-all" type="button" hidden>Show 100 more</button>
       </aside>
 
-      <div class="public-intro-v01"><strong>NYC In Focus:</strong> Discover public events across the five boroughs — today and the week ahead. Confirm details before you go.</div>
-      <div id="status" class="status">Loading the NYC In Focus event map…</div>
+      <div class="public-intro-v01"><strong>NYC In Focus:</strong> Discover public events and find verified community help across the five boroughs. Confirm details before you go.</div>
+      <div id="status" class="status">Loading the NYC In Focus city map…</div>
       <pre id="debugPanel" class="debug-panel" hidden></pre>
     </section>
   </main>
@@ -148,6 +148,7 @@
   <script src="./news-desk-editors-picks-v01.js?v=public-map-v10"></script>
   <script src="./app-schema-v1-major-all-v01.js?v=public-map-v10"></script>
   <script src="./public-approved-overlays-v01.js?v=public-map-v10"></script>
+  <script src="./community-help-v01.js?v=community-help-v1"></script>
   <script src="./field-desk-operator-layer-v01.js?v=public-map-v10"></script>
   <script src="./admin-whats-new-v01.js?v=public-map-v10"></script>
   <script src="./nycif-tip-jar-v01.js?v=06"></script>
