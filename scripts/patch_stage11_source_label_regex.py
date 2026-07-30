@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Replace the accidental backspace regex with a JavaScript word boundary."""
+"""Replace accidental backspace regexes with JavaScript word boundaries."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -12,13 +12,14 @@ def main() -> int:
     text = APP.read_text(encoding="utf-8")
     good = ".replace(/\\b\\w/g, letter => letter.toUpperCase())"
     bad = ".replace(/\x08\\w/g, letter => letter.toUpperCase())"
-    if good in text:
-        print("Stage 11 source-label regex already corrected")
-        return 0
-    if text.count(bad) != 1:
-        raise RuntimeError(f"expected one malformed Stage 11 source-label regex, found {text.count(bad)}")
-    APP.write_text(text.replace(bad, good, 1), encoding="utf-8")
-    print("Stage 11 source-label title casing corrected")
+    malformed = text.count(bad)
+    if malformed == 0:
+        if good in text:
+            print("Stage 11 title-casing regexes already corrected")
+            return 0
+        raise RuntimeError("Stage 11 title-casing regex was not found")
+    APP.write_text(text.replace(bad, good), encoding="utf-8")
+    print(f"Stage 11 title-casing regexes corrected: {malformed}")
     return 0
 
 
