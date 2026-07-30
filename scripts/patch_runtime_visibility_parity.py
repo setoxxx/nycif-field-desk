@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Apply the approved fail-closed runtime visibility parity repair.
 
-Every replacement must match exactly once. The cluster-default block uses a
-narrowly anchored regex only to tolerate harmless whitespace or quote drift.
+Every replacement must match exactly once. A fully installed repair exits
+successfully so reruns certify the existing source instead of trying to reapply it.
 """
 from __future__ import annotations
 
@@ -27,10 +27,26 @@ def replace_regex(text: str, pattern: str, new: str, label: str) -> str:
     return re.sub(pattern, lambda _match: new, text, count=1, flags=re.MULTILINE)
 
 
+def repair_is_installed(text: str) -> bool:
+    required = (
+        "get('clusters') !== '0'",
+        "markerEvents: 0,",
+        "const eligibleInScope = inView.length ? inView : mapReady;",
+        "const candidates = useCluster",
+        "state.markerEvents = candidates.length;",
+        "markerParityComplete:",
+    )
+    legacy = "const candidates = (inView.length ? inView : mapReady).slice(0, MARKER_SOFT_CAP);"
+    return all(token in text for token in required) and legacy not in text
+
+
 def main() -> int:
     original = APP.read_text(encoding="utf-8")
-    updated = original
+    if repair_is_installed(original):
+        print("runtime visibility parity repair already installed")
+        return 0
 
+    updated = original
     updated = replace_regex(
         updated,
         r"^  const clusterEnabled = \(\(\) => \{\r?\n"
@@ -52,24 +68,14 @@ def main() -> int:
   })();""",
         "cluster default",
     )
-
-    updated = replace_exact(
-        updated,
-        """    markerObjects: 0,
-    peakMarkerObjects: 0,""",
-        """    markerObjects: 0,
+    updated = replace_exact(updated, """    markerObjects: 0,
+    peakMarkerObjects: 0,""", """    markerObjects: 0,
     markerEvents: 0,
-    peakMarkerObjects: 0,""",
-        "marker event state",
-    )
-
-    updated = replace_exact(
-        updated,
-        """    const mapReady = visible.filter(e => markerEligible(e));
+    peakMarkerObjects: 0,""", "marker event state")
+    updated = replace_exact(updated, """    const mapReady = visible.filter(e => markerEligible(e));
     const bounds = expandedBounds();
     const inView = bounds ? mapReady.filter(e => bounds.contains([e.lat, e.lng])) : mapReady;
-    const candidates = (inView.length ? inView : mapReady).slice(0, MARKER_SOFT_CAP);""",
-        """    const mapReady = visible.filter(e => markerEligible(e));
+    const candidates = (inView.length ? inView : mapReady).slice(0, MARKER_SOFT_CAP);""", """    const mapReady = visible.filter(e => markerEligible(e));
     const bounds = expandedBounds();
     const inView = bounds ? mapReady.filter(e => bounds.contains([e.lat, e.lng])) : mapReady;
     const eligibleInScope = inView.length ? inView : mapReady;
@@ -78,58 +84,32 @@ def main() -> int:
     // mode, where rendering thousands of independent DOM markers is unsafe.
     const candidates = useCluster
       ? eligibleInScope
-      : eligibleInScope.slice(0, MARKER_SOFT_CAP);""",
-        "marker candidate allocation",
-    )
-
-    updated = replace_exact(
-        updated,
-        """    state.markerObjects = batch.length;
-    state.peakMarkerObjects = Math.max(state.peakMarkerObjects, batch.length);""",
-        """    state.markerObjects = batch.length;
+      : eligibleInScope.slice(0, MARKER_SOFT_CAP);""", "marker candidate allocation")
+    updated = replace_exact(updated, """    state.markerObjects = batch.length;
+    state.peakMarkerObjects = Math.max(state.peakMarkerObjects, batch.length);""", """    state.markerObjects = batch.length;
     state.markerEvents = candidates.length;
-    state.peakMarkerObjects = Math.max(state.peakMarkerObjects, batch.length);""",
-        "marker event accounting",
-    )
-
-    updated = replace_exact(
-        updated,
-        """    if (drawn.length < mapEligibleCount) {
+    state.peakMarkerObjects = Math.max(state.peakMarkerObjects, batch.length);""", "marker event accounting")
+    updated = replace_exact(updated, """    if (drawn.length < mapEligibleCount) {
       meta += ' · move or zoom the map to see more pins';
-    }""",
-        """    if (state.markerEvents < mapEligibleCount) {
+    }""", """    if (state.markerEvents < mapEligibleCount) {
       meta += ' · move or zoom the map to see more pins';
-    }""",
-        "list metadata parity message",
-    )
-
-    updated = replace_exact(
-        updated,
-        """        markers: drawn.length,
-        peakMarkerObjects: state.peakMarkerObjects,""",
-        """        markers: drawn.length,
+    }""", "list metadata parity message")
+    updated = replace_exact(updated, """        markers: drawn.length,
+        peakMarkerObjects: state.peakMarkerObjects,""", """        markers: drawn.length,
         markerEvents: state.markerEvents,
         mapEligibleVisible: mapEligibleCount,
         markerParityComplete: state.markerEvents >= mapEligibleCount,
-        peakMarkerObjects: state.peakMarkerObjects,""",
-        "debug parity fields",
-    )
-
-    updated = replace_exact(
-        updated,
-        """        markerObjects: state.markerObjects,
-        peakMarkerObjects: state.peakMarkerObjects,""",
-        """        markerObjects: state.markerObjects,
+        peakMarkerObjects: state.peakMarkerObjects,""", "debug parity fields")
+    updated = replace_exact(updated, """        markerObjects: state.markerObjects,
+        peakMarkerObjects: state.peakMarkerObjects,""", """        markerObjects: state.markerObjects,
         markerEvents: state.markerEvents,
         visible: state.events.filter(eventMatches).length,
         mapEligibleVisible: state.events.filter(e => eventMatches(e) && markerEligible(e)).length,
         markerParityComplete: state.markerEvents >= state.events.filter(e => eventMatches(e) && markerEligible(e)).length,
-        peakMarkerObjects: state.peakMarkerObjects,""",
-        "public viewer parity fields",
-    )
+        peakMarkerObjects: state.peakMarkerObjects,""", "public viewer parity fields")
 
-    if updated == original:
-        raise SystemExit("runtime visibility patch produced no changes")
+    if not repair_is_installed(updated):
+        raise SystemExit("runtime visibility repair did not satisfy installed invariants")
     APP.write_text(updated, encoding="utf-8")
     print("runtime visibility parity patch applied")
     return 0
