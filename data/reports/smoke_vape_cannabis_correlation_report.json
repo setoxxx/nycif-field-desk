@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1931,
-  "usable_complaints": 1931,
-  "source_dispensaries": 249,
+  "source_complaints": 1952,
+  "usable_complaints": 1952,
+  "source_dispensaries": 254,
   "source_retailers": 4882,
-  "correlation_locations_before_dedupe": 5131,
-  "correlation_locations": 3891,
+  "correlation_locations_before_dedupe": 5136,
+  "correlation_locations": 3896,
   "semantic_duplicate_locations_collapsed": 1240,
-  "output_locations": 173,
+  "output_locations": 175,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3718,
+  "low_signal_excluded": 3721,
   "radius_feet": [
     100,
     250,
@@ -28,19 +28,19 @@
   "min_signal_score": 3,
   "location_kind_counts": {
     "legal_cannabis_dispensary": 31,
-    "licensed_smoke_vape_retailer": 142
+    "licensed_smoke_vape_retailer": 144
   },
   "borough_counts": {
-    "Manhattan": 52,
+    "Manhattan": 51,
     "Brooklyn": 45,
-    "Queens": 53,
-    "Bronx": 18,
-    "Staten Island": 5
+    "Queens": 55,
+    "Staten Island": 6,
+    "Bronx": 18
   },
   "signal_tier_counts": {
     "very_high": 4,
-    "high": 21,
-    "moderate": 148
+    "high": 22,
+    "moderate": 149
   },
   "top_locations_sample": [
     {
@@ -128,6 +128,18 @@
       "last_complaint_date": "2026-07-22"
     },
     {
+      "title": "SAMMY GOURMET DELI 2 INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "16903 JAMAICA AVE, JAMAICA, 11432",
+      "borough": "Queens",
+      "source_record_count": 1,
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-07-30"
+    },
+    {
       "title": "SUNAC NATURAL",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "600 WEST 42 STREET, NEW YORK, 10036",
@@ -174,6 +186,18 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-21"
+    },
+    {
+      "title": "O & A HASSAN CORP.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1810 FOREST AVE, STATEN ISLAND, 10303",
+      "borough": "Staten Island",
+      "source_record_count": 2,
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-07-30"
     },
     {
       "title": "OC DISPENSARY",
@@ -296,18 +320,6 @@
       "last_complaint_date": "2026-07-30"
     },
     {
-      "title": "SAMMY GOURMET DELI 2 INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "16903 JAMAICA AVE, JAMAICA, 11432",
-      "borough": "Queens",
-      "source_record_count": 1,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-26"
-    },
-    {
       "title": "TOP 1 DELI GRILL INC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "9707 57TH AVE, CORONA, 11368",
@@ -330,20 +342,8 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-19"
-    },
-    {
-      "title": "ZARA SMOKE SHOP INC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "580 8 AVENUE, NEW YORK, 10018",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-21"
     }
   ],
-  "generated_at": "2026-07-31T12:22:30.817Z",
+  "generated_at": "2026-08-01T11:38:08.747Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }

@@ -1495,6 +1495,46 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
+    "lat": 40.75753,
+    "lng": -73.97676,
+    "id": "legal-dispensary-OCM-RETL-24-000242",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "BLISSBAR LLC",
+    "address": "MATTHEW HENNESSY 12 E 49TH ST, NEW YORK, 10017 1012",
+    "borough": "Manhattan",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-RETL-24-000242",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "844470866",
+      "legal_name": "BLISSBAR LLC",
+      "ocm_license_number": "OCM-RETL-24-000242",
+      "physical_county": "NEW YORK",
+      "physical_address": "MATTHEW HENNESSY 12 E 49TH ST",
+      "physical_city": "NEW YORK",
+      "physical_state": "NY",
+      "physical_zip": "10017 1012",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.97676,
+          40.75753
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "749",
+      ":@computed_region_wbg7_3whc": "740",
+      ":@computed_region_kjdx_g34t": "2095"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": []
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
     "lat": 40.72079,
     "lng": -73.99546,
     "id": "legal-dispensary-OCM-RETL-24-000104",
@@ -1688,6 +1728,47 @@
       ":@computed_region_yamh_8v7k": "894",
       ":@computed_region_wbg7_3whc": "821",
       ":@computed_region_kjdx_g34t": "2090"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": []
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
+    "lat": 40.74927,
+    "lng": -73.95221,
+    "id": "legal-dispensary-OCM-CAURD-24-000060",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "NYCBUD",
+    "address": "GIANCARLO PINTO 4445 VERNON BLVD, ASTORIA, 11101 7005",
+    "borough": "Queens",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-24-000060",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "920360461",
+      "legal_name": "BUDBIZ LLC",
+      "dba_name": "NYCBUD",
+      "ocm_license_number": "OCM-CAURD-24-000060",
+      "physical_county": "QUEENS",
+      "physical_address": "GIANCARLO PINTO 4445 VERNON BLVD",
+      "physical_city": "ASTORIA",
+      "physical_state": "NY",
+      "physical_zip": "11101 7005",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.95221,
+          40.74927
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "196",
+      ":@computed_region_wbg7_3whc": "873",
+      ":@computed_region_kjdx_g34t": "2137"
     },
     "source_record_count": 1,
     "duplicate_source_ids": []
@@ -6334,7 +6415,7 @@
     "layer": "legal_cannabis_dispensaries",
     "category": "regulated_cannabis_location",
     "title": "NIRVANA SPRINGS, LLC",
-    "address": "ALHASSAN SHAIF 17936 HILLSIDE AVE, JAMAICA, 11432 4685",
+    "address": "NIRVANA SPRINGS 17936 HILLSIDE AVE GROUND FL, JAMAICA, 11432 4685",
     "borough": "Queens",
     "license_type": "Registered adult-use cannabis retail dealer",
     "license_status": "Registered",
@@ -6347,7 +6428,7 @@
       "legal_name": "NIRVANA SPRINGS, LLC",
       "ocm_license_number": "OCM-RETL-26-000507",
       "physical_county": "QUEENS",
-      "physical_address": "ALHASSAN SHAIF 17936 HILLSIDE AVE",
+      "physical_address": "NIRVANA SPRINGS 17936 HILLSIDE AVE GROUND FL",
       "physical_city": "JAMAICA",
       "physical_state": "NY",
       "physical_zip": "11432 4685",
@@ -7818,6 +7899,47 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
+    "lat": 40.67393,
+    "lng": -73.96303,
+    "id": "legal-dispensary-OCM-CAURD-26-000329",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "HOLD UP ROLL UP BROOKLYN",
+    "address": "SEAN S GEORGE 765 WASHINGTON AVE, BROOKLYN, 11238 4504",
+    "borough": "Brooklyn",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-26-000329",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "862840883",
+      "legal_name": "SEAN OF ALL TRADES, LLC",
+      "dba_name": "HOLD UP ROLL UP BROOKLYN",
+      "ocm_license_number": "OCM-CAURD-26-000329",
+      "physical_county": "KINGS",
+      "physical_address": "SEAN S GEORGE 765 WASHINGTON AVE",
+      "physical_city": "BROOKLYN",
+      "physical_state": "NY",
+      "physical_zip": "11238 4504",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.96303,
+          40.67393
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "894",
+      ":@computed_region_wbg7_3whc": "821",
+      ":@computed_region_kjdx_g34t": "2090"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": []
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
     "lat": 40.59081,
     "lng": -73.80189,
     "id": "legal-dispensary-OCM-RETL-24-000120",
@@ -8577,6 +8699,46 @@
       ":@computed_region_yamh_8v7k": "894",
       ":@computed_region_wbg7_3whc": "903",
       ":@computed_region_kjdx_g34t": "2090"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": []
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
+    "lat": 40.78306,
+    "lng": -73.98065,
+    "id": "legal-dispensary-OCM-CAURD-26-000359",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "SWAN LAKE EQUITY LLC",
+    "address": "2195 BROADWAY, NEW YORK, 10024 6611",
+    "borough": "Manhattan",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-26-000359",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "883996389",
+      "legal_name": "SWAN LAKE EQUITY LLC",
+      "ocm_license_number": "OCM-CAURD-26-000359",
+      "physical_county": "NEW YORK",
+      "physical_address": "2195 BROADWAY",
+      "physical_city": "NEW YORK",
+      "physical_state": "NY",
+      "physical_zip": "10024 6611",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.98065,
+          40.78306
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "749",
+      ":@computed_region_wbg7_3whc": "751",
+      ":@computed_region_kjdx_g34t": "2095"
     },
     "source_record_count": 1,
     "duplicate_source_ids": []
@@ -9628,6 +9790,46 @@
       ":@computed_region_yamh_8v7k": "749",
       ":@computed_region_wbg7_3whc": "735",
       ":@computed_region_kjdx_g34t": "2095"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": []
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
+    "lat": 40.72566,
+    "lng": -73.9459,
+    "id": "legal-dispensary-OCM-CAURD-25-000284",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "WASHINGTON PLACE DISPENSARY LLC",
+    "address": "GREGORY VAN ROTEN 2 JEWEL ST, BROOKLYN, 11222 3541",
+    "borough": "Brooklyn",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-25-000284",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "920347138",
+      "legal_name": "WASHINGTON PLACE DISPENSARY LLC",
+      "ocm_license_number": "OCM-CAURD-25-000284",
+      "physical_county": "KINGS",
+      "physical_address": "GREGORY VAN ROTEN 2 JEWEL ST",
+      "physical_city": "BROOKLYN",
+      "physical_state": "NY",
+      "physical_zip": "11222 3541",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.9459,
+          40.72566
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "894",
+      ":@computed_region_wbg7_3whc": "901",
+      ":@computed_region_kjdx_g34t": "2090"
     },
     "source_record_count": 1,
     "duplicate_source_ids": []
