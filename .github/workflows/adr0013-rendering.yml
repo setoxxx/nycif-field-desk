@@ -2,6 +2,13 @@ name: ADR-0013 Approximate Rendering
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/adr0013-rendering.yml'
+      - 'app-schema-v1-major-all-v01.js'
+      - 'adr0013-approximate-markers.css'
+      - 'tests/test-adr0013-approximate-markers.mjs'
 
 permissions:
   contents: read
@@ -12,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: JavaScript syntax
         run: node --check app-schema-v1-major-all-v01.js
       - name: Verify ADR-0013 rendering contract
