@@ -1,0 +1,30 @@
+name: ADR-0013 Approximate Rendering
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/adr0013-rendering.yml'
+      - 'scripts/apply_adr0013_frontend_patch.sh'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/adr-0013-approximate-markers
+          fetch-depth: 0
+      - name: Apply runtime patch
+        run: |
+          bash scripts/apply_adr0013_frontend_patch.sh
+          node --check app-schema-v1-major-all-v01.js
+          node tests/test-adr0013-approximate-markers.mjs
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat(adr-0013): render approximate event layers"
+          git push origin HEAD:feat/adr-0013-approximate-markers
