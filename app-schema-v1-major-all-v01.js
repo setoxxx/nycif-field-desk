@@ -51,7 +51,8 @@
     approvedManifest: FEED_HOST + `/data/${FEED_ROOT}/approved/manifest.json`,
     approvedPage: cursor => pageUrl('approved', cursor),
     reviewManifest: FEED_HOST + `/data/${FEED_ROOT}/review/manifest.json`,
-    reviewPage: cursor => pageUrl('review', cursor)
+    reviewPage: cursor => pageUrl('review', cursor),
+    approximate: FEED_HOST + `/data/${FEED_ROOT}/approximate/approximate-stacks.json`
   };
   // News Desk operator lanes (money shots + viral magnets), same feed ref.
   const NEWS_DESK_DATA = {
@@ -287,6 +288,52 @@
     ? L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 55, spiderfyOnMaxZoom: true, disableClusteringAtZoom: 16 })
     : L.layerGroup();
   markers.addTo(map);
+
+  // ADR-0013 approximate sources are intentionally separate from exact pins.
+  // Leaflet panes preserve the same z-order contract as separate MapLibre sources:
+  // exact pins remain in markerPane (z-index 600), above all approximation layers.
+  const APPROXIMATE_CLUSTERED_SOURCE = 'approximate-clustered-events';
+  const APPROXIMATE_FACILITY_SOURCE = 'approximate-facility-events';
+  const approximatePanes = [
+    ['approximateMunicipalityPane', 420],
+    ['approximateParkPane', 430],
+    ['approximateFacilityPane', 440]
+  ];
+  approximatePanes.forEach(([name, zIndex]) => {
+    const pane = map.getPane(name) || map.createPane(name);
+    pane.style.zIndex = String(zIndex);
+  });
+  const approximateMunicipalityMarkers = useCluster
+    ? L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 65,
+      spiderfyOnMaxZoom: true,
+      disableClusteringAtZoom: 15,
+      zoomToBoundsOnClick: false,
+      iconCreateFunction: cluster => approximateClusterIcon(cluster, 'municipality')
+    })
+    : L.layerGroup();
+  const approximateParkMarkers = useCluster
+    ? L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 55,
+      spiderfyOnMaxZoom: true,
+      disableClusteringAtZoom: 16,
+      zoomToBoundsOnClick: false,
+      iconCreateFunction: cluster => approximateClusterIcon(cluster, 'park')
+    })
+    : L.layerGroup();
+  const approximateFacilityMarkers = L.layerGroup();
+  approximateMunicipalityMarkers.options.nycifSourceId = APPROXIMATE_CLUSTERED_SOURCE;
+  approximateParkMarkers.options.nycifSourceId = APPROXIMATE_CLUSTERED_SOURCE;
+  approximateFacilityMarkers.options.nycifSourceId = APPROXIMATE_FACILITY_SOURCE;
+  approximateMunicipalityMarkers.addTo(map);
+  approximateParkMarkers.addTo(map);
+  approximateFacilityMarkers.addTo(map);
+  let approximateFeatures = [];
+  let approximateLoadState = 'idle';
+  let approximateVisibleCount = 0;
+
   let userMarker = null;
   let userAccuracy = null;
   let searchTimer = null;
@@ -697,6 +744,142 @@
       && medalMatch(e)
       && (state.borough === 'all' || e.borough === state.borough)
       && (!state.search || e.searchText.includes(state.search));
+  }
+
+
+  function approximateClusterIcon(cluster, kind) {
+    const count = cluster.getChildCount();
+    const className = kind === 'park'
+      ? 'approximate-cluster approximate-cluster--park'
+      : 'approximate-cluster approximate-cluster--municipality';
+    return L.divIcon({
+      className: 'approximate-cluster-shell',
+      html: `<span class="${className}" aria-label="${count} approximate events">${count}</span>`,
+      iconSize: [42, 42],
+      iconAnchor: [21, 21]
+    });
+  }
+
+  function approximatePopup(feature, eventCount) {
+    const props = feature.properties || {};
+    const root = document.createElement('article');
+    root.className = 'popup-card popup-card--approximate';
+    appendText(root, 'p', 'Approximate location', 'approximate-disclaimer');
+    appendText(root, 'h2', eventCount > 1 ? `${eventCount.toLocaleString()} events` : (props.title || 'Event'));
+    appendText(root, 'p', props.anchor_name || props.borough || 'NYC area', 'approximate-anchor-name');
+    if (eventCount === 1 && props.original_location) {
+      appendText(root, 'p', `Listed location: ${props.original_location}`, 'approximate-original-location');
+    }
+    appendText(
+      root,
+      'p',
+      props.approximation_class === 'park_level_anchor'
+        ? 'The marker represents the named park, not an exact entrance or facility.'
+        : 'The source identifies the borough but does not provide an exact event location.',
+      'approximate-explanation'
+    );
+    const link = document.createElement('a');
+    link.href = props.list_view_href || '#eventList';
+    link.className = 'approximate-list-link';
+    link.textContent = 'Open event list';
+    link.addEventListener('click', () => setDesk(true));
+    root.appendChild(link);
+    return root;
+  }
+
+  function bindApproximateClusterPopup(group) {
+    if (!group || typeof group.on !== 'function') return;
+    group.on('clusterclick', event => {
+      const children = event.layer.getAllChildMarkers();
+      const feature = children[0]?.__nycifApproximateFeature || { properties: {} };
+      L.popup({ className: 'nycif-event-popup nycif-approximate-popup', maxWidth: 340 })
+        .setLatLng(event.layer.getLatLng())
+        .setContent(approximatePopup(feature, children.length))
+        .openOn(map);
+    });
+  }
+  bindApproximateClusterPopup(approximateMunicipalityMarkers);
+  bindApproximateClusterPopup(approximateParkMarkers);
+
+  function approximateFeatureMatches(feature) {
+    const props = feature.properties || {};
+    if (props.coordinate_status !== 'approximate') return false;
+    if (props.event_date && props.event_date !== selectedDateKey()) return false;
+    if (state.borough !== 'all' && props.borough !== state.borough) return false;
+    if (props.category && state.categories[props.category] === false) return false;
+    if (state.search) {
+      const haystack = norm([props.title, props.original_location, props.anchor_name, props.borough].filter(Boolean).join(' '));
+      if (!haystack.includes(state.search)) return false;
+    }
+    return true;
+  }
+
+  function approximateMarker(feature) {
+    const coordinates = feature.geometry?.coordinates;
+    if (!Array.isArray(coordinates) || coordinates.length < 2) return null;
+    const lng = Number(coordinates[0]);
+    const lat = Number(coordinates[1]);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    const props = feature.properties || {};
+    const park = props.approximation_class === 'park_level_anchor';
+    const marker = L.circleMarker([lat, lng], {
+      pane: park ? 'approximateParkPane' : 'approximateMunicipalityPane',
+      radius: park ? 9 : 10,
+      color: park ? '#c65f11' : '#1967c9',
+      fillColor: park ? '#f28a2e' : '#4b9cff',
+      fillOpacity: 0.52,
+      opacity: 0.82,
+      weight: 2
+    });
+    marker.__nycifApproximateFeature = feature;
+    marker.bindPopup(approximatePopup(feature, 1), {
+      className: 'nycif-event-popup nycif-approximate-popup',
+      maxWidth: 340
+    });
+    return marker;
+  }
+
+  function renderApproximateMarkers() {
+    approximateMunicipalityMarkers.clearLayers();
+    approximateParkMarkers.clearLayers();
+    approximateFacilityMarkers.clearLayers();
+    approximateVisibleCount = 0;
+    for (const feature of approximateFeatures) {
+      if (!approximateFeatureMatches(feature)) continue;
+      const marker = approximateMarker(feature);
+      if (!marker) continue;
+      const props = feature.properties || {};
+      if (props.source_group === APPROXIMATE_FACILITY_SOURCE) {
+        marker.options.pane = 'approximateFacilityPane';
+        approximateFacilityMarkers.addLayer(marker);
+      } else if (props.approximation_class === 'park_level_anchor') {
+        approximateParkMarkers.addLayer(marker);
+      } else {
+        approximateMunicipalityMarkers.addLayer(marker);
+      }
+      approximateVisibleCount += 1;
+    }
+  }
+
+  async function loadApproximateMarkers() {
+    approximateLoadState = 'loading';
+    try {
+      const payload = await fetchJson(FEEDS.approximate, 'approximate-markers');
+      approximateFeatures = Array.isArray(payload?.features)
+        ? payload.features.filter(feature => feature?.type === 'Feature'
+          && feature?.geometry?.type === 'Point'
+          && feature?.properties?.coordinate_status === 'approximate'
+          && feature?.properties?.source_group !== undefined)
+        : [];
+      approximateLoadState = 'ok';
+      renderApproximateMarkers();
+      console.info(`[NYCIF] ADR-0013 approximate features loaded: ${approximateFeatures.length}`);
+    } catch (err) {
+      approximateFeatures = [];
+      approximateLoadState = 'error';
+      state.errors.push(String(err.message || err));
+      console.error('[NYCIF] approximate marker feed failed (fail-soft):', err);
+    }
   }
 
   function milesBetween(a, b) {
@@ -1461,6 +1644,7 @@
     updateCategoryAvailability();
     const visible = state.events.filter(eventMatches).sort(sortEvents);
     const drawn = renderMarkers(visible);
+    renderApproximateMarkers();
     const shown = Math.min(state.listShown, visible.length);
     const mapEligibleCount = visible.filter(e => markerEligible(e)).length;
     const dateLabel = friendlyDateLabel(selectedDateKey());
@@ -2070,6 +2254,7 @@
     buildBoroughs();
     buildDateChips();
     await bootFeeds();
+    await loadApproximateMarkers();
     // News Desk + Editor's Picks signals load after the core feed (non-blocking).
     loadNewsDeskSignals();
     const parityAuditEnabled = (() => {
@@ -2089,6 +2274,11 @@
         operatorDesk: isOperatorDesk(),
         mapReady: state.events.filter(e => e.mapReady).length,
         listOnly: state.events.filter(e => !e.mapReady).length,
+        approximateTotal: approximateFeatures.length,
+        approximateVisible: approximateVisibleCount,
+        approximateLoadState,
+        approximateClusteredSource: APPROXIMATE_CLUSTERED_SOURCE,
+        approximateFacilitySource: APPROXIMATE_FACILITY_SOURCE,
         markerObjects: state.markerObjects,
         markerEvents: state.markerEvents,
         visible: state.events.filter(eventMatches).length,
