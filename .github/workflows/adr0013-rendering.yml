@@ -1,30 +1,29 @@
 name: ADR-0013 Approximate Rendering
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - '.github/workflows/adr0013-rendering.yml'
-      - 'scripts/apply_adr0013_frontend_patch.sh'
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  apply:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: feat/adr-0013-approximate-markers
-          fetch-depth: 0
-      - name: Apply runtime patch
+          ref: ${{ github.ref_name }}
+      - name: JavaScript syntax
+        run: node --check app-schema-v1-major-all-v01.js
+      - name: Verify ADR-0013 rendering contract
+        run: node tests/test-adr0013-approximate-markers.mjs
+      - name: Verify exact pins remain above approximate panes
         run: |
-          bash scripts/apply_adr0013_frontend_patch.sh
-          node --check app-schema-v1-major-all-v01.js
-          node tests/test-adr0013-approximate-markers.mjs
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "feat(adr-0013): render approximate event layers"
-          git push origin HEAD:feat/adr-0013-approximate-markers
+          node - <<'JS'
+          const fs=require('fs');
+          const app=fs.readFileSync('app-schema-v1-major-all-v01.js','utf8');
+          if (!app.includes("['approximateMunicipalityPane', 420]")) throw new Error('municipality pane');
+          if (!app.includes("['approximateParkPane', 430]")) throw new Error('park pane');
+          if (!app.includes("['approximateFacilityPane', 440]")) throw new Error('facility pane');
+          if (!app.includes('markerPane (z-index 600)')) throw new Error('exact z-order contract');
+          JS
