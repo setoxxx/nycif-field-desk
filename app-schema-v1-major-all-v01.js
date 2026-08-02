@@ -779,7 +779,7 @@
       'approximate-explanation'
     );
     const link = document.createElement('a');
-    link.href = props.list_view_href || '#event-list';
+    link.href = props.list_view_href || '#eventList';
     link.className = 'approximate-list-link';
     link.textContent = 'Open event list';
     link.addEventListener('click', () => setDesk(true));
