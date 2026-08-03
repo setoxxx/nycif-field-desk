@@ -181,9 +181,9 @@
     const dep = state.deployment || {};
     const gates = state.qa_gates || {};
     return `
-      <div class="stat"><div class="label">Field Desk map</div><div class="value"><a href="${esc(dep.field_desk_map)}" target="_blank" rel="noopener noreferrer">Open</a></div></div>
-      <div class="stat"><div class="label">God View admin</div><div class="value"><a href="${esc(dep.field_desk_admin)}" target="_blank" rel="noopener noreferrer">Open</a></div></div>
-      <div class="stat"><div class="label">WordPress /map/</div><div class="value"><a href="${esc(dep.wordpress_map)}" target="_blank" rel="noopener noreferrer">Open</a></div></div>
+      <div class="stat"><div class="label">Canonical public map (National MapLibre)</div><div class="value"><a href="${esc(dep.wordpress_map)}" target="_blank" rel="noopener noreferrer">Open /map/</a></div></div>
+      <div class="stat"><div class="label">Operator hub (Field Desk God View)</div><div class="value"><a href="${esc(dep.field_desk_admin)}" target="_blank" rel="noopener noreferrer">Open /admin/</a></div></div>
+      <div class="stat"><div class="label">Field Desk map (legacy Leaflet, operator only)</div><div class="value"><a href="${esc(dep.field_desk_map)}" target="_blank" rel="noopener noreferrer">Open</a></div></div>
       <div class="stat"><div class="label">Backend gate</div><div class="value">${gates.backend_reliability_gate?.qa_pass ? "PASS" : "FAIL"}</div></div>
       <div class="stat"><div class="label">Discovery QA</div><div class="value">${gates.discovery_taxonomy?.qa_pass ? "PASS" : "FAIL"}</div></div>
       <div class="stat"><div class="label">GPS audit</div><div class="value">${gates.public_map_gps_audit?.qa_pass ? "PASS" : gates.public_map_gps_audit?.artifact ? "CHECK" : "N/A"}</div></div>
@@ -242,9 +242,9 @@
     if (bookmarks) {
       const dep = state.deployment || {};
       bookmarks.innerHTML = `
-        <a href="${esc(dep.field_desk_map)}" target="_blank" rel="noopener noreferrer">Public map</a>
+        <a href="${esc(dep.wordpress_map)}" target="_blank" rel="noopener noreferrer">Public map (National MapLibre)</a>
         <a href="${esc(dep.field_desk_admin)}" target="_blank" rel="noopener noreferrer">God View admin</a>
-        <a href="${esc(dep.wordpress_map)}" target="_blank" rel="noopener noreferrer">WordPress map</a>
+        <a href="${esc(dep.field_desk_map)}" target="_blank" rel="noopener noreferrer">Field Desk map (operator/legacy)</a>
         <a href="./calendar.html">Assignment Desk Calendar</a>
       `;
     }
@@ -252,7 +252,7 @@
     const actions = document.getElementById("project-actions");
     if (actions) {
       actions.innerHTML = `
-        <a class="primary-action" href="${esc(state.deployment?.field_desk_map || "#")}" target="_blank" rel="noopener noreferrer">Open live map</a>
+        <a class="primary-action" href="${esc(state.deployment?.wordpress_map || "#")}" target="_blank" rel="noopener noreferrer">Open live map</a>
         <a href="#live-pipeline-section">Live pipeline</a>
         <a href="#discovery-god-view-section">Discovery queues</a>
       `;
