@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2004,
-  "usable_complaints": 2004,
+  "source_complaints": 2026,
+  "usable_complaints": 2026,
   "source_dispensaries": 254,
   "source_retailers": 4882,
   "correlation_locations_before_dedupe": 5136,
   "correlation_locations": 3896,
   "semantic_duplicate_locations_collapsed": 1240,
-  "output_locations": 174,
+  "output_locations": 175,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3722,
+  "low_signal_excluded": 3721,
   "radius_feet": [
     100,
     250,
@@ -27,19 +27,19 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "legal_cannabis_dispensary": 30,
+    "legal_cannabis_dispensary": 31,
     "licensed_smoke_vape_retailer": 144
   },
   "borough_counts": {
     "Manhattan": 48,
-    "Queens": 55,
-    "Brooklyn": 45,
+    "Queens": 57,
+    "Brooklyn": 43,
     "Staten Island": 6,
-    "Bronx": 20
+    "Bronx": 21
   },
   "signal_tier_counts": {
     "very_high": 4,
-    "high": 22,
+    "high": 23,
     "moderate": 148
   },
   "top_locations_sample": [
@@ -320,6 +320,18 @@
       "last_complaint_date": "2026-07-30"
     },
     {
+      "title": "RIVERSIDE MARKETPLACE NY INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "5 BLUE SLIP, BROOKLYN, 11222",
+      "borough": "Brooklyn",
+      "source_record_count": 1,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-08-02"
+    },
+    {
       "title": "TOP 1 DELI GRILL INC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "9707 57TH AVE, CORONA, 11368",
@@ -330,20 +342,8 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-22"
-    },
-    {
-      "title": "UNION DELI GROCERY 1 INC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "226 4TH AVE, BROOKLYN, 11215",
-      "borough": "Brooklyn",
-      "source_record_count": 1,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-19"
     }
   ],
-  "generated_at": "2026-08-03T13:23:49.225Z",
+  "generated_at": "2026-08-04T12:23:14.230Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
