@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2026,
-  "usable_complaints": 2026,
+  "source_complaints": 2067,
+  "usable_complaints": 2067,
   "source_dispensaries": 254,
   "source_retailers": 4882,
   "correlation_locations_before_dedupe": 5136,
   "correlation_locations": 3896,
   "semantic_duplicate_locations_collapsed": 1240,
-  "output_locations": 175,
+  "output_locations": 174,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3721,
+  "low_signal_excluded": 3722,
   "radius_feet": [
     100,
     250,
@@ -28,19 +28,19 @@
   "min_signal_score": 3,
   "location_kind_counts": {
     "legal_cannabis_dispensary": 31,
-    "licensed_smoke_vape_retailer": 144
+    "licensed_smoke_vape_retailer": 143
   },
   "borough_counts": {
-    "Manhattan": 48,
+    "Manhattan": 47,
     "Queens": 57,
-    "Brooklyn": 43,
-    "Staten Island": 6,
+    "Brooklyn": 42,
+    "Staten Island": 7,
     "Bronx": 21
   },
   "signal_tier_counts": {
     "very_high": 4,
     "high": 23,
-    "moderate": 148
+    "moderate": 147
   },
   "top_locations_sample": [
     {
@@ -49,11 +49,11 @@
       "address": "CONCEPCION RANOCCHIA 1662 1ST AVE, NEW YORK, 10028 4770",
       "borough": "Manhattan",
       "source_record_count": 1,
-      "signal_score": 62,
+      "signal_score": 72,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 6,
-      "complaints_365d_250ft": 6,
-      "last_complaint_date": "2026-07-28"
+      "complaints_365d_100ft": 7,
+      "complaints_365d_250ft": 7,
+      "last_complaint_date": "2026-08-03"
     },
     {
       "title": "NEW FIREHOUSE DELI AND GRILL INC",
@@ -150,6 +150,18 @@
       "complaints_365d_100ft": 4,
       "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-07-31"
+    },
+    {
+      "title": "RIVERSIDE MARKETPLACE NY INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "5 BLUE SLIP, BROOKLYN, 11222",
+      "borough": "Brooklyn",
+      "source_record_count": 1,
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-08-03"
     },
     {
       "title": "SAMMY GOURMET DELI 2 INC.",
@@ -320,18 +332,6 @@
       "last_complaint_date": "2026-07-30"
     },
     {
-      "title": "RIVERSIDE MARKETPLACE NY INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "5 BLUE SLIP, BROOKLYN, 11222",
-      "borough": "Brooklyn",
-      "source_record_count": 1,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-02"
-    },
-    {
       "title": "TOP 1 DELI GRILL INC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "9707 57TH AVE, CORONA, 11368",
@@ -344,6 +344,6 @@
       "last_complaint_date": "2026-07-22"
     }
   ],
-  "generated_at": "2026-08-04T12:23:14.230Z",
+  "generated_at": "2026-08-05T12:21:33.284Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
