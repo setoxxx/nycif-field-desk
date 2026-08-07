@@ -1,11 +1,12 @@
 name: News Desk Reader-Safe Sync
 
 on:
-  push:
-    branches:
-      - feat/mission-control-monetization
+  pull_request:
     paths:
       - '.github/workflows/news-desk-reader-safe-sync.yml'
+      - 'app-schema-v1-major-all-v01.js'
+      - 'news-desk-editors-picks-v01.js'
+      - 'data/reader-safe/**'
   workflow_dispatch:
 
 permissions:
@@ -20,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Check out Field Desk branch
+      - name: Check out Field Desk feature branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -78,9 +79,10 @@ jobs:
           text = path.read_text(encoding='utf-8')
           old = """  // News Desk operator lanes (money shots + viral magnets), same feed ref.\n  const NEWS_DESK_DATA = {\n    money: FEED_HOST + '/data/photographer_assignment_calendar_2mo.json',\n    viral: FEED_HOST + '/data/photographer_viral_recurrence_matches.json'\n  };"""
           new = """  // News Desk consumes same-origin reader-safe artifacts projected from the\n  // canonical semantic authority. Browser code never fetches operator/source\n  // repository datasets directly.\n  const NEWS_DESK_DATA = {\n    money: './data/reader-safe/news-desk-money-v02.json',\n    viral: './data/reader-safe/news-desk-viral-v02.json'\n  };"""
-          if old not in text:
+          if old not in text and new not in text:
               raise SystemExit('News Desk source block drifted; refusing broad rewrite')
-          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          if old in text:
+              path.write_text(text.replace(old, new, 1), encoding='utf-8')
           PY
 
       - name: Verify reader-safe News Desk contract
@@ -106,7 +108,7 @@ jobs:
               assert row['coordinate_status'] == 'map_ready'
           text = Path('app-schema-v1-major-all-v01.js').read_text()
           start = text.index('const NEWS_DESK_DATA')
-          block = text[start:start + 320]
+          block = text[start:start + 420]
           assert 'raw.githubusercontent.com' not in block
           assert 'photographer_assignment_calendar_2mo.json' not in block
           assert 'photographer_viral_recurrence_matches.json' not in block
@@ -118,6 +120,7 @@ jobs:
         run: node --test tests/desktop-release-gates.mjs
 
       - name: Commit tested reader-safe News Desk runtime
+        if: github.event_name == 'pull_request'
         run: |
           rm -rf _live_feeds
           git config user.name 'nycif-news-desk-bot'
