@@ -1,0 +1,22 @@
+{
+  "schema_version": "nycif-field-desk-legacy-runtime-matrix-v1",
+  "generated_at": "2026-08-07T12:24:00-04:00",
+  "production_mutation": false,
+  "counts": {"PUBLIC_RUNTIME": 2, "ADMIN_ONLY": 2, "ROLLBACK_ONLY": 2, "STALE": 1, "UNKNOWN": 2},
+  "target": {"PUBLIC_RUNTIME": 0, "UNKNOWN": 0},
+  "items": [
+    {"surface":"Field Desk root runtime","path":"/index.html","classification":"PUBLIC_RUNTIME","replacement":"Certified MapLibre National Map via canonical /map/","disconnect_prerequisite":"Hosted reader-safe path PASS; WordPress /map/ rehearsal PASS; anonymous browser audit PASS; rollback preserved","rollback_evidence":"Current Field Desk main plus recovery/archive manifest"},
+    {"surface":"Field Desk service worker","path":"/service-worker.js","classification":"PUBLIC_RUNTIME","replacement":"No legacy Field Desk service-worker authority for canonical MapLibre path","disconnect_prerequisite":"Field Desk root no longer required; controlled unregister/cache-clear rehearsal; stale-client recovery test; rollback preserved","rollback_evidence":"Worker source, cache inventory, retirement evidence and pre-cutover archive"},
+    {"surface":"God View","path":"/admin/","classification":"ADMIN_ONLY","replacement":"Mission Control after parity PASS","disconnect_prerequisite":"MISSION_CONTROL_PARITY_MATRIX PASS and no normal operator dependency","rollback_evidence":"God View recovery manifest and immutable pre-baseline SHA"},
+    {"surface":"Assignment Desk Calendar","path":"/admin/calendar.html","classification":"ADMIN_ONLY","replacement":"Mission Control-linked Assignment Desk or retained read-only operator route","disconnect_prerequisite":"Reader-safe data path and operator workflow decision","rollback_evidence":"Current route and Field Desk archive"},
+    {"surface":"News Desk legacy component","path":"news-desk-editors-picks-v01.js","classification":"ROLLBACK_ONLY","replacement":"Mission Control status plus future approved News Desk runtime","disconnect_prerequisite":"News Desk operating requirement resolved; no public root dependency","rollback_evidence":"Archived component and tests"},
+    {"surface":"Approved export preview","path":"approved-export-preview.html","classification":"ROLLBACK_ONLY","replacement":"Certified release evidence/QA artifact","disconnect_prerequisite":"No runtime/import/link dependency","rollback_evidence":"Archived preview and associated export evidence"},
+    {"surface":"legacy app runtime family","path":"app*.js including app-v03.js","classification":"STALE","replacement":"MapLibre National Map runtime","disconnect_prerequisite":"Static dependency sweep shows zero active imports/links and Field Desk root disconnected","rollback_evidence":"Repository history/archive manifest"},
+    {"surface":"legacy NYC In Focus Events WordPress plugin","path":"WordPress installed plugin package/source","classification":"UNKNOWN","replacement":"Canonical MapLibre /map/ and reader-safe release path","disconnect_prerequisite":"Installed source/package/rollback authority recovered and WordPress dependency proven zero","rollback_evidence":"UNKNOWN until package/source authority recovered"},
+    {"surface":"final hosted anonymous network proof","path":"browser network capture","classification":"UNKNOWN","replacement":"Reader-safe hosted endpoint proof","disconnect_prerequisite":"Issue #67 endpoint exists; PR #383 and PR #66 shadow path exercised anonymously","rollback_evidence":"Network capture plus release rollback pointer"}
+  ],
+  "count_change_policy":"Counts may decrease only after actual verified dependency removal. Inventory or planning alone cannot lower PUBLIC_RUNTIME or UNKNOWN.",
+  "visibility_gate":"Do not privatize Field Desk until PUBLIC_RUNTIME=0, UNKNOWN=0, WordPress dependency=0, redirects are verified, Mission Control parity passes where applicable, and rollback is preserved.",
+  "visibility_action":"GIVE THIS TO THE CTO",
+  "DoD_met": false
+}
