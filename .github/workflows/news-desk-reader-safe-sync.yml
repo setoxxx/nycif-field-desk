@@ -19,14 +19,13 @@ concurrency:
 jobs:
   build-sync-wire:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - name: Check out Field Desk feature branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: feat/mission-control-monetization
-
       - name: Check out live-feeds semantic branch
         uses: actions/checkout@v4
         with:
@@ -34,42 +33,35 @@ jobs:
           ref: fix/projector-v2-semantic-cutover
           path: _live_feeds
           fetch-depth: 1
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install live pipeline dependencies
         working-directory: _live_feeds
         run: python3 -m pip install -r requirements.txt
-
       - name: Refresh all official source families
         working-directory: _live_feeds
         env:
-          NYCIF_ALLOW_LIVE_GEOSEARCH: 'yes'
+          NYCIF_ALLOW_LIVE_GEOSEARCH: 'no'
         run: |
           python3 scripts/live_event_intake_refresh.py
           python3 scripts/refresh_official_supplemental_occurrences.py
           python3 scripts/build_events_schema_v1_major.py
-
       - name: Run semantic Projector V3
         working-directory: _live_feeds
         run: python3 scripts/project_events_discovery_v03.py
-
       - name: Build News Desk operator signals and reader-safe projection
         working-directory: _live_feeds
         run: |
           python3 scripts/run_daily_people_facing_desk_sync.py --skip-network-sync
           python3 scripts/build_news_desk_reader_safe.py
-
       - name: Copy reader-safe News Desk artifacts
         run: |
           mkdir -p data/reader-safe
           cp _live_feeds/data/reader-safe/news-desk-money-v02.json data/reader-safe/
           cp _live_feeds/data/reader-safe/news-desk-viral-v02.json data/reader-safe/
           cp _live_feeds/data/reader-safe/news-desk-status-v02.json data/reader-safe/
-
       - name: Wire News Desk browser to same-origin safe artifacts
         shell: bash
         run: |
@@ -84,7 +76,6 @@ jobs:
           if old in text:
               path.write_text(text.replace(old, new, 1), encoding='utf-8')
           PY
-
       - name: Verify reader-safe News Desk contract
         run: |
           node --check app-schema-v1-major-all-v01.js
@@ -115,10 +106,8 @@ jobs:
           assert './data/reader-safe/news-desk-money-v02.json' in block
           assert './data/reader-safe/news-desk-viral-v02.json' in block
           PY
-
       - name: Run existing Desktop Release Gates
         run: node --test tests/desktop-release-gates.mjs
-
       - name: Commit tested reader-safe News Desk runtime
         if: github.event_name == 'pull_request'
         run: |
