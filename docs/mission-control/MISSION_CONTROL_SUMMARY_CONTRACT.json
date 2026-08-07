@@ -1,0 +1,108 @@
+{
+  "schema_version": "nycif-mission-control-summary-contract-v1",
+  "artifact_name": "mission-control-summary.json",
+  "purpose": "Reader-safe aggregate for the read-only Mission Control launch dashboard.",
+  "publication_state": "CONTRACT_ONLY_NO_HOSTED_ARTIFACT_YET",
+  "authority": "Projection of already-approved release and health evidence; never a new event, location, ranking, or verification authority.",
+  "allowed_top_level_fields": [
+    "schema_version",
+    "generated_at",
+    "release_id",
+    "release_sha",
+    "current_pointer",
+    "data_health",
+    "sources",
+    "daily_event_count",
+    "new_event_count",
+    "projector_status",
+    "reconciliation_status",
+    "silent_identity_loss",
+    "unsupported_exact_pins",
+    "duplicate_exact_occurrences",
+    "daily_health",
+    "anonymous_audit_status",
+    "rollback_release"
+  ],
+  "required_fields": [
+    "schema_version",
+    "generated_at",
+    "release_id",
+    "release_sha",
+    "data_health",
+    "sources",
+    "projector_status",
+    "reconciliation_status",
+    "silent_identity_loss",
+    "unsupported_exact_pins",
+    "duplicate_exact_occurrences",
+    "daily_health",
+    "anonymous_audit_status"
+  ],
+  "source_item_fields": [
+    "label",
+    "health",
+    "last_success_age_seconds",
+    "safe_event_count",
+    "last_release_id"
+  ],
+  "source_labels": [
+    "Permitted Events",
+    "Citywide Calendar",
+    "Parks BigApps"
+  ],
+  "health_values": [
+    "FRESH",
+    "STALE",
+    "BLOCKED",
+    "UNAVAILABLE"
+  ],
+  "data_health_values": [
+    "READY",
+    "DEGRADED",
+    "BLOCKED",
+    "UNAVAILABLE"
+  ],
+  "status_values": [
+    "PASS",
+    "PENDING",
+    "BLOCKED",
+    "UNAVAILABLE"
+  ],
+  "numeric_fields": {
+    "daily_event_count": "non-negative integer or omitted until available",
+    "new_event_count": "non-negative integer or omitted until available",
+    "silent_identity_loss": "non-negative integer",
+    "unsupported_exact_pins": "non-negative integer",
+    "duplicate_exact_occurrences": "non-negative integer",
+    "sources[].last_success_age_seconds": "non-negative integer or null when unavailable",
+    "sources[].safe_event_count": "non-negative integer or null when unavailable"
+  },
+  "pointer_rules": {
+    "current_pointer": "opaque reader-safe release identifier or relative reader-safe path only; no credentials or private hostnames",
+    "rollback_release": "opaque reader-safe release identifier only; omit until a hosted rollback pointer exists"
+  },
+  "forbidden_content": [
+    "private source paths",
+    "resolver internals",
+    "ranking formulas",
+    "verification internals",
+    "credentials",
+    "repository tokens",
+    "raw private records",
+    "private endpoint URLs",
+    "precise sensitive location data",
+    "raw.githubusercontent.com URLs",
+    "source-repository browser URLs"
+  ],
+  "fail_closed": {
+    "missing_artifact": "UNAVAILABLE_PENDING_READER_SAFE_AGGREGATE",
+    "malformed_artifact": "UNAVAILABLE_PENDING_READER_SAFE_AGGREGATE",
+    "missing_source": "BLOCKED_OR_UNAVAILABLE",
+    "stale_source": "STALE",
+    "invent_missing_counts": false,
+    "fallback_to_raw_github": false,
+    "fallback_to_field_desk_legacy_feed": false,
+    "fallback_to_private_endpoint": false
+  },
+  "production_mutation": false
+}
