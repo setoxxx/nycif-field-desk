@@ -26,13 +26,15 @@ jobs:
         with:
           fetch-depth: 0
           ref: feat/mission-control-monetization
-      - name: Check out live-feeds semantic branch
+      - name: Check out certified live-feeds V3 candidate
         uses: actions/checkout@v4
         with:
           repository: setoxxx/nycif-live-feeds
-          ref: fix/projector-v2-semantic-cutover
+          ref: 07ddc18c65dacf281726c9ab745fd6a1270c971b
           path: _live_feeds
           fetch-depth: 1
+      - name: Verify exact live-feeds authority SHA
+        run: test "$(git -C _live_feeds rev-parse HEAD)" = "07ddc18c65dacf281726c9ab745fd6a1270c971b"
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
