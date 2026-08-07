@@ -1,0 +1,132 @@
+name: News Desk Reader-Safe Sync
+
+on:
+  push:
+    branches:
+      - feat/mission-control-monetization
+    paths:
+      - '.github/workflows/news-desk-reader-safe-sync.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: news-desk-reader-safe-sync-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-sync-wire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out Field Desk branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: feat/mission-control-monetization
+
+      - name: Check out live-feeds semantic branch
+        uses: actions/checkout@v4
+        with:
+          repository: setoxxx/nycif-live-feeds
+          ref: fix/projector-v2-semantic-cutover
+          path: _live_feeds
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install live pipeline dependencies
+        working-directory: _live_feeds
+        run: python3 -m pip install -r requirements.txt
+
+      - name: Refresh all official source families
+        working-directory: _live_feeds
+        env:
+          NYCIF_ALLOW_LIVE_GEOSEARCH: 'yes'
+        run: |
+          python3 scripts/live_event_intake_refresh.py
+          python3 scripts/refresh_official_supplemental_occurrences.py
+          python3 scripts/build_events_schema_v1_major.py
+
+      - name: Run semantic Projector V3
+        working-directory: _live_feeds
+        run: python3 scripts/project_events_discovery_v03.py
+
+      - name: Build News Desk operator signals and reader-safe projection
+        working-directory: _live_feeds
+        run: |
+          python3 scripts/run_daily_people_facing_desk_sync.py --skip-network-sync
+          python3 scripts/build_news_desk_reader_safe.py
+
+      - name: Copy reader-safe News Desk artifacts
+        run: |
+          mkdir -p data/reader-safe
+          cp _live_feeds/data/reader-safe/news-desk-money-v02.json data/reader-safe/
+          cp _live_feeds/data/reader-safe/news-desk-viral-v02.json data/reader-safe/
+          cp _live_feeds/data/reader-safe/news-desk-status-v02.json data/reader-safe/
+
+      - name: Wire News Desk browser to same-origin safe artifacts
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('app-schema-v1-major-all-v01.js')
+          text = path.read_text(encoding='utf-8')
+          old = """  // News Desk operator lanes (money shots + viral magnets), same feed ref.\n  const NEWS_DESK_DATA = {\n    money: FEED_HOST + '/data/photographer_assignment_calendar_2mo.json',\n    viral: FEED_HOST + '/data/photographer_viral_recurrence_matches.json'\n  };"""
+          new = """  // News Desk consumes same-origin reader-safe artifacts projected from the\n  // canonical semantic authority. Browser code never fetches operator/source\n  // repository datasets directly.\n  const NEWS_DESK_DATA = {\n    money: './data/reader-safe/news-desk-money-v02.json',\n    viral: './data/reader-safe/news-desk-viral-v02.json'\n  };"""
+          if old not in text:
+              raise SystemExit('News Desk source block drifted; refusing broad rewrite')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+
+      - name: Verify reader-safe News Desk contract
+        run: |
+          node --check app-schema-v1-major-all-v01.js
+          node --check news-desk-editors-picks-v01.js
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          money = json.loads(Path('data/reader-safe/news-desk-money-v02.json').read_text())
+          viral = json.loads(Path('data/reader-safe/news-desk-viral-v02.json').read_text())
+          status = json.loads(Path('data/reader-safe/news-desk-status-v02.json').read_text())
+          assert status['unsupported_exact_pin_count'] == 0, status
+          assert status['browser_raw_repository_required'] is False, status
+          for row in money['events']:
+              assert row['certified_pin'] is True
+              assert row['map_eligibility_state'] == 'MAP_READY'
+              assert row['coordinate_status'] == 'map_ready'
+          for match in viral['matches']:
+              row = match['current']
+              assert row['certified_pin'] is True
+              assert row['map_eligibility_state'] == 'MAP_READY'
+              assert row['coordinate_status'] == 'map_ready'
+          text = Path('app-schema-v1-major-all-v01.js').read_text()
+          start = text.index('const NEWS_DESK_DATA')
+          block = text[start:start + 320]
+          assert 'raw.githubusercontent.com' not in block
+          assert 'photographer_assignment_calendar_2mo.json' not in block
+          assert 'photographer_viral_recurrence_matches.json' not in block
+          assert './data/reader-safe/news-desk-money-v02.json' in block
+          assert './data/reader-safe/news-desk-viral-v02.json' in block
+          PY
+
+      - name: Run existing Desktop Release Gates
+        run: node --test tests/desktop-release-gates.mjs
+
+      - name: Commit tested reader-safe News Desk runtime
+        run: |
+          rm -rf _live_feeds
+          git config user.name 'nycif-news-desk-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add app-schema-v1-major-all-v01.js data/reader-safe
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo 'News Desk safe runtime already current.'
+            exit 0
+          fi
+          git commit -m 'Wire News Desk to canonical reader-safe data'
+          git push origin HEAD:feat/mission-control-monetization
