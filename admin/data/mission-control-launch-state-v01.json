@@ -5,5 +5,56 @@
   "production_mutation": false,
   "phase": "LATE_INTEGRATION_PRE_CUTOVER",
   "overall_status": "YELLOW",
+  "summary": "Map architecture and isolated security gates are green; launch remains blocked on the projector surgical splice, reader-safe hosted shadow proof, Mission Control parity, fresh reconciled data, and final cutover QA.",
   "canonical_public_map": "https://nycinfocus.com/map/",
   "final_map_engine": "MapLibre National Map",
+  "gates": {
+    "projector_v2": "AUTHORITY_PASS_SPLICE_PENDING",
+    "sonar": "PASS",
+    "reader_safe_producer": "PASS_NON_HOSTED_RELEASE",
+    "shadow_runtime": "PASS_PREHOST",
+    "hosted_shadow": "BLOCKED_NO_READER_SAFE_ENDPOINT",
+    "mission_control_parity": "NOT_PASS",
+    "fresh_data_release_candidate": "PENDING",
+    "independent_launch_qa": "PENDING"
+  },
+  "metrics": {
+    "daily_events": "UNAVAILABLE_UNTIL_READER_SAFE_AGGREGATE",
+    "new_events": "UNAVAILABLE_UNTIL_READER_SAFE_AGGREGATE",
+    "audience": "UNAVAILABLE_UNTIL_APPROVED_ANALYTICS"
+  },
+  "cleanup": {
+    "public_runtime_count": 2,
+    "unknown_count": 2,
+    "known_public_runtimes": [
+      "Field Desk standalone Leaflet runtime",
+      "Field Desk service worker / legacy cached shell"
+    ],
+    "known_unknowns": [
+      "legacy NYC In Focus Events plugin installed-source / rollback authority",
+      "hosted anonymous network proof"
+    ]
+  },
+  "operator": {
+    "assignment_desk": "AVAILABLE_VIA_EXISTING_ROUTE",
+    "news_desk": "NOT_YET_INTEGRATED",
+    "god_view_retirement": "NOT_AUTHORIZED_UNTIL_PARITY_PASS"
+  },
+  "rollback": {
+    "status": "PRESERVED",
+    "god_view_pre_baseline_sha": "acb27c958b4aba4b75d229e3170fe7ff256e7b53"
+  },
+  "blockers": [
+    "Projector V2 surgical splice requires a true patch-level repository editor",
+    "Reader-safe hosted shadow endpoint requires CTO/platform action",
+    "Mission Control runtime parity not yet proven",
+    "Legacy public runtime count not yet zero"
+  ],
+  "source_policy": {
+    "browser_raw_github_dependency_allowed": false,
+    "private_source_locations_exposed": false,
+    "resolver_internals_exposed": false,
+    "ranking_internals_exposed": false,
+    "credentials_exposed": false
+  }
+}
