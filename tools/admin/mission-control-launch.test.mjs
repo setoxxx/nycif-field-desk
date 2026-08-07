@@ -5,14 +5,14 @@ const html = fs.readFileSync('admin/mission-control.html', 'utf8');
 const js = fs.readFileSync('admin/mission-control-launch-v01.js', 'utf8');
 const state = JSON.parse(fs.readFileSync('admin/data/mission-control-launch-state-v01.json', 'utf8'));
 const contract = JSON.parse(fs.readFileSync('docs/mission-control/MISSION_CONTROL_SUMMARY_CONTRACT.json', 'utf8'));
-const joined = html + js + JSON.stringify(state) + JSON.stringify(contract);
+const runtimeJoined = html + js + JSON.stringify(state);
 
 assert.match(html, /NYCIF Mission Control/);
 assert.match(html, /https:\/\/nycinfocus\.com\/map\//);
-assert.doesNotMatch(joined, /raw\.githubusercontent\.com/i);
-assert.doesNotMatch(joined, /github\.com\/setoxxx\/nycif-live-feeds\/raw/i);
-assert.doesNotMatch(joined, /serviceWorker\.register/i);
-assert.doesNotMatch(joined, /api[_-]?key|secret[_-]?key|access[_-]?token|bearer\s+[a-z0-9._-]+/i);
+assert.doesNotMatch(runtimeJoined, /raw\.githubusercontent\.com/i);
+assert.doesNotMatch(runtimeJoined, /github\.com\/setoxxx\/nycif-live-feeds\/raw/i);
+assert.doesNotMatch(runtimeJoined, /serviceWorker\.register/i);
+assert.doesNotMatch(runtimeJoined, /api[_-]?key|secret[_-]?key|access[_-]?token|bearer\s+[a-z0-9._-]+/i);
 
 assert.equal(state.read_only, true);
 assert.equal(state.production_mutation, false);
@@ -42,6 +42,7 @@ assert.ok(contract.forbidden_content.includes('private source paths'));
 assert.ok(contract.forbidden_content.includes('ranking formulas'));
 assert.ok(contract.forbidden_content.includes('credentials'));
 assert.ok(contract.forbidden_content.includes('precise sensitive location data'));
+assert.ok(contract.forbidden_content.includes('raw.githubusercontent.com URLs'));
 assert.deepEqual(contract.source_labels, ['Permitted Events', 'Citywide Calendar', 'Parks BigApps']);
 
 console.log('Mission Control launch safety and reader-safe contract: PASS');
