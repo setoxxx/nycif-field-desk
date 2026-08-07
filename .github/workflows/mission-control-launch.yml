@@ -1,0 +1,29 @@
+name: Mission Control Launch QA
+
+on:
+  pull_request:
+    paths:
+      - 'admin/mission-control.html'
+      - 'admin/mission-control-launch-v01.js'
+      - 'admin/data/mission-control-launch-state-v01.json'
+      - 'tools/admin/mission-control-launch.test.mjs'
+      - '.github/workflows/mission-control-launch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mission-control-launch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate snapshot JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('admin/data/mission-control-launch-state-v01.json','utf8'))"
+      - name: Syntax check
+        run: node --check admin/mission-control-launch-v01.js
+      - name: Run launch safety tests
+        run: node tools/admin/mission-control-launch.test.mjs
