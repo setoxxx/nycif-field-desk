@@ -5,10 +5,12 @@ on:
     paths:
       - 'admin/mission-control.html'
       - 'admin/mission-control-launch-v01.js'
+      - 'admin/mission-control-summary-adapter-v01.js'
       - 'admin/data/mission-control-launch-state-v01.json'
       - 'docs/mission-control/MISSION_CONTROL_SUMMARY_CONTRACT.json'
       - 'docs/launch/FIELD_DESK_SERVICE_WORKER_PRE_RETIREMENT_QA.md'
       - 'tools/admin/mission-control-launch.test.mjs'
+      - 'tools/admin/mission-control-summary-adapter.test.mjs'
       - 'tools/admin/service-worker-retirement-static.test.mjs'
       - 'index.html'
       - 'service-worker.js'
@@ -31,8 +33,12 @@ jobs:
       - name: Validate reader-safe contract JSON
         run: node -e "JSON.parse(require('fs').readFileSync('docs/mission-control/MISSION_CONTROL_SUMMARY_CONTRACT.json','utf8'))"
       - name: Syntax check
-        run: node --check admin/mission-control-launch-v01.js
+        run: |
+          node --check admin/mission-control-launch-v01.js
+          node --check admin/mission-control-summary-adapter-v01.js
       - name: Run launch safety and contract tests
         run: node tools/admin/mission-control-launch.test.mjs
+      - name: Run summary prehost adapter tests
+        run: node tools/admin/mission-control-summary-adapter.test.mjs
       - name: Run service-worker retirement static QA
         run: node tools/admin/service-worker-retirement-static.test.mjs
