@@ -4,28 +4,29 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-08-06",
-  "matched_rows": 2118,
-  "mapped_total": 2101,
+  "since_date": "2025-08-07",
+  "matched_rows": 2151,
+  "mapped_total": 2134,
   "needs_review": 17,
-  "rejected": 297882,
+  "rejected": 297849,
   "duplicate_count": 0,
   "subtype_counts": {
-    "cannabis_related_complaint": 1581,
-    "vape_complaint": 519,
+    "vape_complaint": 530,
+    "cannabis_related_complaint": 1603,
     "public_smoking_complaint": 1
   },
   "match_bucket_counts": {
-    "cannabis_marijuana_weed": 1581,
-    "vape_electronic_cigarette": 519,
+    "vape_electronic_cigarette": 530,
+    "cannabis_marijuana_weed": 1603,
     "public_secondhand_smoking": 1
   },
   "complaint_type_counts": {
-    "Maintenance or Facility": 353,
-    "Smoking or Vaping": 484,
-    "Obstruction": 823,
-    "Cannabis Retailer": 397,
-    "Consumer Complaint": 35,
+    "Smoking or Vaping": 494,
+    "Obstruction": 842,
+    "Cannabis Retailer": 394,
+    "Maintenance or Facility": 358,
+    "Abandoned Vehicle": 1,
+    "Consumer Complaint": 36,
     "Noise - Street/Sidewalk": 5,
     "Street Light Condition": 1,
     "General Construction/Plumbing": 1,
@@ -33,16 +34,17 @@
     "Drug Activity": 1
   },
   "descriptor_counts": {
-    "Grass/Weeds": 353,
-    "Allowed in Smoke Free Area": 469,
-    "Weeds or Grass": 823,
-    "Sales to Minors Under 21": 172,
-    "Suspicious Activity": 45,
-    "Ashtray in Smoke-Free Area": 4,
-    "Product Concerns": 13,
+    "Allowed in Smoke Free Area": 479,
+    "Weeds or Grass": 842,
+    "Sales to Minors Under 21": 170,
+    "Grass/Weeds": 358,
     "Unlicensed": 131,
+    "Suspicious Activity": 45,
+    "With License Plate": 1,
+    "Smoking, Cigar, or Vape Store": 12,
+    "Ashtray in Smoke-Free Area": 4,
+    "Product Concerns": 12,
     "Too Close to a School": 20,
-    "Smoking, Cigar, or Vape Store": 11,
     "E-Cigarette Sales": 24,
     "Too Close to a House of Worship": 16,
     "Workplace Policy Not Provided or Inadequate": 3,
@@ -63,9 +65,9 @@
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 297882
+      "count": 297849
     }
   ],
-  "generated_at": "2026-08-06T12:23:26.203Z",
+  "generated_at": "2026-08-07T11:11:45.048Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }

@@ -104,6 +104,85 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "licensed-smoke-vape-2038360-1-DCA",
+    "location_kind": "licensed_smoke_vape_retailer",
+    "title": "GARDENIA DELI",
+    "address": "404 8 AVENUE, NEW YORK, 10001",
+    "borough": "Manhattan",
+    "lat": 40.749814,
+    "lng": -73.995182,
+    "license_status": "Active",
+    "license_type": "Tobacco Retail Dealer",
+    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+    "raw": {
+      "id": "licensed-smoke-vape-2038360-1-DCA",
+      "layer": "licensed_smoke_vape_retailers",
+      "category": "regulated_business_intel",
+      "subtype": "licensed_tobacco_retailer",
+      "subtype_label": "Licensed tobacco retailer",
+      "icon": "🏪",
+      "title": "GARDENIA DELI",
+      "address": "404 8 AVENUE, NEW YORK, 10001",
+      "borough": "Manhattan",
+      "license": "Tobacco Retail Dealer",
+      "license_status": "Active",
+      "license_expiration_date": "2027-12-31T00:00:00.000",
+      "lat": 40.749814,
+      "lng": -73.995182,
+      "location_quality": "source_coordinates",
+      "source": "NYC Open Data / DCWP business license records",
+      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+      "raw_source_id": "2038360-1-DCA",
+      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
+      "updated_at": "2026-08-07T11:10:19.983Z"
+    },
+    "source_record_count": 2,
+    "duplicate_source_ids": [
+      "licensed-smoke-vape-2071476-1-DCA"
+    ],
+    "complaints_30d_100ft": 6,
+    "complaints_30d_250ft": 6,
+    "complaints_30d_500ft": 6,
+    "complaints_90d_100ft": 6,
+    "complaints_90d_250ft": 6,
+    "complaints_90d_500ft": 6,
+    "complaints_180d_100ft": 6,
+    "complaints_180d_250ft": 6,
+    "complaints_180d_500ft": 6,
+    "complaints_365d_100ft": 6,
+    "complaints_365d_250ft": 6,
+    "complaints_365d_500ft": 6,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 6
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Sales to Minors Under 21",
+        "count": 3
+      },
+      {
+        "value": "Unlicensed",
+        "count": 3
+      }
+    ],
+    "last_complaint_date": "2026-08-05",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69963302",
+      "smoke-intel-69964618",
+      "smoke-intel-69851518",
+      "smoke-intel-69839125",
+      "smoke-intel-69843210",
+      "smoke-intel-69722364"
+    ],
+    "signal_score": 61,
+    "signal_tier": "very_high",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "licensed-smoke-vape-2034766-1-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "NEW FIREHOUSE DELI AND GRILL INC",
@@ -134,7 +213,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2034766-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.541Z"
+      "updated_at": "2026-08-07T11:10:19.981Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -219,7 +298,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2064169-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.561Z"
+      "updated_at": "2026-08-07T11:10:20.003Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -304,7 +383,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1043782-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.490Z"
+      "updated_at": "2026-08-07T11:10:19.928Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -383,197 +462,46 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1400828-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.518Z"
+      "updated_at": "2026-08-07T11:10:19.956Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
       "licensed-smoke-vape-2070437-1-DCA"
     ],
-    "complaints_30d_100ft": 4,
-    "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 5,
-    "complaints_90d_100ft": 4,
-    "complaints_90d_250ft": 4,
-    "complaints_90d_500ft": 5,
-    "complaints_180d_100ft": 4,
-    "complaints_180d_250ft": 4,
-    "complaints_180d_500ft": 5,
-    "complaints_365d_100ft": 4,
-    "complaints_365d_250ft": 4,
-    "complaints_365d_500ft": 5,
+    "complaints_30d_100ft": 5,
+    "complaints_30d_250ft": 5,
+    "complaints_30d_500ft": 6,
+    "complaints_90d_100ft": 5,
+    "complaints_90d_250ft": 5,
+    "complaints_90d_500ft": 6,
+    "complaints_180d_100ft": 5,
+    "complaints_180d_250ft": 5,
+    "complaints_180d_500ft": 6,
+    "complaints_365d_100ft": 5,
+    "complaints_365d_250ft": 5,
+    "complaints_365d_500ft": 6,
     "top_complaint_subtypes": [
       {
         "value": "Vape / e-cigarette complaint",
-        "count": 4
+        "count": 5
       }
     ],
     "top_complaint_descriptors": [
       {
         "value": "Allowed in Smoke Free Area",
-        "count": 4
+        "count": 5
       }
     ],
-    "last_complaint_date": "2026-08-01",
+    "last_complaint_date": "2026-08-05",
     "nearby_complaint_ids_sample": [
+      "smoke-intel-69965125",
       "smoke-intel-69918228",
       "smoke-intel-69800279",
       "smoke-intel-69800280",
       "smoke-intel-69708048"
     ],
-    "signal_score": 41,
-    "signal_tier": "high",
-    "include": true,
-    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
-  },
-  {
-    "id": "licensed-smoke-vape-2038360-1-DCA",
-    "location_kind": "licensed_smoke_vape_retailer",
-    "title": "GARDENIA DELI",
-    "address": "404 8 AVENUE, NEW YORK, 10001",
-    "borough": "Manhattan",
-    "lat": 40.749814,
-    "lng": -73.995182,
-    "license_status": "Active",
-    "license_type": "Tobacco Retail Dealer",
-    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-    "raw": {
-      "id": "licensed-smoke-vape-2038360-1-DCA",
-      "layer": "licensed_smoke_vape_retailers",
-      "category": "regulated_business_intel",
-      "subtype": "licensed_tobacco_retailer",
-      "subtype_label": "Licensed tobacco retailer",
-      "icon": "🏪",
-      "title": "GARDENIA DELI",
-      "address": "404 8 AVENUE, NEW YORK, 10001",
-      "borough": "Manhattan",
-      "license": "Tobacco Retail Dealer",
-      "license_status": "Active",
-      "license_expiration_date": "2027-12-31T00:00:00.000",
-      "lat": 40.749814,
-      "lng": -73.995182,
-      "location_quality": "source_coordinates",
-      "source": "NYC Open Data / DCWP business license records",
-      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-      "raw_source_id": "2038360-1-DCA",
-      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.543Z"
-    },
-    "source_record_count": 2,
-    "duplicate_source_ids": [
-      "licensed-smoke-vape-2071476-1-DCA"
-    ],
-    "complaints_30d_100ft": 4,
-    "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 4,
-    "complaints_90d_100ft": 4,
-    "complaints_90d_250ft": 4,
-    "complaints_90d_500ft": 4,
-    "complaints_180d_100ft": 4,
-    "complaints_180d_250ft": 4,
-    "complaints_180d_500ft": 4,
-    "complaints_365d_100ft": 4,
-    "complaints_365d_250ft": 4,
-    "complaints_365d_500ft": 4,
-    "top_complaint_subtypes": [
-      {
-        "value": "Cannabis-related complaint",
-        "count": 4
-      }
-    ],
-    "top_complaint_descriptors": [
-      {
-        "value": "Sales to Minors Under 21",
-        "count": 2
-      },
-      {
-        "value": "Unlicensed",
-        "count": 2
-      }
-    ],
-    "last_complaint_date": "2026-07-26",
-    "nearby_complaint_ids_sample": [
-      "smoke-intel-69851518",
-      "smoke-intel-69839125",
-      "smoke-intel-69843210",
-      "smoke-intel-69722364"
-    ],
-    "signal_score": 41,
-    "signal_tier": "high",
-    "include": true,
-    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
-  },
-  {
-    "id": "licensed-smoke-vape-2068020-1-DCA",
-    "location_kind": "licensed_smoke_vape_retailer",
-    "title": "SAAD NEWSSTAND",
-    "address": "8 AVENUE, NEW YORK, 10001",
-    "borough": "Manhattan",
-    "lat": 40.74967084450117,
-    "lng": -73.99529728925346,
-    "license_status": "Active",
-    "license_type": "Electronic Cigarette Dealer",
-    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-    "raw": {
-      "id": "licensed-smoke-vape-2068020-1-DCA",
-      "layer": "licensed_smoke_vape_retailers",
-      "category": "regulated_business_intel",
-      "subtype": "licensed_electronic_cigarette_retailer",
-      "subtype_label": "Licensed electronic cigarette / vape retailer",
-      "icon": "🏪",
-      "title": "SAAD NEWSSTAND",
-      "address": "8 AVENUE, NEW YORK, 10001",
-      "borough": "Manhattan",
-      "license": "Electronic Cigarette Dealer",
-      "license_status": "Active",
-      "license_expiration_date": "2027-11-30T00:00:00.000",
-      "lat": 40.74967084450117,
-      "lng": -73.99529728925346,
-      "location_quality": "source_coordinates",
-      "source": "NYC Open Data / DCWP business license records",
-      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-      "raw_source_id": "2068020-1-DCA",
-      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.640Z"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": [],
-    "complaints_30d_100ft": 4,
-    "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 4,
-    "complaints_90d_100ft": 4,
-    "complaints_90d_250ft": 4,
-    "complaints_90d_500ft": 4,
-    "complaints_180d_100ft": 4,
-    "complaints_180d_250ft": 4,
-    "complaints_180d_500ft": 4,
-    "complaints_365d_100ft": 4,
-    "complaints_365d_250ft": 4,
-    "complaints_365d_500ft": 4,
-    "top_complaint_subtypes": [
-      {
-        "value": "Cannabis-related complaint",
-        "count": 4
-      }
-    ],
-    "top_complaint_descriptors": [
-      {
-        "value": "Sales to Minors Under 21",
-        "count": 2
-      },
-      {
-        "value": "Unlicensed",
-        "count": 2
-      }
-    ],
-    "last_complaint_date": "2026-07-26",
-    "nearby_complaint_ids_sample": [
-      "smoke-intel-69851518",
-      "smoke-intel-69839125",
-      "smoke-intel-69843210",
-      "smoke-intel-69722364"
-    ],
-    "signal_score": 41,
-    "signal_tier": "high",
+    "signal_score": 51,
+    "signal_tier": "very_high",
     "include": true,
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
@@ -608,44 +536,122 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1468252-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.527Z"
+      "updated_at": "2026-08-07T11:10:19.966Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
       "licensed-smoke-vape-2076176-1-DCA"
     ],
-    "complaints_30d_100ft": 4,
-    "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 5,
-    "complaints_90d_100ft": 4,
-    "complaints_90d_250ft": 4,
-    "complaints_90d_500ft": 5,
-    "complaints_180d_100ft": 4,
-    "complaints_180d_250ft": 4,
-    "complaints_180d_500ft": 5,
-    "complaints_365d_100ft": 4,
-    "complaints_365d_250ft": 4,
-    "complaints_365d_500ft": 5,
+    "complaints_30d_100ft": 5,
+    "complaints_30d_250ft": 5,
+    "complaints_30d_500ft": 6,
+    "complaints_90d_100ft": 5,
+    "complaints_90d_250ft": 5,
+    "complaints_90d_500ft": 6,
+    "complaints_180d_100ft": 5,
+    "complaints_180d_250ft": 5,
+    "complaints_180d_500ft": 6,
+    "complaints_365d_100ft": 5,
+    "complaints_365d_250ft": 5,
+    "complaints_365d_500ft": 6,
     "top_complaint_subtypes": [
       {
         "value": "Vape / e-cigarette complaint",
-        "count": 4
+        "count": 5
       }
     ],
     "top_complaint_descriptors": [
       {
         "value": "Allowed in Smoke Free Area",
-        "count": 4
+        "count": 5
       }
     ],
-    "last_complaint_date": "2026-08-01",
+    "last_complaint_date": "2026-08-05",
     "nearby_complaint_ids_sample": [
+      "smoke-intel-69965125",
       "smoke-intel-69918228",
       "smoke-intel-69800279",
       "smoke-intel-69800280",
       "smoke-intel-69708048"
     ],
-    "signal_score": 41,
+    "signal_score": 51,
+    "signal_tier": "very_high",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "licensed-smoke-vape-2068020-1-DCA",
+    "location_kind": "licensed_smoke_vape_retailer",
+    "title": "SAAD NEWSSTAND",
+    "address": "8 AVENUE, NEW YORK, 10001",
+    "borough": "Manhattan",
+    "lat": 40.74967084450117,
+    "lng": -73.99529728925346,
+    "license_status": "Active",
+    "license_type": "Electronic Cigarette Dealer",
+    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+    "raw": {
+      "id": "licensed-smoke-vape-2068020-1-DCA",
+      "layer": "licensed_smoke_vape_retailers",
+      "category": "regulated_business_intel",
+      "subtype": "licensed_electronic_cigarette_retailer",
+      "subtype_label": "Licensed electronic cigarette / vape retailer",
+      "icon": "🏪",
+      "title": "SAAD NEWSSTAND",
+      "address": "8 AVENUE, NEW YORK, 10001",
+      "borough": "Manhattan",
+      "license": "Electronic Cigarette Dealer",
+      "license_status": "Active",
+      "license_expiration_date": "2027-11-30T00:00:00.000",
+      "lat": 40.74967084450117,
+      "lng": -73.99529728925346,
+      "location_quality": "source_coordinates",
+      "source": "NYC Open Data / DCWP business license records",
+      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+      "raw_source_id": "2068020-1-DCA",
+      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
+      "updated_at": "2026-08-07T11:10:20.077Z"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": [],
+    "complaints_30d_100ft": 4,
+    "complaints_30d_250ft": 6,
+    "complaints_30d_500ft": 6,
+    "complaints_90d_100ft": 4,
+    "complaints_90d_250ft": 6,
+    "complaints_90d_500ft": 6,
+    "complaints_180d_100ft": 4,
+    "complaints_180d_250ft": 6,
+    "complaints_180d_500ft": 6,
+    "complaints_365d_100ft": 4,
+    "complaints_365d_250ft": 6,
+    "complaints_365d_500ft": 6,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 6
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Sales to Minors Under 21",
+        "count": 3
+      },
+      {
+        "value": "Unlicensed",
+        "count": 3
+      }
+    ],
+    "last_complaint_date": "2026-08-05",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69963302",
+      "smoke-intel-69964618",
+      "smoke-intel-69851518",
+      "smoke-intel-69839125",
+      "smoke-intel-69843210",
+      "smoke-intel-69722364"
+    ],
+    "signal_score": 43,
     "signal_tier": "high",
     "include": true,
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
@@ -681,7 +687,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2127475-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.642Z"
+      "updated_at": "2026-08-07T11:10:20.080Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -760,7 +766,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2132721-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.646Z"
+      "updated_at": "2026-08-07T11:10:20.085Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -830,7 +836,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2106156-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.622Z"
+      "updated_at": "2026-08-07T11:10:20.068Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -908,7 +914,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1054884-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.492Z"
+      "updated_at": "2026-08-07T11:10:19.930Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -1081,7 +1087,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2109665-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.627Z"
+      "updated_at": "2026-08-07T11:10:20.071Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -1153,7 +1159,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2102938-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.619Z"
+      "updated_at": "2026-08-07T11:10:20.064Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -1222,7 +1228,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2111440-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.629Z"
+      "updated_at": "2026-08-07T11:10:20.072Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -1291,7 +1297,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2056747-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.555Z"
+      "updated_at": "2026-08-07T11:10:19.996Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -1370,7 +1376,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2095533-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.611Z"
+      "updated_at": "2026-08-07T11:10:20.053Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -1441,7 +1447,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2058413-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.557Z"
+      "updated_at": "2026-08-07T11:10:19.997Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -1520,7 +1526,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2003602-941-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.531Z"
+      "updated_at": "2026-08-07T11:10:19.969Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -1597,7 +1603,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2133549-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.647Z"
+      "updated_at": "2026-08-07T11:10:20.086Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -1666,7 +1672,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2127781-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.643Z"
+      "updated_at": "2026-08-07T11:10:20.080Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -1707,6 +1713,77 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "licensed-smoke-vape-2057301-2-DCA",
+    "location_kind": "licensed_smoke_vape_retailer",
+    "title": "SUPERIOR GOURMET MARKETPLACE, INC.",
+    "address": "555 10 AVENUE, NEW YORK, 10018",
+    "borough": "Manhattan",
+    "lat": 40.7588602821377,
+    "lng": -73.99604383571884,
+    "license_status": "Active",
+    "license_type": "Tobacco Retail Dealer",
+    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+    "raw": {
+      "id": "licensed-smoke-vape-2057301-2-DCA",
+      "layer": "licensed_smoke_vape_retailers",
+      "category": "regulated_business_intel",
+      "subtype": "licensed_tobacco_retailer",
+      "subtype_label": "Licensed tobacco retailer",
+      "icon": "🏪",
+      "title": "SUPERIOR GOURMET MARKETPLACE, INC.",
+      "address": "555 10 AVENUE, NEW YORK, 10018",
+      "borough": "Manhattan",
+      "license": "Tobacco Retail Dealer",
+      "license_status": "Active",
+      "license_expiration_date": "2026-12-31T00:00:00.000",
+      "lat": 40.7588602821377,
+      "lng": -73.99604383571884,
+      "location_quality": "source_coordinates",
+      "source": "NYC Open Data / DCWP business license records",
+      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+      "raw_source_id": "2057301-2-DCA",
+      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
+      "updated_at": "2026-08-07T11:10:19.996Z"
+    },
+    "source_record_count": 2,
+    "duplicate_source_ids": [
+      "licensed-smoke-vape-2074122-1-DCA"
+    ],
+    "complaints_30d_100ft": 2,
+    "complaints_30d_250ft": 2,
+    "complaints_30d_500ft": 2,
+    "complaints_90d_100ft": 2,
+    "complaints_90d_250ft": 2,
+    "complaints_90d_500ft": 2,
+    "complaints_180d_100ft": 2,
+    "complaints_180d_250ft": 2,
+    "complaints_180d_500ft": 2,
+    "complaints_365d_100ft": 2,
+    "complaints_365d_250ft": 2,
+    "complaints_365d_500ft": 2,
+    "top_complaint_subtypes": [
+      {
+        "value": "Vape / e-cigarette complaint",
+        "count": 2
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Allowed in Smoke Free Area",
+        "count": 2
+      }
+    ],
+    "last_complaint_date": "2026-08-05",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69969309",
+      "smoke-intel-69845946"
+    ],
+    "signal_score": 21,
+    "signal_tier": "high",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "licensed-smoke-vape-2060821-1-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "TOP 1 DELI GRILL INC",
@@ -1737,7 +1814,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2060821-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.560Z"
+      "updated_at": "2026-08-07T11:10:20.001Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -1808,7 +1885,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2132629-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.646Z"
+      "updated_at": "2026-08-07T11:10:20.084Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -1877,7 +1954,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2017917-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.535Z"
+      "updated_at": "2026-08-07T11:10:19.974Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -1956,7 +2033,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2024428-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.537Z"
+      "updated_at": "2026-08-07T11:10:19.976Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -1989,6 +2066,98 @@
       "smoke-intel-69773090",
       "smoke-intel-69774347",
       "smoke-intel-69729598"
+    ],
+    "signal_score": 13,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
+    "id": "legal-dispensary-OCM-CAURD-24-000080",
+    "location_kind": "legal_cannabis_dispensary",
+    "title": "THE CANNABIS PLACE",
+    "address": "OSBERT ORDUNA, CEO 74-03 METRO, MIDDLE VILLAGE, 11379",
+    "borough": "Queens",
+    "lat": 40.71286,
+    "lng": -73.8781,
+    "license_status": "Registered",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw": {
+      "status": "mapped",
+      "location_quality": "source_georeference",
+      "lat": 40.71286,
+      "lng": -73.8781,
+      "id": "legal-dispensary-OCM-CAURD-24-000080",
+      "layer": "legal_cannabis_dispensaries",
+      "category": "regulated_cannabis_location",
+      "title": "THE CANNABIS PLACE",
+      "address": "OSBERT ORDUNA, CEO 74-03 METRO, MIDDLE VILLAGE, 11379",
+      "borough": "Queens",
+      "license_type": "Registered adult-use cannabis retail dealer",
+      "license_status": "Registered",
+      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+      "raw_source_id": "OCM-CAURD-24-000080",
+      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+      "raw": {
+        "external_tpid": "883829136",
+        "legal_name": "SOCIAL EQUITY CAURD JV LLC",
+        "dba_name": "THE CANNABIS PLACE",
+        "ocm_license_number": "OCM-CAURD-24-000080",
+        "physical_county": "QUEENS",
+        "physical_address": "OSBERT ORDUNA, CEO 74-03 METRO",
+        "physical_city": "MIDDLE VILLAGE",
+        "physical_state": "NY",
+        "physical_zip": "11379",
+        "georeference": {
+          "type": "Point",
+          "coordinates": [
+            -73.8781,
+            40.71286
+          ]
+        },
+        ":@computed_region_yamh_8v7k": "196",
+        ":@computed_region_wbg7_3whc": "848",
+        ":@computed_region_kjdx_g34t": "2137"
+      },
+      "source_record_count": 1,
+      "duplicate_source_ids": []
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": [],
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 2,
+    "complaints_30d_500ft": 2,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 2,
+    "complaints_90d_500ft": 2,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 2,
+    "complaints_180d_500ft": 2,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 2,
+    "complaints_365d_500ft": 2,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 2
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Suspicious Activity",
+        "count": 1
+      },
+      {
+        "value": "Weeds or Grass",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-08-05",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69960354",
+      "smoke-intel-69680751"
     ],
     "signal_score": 13,
     "signal_tier": "moderate",
@@ -2112,7 +2281,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2133779-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.647Z"
+      "updated_at": "2026-08-07T11:10:20.086Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -2381,16 +2550,16 @@
     "duplicate_source_ids": [],
     "complaints_30d_100ft": 1,
     "complaints_30d_250ft": 1,
-    "complaints_30d_500ft": 4,
+    "complaints_30d_500ft": 3,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 1,
-    "complaints_90d_500ft": 4,
+    "complaints_90d_500ft": 3,
     "complaints_180d_100ft": 1,
     "complaints_180d_250ft": 1,
-    "complaints_180d_500ft": 4,
+    "complaints_180d_500ft": 3,
     "complaints_365d_100ft": 1,
     "complaints_365d_250ft": 1,
-    "complaints_365d_500ft": 4,
+    "complaints_365d_500ft": 3,
     "top_complaint_subtypes": [
       {
         "value": "Cannabis-related complaint",
@@ -2674,6 +2843,81 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "licensed-smoke-vape-2058736-2-DCA",
+    "location_kind": "licensed_smoke_vape_retailer",
+    "title": "KAVYA OPTIMO II INC",
+    "address": "7429 METROPOLITAN AVENUE, MIDDLE VILLAGE, 11379",
+    "borough": "Queens",
+    "lat": 40.712935679090855,
+    "lng": -73.87734958042353,
+    "license_status": "Active",
+    "license_type": "Tobacco Retail Dealer",
+    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+    "raw": {
+      "id": "licensed-smoke-vape-2058736-2-DCA",
+      "layer": "licensed_smoke_vape_retailers",
+      "category": "regulated_business_intel",
+      "subtype": "licensed_tobacco_retailer",
+      "subtype_label": "Licensed tobacco retailer",
+      "icon": "🏪",
+      "title": "KAVYA OPTIMO II INC",
+      "address": "7429 METROPOLITAN AVENUE, MIDDLE VILLAGE, 11379",
+      "borough": "Queens",
+      "license": "Tobacco Retail Dealer",
+      "license_status": "Active",
+      "license_expiration_date": "2026-12-31T00:00:00.000",
+      "lat": 40.712935679090855,
+      "lng": -73.87734958042353,
+      "location_quality": "source_coordinates",
+      "source": "NYC Open Data / DCWP business license records",
+      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+      "raw_source_id": "2058736-2-DCA",
+      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
+      "updated_at": "2026-08-07T11:10:19.997Z"
+    },
+    "source_record_count": 2,
+    "duplicate_source_ids": [
+      "licensed-smoke-vape-2072748-1-DCA"
+    ],
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 2,
+    "complaints_30d_500ft": 2,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 2,
+    "complaints_90d_500ft": 2,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 2,
+    "complaints_180d_500ft": 2,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 2,
+    "complaints_365d_500ft": 2,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 2
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Suspicious Activity",
+        "count": 1
+      },
+      {
+        "value": "Weeds or Grass",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-08-05",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69960354",
+      "smoke-intel-69680751"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "legal-dispensary-OCM-RETL-24-000261",
     "location_kind": "legal_cannabis_dispensary",
     "title": "L A FFOCA LLC",
@@ -2790,7 +3034,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1276445-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.504Z"
+      "updated_at": "2026-08-07T11:10:19.942Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -2890,16 +3134,16 @@
     "duplicate_source_ids": [],
     "complaints_30d_100ft": 1,
     "complaints_30d_250ft": 1,
-    "complaints_30d_500ft": 2,
+    "complaints_30d_500ft": 3,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 1,
-    "complaints_90d_500ft": 2,
+    "complaints_90d_500ft": 3,
     "complaints_180d_100ft": 1,
     "complaints_180d_250ft": 1,
-    "complaints_180d_500ft": 2,
+    "complaints_180d_500ft": 3,
     "complaints_365d_100ft": 1,
     "complaints_365d_250ft": 1,
-    "complaints_365d_500ft": 2,
+    "complaints_365d_500ft": 3,
     "top_complaint_subtypes": [
       {
         "value": "Cannabis-related complaint",
@@ -3009,92 +3253,6 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
-    "id": "legal-dispensary-OCM-RETL-26-000507",
-    "location_kind": "legal_cannabis_dispensary",
-    "title": "NIRVANA SPRINGS, LLC",
-    "address": "NIRVANA SPRINGS 17936 HILLSIDE AVE GROUND FL, JAMAICA, 11432 4685",
-    "borough": "Queens",
-    "lat": 40.71281,
-    "lng": -73.78311,
-    "license_status": "Registered",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw": {
-      "status": "mapped",
-      "location_quality": "source_georeference",
-      "lat": 40.71281,
-      "lng": -73.78311,
-      "id": "legal-dispensary-OCM-RETL-26-000507",
-      "layer": "legal_cannabis_dispensaries",
-      "category": "regulated_cannabis_location",
-      "title": "NIRVANA SPRINGS, LLC",
-      "address": "NIRVANA SPRINGS 17936 HILLSIDE AVE GROUND FL, JAMAICA, 11432 4685",
-      "borough": "Queens",
-      "license_type": "Registered adult-use cannabis retail dealer",
-      "license_status": "Registered",
-      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-      "raw_source_id": "OCM-RETL-26-000507",
-      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-      "raw": {
-        "external_tpid": "933702567",
-        "legal_name": "NIRVANA SPRINGS, LLC",
-        "ocm_license_number": "OCM-RETL-26-000507",
-        "physical_county": "QUEENS",
-        "physical_address": "NIRVANA SPRINGS 17936 HILLSIDE AVE GROUND FL",
-        "physical_city": "JAMAICA",
-        "physical_state": "NY",
-        "physical_zip": "11432 4685",
-        "georeference": {
-          "type": "Point",
-          "coordinates": [
-            -73.78311,
-            40.71281
-          ]
-        },
-        ":@computed_region_yamh_8v7k": "196",
-        ":@computed_region_wbg7_3whc": "1216",
-        ":@computed_region_kjdx_g34t": "2137"
-      },
-      "source_record_count": 1,
-      "duplicate_source_ids": []
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": [],
-    "complaints_30d_100ft": 1,
-    "complaints_30d_250ft": 1,
-    "complaints_30d_500ft": 1,
-    "complaints_90d_100ft": 1,
-    "complaints_90d_250ft": 1,
-    "complaints_90d_500ft": 1,
-    "complaints_180d_100ft": 1,
-    "complaints_180d_250ft": 1,
-    "complaints_180d_500ft": 1,
-    "complaints_365d_100ft": 1,
-    "complaints_365d_250ft": 1,
-    "complaints_365d_500ft": 1,
-    "top_complaint_subtypes": [
-      {
-        "value": "Cannabis-related complaint",
-        "count": 1
-      }
-    ],
-    "top_complaint_descriptors": [
-      {
-        "value": "Product Concerns",
-        "count": 1
-      }
-    ],
-    "last_complaint_date": "2026-07-08",
-    "nearby_complaint_ids_sample": [
-      "smoke-intel-69650834"
-    ],
-    "signal_score": 12,
-    "signal_tier": "moderate",
-    "include": true,
-    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
-  },
-  {
     "id": "licensed-smoke-vape-2104566-1-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "NYC GOURMET DELI I CORP",
@@ -3125,7 +3283,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2104566-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.621Z"
+      "updated_at": "2026-08-07T11:10:20.066Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -3464,7 +3622,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2065136-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.562Z"
+      "updated_at": "2026-08-07T11:10:20.004Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -3590,6 +3748,81 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "licensed-smoke-vape-2009227-1961-DCA",
+    "location_kind": "licensed_smoke_vape_retailer",
+    "title": "SURBHI ENTERPRISE, INC.",
+    "address": "7504 METROPOLITAN AVE, MIDDLE VILLAGE, 11379",
+    "borough": "Queens",
+    "lat": 40.712916484991894,
+    "lng": -73.87736765151445,
+    "license_status": "Active",
+    "license_type": "Tobacco Retail Dealer",
+    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+    "raw": {
+      "id": "licensed-smoke-vape-2009227-1961-DCA",
+      "layer": "licensed_smoke_vape_retailers",
+      "category": "regulated_business_intel",
+      "subtype": "licensed_tobacco_retailer",
+      "subtype_label": "Licensed tobacco retailer",
+      "icon": "🏪",
+      "title": "SURBHI ENTERPRISE, INC.",
+      "address": "7504 METROPOLITAN AVE, MIDDLE VILLAGE, 11379",
+      "borough": "Queens",
+      "license": "Tobacco Retail Dealer",
+      "license_status": "Active",
+      "license_expiration_date": "2027-12-31T00:00:00.000",
+      "lat": 40.712916484991894,
+      "lng": -73.87736765151445,
+      "location_quality": "source_coordinates",
+      "source": "NYC Open Data / DCWP business license records",
+      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+      "raw_source_id": "2009227-1961-DCA",
+      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
+      "updated_at": "2026-08-07T11:10:19.971Z"
+    },
+    "source_record_count": 2,
+    "duplicate_source_ids": [
+      "licensed-smoke-vape-2069958-1-DCA"
+    ],
+    "complaints_30d_100ft": 1,
+    "complaints_30d_250ft": 2,
+    "complaints_30d_500ft": 2,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 2,
+    "complaints_90d_500ft": 2,
+    "complaints_180d_100ft": 1,
+    "complaints_180d_250ft": 2,
+    "complaints_180d_500ft": 2,
+    "complaints_365d_100ft": 1,
+    "complaints_365d_250ft": 2,
+    "complaints_365d_500ft": 2,
+    "top_complaint_subtypes": [
+      {
+        "value": "Cannabis-related complaint",
+        "count": 2
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Suspicious Activity",
+        "count": 1
+      },
+      {
+        "value": "Weeds or Grass",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-08-05",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69960354",
+      "smoke-intel-69680751"
+    ],
+    "signal_score": 12,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "legal-dispensary-OCM-CAURD-25-000237",
     "location_kind": "legal_cannabis_dispensary",
     "title": "TETRA (TETRA EAST HARLEM)",
@@ -3670,93 +3903,6 @@
     "last_complaint_date": "2026-07-12",
     "nearby_complaint_ids_sample": [
       "smoke-intel-69687627"
-    ],
-    "signal_score": 12,
-    "signal_tier": "moderate",
-    "include": true,
-    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
-  },
-  {
-    "id": "legal-dispensary-OCM-CAURD-24-000080",
-    "location_kind": "legal_cannabis_dispensary",
-    "title": "THE CANNABIS PLACE",
-    "address": "OSBERT ORDUNA, CEO 74-03 METRO, MIDDLE VILLAGE, 11379",
-    "borough": "Queens",
-    "lat": 40.71286,
-    "lng": -73.8781,
-    "license_status": "Registered",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw": {
-      "status": "mapped",
-      "location_quality": "source_georeference",
-      "lat": 40.71286,
-      "lng": -73.8781,
-      "id": "legal-dispensary-OCM-CAURD-24-000080",
-      "layer": "legal_cannabis_dispensaries",
-      "category": "regulated_cannabis_location",
-      "title": "THE CANNABIS PLACE",
-      "address": "OSBERT ORDUNA, CEO 74-03 METRO, MIDDLE VILLAGE, 11379",
-      "borough": "Queens",
-      "license_type": "Registered adult-use cannabis retail dealer",
-      "license_status": "Registered",
-      "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-      "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-      "raw_source_id": "OCM-CAURD-24-000080",
-      "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-      "raw": {
-        "external_tpid": "883829136",
-        "legal_name": "SOCIAL EQUITY CAURD JV LLC",
-        "dba_name": "THE CANNABIS PLACE",
-        "ocm_license_number": "OCM-CAURD-24-000080",
-        "physical_county": "QUEENS",
-        "physical_address": "OSBERT ORDUNA, CEO 74-03 METRO",
-        "physical_city": "MIDDLE VILLAGE",
-        "physical_state": "NY",
-        "physical_zip": "11379",
-        "georeference": {
-          "type": "Point",
-          "coordinates": [
-            -73.8781,
-            40.71286
-          ]
-        },
-        ":@computed_region_yamh_8v7k": "196",
-        ":@computed_region_wbg7_3whc": "848",
-        ":@computed_region_kjdx_g34t": "2137"
-      },
-      "source_record_count": 1,
-      "duplicate_source_ids": []
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": [],
-    "complaints_30d_100ft": 1,
-    "complaints_30d_250ft": 1,
-    "complaints_30d_500ft": 1,
-    "complaints_90d_100ft": 1,
-    "complaints_90d_250ft": 1,
-    "complaints_90d_500ft": 1,
-    "complaints_180d_100ft": 1,
-    "complaints_180d_250ft": 1,
-    "complaints_180d_500ft": 1,
-    "complaints_365d_100ft": 1,
-    "complaints_365d_250ft": 1,
-    "complaints_365d_500ft": 1,
-    "top_complaint_subtypes": [
-      {
-        "value": "Cannabis-related complaint",
-        "count": 1
-      }
-    ],
-    "top_complaint_descriptors": [
-      {
-        "value": "Suspicious Activity",
-        "count": 1
-      }
-    ],
-    "last_complaint_date": "2026-07-11",
-    "nearby_complaint_ids_sample": [
-      "smoke-intel-69680751"
     ],
     "signal_score": 12,
     "signal_tier": "moderate",
@@ -4052,7 +4198,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2116616-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.634Z"
+      "updated_at": "2026-08-07T11:10:20.073Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -4120,7 +4266,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2066867-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.566Z"
+      "updated_at": "2026-08-07T11:10:20.008Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -4158,74 +4304,6 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
-    "id": "licensed-smoke-vape-2133167-2-DCWP",
-    "location_kind": "licensed_smoke_vape_retailer",
-    "title": "2 SISTA'S TREASURE CHEST LLC",
-    "address": "5912 AVENUE N, BROOKLYN, 11234",
-    "borough": "Brooklyn",
-    "lat": 40.619488,
-    "lng": -73.918092,
-    "license_status": "Active",
-    "license_type": "Tobacco Retail Dealer",
-    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-    "raw": {
-      "id": "licensed-smoke-vape-2133167-2-DCWP",
-      "layer": "licensed_smoke_vape_retailers",
-      "category": "regulated_business_intel",
-      "subtype": "licensed_tobacco_retailer",
-      "subtype_label": "Licensed tobacco retailer",
-      "icon": "🏪",
-      "title": "2 SISTA'S TREASURE CHEST LLC",
-      "address": "5912 AVENUE N, BROOKLYN, 11234",
-      "borough": "Brooklyn",
-      "license": "Tobacco Retail Dealer",
-      "license_status": "Active",
-      "license_expiration_date": "2027-12-31T00:00:00.000",
-      "lat": 40.619488,
-      "lng": -73.918092,
-      "location_quality": "source_coordinates",
-      "source": "NYC Open Data / DCWP business license records",
-      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-      "raw_source_id": "2133167-2-DCWP",
-      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.646Z"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": [],
-    "complaints_30d_100ft": 1,
-    "complaints_30d_250ft": 1,
-    "complaints_30d_500ft": 2,
-    "complaints_90d_100ft": 1,
-    "complaints_90d_250ft": 1,
-    "complaints_90d_500ft": 2,
-    "complaints_180d_100ft": 1,
-    "complaints_180d_250ft": 1,
-    "complaints_180d_500ft": 2,
-    "complaints_365d_100ft": 1,
-    "complaints_365d_250ft": 1,
-    "complaints_365d_500ft": 2,
-    "top_complaint_subtypes": [
-      {
-        "value": "Cannabis-related complaint",
-        "count": 1
-      }
-    ],
-    "top_complaint_descriptors": [
-      {
-        "value": "Unlicensed",
-        "count": 1
-      }
-    ],
-    "last_complaint_date": "2026-07-08",
-    "nearby_complaint_ids_sample": [
-      "smoke-intel-69633542"
-    ],
-    "signal_score": 11,
-    "signal_tier": "moderate",
-    "include": true,
-    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
-  },
-  {
     "id": "licensed-smoke-vape-2062197-2-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "268 RAS GOURMET DELI",
@@ -4256,7 +4334,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2062197-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.560Z"
+      "updated_at": "2026-08-07T11:10:20.002Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -4324,7 +4402,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1471110-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.528Z"
+      "updated_at": "2026-08-07T11:10:19.966Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -4392,7 +4470,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2073086-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.651Z"
+      "updated_at": "2026-08-07T11:10:20.093Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -4460,7 +4538,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2009117-1937-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.532Z"
+      "updated_at": "2026-08-07T11:10:19.971Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -4528,7 +4606,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2003835-1011-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.531Z"
+      "updated_at": "2026-08-07T11:10:19.970Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -4598,7 +4676,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2129289-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.643Z"
+      "updated_at": "2026-08-07T11:10:20.080Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -4668,7 +4746,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2040247-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.543Z"
+      "updated_at": "2026-08-07T11:10:19.984Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -4736,7 +4814,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2107809-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.624Z"
+      "updated_at": "2026-08-07T11:10:20.069Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -4804,7 +4882,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2117550-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.635Z"
+      "updated_at": "2026-08-07T11:10:20.074Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -4872,7 +4950,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1042990-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.489Z"
+      "updated_at": "2026-08-07T11:10:19.927Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -4940,7 +5018,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2002166-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.530Z"
+      "updated_at": "2026-08-07T11:10:19.968Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -5008,7 +5086,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2057020-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.556Z"
+      "updated_at": "2026-08-07T11:10:19.996Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -5078,7 +5156,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2032682-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.540Z"
+      "updated_at": "2026-08-07T11:10:19.980Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -5146,7 +5224,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2061475-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.560Z"
+      "updated_at": "2026-08-07T11:10:20.001Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -5216,7 +5294,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1214700-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.500Z"
+      "updated_at": "2026-08-07T11:10:19.938Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -5286,7 +5364,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1472422-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.528Z"
+      "updated_at": "2026-08-07T11:10:19.967Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -5354,7 +5432,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1201993-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.499Z"
+      "updated_at": "2026-08-07T11:10:19.937Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -5422,7 +5500,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2125368-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.641Z"
+      "updated_at": "2026-08-07T11:10:20.078Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -5490,7 +5568,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1445095-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.523Z"
+      "updated_at": "2026-08-07T11:10:19.962Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -5558,7 +5636,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2126478-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.642Z"
+      "updated_at": "2026-08-07T11:10:20.079Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -5626,7 +5704,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1345653-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.509Z"
+      "updated_at": "2026-08-07T11:10:19.947Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -5694,7 +5772,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2097490-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.614Z"
+      "updated_at": "2026-08-07T11:10:20.057Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -5764,7 +5842,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2098176-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.616Z"
+      "updated_at": "2026-08-07T11:10:20.059Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -5832,7 +5910,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1338959-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.508Z"
+      "updated_at": "2026-08-07T11:10:19.946Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -5902,7 +5980,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2095850-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.613Z"
+      "updated_at": "2026-08-07T11:10:20.054Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -5970,7 +6048,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1450941-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.524Z"
+      "updated_at": "2026-08-07T11:10:19.963Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -6038,7 +6116,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1258194-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.503Z"
+      "updated_at": "2026-08-07T11:10:19.941Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -6108,7 +6186,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1367095-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.512Z"
+      "updated_at": "2026-08-07T11:10:19.950Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -6178,7 +6256,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2072875-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.580Z"
+      "updated_at": "2026-08-07T11:10:20.024Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -6246,7 +6324,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1098797-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.495Z"
+      "updated_at": "2026-08-07T11:10:19.933Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -6284,74 +6362,6 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
-    "id": "licensed-smoke-vape-2066734-1-DCA",
-    "location_kind": "licensed_smoke_vape_retailer",
-    "title": "JAMAICA DELI INC",
-    "address": "17946 HILLSIDE AVENUE, JAMAICA, 11432",
-    "borough": "Queens",
-    "lat": 40.71278046934334,
-    "lng": -73.78323570334312,
-    "license_status": "Active",
-    "license_type": "Tobacco Retail Dealer",
-    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-    "raw": {
-      "id": "licensed-smoke-vape-2066734-1-DCA",
-      "layer": "licensed_smoke_vape_retailers",
-      "category": "regulated_business_intel",
-      "subtype": "licensed_tobacco_retailer",
-      "subtype_label": "Licensed tobacco retailer",
-      "icon": "🏪",
-      "title": "JAMAICA DELI INC",
-      "address": "17946 HILLSIDE AVENUE, JAMAICA, 11432",
-      "borough": "Queens",
-      "license": "Tobacco Retail Dealer",
-      "license_status": "Active",
-      "license_expiration_date": "2027-12-31T00:00:00.000",
-      "lat": 40.71278046934334,
-      "lng": -73.78323570334312,
-      "location_quality": "source_coordinates",
-      "source": "NYC Open Data / DCWP business license records",
-      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-      "raw_source_id": "2066734-1-DCA",
-      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.566Z"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": [],
-    "complaints_30d_100ft": 1,
-    "complaints_30d_250ft": 1,
-    "complaints_30d_500ft": 1,
-    "complaints_90d_100ft": 1,
-    "complaints_90d_250ft": 1,
-    "complaints_90d_500ft": 1,
-    "complaints_180d_100ft": 1,
-    "complaints_180d_250ft": 1,
-    "complaints_180d_500ft": 1,
-    "complaints_365d_100ft": 1,
-    "complaints_365d_250ft": 1,
-    "complaints_365d_500ft": 1,
-    "top_complaint_subtypes": [
-      {
-        "value": "Cannabis-related complaint",
-        "count": 1
-      }
-    ],
-    "top_complaint_descriptors": [
-      {
-        "value": "Product Concerns",
-        "count": 1
-      }
-    ],
-    "last_complaint_date": "2026-07-08",
-    "nearby_complaint_ids_sample": [
-      "smoke-intel-69650834"
-    ],
-    "signal_score": 11,
-    "signal_tier": "moderate",
-    "include": true,
-    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
-  },
-  {
     "id": "licensed-smoke-vape-2074087-1-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "JASANI, MUNIRA",
@@ -6382,7 +6392,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2074087-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.637Z"
+      "updated_at": "2026-08-07T11:10:20.075Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -6452,7 +6462,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2106902-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.623Z"
+      "updated_at": "2026-08-07T11:10:20.069Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -6522,7 +6532,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1240736-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.648Z"
+      "updated_at": "2026-08-07T11:10:20.087Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -6590,7 +6600,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1042062-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.489Z"
+      "updated_at": "2026-08-07T11:10:19.927Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -6658,7 +6668,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2114414-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.631Z"
+      "updated_at": "2026-08-07T11:10:20.072Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -6726,7 +6736,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2119087-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.637Z"
+      "updated_at": "2026-08-07T11:10:20.075Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -6796,7 +6806,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1094893-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.495Z"
+      "updated_at": "2026-08-07T11:10:19.933Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -6864,7 +6874,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2133698-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.647Z"
+      "updated_at": "2026-08-07T11:10:20.086Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -6932,7 +6942,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2133974-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.647Z"
+      "updated_at": "2026-08-07T11:10:20.086Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -7000,7 +7010,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1254228-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.503Z"
+      "updated_at": "2026-08-07T11:10:19.941Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -7068,7 +7078,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2003067-781-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.530Z"
+      "updated_at": "2026-08-07T11:10:19.969Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -7136,7 +7146,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1294757-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.504Z"
+      "updated_at": "2026-08-07T11:10:19.943Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -7204,7 +7214,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1406542-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.519Z"
+      "updated_at": "2026-08-07T11:10:19.957Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -7274,7 +7284,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2038319-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.543Z"
+      "updated_at": "2026-08-07T11:10:19.983Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -7344,7 +7354,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2062177-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.560Z"
+      "updated_at": "2026-08-07T11:10:20.002Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -7412,7 +7422,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2107026-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.648Z"
+      "updated_at": "2026-08-07T11:10:20.088Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -7480,7 +7490,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2056721-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.555Z"
+      "updated_at": "2026-08-07T11:10:19.995Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -7550,7 +7560,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2103667-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.620Z"
+      "updated_at": "2026-08-07T11:10:20.065Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -7618,7 +7628,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2065639-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.563Z"
+      "updated_at": "2026-08-07T11:10:20.004Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -7688,7 +7698,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2106242-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.623Z"
+      "updated_at": "2026-08-07T11:10:20.069Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -7756,7 +7766,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2018945-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.535Z"
+      "updated_at": "2026-08-07T11:10:19.975Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -7826,7 +7836,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2027968-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.538Z"
+      "updated_at": "2026-08-07T11:10:19.977Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -7894,7 +7904,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2131507-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.645Z"
+      "updated_at": "2026-08-07T11:10:20.083Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -7962,7 +7972,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2026189-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.537Z"
+      "updated_at": "2026-08-07T11:10:19.977Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -8032,7 +8042,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2125844-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.641Z"
+      "updated_at": "2026-08-07T11:10:20.078Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -8100,7 +8110,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1102854-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.495Z"
+      "updated_at": "2026-08-07T11:10:19.933Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -8168,7 +8178,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2030690-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.539Z"
+      "updated_at": "2026-08-07T11:10:19.979Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -8238,7 +8248,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2058731-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.557Z"
+      "updated_at": "2026-08-07T11:10:19.997Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -8308,7 +8318,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2132964-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.646Z"
+      "updated_at": "2026-08-07T11:10:20.085Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -8378,7 +8388,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2015323-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.534Z"
+      "updated_at": "2026-08-07T11:10:19.974Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -8448,7 +8458,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1363657-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.511Z"
+      "updated_at": "2026-08-07T11:10:19.949Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -8516,7 +8526,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2076873-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.601Z"
+      "updated_at": "2026-08-07T11:10:20.045Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -8584,7 +8594,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1474914-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.648Z"
+      "updated_at": "2026-08-07T11:10:20.088Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -8652,7 +8662,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2126701-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.642Z"
+      "updated_at": "2026-08-07T11:10:20.079Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -8722,7 +8732,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2029931-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.539Z"
+      "updated_at": "2026-08-07T11:10:19.978Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -8792,7 +8802,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2075484-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.597Z"
+      "updated_at": "2026-08-07T11:10:20.039Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -8860,7 +8870,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1271296-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.503Z"
+      "updated_at": "2026-08-07T11:10:19.941Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -8900,76 +8910,6 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
-    "id": "licensed-smoke-vape-2057301-2-DCA",
-    "location_kind": "licensed_smoke_vape_retailer",
-    "title": "SUPERIOR GOURMET MARKETPLACE, INC.",
-    "address": "555 10 AVENUE, NEW YORK, 10018",
-    "borough": "Manhattan",
-    "lat": 40.7588602821377,
-    "lng": -73.99604383571884,
-    "license_status": "Active",
-    "license_type": "Tobacco Retail Dealer",
-    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-    "raw": {
-      "id": "licensed-smoke-vape-2057301-2-DCA",
-      "layer": "licensed_smoke_vape_retailers",
-      "category": "regulated_business_intel",
-      "subtype": "licensed_tobacco_retailer",
-      "subtype_label": "Licensed tobacco retailer",
-      "icon": "🏪",
-      "title": "SUPERIOR GOURMET MARKETPLACE, INC.",
-      "address": "555 10 AVENUE, NEW YORK, 10018",
-      "borough": "Manhattan",
-      "license": "Tobacco Retail Dealer",
-      "license_status": "Active",
-      "license_expiration_date": "2026-12-31T00:00:00.000",
-      "lat": 40.7588602821377,
-      "lng": -73.99604383571884,
-      "location_quality": "source_coordinates",
-      "source": "NYC Open Data / DCWP business license records",
-      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-      "raw_source_id": "2057301-2-DCA",
-      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.556Z"
-    },
-    "source_record_count": 2,
-    "duplicate_source_ids": [
-      "licensed-smoke-vape-2074122-1-DCA"
-    ],
-    "complaints_30d_100ft": 1,
-    "complaints_30d_250ft": 1,
-    "complaints_30d_500ft": 1,
-    "complaints_90d_100ft": 1,
-    "complaints_90d_250ft": 1,
-    "complaints_90d_500ft": 1,
-    "complaints_180d_100ft": 1,
-    "complaints_180d_250ft": 1,
-    "complaints_180d_500ft": 1,
-    "complaints_365d_100ft": 1,
-    "complaints_365d_250ft": 1,
-    "complaints_365d_500ft": 1,
-    "top_complaint_subtypes": [
-      {
-        "value": "Vape / e-cigarette complaint",
-        "count": 1
-      }
-    ],
-    "top_complaint_descriptors": [
-      {
-        "value": "Allowed in Smoke Free Area",
-        "count": 1
-      }
-    ],
-    "last_complaint_date": "2026-07-26",
-    "nearby_complaint_ids_sample": [
-      "smoke-intel-69845946"
-    ],
-    "signal_score": 11,
-    "signal_tier": "moderate",
-    "include": true,
-    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
-  },
-  {
     "id": "licensed-smoke-vape-1146504-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "THE BAGEL BIN",
@@ -9000,7 +8940,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1146504-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.497Z"
+      "updated_at": "2026-08-07T11:10:19.935Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9068,7 +9008,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2068585-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.569Z"
+      "updated_at": "2026-08-07T11:10:20.010Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9136,7 +9076,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1417157-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.520Z"
+      "updated_at": "2026-08-07T11:10:19.959Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9204,7 +9144,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2126700-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.642Z"
+      "updated_at": "2026-08-07T11:10:20.079Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9272,7 +9212,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2046815-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.547Z"
+      "updated_at": "2026-08-07T11:10:19.988Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9348,7 +9288,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2071878-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.574Z"
+      "updated_at": "2026-08-07T11:10:20.018Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9424,7 +9364,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2063880-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.561Z"
+      "updated_at": "2026-08-07T11:10:20.003Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9601,7 +9541,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2132708-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.646Z"
+      "updated_at": "2026-08-07T11:10:20.085Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9643,6 +9583,78 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
+    "id": "licensed-smoke-vape-2122329-2-DCWP",
+    "location_kind": "licensed_smoke_vape_retailer",
+    "title": "ZO GRILL MINIMARKET CORP.",
+    "address": "157 BROOME ST, NEW YORK, 10002",
+    "borough": "Manhattan",
+    "lat": 40.716607,
+    "lng": -73.985271,
+    "license_status": "Active",
+    "license_type": "Tobacco Retail Dealer",
+    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+    "raw": {
+      "id": "licensed-smoke-vape-2122329-2-DCWP",
+      "layer": "licensed_smoke_vape_retailers",
+      "category": "regulated_business_intel",
+      "subtype": "licensed_tobacco_retailer",
+      "subtype_label": "Licensed tobacco retailer",
+      "icon": "🏪",
+      "title": "ZO GRILL MINIMARKET CORP.",
+      "address": "157 BROOME ST, NEW YORK, 10002",
+      "borough": "Manhattan",
+      "license": "Tobacco Retail Dealer",
+      "license_status": "Active",
+      "license_expiration_date": "2027-12-31T00:00:00.000",
+      "lat": 40.716607,
+      "lng": -73.985271,
+      "location_quality": "source_coordinates",
+      "source": "NYC Open Data / DCWP business license records",
+      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+      "raw_source_id": "2122329-2-DCWP",
+      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
+      "updated_at": "2026-08-07T11:10:20.076Z"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": [],
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 5,
+    "complaints_30d_500ft": 5,
+    "complaints_90d_100ft": 0,
+    "complaints_90d_250ft": 5,
+    "complaints_90d_500ft": 5,
+    "complaints_180d_100ft": 0,
+    "complaints_180d_250ft": 5,
+    "complaints_180d_500ft": 5,
+    "complaints_365d_100ft": 0,
+    "complaints_365d_250ft": 5,
+    "complaints_365d_500ft": 5,
+    "top_complaint_subtypes": [
+      {
+        "value": "Vape / e-cigarette complaint",
+        "count": 5
+      }
+    ],
+    "top_complaint_descriptors": [
+      {
+        "value": "Allowed in Smoke Free Area",
+        "count": 5
+      }
+    ],
+    "last_complaint_date": "2026-08-06",
+    "nearby_complaint_ids_sample": [
+      "smoke-intel-69959609",
+      "smoke-intel-69857141",
+      "smoke-intel-69853003",
+      "smoke-intel-69841835",
+      "smoke-intel-69663854"
+    ],
+    "signal_score": 6,
+    "signal_tier": "moderate",
+    "include": true,
+    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
+  },
+  {
     "id": "licensed-smoke-vape-2071218-1-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "charmar superette",
@@ -9673,7 +9685,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2071218-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.572Z"
+      "updated_at": "2026-08-07T11:10:20.015Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9744,7 +9756,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1062576-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.493Z"
+      "updated_at": "2026-08-07T11:10:19.931Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9785,77 +9797,6 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
-    "id": "licensed-smoke-vape-2122329-2-DCWP",
-    "location_kind": "licensed_smoke_vape_retailer",
-    "title": "ZO GRILL MINIMARKET CORP.",
-    "address": "157 BROOME ST, NEW YORK, 10002",
-    "borough": "Manhattan",
-    "lat": 40.716607,
-    "lng": -73.985271,
-    "license_status": "Active",
-    "license_type": "Tobacco Retail Dealer",
-    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-    "raw": {
-      "id": "licensed-smoke-vape-2122329-2-DCWP",
-      "layer": "licensed_smoke_vape_retailers",
-      "category": "regulated_business_intel",
-      "subtype": "licensed_tobacco_retailer",
-      "subtype_label": "Licensed tobacco retailer",
-      "icon": "🏪",
-      "title": "ZO GRILL MINIMARKET CORP.",
-      "address": "157 BROOME ST, NEW YORK, 10002",
-      "borough": "Manhattan",
-      "license": "Tobacco Retail Dealer",
-      "license_status": "Active",
-      "license_expiration_date": "2027-12-31T00:00:00.000",
-      "lat": 40.716607,
-      "lng": -73.985271,
-      "location_quality": "source_coordinates",
-      "source": "NYC Open Data / DCWP business license records",
-      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-      "raw_source_id": "2122329-2-DCWP",
-      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.638Z"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": [],
-    "complaints_30d_100ft": 0,
-    "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 4,
-    "complaints_90d_100ft": 0,
-    "complaints_90d_250ft": 4,
-    "complaints_90d_500ft": 4,
-    "complaints_180d_100ft": 0,
-    "complaints_180d_250ft": 4,
-    "complaints_180d_500ft": 4,
-    "complaints_365d_100ft": 0,
-    "complaints_365d_250ft": 4,
-    "complaints_365d_500ft": 4,
-    "top_complaint_subtypes": [
-      {
-        "value": "Vape / e-cigarette complaint",
-        "count": 4
-      }
-    ],
-    "top_complaint_descriptors": [
-      {
-        "value": "Allowed in Smoke Free Area",
-        "count": 4
-      }
-    ],
-    "last_complaint_date": "2026-07-27",
-    "nearby_complaint_ids_sample": [
-      "smoke-intel-69857141",
-      "smoke-intel-69853003",
-      "smoke-intel-69841835",
-      "smoke-intel-69663854"
-    ],
-    "signal_score": 5,
-    "signal_tier": "moderate",
-    "include": true,
-    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
-  },
-  {
     "id": "licensed-smoke-vape-2101659-2-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "185 GARDEN DELI & GRILL LLC",
@@ -9886,7 +9827,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2101659-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.618Z"
+      "updated_at": "2026-08-07T11:10:20.063Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -9956,7 +9897,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2029364-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.538Z"
+      "updated_at": "2026-08-07T11:10:19.978Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -10036,7 +9977,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2133406-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.647Z"
+      "updated_at": "2026-08-07T11:10:20.086Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10106,7 +10047,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2112125-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.630Z"
+      "updated_at": "2026-08-07T11:10:20.072Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10176,7 +10117,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2065768-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.563Z"
+      "updated_at": "2026-08-07T11:10:20.005Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10246,7 +10187,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2073144-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.647Z"
+      "updated_at": "2026-08-07T11:10:20.087Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -10318,7 +10259,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2125104-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.640Z"
+      "updated_at": "2026-08-07T11:10:20.077Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10388,7 +10329,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2115058-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.632Z"
+      "updated_at": "2026-08-07T11:10:20.072Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10458,7 +10399,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2088474-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.607Z"
+      "updated_at": "2026-08-07T11:10:20.050Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10528,7 +10469,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2043686-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.545Z"
+      "updated_at": "2026-08-07T11:10:19.985Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10598,7 +10539,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2075485-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.597Z"
+      "updated_at": "2026-08-07T11:10:20.039Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10668,7 +10609,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2029943-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.539Z"
+      "updated_at": "2026-08-07T11:10:19.978Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -10740,7 +10681,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1431683-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.522Z"
+      "updated_at": "2026-08-07T11:10:19.961Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10813,7 +10754,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2100258-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.617Z"
+      "updated_at": "2026-08-07T11:10:20.061Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10882,7 +10823,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1464634-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.527Z"
+      "updated_at": "2026-08-07T11:10:19.965Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -10955,7 +10896,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2126822-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.642Z"
+      "updated_at": "2026-08-07T11:10:20.079Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -11028,22 +10969,22 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2076924-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.601Z"
+      "updated_at": "2026-08-07T11:10:20.045Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 2,
-    "complaints_30d_500ft": 4,
+    "complaints_30d_500ft": 3,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 2,
-    "complaints_90d_500ft": 4,
+    "complaints_90d_500ft": 3,
     "complaints_180d_100ft": 0,
     "complaints_180d_250ft": 2,
-    "complaints_180d_500ft": 4,
+    "complaints_180d_500ft": 3,
     "complaints_365d_100ft": 0,
     "complaints_365d_250ft": 2,
-    "complaints_365d_500ft": 4,
+    "complaints_365d_500ft": 3,
     "top_complaint_subtypes": [
       {
         "value": "Cannabis-related complaint",
@@ -11101,7 +11042,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2073049-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.581Z"
+      "updated_at": "2026-08-07T11:10:20.025Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -11170,7 +11111,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2009385-1983-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.532Z"
+      "updated_at": "2026-08-07T11:10:19.971Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -11649,75 +11590,6 @@
     "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
   },
   {
-    "id": "licensed-smoke-vape-2126687-1-DCWP",
-    "location_kind": "licensed_smoke_vape_retailer",
-    "title": "EMDAD SUPERMARKET & GROCERY, INC.",
-    "address": "1206 LIBERTY AVE, BROOKLYN, 11208",
-    "borough": "Brooklyn",
-    "lat": 40.67899062660771,
-    "lng": -73.86468162632019,
-    "license_status": "Active",
-    "license_type": "Tobacco Retail Dealer",
-    "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-    "raw": {
-      "id": "licensed-smoke-vape-2126687-1-DCWP",
-      "layer": "licensed_smoke_vape_retailers",
-      "category": "regulated_business_intel",
-      "subtype": "licensed_tobacco_retailer",
-      "subtype_label": "Licensed tobacco retailer",
-      "icon": "🏪",
-      "title": "EMDAD SUPERMARKET & GROCERY, INC.",
-      "address": "1206 LIBERTY AVE, BROOKLYN, 11208",
-      "borough": "Brooklyn",
-      "license": "Tobacco Retail Dealer",
-      "license_status": "Active",
-      "license_expiration_date": "2026-12-31T00:00:00.000",
-      "lat": 40.67899062660771,
-      "lng": -73.86468162632019,
-      "location_quality": "source_coordinates",
-      "source": "NYC Open Data / DCWP business license records",
-      "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
-      "raw_source_id": "2126687-1-DCWP",
-      "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.642Z"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": [],
-    "complaints_30d_100ft": 0,
-    "complaints_30d_250ft": 2,
-    "complaints_30d_500ft": 2,
-    "complaints_90d_100ft": 0,
-    "complaints_90d_250ft": 2,
-    "complaints_90d_500ft": 2,
-    "complaints_180d_100ft": 0,
-    "complaints_180d_250ft": 2,
-    "complaints_180d_500ft": 2,
-    "complaints_365d_100ft": 0,
-    "complaints_365d_250ft": 2,
-    "complaints_365d_500ft": 2,
-    "top_complaint_subtypes": [
-      {
-        "value": "Cannabis-related complaint",
-        "count": 2
-      }
-    ],
-    "top_complaint_descriptors": [
-      {
-        "value": "Grass/Weeds",
-        "count": 2
-      }
-    ],
-    "last_complaint_date": "2026-07-21",
-    "nearby_complaint_ids_sample": [
-      "smoke-intel-69791794",
-      "smoke-intel-69645781"
-    ],
-    "signal_score": 3,
-    "signal_tier": "moderate",
-    "include": true,
-    "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
-  },
-  {
     "id": "licensed-smoke-vape-1225505-DCA",
     "location_kind": "licensed_smoke_vape_retailer",
     "title": "FAST & FRESH SUPERMARKET, INC",
@@ -11748,7 +11620,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1225505-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.501Z"
+      "updated_at": "2026-08-07T11:10:19.939Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -11817,7 +11689,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1457672-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.525Z"
+      "updated_at": "2026-08-07T11:10:19.964Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -11890,7 +11762,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2124164-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.639Z"
+      "updated_at": "2026-08-07T11:10:20.077Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -11959,7 +11831,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2038839-1-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.543Z"
+      "updated_at": "2026-08-07T11:10:19.983Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -12114,7 +11986,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2059602-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.559Z"
+      "updated_at": "2026-08-07T11:10:20.000Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -12183,7 +12055,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2124606-2-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.640Z"
+      "updated_at": "2026-08-07T11:10:20.077Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -12256,7 +12128,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2131305-1-DCWP",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.645Z"
+      "updated_at": "2026-08-07T11:10:20.083Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -12327,7 +12199,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1116403-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.496Z"
+      "updated_at": "2026-08-07T11:10:19.934Z"
     },
     "source_record_count": 1,
     "duplicate_source_ids": [],
@@ -12482,7 +12354,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1155979-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.497Z"
+      "updated_at": "2026-08-07T11:10:19.935Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -12553,7 +12425,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2065305-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.562Z"
+      "updated_at": "2026-08-07T11:10:20.004Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -12624,7 +12496,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "2053728-2-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.553Z"
+      "updated_at": "2026-08-07T11:10:19.993Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [
@@ -12695,7 +12567,7 @@
       "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
       "raw_source_id": "1202099-DCA",
       "data_note": "Official license/business record; confirm current license status with the source before publication or enforcement use.",
-      "updated_at": "2026-08-06T12:21:19.499Z"
+      "updated_at": "2026-08-07T11:10:19.937Z"
     },
     "source_record_count": 2,
     "duplicate_source_ids": [

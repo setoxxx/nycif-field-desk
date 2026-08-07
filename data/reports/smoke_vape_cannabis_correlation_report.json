@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2101,
-  "usable_complaints": 2101,
+  "source_complaints": 2134,
+  "usable_complaints": 2134,
   "source_dispensaries": 254,
   "source_retailers": 4882,
   "correlation_locations_before_dedupe": 5136,
   "correlation_locations": 3896,
   "semantic_duplicate_locations_collapsed": 1240,
-  "output_locations": 173,
+  "output_locations": 171,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3723,
+  "low_signal_excluded": 3725,
   "radius_feet": [
     100,
     250,
@@ -27,20 +27,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "legal_cannabis_dispensary": 30,
-    "licensed_smoke_vape_retailer": 143
+    "legal_cannabis_dispensary": 29,
+    "licensed_smoke_vape_retailer": 142
   },
   "borough_counts": {
     "Manhattan": 47,
     "Queens": 57,
-    "Brooklyn": 42,
+    "Brooklyn": 40,
     "Staten Island": 7,
     "Bronx": 20
   },
   "signal_tier_counts": {
-    "very_high": 4,
-    "high": 21,
-    "moderate": 148
+    "very_high": 7,
+    "high": 19,
+    "moderate": 145
   },
   "top_locations_sample": [
     {
@@ -54,6 +54,18 @@
       "complaints_365d_100ft": 7,
       "complaints_365d_250ft": 7,
       "last_complaint_date": "2026-08-03"
+    },
+    {
+      "title": "GARDENIA DELI",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "404 8 AVENUE, NEW YORK, 10001",
+      "borough": "Manhattan",
+      "source_record_count": 2,
+      "signal_score": 61,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 6,
+      "complaints_365d_250ft": 6,
+      "last_complaint_date": "2026-08-05"
     },
     {
       "title": "NEW FIREHOUSE DELI AND GRILL INC",
@@ -97,35 +109,11 @@
       "address": "600 WEST 42 STREET, NEW YORK, 10036",
       "borough": "Manhattan",
       "source_record_count": 2,
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-08-01"
-    },
-    {
-      "title": "GARDENIA DELI",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "404 8 AVENUE, NEW YORK, 10001",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-07-26"
-    },
-    {
-      "title": "SAAD NEWSSTAND",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "8 AVENUE, NEW YORK, 10001",
-      "borough": "Manhattan",
-      "source_record_count": 1,
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-07-26"
+      "signal_score": 51,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 5,
+      "last_complaint_date": "2026-08-05"
     },
     {
       "title": "SUNAC NATURAL",
@@ -133,11 +121,23 @@
       "address": "600 WEST 42 STREET, NEW YORK, 10036",
       "borough": "Manhattan",
       "source_record_count": 2,
-      "signal_score": 41,
+      "signal_score": 51,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 5,
+      "last_complaint_date": "2026-08-05"
+    },
+    {
+      "title": "SAAD NEWSSTAND",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "8 AVENUE, NEW YORK, 10001",
+      "borough": "Manhattan",
+      "source_record_count": 1,
+      "signal_score": 43,
       "signal_tier": "high",
       "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-08-01"
+      "complaints_365d_250ft": 6,
+      "last_complaint_date": "2026-08-05"
     },
     {
       "title": "THE HOT SPOT 4 CORP.",
@@ -308,6 +308,18 @@
       "last_complaint_date": "2026-07-30"
     },
     {
+      "title": "SUPERIOR GOURMET MARKETPLACE, INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "555 10 AVENUE, NEW YORK, 10018",
+      "borough": "Manhattan",
+      "source_record_count": 2,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-08-05"
+    },
+    {
       "title": "TOP 1 DELI GRILL INC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "9707 57TH AVE, CORONA, 11368",
@@ -330,20 +342,8 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-19"
-    },
-    {
-      "title": "ZARA SMOKE SHOP INC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "580 8 AVENUE, NEW YORK, 10018",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-21"
     }
   ],
-  "generated_at": "2026-08-06T12:23:26.527Z",
+  "generated_at": "2026-08-07T11:11:45.366Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
