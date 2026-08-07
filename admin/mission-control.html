@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>NYCIF Mission Control — Launch</title>
+<style>
+body{margin:0;background:#0b1020;color:#eef2ff;font:14px/1.5 system-ui,sans-serif}.wrap{max-width:1180px;margin:auto;padding:20px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.card{background:#121a2b;border:1px solid #2a354b;border-radius:14px;padding:14px}.label{color:#9aa7c0;font-size:12px;text-transform:uppercase}.value{font-size:18px;font-weight:800}.ok{color:#a7f3d0}.warn{color:#fde68a}.bad{color:#fecdd3}a{color:#bfdbfe}.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.pill{border:1px solid #2a354b;border-radius:999px;padding:6px 10px}.notice{margin:12px 0;padding:12px;border-left:4px solid #fbbf24;background:#30260d}.sr-only{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="bar"><span class="pill">Read only</span><span class="pill">Pre-cutover</span><a class="pill" href="https://nycinfocus.com/map/">Public Map</a><a class="pill" href="./calendar.html">Assignment Desk</a></div>
+<h1>NYCIF Mission Control</h1>
+<p>Launch dashboard for release state, data health, blockers, recovery and operator handoff. No deploy or mutation controls.</p>
+<div id="status" class="notice" role="status">Loading launch state…</div>
+<section id="cards" class="grid" aria-label="Launch status cards"></section>
+</main>
+<script src="./mission-control-launch-v01.js"></script>
+</body>
+</html>
