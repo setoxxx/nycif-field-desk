@@ -6,6 +6,7 @@ on:
       - "index.html"
       - "accessibility-v01.js"
       - "accessibility-v01.css"
+      - "tests/public-map-retirement-contract.mjs"
       - "tests/test_protected_staging_accessibility_contract.py"
       - ".github/workflows/protected-staging-accessibility-qa.yml"
 
@@ -31,8 +32,24 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Detect public runtime state
+        id: runtime
+        shell: bash
+        run: |
+          if grep -q 'https://nycinfocus.com/map/' index.html && ! grep -qi 'leaflet' index.html; then
+            echo 'state=retired' >> "$GITHUB_OUTPUT"
+          else
+            echo 'state=active' >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Validate accessibility JavaScript syntax
+        if: steps.runtime.outputs.state == 'active'
         run: node --check accessibility-v01.js
 
-      - name: Run dependency-free accessibility contract tests
+      - name: Run active dependency-free accessibility contract tests
+        if: steps.runtime.outputs.state == 'active'
         run: python3 tests/test_protected_staging_accessibility_contract.py
+
+      - name: Run retired redirect accessibility contract
+        if: steps.runtime.outputs.state == 'retired'
+        run: node tests/public-map-retirement-contract.mjs
