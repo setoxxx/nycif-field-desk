@@ -5,6 +5,7 @@ on:
     paths:
       - 'index.html'
       - 'service-worker.js'
+      - 'tests/public-map-retirement-contract.mjs'
       - '.github/workflows/public-map-retirement-qa.yml'
   workflow_dispatch:
 
@@ -16,27 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Verify canonical redirect and legacy runtime removal
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          index = Path('index.html').read_text(encoding='utf-8')
-          worker = Path('service-worker.js').read_text(encoding='utf-8')
-
-          canonical = 'https://nycinfocus.com/map/'
-          assert canonical in index
-          assert 'window.location.replace' in index
-          assert '<link rel="canonical" href="https://nycinfocus.com/map/">' in index
-          assert 'leaflet' not in index.lower()
-          assert 'raw.githubusercontent.com' not in index
-          assert 'serviceWorker.register' not in index
-
-          assert canonical in worker
-          assert "LEGACY_CACHE_PREFIX = 'nycif-rc-public-map-'" in worker
-          assert 'caches.delete' in worker
-          assert 'Response.redirect(CANONICAL_MAP, 302)' in worker
-          assert 'raw.githubusercontent.com' not in worker
-          assert 'cache.addAll' not in worker
-          assert 'APP_SHELL' not in worker
-          PY
+        run: node tests/public-map-retirement-contract.mjs
