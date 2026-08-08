@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2134,
-  "usable_complaints": 2134,
+  "source_complaints": 2150,
+  "usable_complaints": 2150,
   "source_dispensaries": 254,
   "source_retailers": 4882,
   "correlation_locations_before_dedupe": 5136,
   "correlation_locations": 3896,
   "semantic_duplicate_locations_collapsed": 1240,
-  "output_locations": 171,
+  "output_locations": 176,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3725,
+  "low_signal_excluded": 3720,
   "radius_feet": [
     100,
     250,
@@ -27,20 +27,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "legal_cannabis_dispensary": 29,
-    "licensed_smoke_vape_retailer": 142
+    "legal_cannabis_dispensary": 31,
+    "licensed_smoke_vape_retailer": 145
   },
   "borough_counts": {
     "Manhattan": 47,
-    "Queens": 57,
-    "Brooklyn": 40,
+    "Queens": 61,
+    "Brooklyn": 41,
     "Staten Island": 7,
     "Bronx": 20
   },
   "signal_tier_counts": {
     "very_high": 7,
     "high": 19,
-    "moderate": 145
+    "moderate": 150
   },
   "top_locations_sample": [
     {
@@ -61,11 +61,11 @@
       "address": "404 8 AVENUE, NEW YORK, 10001",
       "borough": "Manhattan",
       "source_record_count": 2,
-      "signal_score": 61,
+      "signal_score": 71,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 6,
-      "complaints_365d_250ft": 6,
-      "last_complaint_date": "2026-08-05"
+      "complaints_365d_100ft": 7,
+      "complaints_365d_250ft": 7,
+      "last_complaint_date": "2026-08-06"
     },
     {
       "title": "NEW FIREHOUSE DELI AND GRILL INC",
@@ -133,11 +133,11 @@
       "address": "8 AVENUE, NEW YORK, 10001",
       "borough": "Manhattan",
       "source_record_count": 1,
-      "signal_score": 43,
+      "signal_score": 44,
       "signal_tier": "high",
       "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 6,
-      "last_complaint_date": "2026-08-05"
+      "complaints_365d_250ft": 7,
+      "last_complaint_date": "2026-08-06"
     },
     {
       "title": "THE HOT SPOT 4 CORP.",
@@ -344,6 +344,6 @@
       "last_complaint_date": "2026-07-19"
     }
   ],
-  "generated_at": "2026-08-07T11:11:45.366Z",
+  "generated_at": "2026-08-08T10:56:04.040Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
