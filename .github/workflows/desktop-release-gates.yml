@@ -17,6 +17,7 @@ on:
       - "service-worker.js"
       - "tests/desktop-release-gates.mjs"
       - "tests/public-release-blockers.test.mjs"
+      - "tests/public-map-retirement-contract.mjs"
       - "tests/test_protected_staging_accessibility_contract.py"
       - ".github/workflows/desktop-release-gates.yml"
   push:
@@ -37,6 +38,7 @@ on:
       - "service-worker.js"
       - "tests/desktop-release-gates.mjs"
       - "tests/public-release-blockers.test.mjs"
+      - "tests/public-map-retirement-contract.mjs"
       - "tests/test_protected_staging_accessibility_contract.py"
       - ".github/workflows/desktop-release-gates.yml"
   workflow_dispatch:
@@ -63,15 +65,32 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run public release blocker contracts
+      - name: Detect public runtime state
+        id: runtime
+        shell: bash
+        run: |
+          if grep -q 'https://nycinfocus.com/map/' index.html && ! grep -qi 'leaflet' index.html; then
+            echo 'state=retired' >> "$GITHUB_OUTPUT"
+          else
+            echo 'state=active' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run active public release blocker contracts
+        if: steps.runtime.outputs.state == 'active'
         run: node tests/public-release-blockers.test.mjs
 
+      - name: Run retired public runtime contract
+        if: steps.runtime.outputs.state == 'retired'
+        run: node tests/public-map-retirement-contract.mjs
+
       - name: Install browser QA dependencies
+        if: steps.runtime.outputs.state == 'active'
         run: |
           npm install --no-save playwright@1.54.1 @axe-core/playwright@4.10.2
           npx playwright install chromium
 
       - name: Start exact reviewed runtime
+        if: steps.runtime.outputs.state == 'active'
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/nycif-desktop-server.log 2>&1 &
           for attempt in {1..20}; do
@@ -83,7 +102,8 @@ jobs:
           cat /tmp/nycif-desktop-server.log
           exit 1
 
-      - name: Run desktop keyboard, accessibility, and performance gates
+      - name: Run desktop keyboard accessibility and performance gates
+        if: steps.runtime.outputs.state == 'active'
         shell: bash
         run: |
           mkdir -p artifacts
@@ -92,6 +112,12 @@ jobs:
           status=${PIPESTATUS[0]}
           cp /tmp/nycif-desktop-server.log artifacts/server.log || true
           exit "$status"
+
+      - name: Record retired desktop semantics
+        if: steps.runtime.outputs.state == 'retired'
+        run: |
+          mkdir -p artifacts
+          printf '%s\n' 'RETIRED_RUNTIME: redirect-only root; active Leaflet/application-shell browser gates are not applicable. Retirement contract passed.' > artifacts/desktop-release-gates.log
 
       - name: Upload desktop QA evidence
         if: always()
