@@ -15,8 +15,11 @@ on:
       - data/community-help/**
       - community-help-v01.js
       - scripts/validate_community_help.py
+      - index.html
       - service-worker.js
       - tests/public-release-blockers.test.mjs
+      - tests/public-map-retirement-contract.mjs
+      - .github/workflows/community-help-v2-sync.yml
   workflow_dispatch:
   schedule:
     - cron: '17 9 * * 1'
@@ -34,14 +37,30 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Build authoritative public-location files
         run: python scripts/sync_community_help_v2_fixed.py
       - name: Validate Community Help
         run: python scripts/validate_community_help.py
-      - name: Validate JavaScript and release contracts
+      - name: Validate JavaScript syntax
+        run: node --check community-help-v01.js
+      - name: Detect public runtime state
+        id: runtime
+        shell: bash
         run: |
-          node --check community-help-v01.js
-          node tests/public-release-blockers.test.mjs
+          if grep -q 'https://nycinfocus.com/map/' index.html && ! grep -qi 'leaflet' index.html; then
+            echo 'state=retired' >> "$GITHUB_OUTPUT"
+          else
+            echo 'state=active' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Validate active public release contracts
+        if: steps.runtime.outputs.state == 'active'
+        run: node tests/public-release-blockers.test.mjs
+      - name: Validate retired public runtime contract
+        if: steps.runtime.outputs.state == 'retired'
+        run: node tests/public-map-retirement-contract.mjs
       - name: Upload generated evidence
         uses: actions/upload-artifact@v4
         with:
