@@ -4633,6 +4633,46 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
+    "lat": 40.60464,
+    "lng": -73.75371,
+    "id": "legal-dispensary-OCM-RETL-26-000477",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "HIGH CLASS CONVENIENCE CORPORATION",
+    "address": "2101 MOTT AVE, FAR ROCKAWAY, 11691 3308",
+    "borough": "Queens",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-RETL-26-000477",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "883892759",
+      "legal_name": "HIGH CLASS CONVENIENCE CORPORATION",
+      "ocm_license_number": "OCM-RETL-26-000477",
+      "physical_county": "QUEENS",
+      "physical_address": "2101 MOTT AVE",
+      "physical_city": "FAR ROCKAWAY",
+      "physical_state": "NY",
+      "physical_zip": "11691 3308",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.75371,
+          40.60464
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "196",
+      ":@computed_region_wbg7_3whc": "1027",
+      ":@computed_region_kjdx_g34t": "2137"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": []
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
     "lat": 40.74826,
     "lng": -73.87796,
     "id": "legal-dispensary-OCM-RETL-25-000442",
