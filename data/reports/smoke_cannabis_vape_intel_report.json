@@ -4,28 +4,28 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-08-09",
-  "matched_rows": 2148,
-  "mapped_total": 2130,
+  "since_date": "2025-08-10",
+  "matched_rows": 2149,
+  "mapped_total": 2131,
   "needs_review": 18,
-  "rejected": 297852,
+  "rejected": 297851,
   "duplicate_count": 0,
   "subtype_counts": {
-    "cannabis_related_complaint": 1601,
     "vape_complaint": 528,
+    "cannabis_related_complaint": 1602,
     "public_smoking_complaint": 1
   },
   "match_bucket_counts": {
-    "cannabis_marijuana_weed": 1601,
     "vape_electronic_cigarette": 528,
+    "cannabis_marijuana_weed": 1602,
     "public_secondhand_smoking": 1
   },
   "complaint_type_counts": {
-    "Cannabis Retailer": 392,
-    "Consumer Complaint": 40,
     "Smoking or Vaping": 488,
-    "Obstruction": 840,
-    "Maintenance or Facility": 359,
+    "Maintenance or Facility": 362,
+    "Obstruction": 836,
+    "Cannabis Retailer": 394,
+    "Consumer Complaint": 40,
     "Abandoned Vehicle": 1,
     "Derelict Vehicles": 1,
     "Noise - Street/Sidewalk": 5,
@@ -35,24 +35,24 @@
     "Drug Activity": 1
   },
   "descriptor_counts": {
-    "Sales to Minors Under 21": 172,
+    "Sign Inadequate": 8,
+    "Allowed in Smoke Free Area": 473,
+    "Grass/Weeds": 362,
+    "Weeds or Grass": 836,
+    "Unlicensed": 127,
+    "Sales to Minors Under 21": 170,
+    "Workplace Policy Not Provided or Inadequate": 3,
+    "Too Close to a School": 21,
+    "Suspicious Activity": 46,
     "E-Cigarette Sales": 28,
-    "Allowed in Smoke Free Area": 475,
-    "Weeds or Grass": 840,
-    "Unlicensed": 124,
-    "Suspicious Activity": 47,
     "Smoking, Cigar, or Vape Store": 12,
-    "Grass/Weeds": 359,
     "Product Concerns": 14,
-    "Too Close to a School": 19,
     "With License Plate": 1,
     "Derelict Vehicles": 1,
     "Ashtray in Smoke-Free Area": 4,
     "Too Close to a House of Worship": 16,
-    "Workplace Policy Not Provided or Inadequate": 2,
     "Loud Talking": 4,
     "Street Light Out": 1,
-    "Sign Inadequate": 7,
     "Loud Music/Party": 1,
     "Smoking Ban - Smoking on Construction Site": 1,
     "Hitting Phone/Cable Lines": 1,
@@ -67,9 +67,9 @@
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 297852
+      "count": 297851
     }
   ],
-  "generated_at": "2026-08-09T10:59:56.995Z",
+  "generated_at": "2026-08-10T11:30:21.207Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }
