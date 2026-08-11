@@ -4,59 +4,57 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-08-10",
-  "matched_rows": 2149,
-  "mapped_total": 2131,
+  "since_date": "2025-08-11",
+  "matched_rows": 2167,
+  "mapped_total": 2149,
   "needs_review": 18,
-  "rejected": 297851,
+  "rejected": 297833,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 528,
-    "cannabis_related_complaint": 1602,
+    "vape_complaint": 535,
+    "cannabis_related_complaint": 1613,
     "public_smoking_complaint": 1
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 528,
-    "cannabis_marijuana_weed": 1602,
+    "vape_electronic_cigarette": 535,
+    "cannabis_marijuana_weed": 1613,
     "public_secondhand_smoking": 1
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 488,
-    "Maintenance or Facility": 362,
-    "Obstruction": 836,
-    "Cannabis Retailer": 394,
-    "Consumer Complaint": 40,
+    "Smoking or Vaping": 493,
+    "Obstruction": 847,
+    "Maintenance or Facility": 360,
+    "Cannabis Retailer": 398,
+    "Noise - Street/Sidewalk": 4,
+    "Consumer Complaint": 42,
     "Abandoned Vehicle": 1,
     "Derelict Vehicles": 1,
-    "Noise - Street/Sidewalk": 5,
     "Street Light Condition": 1,
     "General Construction/Plumbing": 1,
-    "Overgrown Tree/Branches": 1,
-    "Drug Activity": 1
+    "Overgrown Tree/Branches": 1
   },
   "descriptor_counts": {
+    "Allowed in Smoke Free Area": 478,
+    "Weeds or Grass": 847,
+    "Grass/Weeds": 360,
+    "Unlicensed": 128,
+    "Loud Music/Party": 2,
+    "Sales to Minors Under 21": 174,
+    "E-Cigarette Sales": 29,
+    "Product Concerns": 15,
+    "Smoking, Cigar, or Vape Store": 13,
     "Sign Inadequate": 8,
-    "Allowed in Smoke Free Area": 473,
-    "Grass/Weeds": 362,
-    "Weeds or Grass": 836,
-    "Unlicensed": 127,
-    "Sales to Minors Under 21": 170,
     "Workplace Policy Not Provided or Inadequate": 3,
-    "Too Close to a School": 21,
-    "Suspicious Activity": 46,
-    "E-Cigarette Sales": 28,
-    "Smoking, Cigar, or Vape Store": 12,
-    "Product Concerns": 14,
+    "Too Close to a School": 20,
+    "Suspicious Activity": 45,
     "With License Plate": 1,
     "Derelict Vehicles": 1,
     "Ashtray in Smoke-Free Area": 4,
     "Too Close to a House of Worship": 16,
-    "Loud Talking": 4,
+    "Loud Talking": 2,
     "Street Light Out": 1,
-    "Loud Music/Party": 1,
     "Smoking Ban - Smoking on Construction Site": 1,
-    "Hitting Phone/Cable Lines": 1,
-    "Use Indoor": 1
+    "Hitting Phone/Cable Lines": 1
   },
   "top_review_reasons": [
     {
@@ -67,9 +65,9 @@
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 297851
+      "count": 297833
     }
   ],
-  "generated_at": "2026-08-10T11:32:45.785Z",
+  "generated_at": "2026-08-11T11:09:35.907Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }

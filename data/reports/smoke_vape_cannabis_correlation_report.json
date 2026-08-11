@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2131,
-  "usable_complaints": 2131,
+  "source_complaints": 2149,
+  "usable_complaints": 2149,
   "source_dispensaries": 255,
   "source_retailers": 4882,
   "correlation_locations_before_dedupe": 5137,
   "correlation_locations": 3897,
   "semantic_duplicate_locations_collapsed": 1240,
-  "output_locations": 177,
+  "output_locations": 183,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3720,
+  "low_signal_excluded": 3714,
   "radius_feet": [
     100,
     250,
@@ -27,20 +27,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "legal_cannabis_dispensary": 32,
-    "licensed_smoke_vape_retailer": 145
+    "legal_cannabis_dispensary": 33,
+    "licensed_smoke_vape_retailer": 150
   },
   "borough_counts": {
-    "Manhattan": 46,
-    "Queens": 59,
-    "Brooklyn": 46,
+    "Manhattan": 48,
+    "Queens": 60,
+    "Brooklyn": 48,
     "Staten Island": 7,
-    "Bronx": 19
+    "Bronx": 20
   },
   "signal_tier_counts": {
     "very_high": 7,
-    "high": 22,
-    "moderate": 148
+    "high": 21,
+    "moderate": 155
   },
   "top_locations_sample": [
     {
@@ -176,18 +176,6 @@
       "last_complaint_date": "2026-07-30"
     },
     {
-      "title": "BLAZINUP, LLC",
-      "location_kind": "legal_cannabis_dispensary",
-      "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
-      "borough": "Manhattan",
-      "source_record_count": 1,
-      "signal_score": 22,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-07"
-    },
-    {
       "title": "FLYNNSTONED CANNABIS COMPANY",
       "location_kind": "legal_cannabis_dispensary",
       "address": "820 2ND AVE, NEW YORK, 10017 4502",
@@ -272,18 +260,6 @@
       "last_complaint_date": "2026-08-08"
     },
     {
-      "title": "CHELSEA FINE FOODS",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "300 8TH AVE, NEW YORK, 10001",
-      "borough": "Manhattan",
-      "source_record_count": 1,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-07"
-    },
-    {
       "title": "FRESH FOOD CENTER INC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "820 2ND AVE, NEW YORK, 10017",
@@ -342,8 +318,32 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-08-08"
+    },
+    {
+      "title": "SUPERIOR GOURMET MARKETPLACE, INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "555 10 AVENUE, NEW YORK, 10018",
+      "borough": "Manhattan",
+      "source_record_count": 2,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-08-05"
+    },
+    {
+      "title": "THE CITY VAPER LTD.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "2920 23RD AVE, ASTORIA, 11105",
+      "borough": "Queens",
+      "source_record_count": 1,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-08-09"
     }
   ],
-  "generated_at": "2026-08-10T11:32:46.058Z",
+  "generated_at": "2026-08-11T11:09:38.285Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
