@@ -7,6 +7,7 @@ on:
       - 'service-worker.js'
       - 'scripts/build_retired_pages.py'
       - 'tests/public-map-retirement-contract.mjs'
+      - 'tests/retirement-service-worker.test.mjs'
       - '.github/workflows/public-map-retirement-refresh-qa.yml'
       - '.github/workflows/static.yml'
   workflow_dispatch:
@@ -30,6 +31,8 @@ jobs:
           python-version: '3.11'
       - name: Verify retired public root contract
         run: node tests/public-map-retirement-contract.mjs
+      - name: Verify stale-cache cleanup and navigation redirect behavior
+        run: node tests/retirement-service-worker.test.mjs
       - name: Build retirement-only Pages artifact
         run: python3 scripts/build_retired_pages.py "$RUNNER_TEMP/field-desk-pages"
       - name: Fail closed on legacy public routes in artifact
