@@ -3,175 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#05070b">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="NYC In Focus">
-  <title>NYC In Focus · NYC Event Map</title>
-
-  <link rel="preconnect" href="https://raw.githubusercontent.com">
-  <link rel="preconnect" href="https://{s}.tile.openstreetmap.org">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" integrity="sha384-pmjIAcz2bAn0xukfxADbZIb3t8oRT9Sv0rvO+BR5Csr6Dhqq+nZs59P0pPKQJkEV" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" integrity="sha384-wgw+aLYNQ7dlhK47ZPK7FRACiq7ROZwgFNg0m04avm4CaXS+Z9Y7nMu8yNjBKYC+" crossorigin="anonymous">
-  <link rel="stylesheet" href="./style.css?v=public-map-v10">
-  <link rel="stylesheet" href="./fielddesk-v02.css?v=public-map-v10">
-  <link rel="stylesheet" href="./weekstrip-v06-safe.css?v=public-map-v10">
-  <link rel="stylesheet" href="./public-map-v01.css?v=public-map-v10">
-  <link rel="stylesheet" href="./tip-jar-motion-safety-v01.css?v=public-map-v11">
-  <link rel="stylesheet" href="./accessibility-v01.css?v=public-map-v11">
-  <link rel="stylesheet" href="./adr0013-approximate-markers.css?v=adr0013-v1">
-  <script src="./public-display-mode-v01.js?v=public-map-v10"></script>
+  <meta name="robots" content="noindex,follow">
+  <meta http-equiv="refresh" content="0;url=https://nycinfocus.com/map/">
+  <link rel="canonical" href="https://nycinfocus.com/map/">
+  <title>NYC In Focus Map</title>
+  <style>
+    html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b1117;color:#f8fafc}
+    main{min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box;text-align:center}
+    a{color:#7dd3fc}
+  </style>
 </head>
-<body class="public-map-page">
-  <a class="a11y-skip-link" href="#deskBtn">Skip to the event list</a>
-  <main id="app" class="app">
-    <section class="map-shell" aria-label="NYC In Focus event and community help map">
-      <p id="mapTextAlternative" class="sr-only">Use the Event List button for an equivalent text list.</p>
-      <div id="map" class="map" role="region" tabindex="0" aria-label="NYC event and community help map" aria-describedby="mapTextAlternative"></div>
-
-      <div class="brand-header-row" aria-label="NYC In Focus header">
-        <div class="brand-card" aria-label="NYC In Focus City Map status">
-          <div class="brand-mark">NYCIF</div>
-          <div>
-            <strong>NYC</strong>
-            <span id="brandCount" role="status" aria-live="polite">Loading NYC events…</span>
-          </div>
-        </div>
-      </div>
-
-      <div id="viewBanner" class="view-banner" role="status" aria-live="polite" hidden></div>
-      <div id="indexStatus" class="index-status" role="status" aria-live="polite" hidden></div>
-
-      <div id="dateChips" class="date-chips" role="group" aria-label="Choose a day"></div>
-
-      <div class="map-controls" aria-label="Map controls">
-        <button id="layersBtn" class="pill layers-pill" type="button" aria-expanded="false" aria-controls="layersPanel">
-          <span>☰</span><b>Filters</b>
-        </button>
-        <button id="locateBtn" class="locate-btn" type="button" aria-label="Show my location" title="Show my location">⌖</button>
-        <button id="bugBtn" class="bug-btn" type="button" aria-label="Report a problem" title="Report a problem">🐞</button>
-        <button id="nearMeBtn" class="near-me-btn" type="button" hidden
-          aria-label="Near me alerts (coming soon)" title="Near me alerts — coming in the app">Near Me</button>
-      </div>
-
-      <aside id="layersPanel" class="layers-panel" aria-label="Choose what to show" hidden>
-        <p class="panel-label">Choose what to show</p>
-
-        <p class="panel-sub-label">News assignments</p>
-        <div class="editors-block">
-          <label class="check newsdesk-check"><input type="checkbox" id="newsDeskToggle" checked> <span>📰 News Desk <small>money shots + viral</small></span></label>
-          <label class="editors-pick">
-            <span>🏅 Editor's Picks</span>
-            <select id="editorsPicksSelect" aria-label="Editor's Picks medal filter">
-              <option value="all">Show all events</option>
-              <option value="medaled">Medals only 🥇🥈🥉</option>
-              <option value="gold">Gold only 🥇</option>
-            </select>
-          </label>
-        </div>
-
-        <label class="check"><input type="checkbox" data-cat="sports" checked> <span>🏟️ Sports</span></label>
-        <label class="check"><input type="checkbox" data-cat="fitness" checked> <span>💪 Fitness / wellness</span></label>
-        <label class="check"><input type="checkbox" data-cat="parks" checked> <span>🌳 Parks / outdoors</span></label>
-        <label class="check"><input type="checkbox" data-cat="arts" checked> <span>🎭 Arts / culture</span></label>
-        <label class="check"><input type="checkbox" data-cat="market" checked> <span>🛍️ Markets / street fairs</span></label>
-        <label class="check"><input type="checkbox" data-cat="civic" checked> <span>📣 Civic / neighborhood</span></label>
-        <label class="check"><input type="checkbox" data-cat="family" checked> <span>👨‍👩‍👧 Kids / family</span></label>
-        <label class="check"><input type="checkbox" data-cat="education" checked> <span>📚 Classes / workshops</span></label>
-        <label class="check"><input type="checkbox" data-cat="volunteer" checked> <span>🙋 Volunteer opportunities</span></label>
-        <label class="check"><input type="checkbox" data-cat="general" checked> <span>📍 General</span></label>
-
-        <div class="explore-more-block">
-          <button id="explore-more-toggle" type="button" aria-expanded="false" aria-controls="explore-more-panel">
-            🧭 Explore More
-          </button>
-          <div id="explore-more-panel" hidden>
-            <label class="check"><input type="checkbox" data-cat="media" checked> <span>🎬 Film / production</span></label>
-            <label class="check"><input type="checkbox" data-cat="tours" checked> <span>🗺️ Tours / history</span></label>
-            <label class="check"><input type="checkbox" data-cat="government" checked> <span>🏛️ Government / meetings</span></label>
-            <label class="check"><input type="checkbox" data-cat="services" checked> <span>🤝 Health / benefits</span></label>
-            <label class="check"><input type="checkbox" data-cat="jobs" checked> <span>💼 Jobs / career</span></label>
-            <label class="check"><input type="checkbox" data-cat="housing" checked> <span>🏠 Housing / tenant help</span></label>
-            <label class="check"><input type="checkbox" data-cat="environment" checked> <span>🌎 Environment / nature</span></label>
-          </div>
-        </div>
-
-        <hr>
-
-        <button id="enableAllCategoriesBtn" class="load-all panel-action" type="button">Enable All</button>
-        <button id="resetFiltersBtn" class="load-all panel-action" type="button">Clear Filters</button>
-        <button id="retryFeedBtn" class="load-all panel-action" type="button">Retry Events</button>
-      </aside>
-
-      <button id="deskBtn" class="desk-btn" type="button" aria-expanded="false" aria-controls="deskDrawer">Event List</button>
-
-      <aside id="deskDrawer" class="desk-drawer" aria-label="Event list" hidden>
-        <header class="desk-header">
-          <div>
-            <p>NYC In Focus</p>
-            <h1>Event Map</h1>
-          </div>
-          <button id="closeDeskBtn" class="close-btn" type="button" aria-label="Close event list">×</button>
-        </header>
-
-        <label class="search">
-          <span class="sr-only">Search events</span>
-          <input id="searchInput" type="search" placeholder="Search title, location, borough" autocomplete="off">
-        </label>
-
-        <div class="boroughs" id="boroughs" role="group" aria-label="Filter by borough"></div>
-
-        <label class="sort">
-          <span>Sort</span>
-          <select id="sortSelect" aria-label="Sort events">
-            <option value="priority">Highlights</option>
-            <option value="near">Near me</option>
-            <option value="time">Time</option>
-            <option value="borough">Borough</option>
-            <option value="type">Type</option>
-          </select>
-        </label>
-
-        <div id="listMeta" class="list-meta" role="status" aria-live="polite">Loading events...</div>
-        <div id="eventList" class="event-list"></div>
-        <button id="loadMoreBtn" class="load-all" type="button" hidden>Show 100 more</button>
-      </aside>
-
-      <div class="public-intro-v01"><strong>NYC In Focus:</strong> Discover public events and find verified community help across the five boroughs. Confirm details before you go.</div>
-      <div id="status" class="status" role="status" aria-live="polite">Loading the NYC In Focus city map…</div>
-      <pre id="debugPanel" class="debug-panel" hidden></pre>
-    </section>
+<body>
+  <main>
+    <p>The former Field Desk public map is retired. <a href="https://nycinfocus.com/map/">Open the canonical NYC In Focus National Map.</a></p>
   </main>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" integrity="sha384-eXVCORTRlv4FUUgS/xmOyr66XBVraen8ATNLMESp92FKXLAMiKkerixTiBvXriZr" crossorigin="anonymous"></script>
-  <script src="./public-approved-overlays-capture-v01.js?v=public-map-v10"></script>
-  <script src="./public-map-defaults-v01.js?v=public-map-v10"></script>
-  <script src="./public-feed-policy-v01.js?v=public-map-v11"></script>
-  <script src="./discovery-patch-v02.js?v=public-map-v10"></script>
-  <script src="./event-feed-schema-v1.js?v=public-map-v10"></script>
-  <script src="./nyc-calendar-runtime-v01.js?v=public-map-v11"></script>
-  <script src="./public-release-guard-v01.js?v=public-map-v11"></script>
-  <script src="./news-desk-editors-picks-v01.js?v=public-map-v10"></script>
-  <script src="./app-schema-v1-major-all-v01.js?v=public-map-v10"></script>
-  <script src="./live-location-tracking-v01.js?v=protected-staging-live-gps-v01"></script>
-  <script src="./live-location-control-handoff-v01.js?v=protected-staging-live-gps-v01"></script>
-  <script src="./accessibility-v01.js?v=public-map-v11"></script>
-  <script src="./public-approved-overlays-v01.js?v=public-map-v10"></script>
-  <script src="./community-help-v01.js?v=community-help-v1"></script>
-  <script src="./field-desk-operator-layer-v01.js?v=public-map-v10"></script>
-  <script src="./admin-whats-new-v01.js?v=public-map-v10"></script>
-  <script src="./tip-jar-motion-policy-v01.js?v=public-map-v11"></script>
-  <script src="./nycif-tip-jar-v01.js?v=06"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const policy = window.NYCIF_TIP_JAR_MOTION_POLICY;
-      if (policy && typeof policy.restore === 'function') policy.restore();
-    }, { once: true });
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./service-worker.js").catch(function () {});
-    }
+    (function () {
+      var target = 'https://nycinfocus.com/map/';
+      if (window.location.href !== target) window.location.replace(target);
+    }());
   </script>
 </body>
 </html>
