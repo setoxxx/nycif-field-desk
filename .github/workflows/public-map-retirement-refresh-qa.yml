@@ -70,3 +70,10 @@ jobs:
           count="$(find "$root" -type f | wc -l | tr -d ' ')"
           test "$count" = '3'
           echo FIELD_DESK_RETIREMENT_ARTIFACT_ZERO_LEGACY_ROUTES_PASS
+      - name: Verify Pages publication is main-only
+        run: |
+          set -euo pipefail
+          workflow='.github/workflows/static.yml'
+          grep -Fq 'branches: ["main"]' "$workflow"
+          grep -Fq "if: ${{ github.ref == 'refs/heads/main' }}" "$workflow"
+          echo FIELD_DESK_PAGES_MAIN_ONLY_PUBLICATION_BOUNDARY_PASS
