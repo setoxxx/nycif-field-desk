@@ -54,7 +54,10 @@ let activatePromise;
 listeners.get('activate')({
   waitUntil(value) { activatePromise = value; },
 });
-assert.ok(activatePromise instanceof Promise);
+assert.ok(
+  activatePromise && typeof activatePromise.then === 'function',
+  'activation must supply a thenable to waitUntil',
+);
 await activatePromise;
 assert.deepEqual(
   deleted.sort(),
