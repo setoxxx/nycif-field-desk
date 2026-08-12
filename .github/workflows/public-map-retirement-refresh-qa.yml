@@ -8,6 +8,7 @@ on:
       - 'scripts/build_retired_pages.py'
       - 'tests/public-map-retirement-contract.mjs'
       - 'tests/retirement-service-worker.test.mjs'
+      - 'docs/rung14-field-desk-retirement-rollback.md'
       - '.github/workflows/public-map-retirement-refresh-qa.yml'
       - '.github/workflows/static.yml'
   workflow_dispatch:
@@ -33,6 +34,12 @@ jobs:
         run: node tests/public-map-retirement-contract.mjs
       - name: Verify stale-cache cleanup and navigation redirect behavior
         run: node tests/retirement-service-worker.test.mjs
+      - name: Verify rollback anchor is pinned
+        run: |
+          set -euo pipefail
+          grep -Fq 'c86db5e0a9334539d4fb2233bebdbf75dff6df65' docs/rung14-field-desk-retirement-rollback.md
+          grep -Fq 'does not authorize merge, deployment, rollback' docs/rung14-field-desk-retirement-rollback.md
+          echo FIELD_DESK_ROLLBACK_ANCHOR_PASS
       - name: Build retirement-only Pages artifact
         run: python3 scripts/build_retired_pages.py "$RUNNER_TEMP/field-desk-pages"
       - name: Fail closed on legacy public routes in artifact
