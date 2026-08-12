@@ -8,6 +8,7 @@ on:
       - 'scripts/validate_community_help.py'
       - 'index.html'
       - 'service-worker.js'
+      - 'tests/public-map-retirement-contract.mjs'
       - '.github/workflows/community-help-qa.yml'
   push:
     branches:
@@ -18,6 +19,7 @@ on:
       - 'scripts/validate_community_help.py'
       - 'index.html'
       - 'service-worker.js'
+      - 'tests/public-map-retirement-contract.mjs'
       - '.github/workflows/community-help-qa.yml'
   workflow_dispatch:
 
@@ -36,13 +38,30 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Validate public service directory
         run: python scripts/validate_community_help.py
 
       - name: Validate JavaScript syntax
         run: node --check community-help-v01.js
 
-      - name: Verify public shell and offline wiring
+      - name: Detect public runtime state
+        id: runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -Fq 'https://nycinfocus.com/map/' index.html && ! grep -Eqi 'leaflet|raw\.githubusercontent\.com' index.html; then
+            echo 'state=retired' >> "$GITHUB_OUTPUT"
+          else
+            echo 'state=active' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify active public shell and offline wiring
+        if: steps.runtime.outputs.state == 'active'
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -65,5 +84,9 @@ jobs:
           missing = [item for item in required if item not in worker]
           if missing:
               raise SystemExit(f'service worker missing Community Help assets: {missing}')
-          print('Community Help public shell and offline wiring verified.')
+          print('Community Help active public shell and offline wiring verified.')
           PY
+
+      - name: Verify retired public root does not expose Community Help shell
+        if: steps.runtime.outputs.state == 'retired'
+        run: node tests/public-map-retirement-contract.mjs
