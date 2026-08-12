@@ -5,8 +5,10 @@ on:
     paths:
       - 'index.html'
       - 'service-worker.js'
+      - 'scripts/build_retired_pages.py'
       - 'tests/public-map-retirement-contract.mjs'
       - '.github/workflows/public-map-retirement-refresh-qa.yml'
+      - '.github/workflows/static.yml'
   workflow_dispatch:
 
 permissions:
@@ -22,5 +24,33 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - name: Verify retired public root contract
         run: node tests/public-map-retirement-contract.mjs
+      - name: Build retirement-only Pages artifact
+        run: python3 scripts/build_retired_pages.py "$RUNNER_TEMP/field-desk-pages"
+      - name: Fail closed on legacy public routes in artifact
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/field-desk-pages"
+          test -s "$root/index.html"
+          test -s "$root/service-worker.js"
+          test -f "$root/.nojekyll"
+          test ! -e "$root/admin"
+          test ! -e "$root/approved-export-preview.html"
+          test ! -e "$root/desk.html"
+          test ! -e "$root/live-alerts.html"
+          test ! -e "$root/live-qa-standalone.html"
+          test ! -e "$root/mobile.html"
+          test ! -e "$root/nightlife-preview.html"
+          test ! -e "$root/preview-major-feed-review.html"
+          test ! -e "$root/prototype-major-events-review.html"
+          test ! -e "$root/public.html"
+          test ! -e "$root/special-overlays-test.html"
+          test ! -e "$root/web.html"
+          count="$(find "$root" -type f | wc -l | tr -d ' ')"
+          test "$count" = '3'
+          echo FIELD_DESK_RETIREMENT_ARTIFACT_ZERO_LEGACY_ROUTES_PASS
