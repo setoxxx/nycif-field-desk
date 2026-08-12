@@ -1,0 +1,26 @@
+name: Public Map Retirement Refresh QA
+
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'service-worker.js'
+      - 'tests/public-map-retirement-contract.mjs'
+      - '.github/workflows/public-map-retirement-refresh-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  retirement-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify retired public root contract
+        run: node tests/public-map-retirement-contract.mjs
