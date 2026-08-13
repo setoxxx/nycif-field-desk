@@ -33,7 +33,7 @@ jobs:
       - name: Verify retired public root contract
         run: node tests/public-map-retirement-contract.mjs
       - name: Verify stale-cache cleanup and navigation redirect behavior
-        run: node tests/retirement-service-worker.test.mjs
+        run: node --test tests/retirement-service-worker.test.mjs
       - name: Verify rollback source semantics are pinned
         run: |
           set -euo pipefail
@@ -47,7 +47,7 @@ jobs:
           grep -Fq 'does not authorize merge, deployment, rollback' "$doc"
           echo FIELD_DESK_ROLLBACK_SOURCE_SEMANTICS_PASS
       - name: Build retirement-only Pages artifact
-        run: python3 scripts/build_retired_pages.py "$RUNNER_TEMP/field-desk-pages"
+        run: python3 scripts/build_retired_pages.py
       - name: Fail closed on legacy public routes in artifact
         run: |
           set -euo pipefail
