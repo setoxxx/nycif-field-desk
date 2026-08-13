@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 1978,
-  "usable_complaints": 1978,
+  "source_complaints": 2023,
+  "usable_complaints": 2023,
   "source_dispensaries": 255,
   "source_retailers": 4882,
   "correlation_locations_before_dedupe": 5137,
   "correlation_locations": 3897,
   "semantic_duplicate_locations_collapsed": 1240,
-  "output_locations": 174,
+  "output_locations": 176,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3723,
+  "low_signal_excluded": 3721,
   "radius_feet": [
     100,
     250,
@@ -28,19 +28,19 @@
   "min_signal_score": 3,
   "location_kind_counts": {
     "legal_cannabis_dispensary": 31,
-    "licensed_smoke_vape_retailer": 143
+    "licensed_smoke_vape_retailer": 145
   },
   "borough_counts": {
-    "Manhattan": 45,
-    "Queens": 56,
-    "Brooklyn": 47,
+    "Manhattan": 48,
+    "Queens": 57,
+    "Brooklyn": 48,
     "Staten Island": 6,
-    "Bronx": 20
+    "Bronx": 17
   },
   "signal_tier_counts": {
-    "very_high": 5,
-    "high": 20,
-    "moderate": 149
+    "very_high": 7,
+    "high": 19,
+    "moderate": 150
   },
   "top_locations_sample": [
     {
@@ -61,10 +61,10 @@
       "address": "404 8 AVENUE, NEW YORK, 10001",
       "borough": "Manhattan",
       "source_record_count": 2,
-      "signal_score": 61,
+      "signal_score": 71,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 6,
-      "complaints_365d_250ft": 6,
+      "complaints_365d_100ft": 7,
+      "complaints_365d_250ft": 7,
       "last_complaint_date": "2026-08-06"
     },
     {
@@ -109,10 +109,10 @@
       "address": "600 WEST 42 STREET, NEW YORK, 10036",
       "borough": "Manhattan",
       "source_record_count": 2,
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
+      "signal_score": 51,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 5,
       "last_complaint_date": "2026-08-05"
     },
     {
@@ -121,11 +121,23 @@
       "address": "600 WEST 42 STREET, NEW YORK, 10036",
       "borough": "Manhattan",
       "source_record_count": 2,
-      "signal_score": 41,
+      "signal_score": 51,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 5,
+      "last_complaint_date": "2026-08-05"
+    },
+    {
+      "title": "SAAD NEWSSTAND",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "8 AVENUE, NEW YORK, 10001",
+      "borough": "Manhattan",
+      "source_record_count": 1,
+      "signal_score": 44,
       "signal_tier": "high",
       "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-08-05"
+      "complaints_365d_250ft": 7,
+      "last_complaint_date": "2026-08-06"
     },
     {
       "title": "THE HOT SPOT 4 CORP.",
@@ -138,30 +150,6 @@
       "complaints_365d_100ft": 4,
       "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-07-31"
-    },
-    {
-      "title": "SAAD NEWSSTAND",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "8 AVENUE, NEW YORK, 10001",
-      "borough": "Manhattan",
-      "source_record_count": 1,
-      "signal_score": 34,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 6,
-      "last_complaint_date": "2026-08-06"
-    },
-    {
-      "title": "RIVERSIDE MARKETPLACE NY INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "5 BLUE SLIP, BROOKLYN, 11222",
-      "borough": "Brooklyn",
-      "source_record_count": 1,
-      "signal_score": 31,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-08-03"
     },
     {
       "title": "SAMMY GOURMET DELI 2 INC.",
@@ -198,6 +186,18 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-19"
+    },
+    {
+      "title": "2527 MR DELI GOURMET I CORP.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "2527 FREDERICK DOUGLASS BLVD, NEW YORK, 10030",
+      "borough": "Manhattan",
+      "source_record_count": 1,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-07-14"
     },
     {
       "title": "7 Eleven Store #39875A",
@@ -272,6 +272,18 @@
       "last_complaint_date": "2026-07-30"
     },
     {
+      "title": "RIVERSIDE MARKETPLACE NY INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "5 BLUE SLIP, BROOKLYN, 11222",
+      "borough": "Brooklyn",
+      "source_record_count": 1,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-08-03"
+    },
+    {
       "title": "ROYAL STAR 99¢ INC.",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "13779 QUEENS BLVD, BRIARWOOD, 11435",
@@ -330,20 +342,8 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-07-19"
-    },
-    {
-      "title": "ZARA SMOKE SHOP INC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "580 8 AVENUE, NEW YORK, 10018",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-21"
     }
   ],
-  "generated_at": "2026-08-13T11:15:30.606Z",
+  "generated_at": "2026-08-13T11:19:21.262Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
