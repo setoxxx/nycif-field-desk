@@ -8,6 +8,7 @@ on:
       - "live-location-control-handoff-v01.js"
       - "tests/live-location-tracking.test.cjs"
       - "tests/live-location-single-control.playwright.mjs"
+      - "tests/public-map-retirement-contract.mjs"
       - ".github/workflows/live-location-tracking.yml"
 
 permissions:
@@ -35,12 +36,29 @@ jobs:
       - name: Run deterministic controller tests
         run: node tests/live-location-tracking.test.cjs
 
+      - name: Detect public runtime state
+        id: runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -Fq 'https://nycinfocus.com/map/' index.html && ! grep -Eqi 'leaflet|raw\.githubusercontent\.com' index.html; then
+            echo 'state=retired' >> "$GITHUB_OUTPUT"
+          else
+            echo 'state=active' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate retired redirect runtime
+        if: steps.runtime.outputs.state == 'retired'
+        run: node tests/public-map-retirement-contract.mjs
+
       - name: Install browser QA dependencies
+        if: steps.runtime.outputs.state == 'active'
         run: |
           npm install --no-save playwright@1.54.1 @axe-core/playwright@4.10.2
           npx playwright install chromium
 
       - name: Start exact reviewed runtime
+        if: steps.runtime.outputs.state == 'active'
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/nycif-live-location-server.log 2>&1 &
           for attempt in {1..20}; do
@@ -53,6 +71,7 @@ jobs:
           exit 1
 
       - name: Run mobile and desktop rendered live GPS gates
+        if: steps.runtime.outputs.state == 'active'
         shell: bash
         run: |
           mkdir -p artifacts/live-location
@@ -61,6 +80,12 @@ jobs:
           status=${PIPESTATUS[0]}
           cp /tmp/nycif-live-location-server.log artifacts/live-location/server.log || true
           exit "$status"
+
+      - name: Record retired live-location semantics
+        if: steps.runtime.outputs.state == 'retired'
+        run: |
+          mkdir -p artifacts/live-location
+          printf '%s\n' 'RETIRED_RUNTIME: deterministic live-location controller tests retained; rendered Leaflet/GPS shell is intentionally absent from the public root.' > artifacts/live-location/live-location-gates.log
 
       - name: Upload live GPS QA evidence
         if: always()

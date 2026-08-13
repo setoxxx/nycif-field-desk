@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: ${{ github.ref == 'refs/heads/main' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -27,10 +28,16 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload static site
+      - name: Build retirement-only Pages artifact
+        run: python3 scripts/build_retired_pages.py
+
+      - name: Verify retirement contract before upload
+        run: node tests/public-map-retirement-contract.mjs
+
+      - name: Upload retirement-only static site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: ${{ runner.temp }}/field-desk-pages
 
       - name: Deploy to GitHub Pages
         id: deployment
