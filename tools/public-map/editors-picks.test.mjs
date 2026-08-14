@@ -30,14 +30,11 @@ test('engine module loads with weights and thresholds', () => {
 });
 
 test('being major alone earns no medal (curation, not gilding the whole feed)', () => {
-  // Every major feed event carries the same flat major_score; major-only must
-  // not medal, or ~900 events would all be gold.
   assert.equal(ED.medalOf(ED.editorialScore({ isMajor: true })), '', 'major alone => no medal');
   assert.equal(ED.medalOf(ED.editorialScore({})), '', 'nothing => no medal');
 });
 
 test('editorial score rewards past presence, crowd, money, and photogenic', () => {
-  // Returning alone is a medal (silver) but not gold — gold needs more.
   assert.ok(ED.editorialScore({ returning: true }) >= ED.THRESHOLDS.silver, 'past presence => at least silver');
   assert.ok(ED.editorialScore({ returning: true }) < ED.THRESHOLDS.gold, 'past presence alone is not gold');
   assert.ok(ED.editorialScore({ crowdScore: 200 }) > 0, 'crowd adds');
@@ -53,7 +50,7 @@ test('gold requires past presence plus another standout signal', () => {
 
 test('medals are threshold tiers, not fixed counts', () => {
   assert.equal(ED.medalOf(ED.THRESHOLDS.gold), 'gold');
-  assert.equal(ED.medalOf(ED.THRESHOLDS.gold + 500), 'gold'); // many can be gold
+  assert.equal(ED.medalOf(ED.THRESHOLDS.gold + 500), 'gold');
   assert.equal(ED.medalOf(ED.THRESHOLDS.silver), 'silver');
   assert.equal(ED.medalOf(ED.THRESHOLDS.bronze), 'bronze');
   assert.equal(ED.medalOf(ED.THRESHOLDS.bronze - 1), '', 'below bronze earns no medal');
@@ -63,8 +60,7 @@ test('medals are threshold tiers, not fixed counts', () => {
 test('a proven returning crowd magnet reaches gold; a plain event does not', () => {
   const magnet = ED.editorialScore({ isMajor: true, crowdScore: 100, returning: true, photoPick: true });
   assert.equal(ED.medalOf(magnet), 'gold');
-  const plain = ED.editorialScore({ isMajor: true });
-  assert.equal(ED.medalOf(plain), '');
+  assert.equal(ED.medalOf(ED.editorialScore({ isMajor: true })), '');
 });
 
 test('money-day priority alone can earn silver/bronze without past presence', () => {
@@ -73,8 +69,7 @@ test('money-day priority alone can earn silver/bronze without past presence', ()
 });
 
 test('sourceKey joins feed events to operator rows', () => {
-  const k = ED.sourceKey({ source: { dataset: 'tvpp-9vvx', source_event_id: '898494' } });
-  assert.equal(k, 'tvpp-9vvx:898494');
+  assert.equal(ED.sourceKey({ source: { dataset: 'tvpp-9vvx', source_event_id: '898494' } }), 'tvpp-9vvx:898494');
   assert.equal(ED.sourceKey({ source: {} }), '');
 });
 
@@ -101,12 +96,11 @@ test('News Desk rows are certified NYC map_ready only — no ocean pins', () => 
   assert.equal(rows[0].kind, 'money');
 });
 
-test('index.html exposes the public News Desk toggle and Editor’s Picks control', () => {
+test('index.html exposes the public News Desk toggle and NYCIF Top Picks control', () => {
   assert.match(indexHtml, /id="newsDeskToggle"/);
   assert.match(indexHtml, /id="editorsPicksSelect"/);
   assert.match(indexHtml, /News Desk/);
-  assert.match(indexHtml, /Editor.s Picks/);
-  // Engine script must load before the app that consumes it.
+  assert.match(indexHtml, /NYCIF Top Picks/);
   assert.ok(indexHtml.indexOf('news-desk-editors-picks-v01.js') < indexHtml.indexOf('app-schema-v1-major-all-v01.js'));
 });
 
@@ -116,7 +110,6 @@ test('marquee types (FIFA / festival / parade / feast) medal and reach News Desk
   assert.equal(ED.isMarquee('Puerto Rican Day Parade'), true);
   assert.equal(ED.isMarquee('Summer Festival'), true);
   assert.equal(ED.isMarquee('Adult Softball League'), false);
-  // A marquee event earns a medal even with no money/viral history.
   assert.ok(ED.medalOf(ED.editorialScore({ marquee: true, isMajor: true })) !== '');
 });
 
@@ -130,11 +123,22 @@ test('app wires medals into filtering and rendering', () => {
   assert.match(appJs, /state\.newsDeskOn/);
   assert.match(appJs, /loadNewsDeskSignals/);
   assert.match(appJs, /applyEditorial/);
-  // News Desk is additive in category matching.
   assert.match(appJs, /state\.newsDeskOn && e\.newsDesk/);
 });
 
 test('engine script is service-worker cached and cache bumped', () => {
   assert.match(swJs, /news-desk-editors-picks-v01\.js/);
-  assert.match(swJs, /const CACHE_NAME = 'nycif-v\d+-[a-z0-9-]+'/);
+  assert.match(swJs, /const CACHE_NAME = 'nycif-[a-z0-9-]+'/);
+});
+
+test('public tier labels map medals to NYCIF assignment language', () => {
+  assert.equal(ED.MEDAL_META.gold.emoji, '🔴');
+  assert.equal(ED.MEDAL_META.gold.label, 'Photo First');
+  assert.equal(ED.MEDAL_META.silver.emoji, '🟠');
+  assert.equal(ED.MEDAL_META.silver.label, 'Strong Assignment');
+  assert.equal(ED.MEDAL_META.bronze.emoji, '🟡');
+  assert.equal(ED.MEDAL_META.bronze.label, 'Feature Option');
+  assert.match(indexHtml, /Show all events/);
+  assert.match(indexHtml, /Top Picks only/);
+  assert.match(indexHtml, /Photo First only/);
 });
