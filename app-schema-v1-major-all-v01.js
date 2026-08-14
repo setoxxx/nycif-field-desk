@@ -752,11 +752,6 @@
     return baseEventMatches(e) && medalMatch(e);
   }
 
-  function eventMatches(e) {
-    return listEventMatches(e);
-  }
-
-
   function approximateClusterIcon(cluster, kind) {
     const count = cluster.getChildCount();
     const className = kind === 'park'
@@ -904,24 +899,6 @@
     const lat2 = toRad(b.lat);
     const x = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
     return 2 * R * Math.asin(Math.sqrt(x));
-  }
-
-  function sortEvents(a, b) {
-    if (state.sort === 'near') {
-      const da = milesBetween(state.userLocation, a) ?? 999999;
-      const db = milesBetween(state.userLocation, b) ?? 999999;
-      return da - db || b.priority - a.priority;
-    }
-    if (state.sort === 'borough') {
-      return (a.borough || 'zz').localeCompare(b.borough || 'zz') || b.priority - a.priority;
-    }
-    if (state.sort === 'type') {
-      return String(a.nycif?.event_type || 'zz').localeCompare(String(b.nycif?.event_type || 'zz')) || b.priority - a.priority;
-    }
-    if (state.sort === 'time') {
-      return (a.dateKey || '9999').localeCompare(b.dateKey || '9999') || b.priority - a.priority;
-    }
-    return b.priority - a.priority || (a.dateKey || '').localeCompare(b.dateKey || '');
   }
 
   function mapsUrl(kind, e) {
@@ -1442,7 +1419,8 @@
     // With clustering available, represent EVERY map-eligible event in the selected
     // date/filter scope. Viewport limiting survives only in explicit no-cluster
     // diagnostic mode, where thousands of independent DOM markers are unsafe.
-    const eligibleInScope = useCluster ? mapReady : (inView.length ? inView : mapReady);
+    const nonClusterScope = inView.length ? inView : mapReady;
+    const eligibleInScope = useCluster ? mapReady : nonClusterScope;
     const candidates = useCluster
       ? eligibleInScope
       : eligibleInScope.slice(0, MARKER_SOFT_CAP);
@@ -2438,8 +2416,8 @@
         mapScopeVisible: state.events.filter(baseEventMatches).length,
         mapEligibleVisible: state.events.filter(e => baseEventMatches(e) && markerEligible(e)).length,
         ...(parityAuditEnabled ? {
-          visibleIds: state.events.filter(listEventMatches).map(e => e.id).sort(),
-          mapEligibleVisibleIds: state.events.filter(e => baseEventMatches(e) && markerEligible(e)).map(e => e.id).sort()
+          visibleIds: state.events.filter(listEventMatches).map(e => e.id).sort((a, b) => String(a).localeCompare(String(b))),
+          mapEligibleVisibleIds: state.events.filter(e => baseEventMatches(e) && markerEligible(e)).map(e => e.id).sort((a, b) => String(a).localeCompare(String(b)))
         } : {}),
         markerParityComplete: useCluster && state.markerEvents === state.events.filter(e => baseEventMatches(e) && markerEligible(e)).length,
         peakMarkerObjects: state.peakMarkerObjects,

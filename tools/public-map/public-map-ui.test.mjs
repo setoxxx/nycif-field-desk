@@ -157,3 +157,9 @@ test('top picks and temporal states are derived from complete scoped data before
   const shownAt = appJs.indexOf('const shown = Math.min(state.listShown, listScope.length)');
   assert.ok(summaryAt > shownAt, 'summary is fed the complete mapScope, not a sliced card page');
 });
+
+test('parity diagnostics sort string IDs explicitly and ended badges retain readable contrast', () => {
+  assert.match(appJs, /visibleIds:[^\n]+\.sort\(\(a, b\) => String\(a\)\.localeCompare\(String\(b\)\)\)/);
+  assert.match(appJs, /mapEligibleVisibleIds:[^\n]+\.sort\(\(a, b\) => String\(a\)\.localeCompare\(String\(b\)\)\)/);
+  assert.match(publicMapCss, /item-tag\.temporal-ended \{ background: #e5e7eb; color: #4b5563; \}/);
+});
