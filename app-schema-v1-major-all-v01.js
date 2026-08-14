@@ -205,6 +205,7 @@
     sortSelect: document.getElementById('sortSelect'),
     dateChips: document.getElementById('dateChips'),
     boroughs: document.getElementById('boroughs'),
+    dailyGuideSummary: document.getElementById('dailyGuideSummary'),
     listMeta: document.getElementById('listMeta'),
     eventList: document.getElementById('eventList'),
     loadMoreBtn: document.getElementById('loadMoreBtn'),
@@ -737,13 +738,22 @@
     return false;
   }
 
-  function eventMatches(e) {
+  // NYCIF_DAILY_GUIDE_V01: map scope and editorial-list scope are deliberately separate.
+  // Editorial tiers change list presentation only; they never make an otherwise valid map pin disappear.
+  function baseEventMatches(e) {
     return sourceMatches(e)
       && dateMatches(e)
       && categoryFilterMatch(e)
-      && medalMatch(e)
       && (state.borough === 'all' || e.borough === state.borough)
       && (!state.search || e.searchText.includes(state.search));
+  }
+
+  function listEventMatches(e) {
+    return baseEventMatches(e) && medalMatch(e);
+  }
+
+  function eventMatches(e) {
+    return listEventMatches(e);
   }
 
 
@@ -1077,7 +1087,8 @@
       groups.get(key).push(e);
     }
     for (const group of groups.values()) {
-      group.sort((a, b) => b.priority - a.priority || String(a.title).localeCompare(String(b.title)));
+      group.sort((a, b) => Number(b.editorialScore || 0) - Number(a.editorialScore || 0)
+        || b.priority - a.priority || String(a.title).localeCompare(String(b.title)));
     }
     return groups;
   }
@@ -1400,7 +1411,7 @@
     }
     const key = coordKeyFor(e.lat, e.lng);
     const stack = state.events.filter(ev => markerEligible(ev)
-      && eventMatches(ev)
+      && baseEventMatches(ev)
       && coordKeyFor(ev.lat, ev.lng) === key);
     stack.sort((a, b) => b.priority - a.priority || String(a.title).localeCompare(String(b.title)));
     return ensureStackMarker(stack.length ? stack : [e]);
@@ -1428,10 +1439,10 @@
     const mapReady = visible.filter(e => markerEligible(e));
     const bounds = expandedBounds();
     const inView = bounds ? mapReady.filter(e => bounds.contains([e.lat, e.lng])) : mapReady;
-    const eligibleInScope = inView.length ? inView : mapReady;
-    // With clustering available, represent every eligible event in scope. The
-    // legacy soft cap is retained only for the explicit no-cluster diagnostic
-    // mode, where rendering thousands of independent DOM markers is unsafe.
+    // With clustering available, represent EVERY map-eligible event in the selected
+    // date/filter scope. Viewport limiting survives only in explicit no-cluster
+    // diagnostic mode, where thousands of independent DOM markers are unsafe.
+    const eligibleInScope = useCluster ? mapReady : (inView.length ? inView : mapReady);
     const candidates = useCluster
       ? eligibleInScope
       : eligibleInScope.slice(0, MARKER_SOFT_CAP);
@@ -1457,6 +1468,138 @@
     return batch;
   }
 
+  const DAILY_GUIDE_BOROUGHS = [
+    ['Manhattan', 'MANHATTAN'],
+    ['Brooklyn', 'BROOKLYN'],
+    ['Queens', 'QUEENS'],
+    ['Bronx', 'THE BRONX'],
+    ['Staten Island', 'STATEN ISLAND']
+  ];
+  const DAILY_GUIDE_TIERS = [
+    ['gold', '🔴 PHOTO FIRST', 'Highest-priority newsworthy and photo assignments.'],
+    ['silver', '🟠 STRONG ASSIGNMENTS', 'Strong community, cultural, civic, visual, or local-news assignments.'],
+    ['bronze', '🟡 FEATURE OPTIONS', 'Good visual feature opportunities.'],
+    ['', 'WHAT ELSE IS HAPPENING', 'Every remaining valid public event for this date.']
+  ];
+
+  function fullDateLabel(key) {
+    if (!SCHEMA.validCalendarDate(key)) return key;
+    const d = new Date(`${key}T12:00:00Z`);
+    return new Intl.DateTimeFormat('en-US', {
+      weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York'
+    }).format(d);
+  }
+
+  function exactEventMoment(value) {
+    const raw = String(value || '').trim();
+    if (!raw || !meaningfulTime(raw)) return null;
+    const ms = Date.parse(raw);
+    return Number.isFinite(ms) ? ms : null;
+  }
+
+  function eventTemporalStatus(e) {
+    if (selectedDateKey() !== todayKey()) return '';
+    const now = Date.now();
+    const start = exactEventMoment(e.start_date_time);
+    const end = exactEventMoment(e.end_date_time);
+    if (end != null && end < now) return 'ENDED';
+    if (start != null && end != null && start <= now && now <= end) return 'HAPPENING NOW';
+    if (start != null && start > now) {
+      return ((start - now) / 60000) <= 90 ? 'STARTING SOON' : 'LATER TODAY';
+    }
+    return '';
+  }
+
+  function temporalRank(e) {
+    const status = eventTemporalStatus(e);
+    if (status === 'HAPPENING NOW') return 0;
+    if (status === 'ENDED') return 2;
+    return 1;
+  }
+
+  function dailyGuideSort(a, b) {
+    if (state.sort === 'near') {
+      const da = milesBetween(state.userLocation, a) ?? 999999;
+      const db = milesBetween(state.userLocation, b) ?? 999999;
+      return da - db || eventSortTime(a) - eventSortTime(b) || String(a.title).localeCompare(String(b.title));
+    }
+    if (state.sort === 'time') {
+      return eventSortTime(a) - eventSortTime(b) || String(a.title).localeCompare(String(b.title));
+    }
+    if (state.sort === 'type') {
+      return String(a.nycif?.event_type || 'zz').localeCompare(String(b.nycif?.event_type || 'zz'))
+        || eventSortTime(a) - eventSortTime(b) || String(a.title).localeCompare(String(b.title));
+    }
+    return temporalRank(a) - temporalRank(b)
+      || Number(b.editorialScore || 0) - Number(a.editorialScore || 0)
+      || eventSortTime(a) - eventSortTime(b)
+      || String(a.title).localeCompare(String(b.title));
+  }
+
+  function topPickCounts(events) {
+    return {
+      gold: events.filter(e => e.medal === 'gold').length,
+      silver: events.filter(e => e.medal === 'silver').length,
+      bronze: events.filter(e => e.medal === 'bronze').length
+    };
+  }
+
+  function renderDailyGuideSummary(events) {
+    if (!els.dailyGuideSummary) return;
+    clearChildren(els.dailyGuideSummary);
+    const key = selectedDateKey();
+    const title = key === todayKey() ? `TODAY — ${fullDateLabel(key).toUpperCase()}` : fullDateLabel(key).toUpperCase();
+    appendText(els.dailyGuideSummary, 'h2', title, 'daily-guide-date');
+    const scope = state.borough === 'all' ? 'around NYC' : `in ${state.borough}`;
+    appendText(els.dailyGuideSummary, 'p', `${events.length.toLocaleString()} event${events.length === 1 ? '' : 's'} happening ${scope}`, 'daily-guide-total');
+    appendText(els.dailyGuideSummary, 'h3', 'NYCIF TOP PICKS', 'daily-guide-picks-title');
+    const counts = topPickCounts(events);
+    const grid = document.createElement('div');
+    grid.className = 'daily-guide-picks';
+    appendText(grid, 'span', `🔴 ${counts.gold.toLocaleString()} Photo First`, 'daily-guide-pick daily-guide-pick--gold');
+    appendText(grid, 'span', `🟠 ${counts.silver.toLocaleString()} Strong Assignments`, 'daily-guide-pick daily-guide-pick--silver');
+    appendText(grid, 'span', `🟡 ${counts.bronze.toLocaleString()} Feature Options`, 'daily-guide-pick daily-guide-pick--bronze');
+    els.dailyGuideSummary.appendChild(grid);
+    if (!state.indexComplete) {
+      appendText(els.dailyGuideSummary, 'p', 'Finding more events — counts update as the complete day index loads.', 'daily-guide-loading');
+    }
+  }
+
+  function boroughGuideKey(e) {
+    const exact = DAILY_GUIDE_BOROUGHS.find(([key]) => key === e.borough);
+    return exact ? exact[0] : '__other__';
+  }
+
+  function renderDailyGuide(events, shownLimit) {
+    let remaining = shownLimit;
+    const boroughRows = [...DAILY_GUIDE_BOROUGHS];
+    if (events.some(e => boroughGuideKey(e) === '__other__')) {
+      boroughRows.push(['__other__', 'CITYWIDE / BOROUGH NOT LISTED']);
+    }
+    for (const [boroughKey, boroughLabel] of boroughRows) {
+      const boroughEvents = events.filter(e => boroughGuideKey(e) === boroughKey);
+      if (!boroughEvents.length || remaining <= 0) continue;
+      const section = document.createElement('section');
+      section.className = 'daily-guide-borough';
+      appendText(section, 'h2', boroughLabel, 'daily-guide-borough-title');
+      let sectionCards = 0;
+      for (const [tier, heading, description] of DAILY_GUIDE_TIERS) {
+        const tierEvents = boroughEvents.filter(e => (e.medal || '') === tier).sort(dailyGuideSort);
+        if (!tierEvents.length || remaining <= 0) continue;
+        const tierSection = document.createElement('section');
+        tierSection.className = `daily-guide-tier daily-guide-tier--${tier || 'else'}`;
+        appendText(tierSection, 'h3', heading, 'daily-guide-tier-title');
+        appendText(tierSection, 'p', description, 'daily-guide-tier-dek');
+        const take = tierEvents.slice(0, remaining);
+        take.forEach(e => tierSection.appendChild(buildListCard(e)));
+        remaining -= take.length;
+        sectionCards += take.length;
+        section.appendChild(tierSection);
+      }
+      if (sectionCards) els.eventList.appendChild(section);
+    }
+  }
+
   function buildListCard(e) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -1468,8 +1611,10 @@
     appendText(top, 'span', `${e.displayEmoji} ${e.categoryMeta.label}`, 'item-source');
     const tags = document.createElement('span');
     tags.className = 'item-tags';
-    if (e.isPast) {
-      appendText(tags, 'span', '✓ Ended', 'item-tag ended');
+    const temporalStatus = eventTemporalStatus(e);
+    if (temporalStatus) {
+      const statusClass = temporalStatus.toLowerCase().replace(/\s+/g, '-');
+      appendText(tags, 'span', temporalStatus, `item-tag temporal temporal-${statusClass}`);
     }
     if (e.medal && ED.MEDAL_META[e.medal]) {
       appendText(tags, 'span', `${ED.MEDAL_META[e.medal].emoji} ${ED.MEDAL_META[e.medal].label}`, `item-tag medal medal-${e.medal}`);
@@ -1642,36 +1787,41 @@
     const t0 = performance.now();
     updateIndexLabel();
     updateCategoryAvailability();
-    const visible = state.events.filter(eventMatches).sort(sortEvents);
-    const drawn = renderMarkers(visible);
+    const mapScope = state.events.filter(baseEventMatches);
+    const listScope = mapScope.filter(medalMatch);
+    const drawn = renderMarkers(mapScope);
     renderApproximateMarkers();
-    const shown = Math.min(state.listShown, visible.length);
-    const mapEligibleCount = visible.filter(e => markerEligible(e)).length;
+    const shown = Math.min(state.listShown, listScope.length);
+    const mapEligibleCount = mapScope.filter(e => markerEligible(e)).length;
     const dateLabel = friendlyDateLabel(selectedDateKey());
-    let meta = `${visible.length.toLocaleString()} event${visible.length === 1 ? '' : 's'} ${dateLabel === 'today' || dateLabel === 'tomorrow' ? dateLabel : `on ${dateLabel}`}`;
-    if (state.markerEvents < mapEligibleCount) {
+    renderDailyGuideSummary(mapScope);
+    let meta = `${listScope.length.toLocaleString()} shown in the editorial guide`;
+    if (listScope.length !== mapScope.length) {
+      meta += ` · ${mapScope.length.toLocaleString()} total events remain on the map`;
+    }
+    if (!useCluster && state.markerEvents < mapEligibleCount) {
       meta += ' · move or zoom the map to see more pins';
     }
     els.listMeta.textContent = meta;
     clearChildren(els.eventList);
-    if (!visible.length) {
+    if (!listScope.length) {
       appendText(els.eventList, 'div', emptyStateMessage(), 'empty');
     } else {
-      visible.slice(0, shown).forEach(e => els.eventList.appendChild(buildListCard(e)));
+      renderDailyGuide(listScope, shown);
     }
     if (els.loadMoreBtn) {
-      els.loadMoreBtn.hidden = shown >= visible.length;
-      els.loadMoreBtn.textContent = `Show 100 more (${Math.max(0, visible.length - shown).toLocaleString()} remaining)`;
+      els.loadMoreBtn.hidden = shown >= listScope.length;
+      els.loadMoreBtn.textContent = `Show 100 more (${Math.max(0, listScope.length - shown).toLocaleString()} remaining)`;
     }
     if (els.brandCount) {
-      els.brandCount.textContent = `${visible.length.toLocaleString()} event${visible.length === 1 ? '' : 's'} · ${dateLabel}`;
+      els.brandCount.textContent = `${mapScope.length.toLocaleString()} event${mapScope.length === 1 ? '' : 's'} · ${dateLabel}`;
     }
     if (state.feedPhase === 'error' && !state.events.length) {
       status('Events are temporarily unavailable. Open Filters and choose Retry Events.');
     } else if (state.feedPhase === 'error') {
       status('Events could not be refreshed. Showing the most recent available information.');
     } else {
-      status(`${visible.length.toLocaleString()} event${visible.length === 1 ? '' : 's'} · ${dateLabel}`);
+      status(`${mapScope.length.toLocaleString()} event${mapScope.length === 1 ? '' : 's'} · ${dateLabel}`);
     }
     state.timings.listRenderMs = Math.round(performance.now() - t0);
     if (debug && els.debugPanel) {
@@ -1679,11 +1829,13 @@
       els.debugPanel.textContent = JSON.stringify({
         version: VERSION,
         total: state.events.length,
-        filtered: visible.length,
+        mapScope: mapScope.length,
+        listScope: listScope.length,
+        topPicks: topPickCounts(mapScope),
         markers: drawn.length,
         markerEvents: state.markerEvents,
         mapEligibleVisible: mapEligibleCount,
-        markerParityComplete: state.markerEvents >= mapEligibleCount,
+        markerParityComplete: useCluster ? state.markerEvents === mapEligibleCount : state.markerEvents >= Math.min(mapEligibleCount, MARKER_SOFT_CAP),
         peakMarkerObjects: state.peakMarkerObjects,
         indexComplete: state.indexComplete,
         pagesLoaded: state.pagesLoaded,
@@ -1695,7 +1847,7 @@
         errors: state.errors.slice(-8)
       }, null, 2);
     }
-    return visible;
+    return mapScope;
   }
 
   function scheduleRender() {
@@ -1761,6 +1913,7 @@
 
   function onBoroughSelected(value, button) {
     state.borough = value;
+    state.listShown = LIST_PAGE;
     setActiveBoroughButton(button);
     savePrefs();
     scheduleRender();
@@ -2281,13 +2434,14 @@
         approximateFacilitySource: APPROXIMATE_FACILITY_SOURCE,
         markerObjects: state.markerObjects,
         markerEvents: state.markerEvents,
-        visible: state.events.filter(eventMatches).length,
-        mapEligibleVisible: state.events.filter(e => eventMatches(e) && markerEligible(e)).length,
+        visible: state.events.filter(listEventMatches).length,
+        mapScopeVisible: state.events.filter(baseEventMatches).length,
+        mapEligibleVisible: state.events.filter(e => baseEventMatches(e) && markerEligible(e)).length,
         ...(parityAuditEnabled ? {
-          visibleIds: state.events.filter(eventMatches).map(e => e.id).sort(),
-          mapEligibleVisibleIds: state.events.filter(e => eventMatches(e) && markerEligible(e)).map(e => e.id).sort()
+          visibleIds: state.events.filter(listEventMatches).map(e => e.id).sort(),
+          mapEligibleVisibleIds: state.events.filter(e => baseEventMatches(e) && markerEligible(e)).map(e => e.id).sort()
         } : {}),
-        markerParityComplete: state.markerEvents >= state.events.filter(e => eventMatches(e) && markerEligible(e)).length,
+        markerParityComplete: useCluster && state.markerEvents === state.events.filter(e => baseEventMatches(e) && markerEligible(e)).length,
         peakMarkerObjects: state.peakMarkerObjects,
         cluster: useCluster,
         indexComplete: state.indexComplete,
