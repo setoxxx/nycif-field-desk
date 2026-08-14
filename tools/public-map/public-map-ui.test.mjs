@@ -115,3 +115,45 @@ test('category filter badges are date-scoped and explain other-day totals', () =
   assert.match(appJs, /other days/);
   assert.match(appJs, /on map/);
 });
+
+
+test('daily guide keeps complete map scope separate from editorial list filtering', () => {
+  assert.match(indexHtml, /id="dailyGuideSummary"/);
+  assert.match(indexHtml, /Happening Now/);
+  assert.match(appJs, /function baseEventMatches/);
+  assert.match(appJs, /function listEventMatches/);
+  assert.match(appJs, /const mapScope = state\.events\.filter\(baseEventMatches\)/);
+  assert.match(appJs, /const listScope = mapScope\.filter\(medalMatch\)/);
+  assert.match(appJs, /renderMarkers\(mapScope\)/);
+  assert.match(appJs, /renderDailyGuideSummary\(mapScope\)/);
+  assert.match(appJs, /renderDailyGuide\(listScope, shown\)/);
+  assert.match(appJs, /useCluster \? mapReady/);
+});
+
+test('daily guide is date then borough then editorial tier and preserves all-events default', () => {
+  assert.match(appJs, /DAILY_GUIDE_BOROUGHS/);
+  assert.match(appJs, /MANHATTAN/);
+  assert.match(appJs, /BROOKLYN/);
+  assert.match(appJs, /QUEENS/);
+  assert.match(appJs, /THE BRONX/);
+  assert.match(appJs, /STATEN ISLAND/);
+  assert.match(appJs, /PHOTO FIRST/);
+  assert.match(appJs, /STRONG ASSIGNMENTS/);
+  assert.match(appJs, /FEATURE OPTIONS/);
+  assert.match(appJs, /WHAT ELSE IS HAPPENING/);
+  assert.match(appJs, /dateMode: 'today'/);
+  assert.match(appJs, /medalFilter: 'all'/);
+  assert.match(appJs, /categories: Object\.fromEntries\(ALL_CATEGORY_KEYS\.map\(k => \[k, true\]\)\)/);
+});
+
+test('top picks and temporal states are derived from complete scoped data before card pagination', () => {
+  assert.match(appJs, /function topPickCounts/);
+  assert.match(appJs, /function eventTemporalStatus/);
+  assert.match(appJs, /HAPPENING NOW/);
+  assert.match(appJs, /STARTING SOON/);
+  assert.match(appJs, /LATER TODAY/);
+  assert.match(appJs, /ENDED/);
+  const summaryAt = appJs.indexOf('renderDailyGuideSummary(mapScope)');
+  const shownAt = appJs.indexOf('const shown = Math.min(state.listShown, listScope.length)');
+  assert.ok(summaryAt > shownAt, 'summary is fed the complete mapScope, not a sliced card page');
+});

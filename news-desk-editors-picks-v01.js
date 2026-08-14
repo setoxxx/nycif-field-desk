@@ -72,10 +72,11 @@
     return '';
   }
 
+  // Internal medal keys stay stable; public labels use NYCIF assignment language.
   const MEDAL_META = {
-    gold: { emoji: '🥇', label: 'Gold' },
-    silver: { emoji: '🥈', label: 'Silver' },
-    bronze: { emoji: '🥉', label: 'Bronze' }
+    gold: { emoji: '🔴', label: 'Photo First' },
+    silver: { emoji: '🟠', label: 'Strong Assignment' },
+    bronze: { emoji: '🟡', label: 'Feature Option' }
   };
 
   // Stable join key across the discovery feed and the operator lanes.

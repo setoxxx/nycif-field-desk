@@ -789,3 +789,38 @@ body.public-map-page .nycif-event-popup--side-left .leaflet-popup-tip-container 
     inset-block-start: calc(env(safe-area-inset-top, 0px) + 132px);
   }
 }
+
+
+/* NYCIF daily editorial guide v01 */
+body.public-map-page .daily-guide-summary {
+  margin: 0 0 12px;
+  padding: 12px;
+  border: 1px solid rgba(17, 24, 39, .10);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .82);
+}
+body.public-map-page .daily-guide-date { margin: 0; font-size: 15px; line-height: 1.2; letter-spacing: -.01em; }
+body.public-map-page .daily-guide-total { margin: 4px 0 10px; color: #4b5563; font-size: 12px; }
+body.public-map-page .daily-guide-picks-title { margin: 0 0 6px; font-size: 11px; letter-spacing: .08em; }
+body.public-map-page .daily-guide-picks { display: grid; gap: 4px; }
+body.public-map-page .daily-guide-pick { font-size: 12px; font-weight: 800; }
+body.public-map-page .daily-guide-loading { margin: 8px 0 0; color: #6b7280; font-size: 10px; }
+body.public-map-page .daily-guide-borough { margin: 16px 0 22px; }
+body.public-map-page .daily-guide-borough-title { margin: 0 0 10px; padding-bottom: 6px; border-bottom: 2px solid #111827; font-size: 15px; letter-spacing: .08em; }
+body.public-map-page .daily-guide-tier { margin: 0 0 14px; }
+body.public-map-page .daily-guide-tier-title { margin: 0; font-size: 12px; letter-spacing: .04em; }
+body.public-map-page .daily-guide-tier-dek { margin: 3px 0 7px; color: #6b7280; font-size: 10px; line-height: 1.35; }
+body.public-map-page .item-tag.temporal-happening-now { background: #111827; color: #fff; }
+body.public-map-page .item-tag.temporal-starting-soon { background: #fee2e2; color: #991b1b; }
+body.public-map-page .item-tag.temporal-later-today { background: #eef2ff; color: #3730a3; }
+body.public-map-page .item-tag.temporal-ended { background: #e5e7eb; color: #6b7280; }
+body.public-map-page .marker--medal-gold { box-shadow: 0 0 0 4px rgba(220, 38, 38, .32), 0 6px 14px rgba(0,0,0,.28); transform: scale(1.12); }
+body.public-map-page .marker--medal-silver { box-shadow: 0 0 0 3px rgba(234, 88, 12, .26), 0 6px 14px rgba(0,0,0,.24); transform: scale(1.07); }
+body.public-map-page .marker--medal-bronze { box-shadow: 0 0 0 2px rgba(202, 138, 4, .22), 0 5px 12px rgba(0,0,0,.22); transform: scale(1.03); }
+@media (max-width: 700px) {
+  body.public-map-page .daily-guide-summary { position: sticky; top: 0; z-index: 2; padding: 10px; backdrop-filter: blur(14px); }
+  body.public-map-page .daily-guide-date { font-size: 13px; }
+  body.public-map-page .daily-guide-total,
+  body.public-map-page .daily-guide-pick { font-size: 11px; }
+  body.public-map-page .daily-guide-borough { margin-top: 14px; }
+}
