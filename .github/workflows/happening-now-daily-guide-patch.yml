@@ -1,0 +1,56 @@
+name: Happening Now Daily Guide Patch
+
+on:
+  push:
+    branches:
+      - feature/happening-now-daily-guide-20260814
+
+permissions:
+  contents: write
+
+concurrency:
+  group: happening-now-daily-guide-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  patch-and-test:
+    if: github.actor != 'github-actions[bot]' || !contains(github.event.head_commit.message, 'Apply Happening Now daily guide')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/happening-now-daily-guide-20260814
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Apply deterministic product patch
+        run: python tools/public-map/apply-happening-now-daily-guide.py
+
+      - name: JavaScript syntax
+        run: |
+          node --check app-schema-v1-major-all-v01.js
+          node --check news-desk-editors-picks-v01.js
+          node --check service-worker.js
+
+      - name: Public map contract tests
+        run: node --test tools/public-map/editors-picks.test.mjs tools/public-map/public-map-ui.test.mjs
+
+      - name: Diff safety
+        run: git diff --check
+
+      - name: Commit verified product changes
+        run: |
+          if git diff --quiet; then
+            echo 'No product changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app-schema-v1-major-all-v01.js index.html news-desk-editors-picks-v01.js public-map-v01.css service-worker.js tools/public-map/editors-picks.test.mjs tools/public-map/public-map-ui.test.mjs
+          git commit -m 'Apply Happening Now daily guide'
+          git push origin HEAD:feature/happening-now-daily-guide-20260814
