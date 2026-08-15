@@ -4,68 +4,70 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-08-14",
-  "matched_rows": 2212,
-  "mapped_total": 2195,
-  "needs_review": 17,
-  "rejected": 297788,
+  "since_date": "2025-08-15",
+  "matched_rows": 2288,
+  "mapped_total": 2270,
+  "needs_review": 18,
+  "rejected": 297712,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 558,
-    "cannabis_related_complaint": 1636,
-    "public_smoking_complaint": 1
+    "vape_complaint": 576,
+    "cannabis_related_complaint": 1692,
+    "public_smoking_complaint": 2
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 558,
-    "cannabis_marijuana_weed": 1636,
-    "public_secondhand_smoking": 1
+    "vape_electronic_cigarette": 576,
+    "cannabis_marijuana_weed": 1692,
+    "public_secondhand_smoking": 2
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 515,
-    "Obstruction": 855,
-    "Cannabis Retailer": 405,
-    "Maintenance or Facility": 369,
+    "Smoking or Vaping": 533,
     "Consumer Complaint": 43,
+    "Cannabis Retailer": 418,
+    "Obstruction": 892,
+    "Maintenance or Facility": 374,
+    "Animal-Abuse": 1,
+    "General Construction/Plumbing": 2,
     "Noise - Street/Sidewalk": 4,
     "Abandoned Vehicle": 1,
     "Derelict Vehicles": 1,
-    "Street Light Condition": 1,
-    "General Construction/Plumbing": 1
+    "Street Light Condition": 1
   },
   "descriptor_counts": {
-    "Allowed in Smoke Free Area": 501,
-    "Weeds or Grass": 855,
-    "Sales to Minors Under 21": 178,
-    "Unlicensed": 128,
-    "Grass/Weeds": 369,
+    "Allowed in Smoke Free Area": 519,
     "E-Cigarette Sales": 31,
-    "Suspicious Activity": 46,
-    "Product Concerns": 16,
-    "Too Close to a House of Worship": 17,
+    "Unlicensed": 136,
+    "Weeds or Grass": 892,
+    "Sales to Minors Under 21": 184,
+    "Grass/Weeds": 374,
+    "Product Concerns": 15,
+    "Smoking, Cigar, or Vape Store": 12,
+    "Neglected": 1,
+    "Suspicious Activity": 43,
+    "Too Close to a House of Worship": 19,
+    "Too Close to a School": 21,
+    "Smoking Ban - Smoking on Construction Site": 2,
     "Ashtray in Smoke-Free Area": 5,
     "Loud Music/Party": 2,
-    "Smoking, Cigar, or Vape Store": 12,
     "Sign Inadequate": 6,
     "Workplace Policy Not Provided or Inadequate": 3,
-    "Too Close to a School": 20,
     "With License Plate": 1,
     "Derelict Vehicles": 1,
     "Loud Talking": 2,
-    "Street Light Out": 1,
-    "Smoking Ban - Smoking on Construction Site": 1
+    "Street Light Out": 1
   },
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 17
+      "count": 18
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 297788
+      "count": 297712
     }
   ],
-  "generated_at": "2026-08-14T11:15:42.071Z",
+  "generated_at": "2026-08-15T10:44:26.946Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }
