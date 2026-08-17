@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2300,
-  "usable_complaints": 2300,
+  "source_complaints": 2324,
+  "usable_complaints": 2324,
   "source_dispensaries": 255,
   "source_retailers": 4882,
   "correlation_locations_before_dedupe": 5137,
   "correlation_locations": 3897,
   "semantic_duplicate_locations_collapsed": 1240,
-  "output_locations": 200,
+  "output_locations": 201,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3697,
+  "low_signal_excluded": 3696,
   "radius_feet": [
     100,
     250,
@@ -28,19 +28,19 @@
   "min_signal_score": 3,
   "location_kind_counts": {
     "legal_cannabis_dispensary": 33,
-    "licensed_smoke_vape_retailer": 167
+    "licensed_smoke_vape_retailer": 168
   },
   "borough_counts": {
     "Manhattan": 59,
-    "Queens": 58,
     "Brooklyn": 49,
     "Bronx": 26,
-    "Staten Island": 8
+    "Queens": 58,
+    "Staten Island": 9
   },
   "signal_tier_counts": {
-    "very_high": 7,
-    "high": 18,
-    "moderate": 175
+    "very_high": 6,
+    "high": 19,
+    "moderate": 176
   },
   "top_locations_sample": [
     {
@@ -80,30 +80,6 @@
       "last_complaint_date": "2026-08-06"
     },
     {
-      "title": "NEW FIREHOUSE DELI AND GRILL INC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "5615 METROPOLITAN AVENUE, RIDGEWOOD, 11385",
-      "borough": "Queens",
-      "source_record_count": 1,
-      "signal_score": 61,
-      "signal_tier": "very_high",
-      "complaints_365d_100ft": 6,
-      "complaints_365d_250ft": 6,
-      "last_complaint_date": "2026-07-31"
-    },
-    {
-      "title": "PNZ GRILL & DELI CORP",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "5605 METROPOLITAN AVE, RIDGEWOOD, 11385",
-      "borough": "Queens",
-      "source_record_count": 1,
-      "signal_score": 61,
-      "signal_tier": "very_high",
-      "complaints_365d_100ft": 6,
-      "complaints_365d_250ft": 6,
-      "last_complaint_date": "2026-07-31"
-    },
-    {
       "title": "SUNAC NATURAL",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "600 WEST 42 STREET, NEW YORK, 10036",
@@ -114,6 +90,18 @@
       "complaints_365d_100ft": 6,
       "complaints_365d_250ft": 6,
       "last_complaint_date": "2026-08-12"
+    },
+    {
+      "title": "RIVERBEND CANDY STORE",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "2289 5 AVENUE, NEW YORK, 10037",
+      "borough": "Manhattan",
+      "source_record_count": 1,
+      "signal_score": 55,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 9,
+      "last_complaint_date": "2026-08-15"
     },
     {
       "title": "NOSTRAND DELI & GROCERY",
@@ -140,16 +128,28 @@
       "last_complaint_date": "2026-08-13"
     },
     {
-      "title": "RIVERBEND CANDY STORE",
+      "title": "NEW FIREHOUSE DELI AND GRILL INC",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "2289 5 AVENUE, NEW YORK, 10037",
-      "borough": "Manhattan",
+      "address": "5615 METROPOLITAN AVENUE, RIDGEWOOD, 11385",
+      "borough": "Queens",
       "source_record_count": 1,
-      "signal_score": 35,
+      "signal_score": 41,
       "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 7,
-      "last_complaint_date": "2026-08-14"
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-31"
+    },
+    {
+      "title": "PNZ GRILL & DELI CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "5605 METROPOLITAN AVE, RIDGEWOOD, 11385",
+      "borough": "Queens",
+      "source_record_count": 1,
+      "signal_score": 41,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-07-31"
     },
     {
       "title": "SAAD NEWSSTAND",
@@ -344,6 +344,6 @@
       "last_complaint_date": "2026-07-22"
     }
   ],
-  "generated_at": "2026-08-16T10:45:09.785Z",
+  "generated_at": "2026-08-17T10:53:10.815Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
