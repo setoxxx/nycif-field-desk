@@ -4,30 +4,30 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-08-17",
-  "matched_rows": 2344,
-  "mapped_total": 2324,
-  "needs_review": 20,
-  "rejected": 297656,
+  "since_date": "2025-08-18",
+  "matched_rows": 2364,
+  "mapped_total": 2343,
+  "needs_review": 21,
+  "rejected": 297636,
   "duplicate_count": 0,
   "subtype_counts": {
-    "vape_complaint": 578,
-    "cannabis_related_complaint": 1744,
+    "vape_complaint": 575,
+    "cannabis_related_complaint": 1766,
     "public_smoking_complaint": 2
   },
   "match_bucket_counts": {
-    "vape_electronic_cigarette": 578,
-    "cannabis_marijuana_weed": 1744,
+    "vape_electronic_cigarette": 575,
+    "cannabis_marijuana_weed": 1766,
     "public_secondhand_smoking": 2
   },
   "complaint_type_counts": {
-    "Smoking or Vaping": 534,
-    "Obstruction": 924,
+    "Smoking or Vaping": 531,
+    "Maintenance or Facility": 391,
+    "Obstruction": 948,
+    "Cannabis Retailer": 415,
     "Noise - Residential": 1,
     "Overgrown Tree/Branches": 1,
     "Consumer Complaint": 44,
-    "Maintenance or Facility": 390,
-    "Cannabis Retailer": 418,
     "Damaged Tree": 2,
     "Animal-Abuse": 1,
     "General Construction/Plumbing": 2,
@@ -37,19 +37,19 @@
     "Street Light Condition": 1
   },
   "descriptor_counts": {
-    "Allowed in Smoke Free Area": 520,
-    "Weeds or Grass": 924,
+    "Allowed in Smoke Free Area": 517,
+    "Grass/Weeds": 391,
+    "Weeds or Grass": 948,
+    "Suspicious Activity": 44,
+    "Sales to Minors Under 21": 180,
+    "Unlicensed": 136,
+    "Product Concerns": 15,
     "Loud Music/Party": 3,
     "Traffic Sign or Signal Blocked": 1,
     "E-Cigarette Sales": 32,
-    "Grass/Weeds": 390,
-    "Unlicensed": 136,
-    "Sales to Minors Under 21": 183,
-    "Too Close to a School": 23,
+    "Too Close to a School": 21,
     "Sign Inadequate": 6,
-    "Suspicious Activity": 42,
     "Branch or Limb Has Fallen Down": 2,
-    "Product Concerns": 15,
     "Smoking, Cigar, or Vape Store": 12,
     "Neglected": 1,
     "Too Close to a House of Worship": 19,
@@ -64,15 +64,15 @@
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 20
+      "count": 21
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 297656
+      "count": 297636
     }
   ],
-  "generated_at": "2026-08-17T10:55:46.712Z",
+  "generated_at": "2026-08-18T10:52:07.771Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }
