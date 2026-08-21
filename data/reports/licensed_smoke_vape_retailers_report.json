@@ -1,47 +1,47 @@
 {
   "source_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
   "queried_url": "https://data.cityofnewyork.us/resource/w7w3-xahh.json?%24select=*&%24where=lower%28business_category%29+like+%27%25tobacco%25%27+OR+lower%28business_category%29+like+%27%25electronic+cigarette%25%27+OR+lower%28business_category%29+like+%27%25cigarette%25%27+OR+lower%28business_category%29+like+%27%25vape%25%27+OR+lower%28business_category%29+like+%27%25smoke%25%27+OR+lower%28detail%29+like+%27%25tobacco%25%27+OR+lower%28detail%29+like+%27%25electronic+cigarette%25%27+OR+lower%28detail%29+like+%27%25cigarette%25%27+OR+lower%28detail%29+like+%27%25vape%25%27+OR+lower%28dba_trade_name%29+like+%27%25tobacco%25%27+OR+lower%28dba_trade_name%29+like+%27%25cigarette%25%27+OR+lower%28dba_trade_name%29+like+%27%25vape%25%27+OR+lower%28dba_trade_name%29+like+%27%25smoke%25%27+OR+lower%28business_name%29+like+%27%25tobacco%25%27+OR+lower%28business_name%29+like+%27%25cigarette%25%27+OR+lower%28business_name%29+like+%27%25vape%25%27+OR+lower%28business_name%29+like+%27%25smoke%25%27&%24limit=50000",
-  "source_rows": 9321,
+  "source_rows": 9492,
   "fetch_limit": 50000,
-  "matched_rows": 9316,
-  "mapped_total": 9057,
-  "full_mapped_total": 9057,
-  "slim_mapped_total": 4882,
-  "slim_excluded_total": 4175,
+  "matched_rows": 9486,
+  "mapped_total": 9209,
+  "full_mapped_total": 9209,
+  "slim_mapped_total": 4688,
+  "slim_excluded_total": 4521,
   "slim_filter": "license_status active and license_expiration_date within last 2 years",
-  "license_expiration_cutoff": "2024-08-20T00:00:00.000Z",
+  "license_expiration_cutoff": "2024-08-21T00:00:00.000Z",
   "full_status_counts": [
     {
       "value": "Active",
-      "count": 4882
+      "count": 4688
     },
     {
       "value": "Expired",
-      "count": 2634
+      "count": 2633
     },
     {
       "value": "Surrendered",
-      "count": 904
+      "count": 1002
     },
     {
       "value": "Revoked",
-      "count": 523
+      "count": 528
+    },
+    {
+      "value": "Ready for Renewal",
+      "count": 198
     },
     {
       "value": "Suspended",
-      "count": 97
+      "count": 140
     },
     {
       "value": "Voided",
-      "count": 12
+      "count": 16
     },
     {
       "value": "Out of Business",
       "count": 3
-    },
-    {
-      "value": "Failed to Renew",
-      "count": 1
     },
     {
       "value": "Close",
@@ -51,15 +51,15 @@
   "slim_status_counts": [
     {
       "value": "Active",
-      "count": 4882
+      "count": 4688
     }
   ],
-  "needs_review": 64,
-  "rejected": 5,
-  "duplicate_count": 195,
+  "needs_review": 65,
+  "rejected": 6,
+  "duplicate_count": 212,
   "subtype_counts": {
-    "licensed_electronic_cigarette_retailer": 2643,
-    "licensed_tobacco_retailer": 6408,
+    "licensed_electronic_cigarette_retailer": 2684,
+    "licensed_tobacco_retailer": 6519,
     "licensed_smoke_vape_retailer": 6
   },
   "map_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
@@ -68,15 +68,15 @@
   "business_category_sample": [
     {
       "value": "Tobacco Retail Dealer",
-      "count": 6586
+      "count": 6707
     },
     {
       "value": "Electronic Cigarette Dealer",
-      "count": 2724
+      "count": 2773
     },
     {
       "value": "Stoop Line Stand",
-      "count": 5
+      "count": 6
     },
     {
       "value": "Dealer In Products For The Disabled",
@@ -98,41 +98,41 @@
   "license_type_sample": [
     {
       "value": "Premises",
-      "count": 9321
+      "count": 9492
     }
   ],
   "license_status_sample": [
     {
       "value": "Active",
-      "count": 5075
+      "count": 4875
     },
     {
       "value": "Expired",
-      "count": 2675
+      "count": 2674
     },
     {
       "value": "Surrendered",
-      "count": 923
+      "count": 1029
     },
     {
       "value": "Revoked",
-      "count": 529
+      "count": 538
+    },
+    {
+      "value": "Ready for Renewal",
+      "count": 210
     },
     {
       "value": "Suspended",
-      "count": 100
+      "count": 144
     },
     {
       "value": "Voided",
-      "count": 14
+      "count": 18
     },
     {
       "value": "Out of Business",
       "count": 3
-    },
-    {
-      "value": "Failed to Renew",
-      "count": 1
     },
     {
       "value": "Close",
@@ -170,15 +170,15 @@
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 64
+      "count": 65
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_licensed_smoke_vape_match",
-      "count": 5
+      "count": 6
     }
   ],
-  "generated_at": "2026-08-20T10:50:33.570Z",
+  "generated_at": "2026-08-21T10:50:56.269Z",
   "data_note": "Official license/business records; confirm current license status with the source before publication or enforcement use."
 }

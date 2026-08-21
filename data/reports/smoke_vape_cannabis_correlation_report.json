@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2414,
-  "usable_complaints": 2414,
+  "source_complaints": 2424,
+  "usable_complaints": 2424,
   "source_dispensaries": 255,
-  "source_retailers": 4882,
-  "correlation_locations_before_dedupe": 5137,
-  "correlation_locations": 3897,
-  "semantic_duplicate_locations_collapsed": 1240,
-  "output_locations": 190,
+  "source_retailers": 4688,
+  "correlation_locations_before_dedupe": 4943,
+  "correlation_locations": 3845,
+  "semantic_duplicate_locations_collapsed": 1098,
+  "output_locations": 184,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3707,
+  "low_signal_excluded": 3661,
   "radius_feet": [
     100,
     250,
@@ -27,20 +27,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "legal_cannabis_dispensary": 35,
-    "licensed_smoke_vape_retailer": 155
+    "legal_cannabis_dispensary": 34,
+    "licensed_smoke_vape_retailer": 150
   },
   "borough_counts": {
-    "Manhattan": 63,
-    "Brooklyn": 42,
-    "Bronx": 27,
-    "Queens": 49,
+    "Manhattan": 61,
+    "Brooklyn": 41,
+    "Bronx": 26,
+    "Queens": 47,
     "Staten Island": 9
   },
   "signal_tier_counts": {
-    "very_high": 6,
-    "high": 22,
-    "moderate": 162
+    "very_high": 3,
+    "high": 23,
+    "moderate": 158
   },
   "top_locations_sample": [
     {
@@ -56,18 +56,6 @@
       "last_complaint_date": "2026-08-10"
     },
     {
-      "title": "FREEDOM NEWS I, INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 61,
-      "signal_tier": "very_high",
-      "complaints_365d_100ft": 6,
-      "complaints_365d_250ft": 6,
-      "last_complaint_date": "2026-08-12"
-    },
-    {
       "title": "GARDENIA DELI",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "404 8 AVENUE, NEW YORK, 10001",
@@ -78,30 +66,6 @@
       "complaints_365d_100ft": 6,
       "complaints_365d_250ft": 6,
       "last_complaint_date": "2026-08-06"
-    },
-    {
-      "title": "SUNAC NATURAL",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 61,
-      "signal_tier": "very_high",
-      "complaints_365d_100ft": 6,
-      "complaints_365d_250ft": 6,
-      "last_complaint_date": "2026-08-12"
-    },
-    {
-      "title": "RIVERBEND CANDY STORE",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "2289 5 AVENUE, NEW YORK, 10037",
-      "borough": "Manhattan",
-      "source_record_count": 1,
-      "signal_score": 57,
-      "signal_tier": "very_high",
-      "complaints_365d_100ft": 5,
-      "complaints_365d_250ft": 11,
-      "last_complaint_date": "2026-08-17"
     },
     {
       "title": "NOSTRAND DELI & GROCERY",
@@ -116,6 +80,18 @@
       "last_complaint_date": "2026-07-31"
     },
     {
+      "title": "FREEDOM NEWS I, INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
+      "source_record_count": 2,
+      "signal_score": 41,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-08-12"
+    },
+    {
       "title": "LUCKY LELAND CORP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1859 ARCHER ST, BRONX, 10460",
@@ -126,6 +102,18 @@
       "complaints_365d_100ft": 4,
       "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-08-13"
+    },
+    {
+      "title": "SUNAC NATURAL",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
+      "source_record_count": 2,
+      "signal_score": 41,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 4,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-08-12"
     },
     {
       "title": "SAAD NEWSSTAND",
@@ -140,11 +128,23 @@
       "last_complaint_date": "2026-08-06"
     },
     {
+      "title": "GRACE FOOD TOWN",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "2326 BATH AVE, BROOKLYN, 11214",
+      "borough": "Brooklyn",
+      "source_record_count": 1,
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-08-19"
+    },
+    {
       "title": "P AND A FOOD MARKET INC",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "980 RUTLAND ROAD, BROOKLYN, 11212",
       "borough": "Brooklyn",
-      "source_record_count": 2,
+      "source_record_count": 1,
       "signal_score": 31,
       "signal_tier": "high",
       "complaints_365d_100ft": 3,
@@ -156,7 +156,7 @@
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "2244 31ST ST, ASTORIA, 11105",
       "borough": "Queens",
-      "source_record_count": 2,
+      "source_record_count": 1,
       "signal_score": 31,
       "signal_tier": "high",
       "complaints_365d_100ft": 3,
@@ -176,16 +176,16 @@
       "last_complaint_date": "2026-08-03"
     },
     {
-      "title": "SAMMY GOURMET DELI 2 INC.",
+      "title": "S & S BK INC",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "16903 JAMAICA AVE, JAMAICA, 11432",
-      "borough": "Queens",
+      "address": "2328 BATH AVE, BROOKLYN, 11214",
+      "borough": "Brooklyn",
       "source_record_count": 1,
       "signal_score": 31,
       "signal_tier": "high",
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-30"
+      "last_complaint_date": "2026-08-19"
     },
     {
       "title": "Hanuman01 Inc",
@@ -210,18 +210,6 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-08-11"
-    },
-    {
-      "title": "O & A HASSAN CORP.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "1810 FOREST AVE, STATEN ISLAND, 10303",
-      "borough": "Staten Island",
-      "source_record_count": 2,
-      "signal_score": 22,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-07-30"
     },
     {
       "title": "TANGO HOTEL CHARLIE VENTURES LLC",
@@ -272,16 +260,16 @@
       "last_complaint_date": "2026-08-01"
     },
     {
-      "title": "GRACE FOOD TOWN",
+      "title": "GOGA 176 INC",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "2326 BATH AVE, BROOKLYN, 11214",
+      "address": "176 GRAND ST, BROOKLYN, 11211",
       "borough": "Brooklyn",
-      "source_record_count": 1,
+      "source_record_count": 2,
       "signal_score": 21,
       "signal_tier": "high",
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-18"
+      "last_complaint_date": "2026-08-19"
     },
     {
       "title": "JASANI, MUNIRA",
@@ -320,30 +308,42 @@
       "last_complaint_date": "2026-08-12"
     },
     {
-      "title": "NEW FIREHOUSE DELI AND GRILL INC",
+      "title": "RAKAN CONVENIENCE CORP",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "5615 METROPOLITAN AVENUE, RIDGEWOOD, 11385",
-      "borough": "Queens",
+      "address": "791 ROGERS AVENUE, BROOKLYN, 11226",
+      "borough": "Brooklyn",
       "source_record_count": 1,
       "signal_score": 21,
       "signal_tier": "high",
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-31"
+      "last_complaint_date": "2026-08-20"
     },
     {
-      "title": "PNZ GRILL & DELI CORP",
+      "title": "SPEEDWAY LLC",
       "location_kind": "licensed_smoke_vape_retailer",
-      "address": "5605 METROPOLITAN AVE, RIDGEWOOD, 11385",
-      "borough": "Queens",
+      "address": "1885 ATLANTIC AVE, BROOKLYN, 11233",
+      "borough": "Brooklyn",
       "source_record_count": 1,
       "signal_score": 21,
       "signal_tier": "high",
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-07-31"
+      "last_complaint_date": "2026-08-18"
+    },
+    {
+      "title": "SUPERIOR GOURMET MARKETPLACE, INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "555 10 AVENUE, NEW YORK, 10018",
+      "borough": "Manhattan",
+      "source_record_count": 2,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-08-05"
     }
   ],
-  "generated_at": "2026-08-20T10:52:55.547Z",
+  "generated_at": "2026-08-21T10:53:36.254Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
