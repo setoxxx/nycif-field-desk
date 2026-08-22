@@ -7,6 +7,19 @@
   const PUBLISHABLE_KEY = 'sb_publishable_V5PfbUnBmRxlVVS6TtOHHQ_av0Fzo3Z';
   const LIVE_FEEDS_HOST = 'raw.githubusercontent.com';
   const LIVE_FEEDS_PREFIX = '/setoxxx/nycif-live-feeds/';
+  const LOCAL_EVENT_PATHS = [
+    /^\/data\/schema-v1(?:-discovery)?\/major\/events\.json$/,
+    /^\/data\/events_discovery_v02_major\.json$/,
+    /^\/data\/events_schema_v1_major\.json$/,
+    /^\/nycif_major_radar_map_events\.json$/,
+    /^\/data\/schema-v1(?:-discovery)?\/approved\/manifest\.json$/,
+    /^\/data\/schema-v1(?:-discovery)?\/approved\/pages\//,
+    /^\/data\/schema-v1(?:-discovery)?\/review\/manifest\.json$/,
+    /^\/data\/schema-v1(?:-discovery)?\/review\/pages\//,
+    /^\/data\/schema-v1(?:-discovery)?\/approximate\/approximate-stacks\.json$/,
+    /^\/data\/photographer_assignment_calendar_2mo\.json$/,
+    /^\/data\/photographer_viral_recurrence_matches\.json$/
+  ];
   const originalFetch = window.fetch.bind(window);
 
   let authorityPromise = null;
@@ -127,7 +140,10 @@
   }
 
   function isLegacyRuntimeRequest(url) {
-    return url?.hostname === LIVE_FEEDS_HOST && url.pathname.startsWith(LIVE_FEEDS_PREFIX);
+    if (!url) return false;
+    const backendRepoRequest = url.hostname === LIVE_FEEDS_HOST && url.pathname.startsWith(LIVE_FEEDS_PREFIX);
+    const localEventRequest = url.origin === location.origin && LOCAL_EVENT_PATHS.some(pattern => pattern.test(url.pathname));
+    return backendRepoRequest || localEventRequest;
   }
 
   function recordIntercept(url) {
@@ -208,8 +224,6 @@
       return jsonResponse([]);
     }
 
-    // Fail closed for any other browser fetch into the backend event-data repo.
-    // Static JS/CSS live in the field-desk app and are not affected by this guard.
     return jsonResponse({
       generated_at_utc: lastMetadata?.generated_at_utc || new Date().toISOString(),
       events: [],
