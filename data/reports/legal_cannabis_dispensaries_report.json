@@ -3,7 +3,7 @@
   "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
   "queried_url": "https://data.ny.gov/resource/gttd-5u6y.json",
   "source_note": "Official NYS registered adult-use cannabis retail dealer records from data.ny.gov dataset gttd-5u6y.",
-  "source_rows": 648,
+  "source_rows": 649,
   "nyc_county_filter": [
     "BRONX",
     "KINGS",
@@ -11,8 +11,8 @@
     "QUEENS",
     "RICHMOND"
   ],
-  "mapped_before_dedupe": 256,
-  "mapped_total": 255,
+  "mapped_before_dedupe": 257,
+  "mapped_total": 256,
   "duplicate_id_rows_collapsed": 1,
   "duplicate_semantic_locations_collapsed": 0,
   "duplicate_output_ids": 0,
@@ -20,14 +20,14 @@
   "needs_review": 0,
   "rejected": 392,
   "borough_counts": {
-    "Brooklyn": 73,
+    "Brooklyn": 74,
     "Queens": 67,
     "Manhattan": 83,
     "Staten Island": 12,
     "Bronx": 20
   },
   "license_status_counts": {
-    "Registered": 255
+    "Registered": 256
   },
   "top_rejection_reasons": [
     {
@@ -37,6 +37,6 @@
   ],
   "top_review_reasons": [],
   "limitation": null,
-  "generated_at": "2026-08-22T10:43:23.906Z",
+  "generated_at": "2026-08-23T10:44:04.458Z",
   "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication."
 }

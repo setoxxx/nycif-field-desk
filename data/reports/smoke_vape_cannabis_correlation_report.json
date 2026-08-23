@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2421,
-  "usable_complaints": 2421,
-  "source_dispensaries": 255,
+  "source_complaints": 2406,
+  "usable_complaints": 2406,
+  "source_dispensaries": 256,
   "source_retailers": 4688,
-  "correlation_locations_before_dedupe": 4943,
-  "correlation_locations": 3845,
+  "correlation_locations_before_dedupe": 4944,
+  "correlation_locations": 3846,
   "semantic_duplicate_locations_collapsed": 1098,
-  "output_locations": 189,
+  "output_locations": 192,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3656,
+  "low_signal_excluded": 3654,
   "radius_feet": [
     100,
     250,
@@ -27,20 +27,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "legal_cannabis_dispensary": 35,
-    "licensed_smoke_vape_retailer": 154
+    "legal_cannabis_dispensary": 36,
+    "licensed_smoke_vape_retailer": 156
   },
   "borough_counts": {
-    "Manhattan": 60,
-    "Brooklyn": 44,
-    "Bronx": 26,
-    "Queens": 47,
+    "Manhattan": 61,
+    "Brooklyn": 43,
+    "Bronx": 27,
+    "Queens": 49,
     "Staten Island": 12
   },
   "signal_tier_counts": {
     "very_high": 3,
-    "high": 26,
-    "moderate": 160
+    "high": 24,
+    "moderate": 165
   },
   "top_locations_sample": [
     {
@@ -236,18 +236,6 @@
       "last_complaint_date": "2026-08-13"
     },
     {
-      "title": "Ambica Newsstand LLC",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "N/E/C 6 AVENUE WEST 46 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "source_record_count": 1,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-14"
-    },
-    {
       "title": "BEACH CHANNEL DELI & GROCERY CORP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1165 BEACH CHANNEL DR, FAR ROCKAWAY, 11691",
@@ -270,18 +258,6 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-08-19"
-    },
-    {
-      "title": "JASANI, MUNIRA",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "6 AVENUE, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-14"
     },
     {
       "title": "JHER, INC.",
@@ -342,8 +318,32 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-08-20"
+    },
+    {
+      "title": "SANAA SMOKE SHOP CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "3279 WESTCHESTER AVE, BRONX, 10461",
+      "borough": "Bronx",
+      "source_record_count": 2,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-08-20"
+    },
+    {
+      "title": "SPEEDWAY LLC",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1885 ATLANTIC AVE, BROOKLYN, 11233",
+      "borough": "Brooklyn",
+      "source_record_count": 1,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-08-18"
     }
   ],
-  "generated_at": "2026-08-22T10:45:37.237Z",
+  "generated_at": "2026-08-23T10:47:43.242Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }

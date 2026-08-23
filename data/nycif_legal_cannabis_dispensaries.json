@@ -9072,6 +9072,46 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
+    "lat": 40.66116,
+    "lng": -73.99362,
+    "id": "legal-dispensary-OCM-CAURD-25-000321",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "THE HIBRARY 695 INC.",
+    "address": "PATRICK DORISCA 695 5TH AVE, BROOKLYN, 11215 6509",
+    "borough": "Brooklyn",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-25-000321",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "394366434",
+      "legal_name": "THE HIBRARY 695 INC.",
+      "ocm_license_number": "OCM-CAURD-25-000321",
+      "physical_county": "KINGS",
+      "physical_address": "PATRICK DORISCA 695 5TH AVE",
+      "physical_city": "BROOKLYN",
+      "physical_state": "NY",
+      "physical_zip": "11215 6509",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.99362,
+          40.66116
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "894",
+      ":@computed_region_wbg7_3whc": "893",
+      ":@computed_region_kjdx_g34t": "2090"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": []
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
     "lat": 40.77736,
     "lng": -73.94902,
     "id": "legal-dispensary-OCM-RETL-24-000107",
