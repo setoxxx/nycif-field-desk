@@ -62,6 +62,21 @@
     let target = todayKey();
     if (mode === 'tomorrow') target = tomorrowKey();
     else if (/^\d{4}-\d{2}-\d{2}$/.test(mode)) target = mode;
+    else if (mode === 'tonight') {
+      const today = todayKey();
+      if (target !== today) return false;
+      const startText = String(row.start_date_time || row.start || row.date || '');
+      const startDate = startText ? new Date(startText) : null;
+      if (startDate && Number.isFinite(startDate.getTime())) {
+        try {
+          const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', hour12: false }).formatToParts(startDate);
+          const hourPart = parts.find(p => p.type === 'hour');
+          if (hourPart) return Number(hourPart.value) >= 17;
+        } catch {}
+      }
+      const text = `${row.title || ''} ${row.event_type || ''} ${row.type || ''}`.toLowerCase();
+      return /music|concert|arts|dance|theater|theatre|film|production|performance|parade|market|food|nightlife/.test(text);
+    }
     else if (mode === 'weekend') {
       const startN = s;
       const endN = Number.isFinite(e) ? e : s;

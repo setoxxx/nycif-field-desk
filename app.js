@@ -63,6 +63,23 @@ function dateKey(date) { if (!date) return ''; return `${date.getFullYear()}-${S
 function todayKey() { return dateKey(new Date()); }
 function tomorrowKey() { const d = new Date(); d.setDate(d.getDate() + 1); return dateKey(d); }
 function isWeekendDate(date) { return !!date && (date.getDay() === 0 || date.getDay() === 6); }
+function eveningHourNY(date) {
+  if (!date) return null;
+  try {
+    const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', hour12: false }).formatToParts(date);
+    const hour = parts.find(p => p.type === 'hour');
+    return hour ? Number(hour.value) : null;
+  } catch {
+    return date.getHours();
+  }
+}
+function isTonightEvent(event) {
+  if (event.dateKey !== todayKey()) return false;
+  const hour = eveningHourNY(event.start);
+  if (hour !== null) return hour >= 17;
+  const cat = event.category?.key || '';
+  return cat === 'arts' || event.field_default || event.assignment_feed === 'major' || cat === 'market' || cat === 'parade';
+}
 function timeLabel(date) { return date ? date.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : 'Time not listed'; }
 function isNYCoord(lat, lng) { return Number.isFinite(lat) && Number.isFinite(lng) && lat >= 40.4774 && lat <= 40.9176 && lng >= -74.2591 && lng <= -73.7004; }
 
@@ -172,12 +189,12 @@ function makeMarker(event) {
   return marker;
 }
 
-function dateMatches(event) { if (state.dateMode === 'all') return true; if (!event.dateKey) return false; if (state.dateMode === 'today') return event.dateKey === todayKey(); if (state.dateMode === 'tomorrow') return event.dateKey === tomorrowKey(); if (state.dateMode === 'weekend') return isWeekendDate(event.start); return true; }
+function dateMatches(event) { if (state.dateMode === 'all') return true; if (!event.dateKey) return false; if (state.dateMode === 'today') return event.dateKey === todayKey(); if (state.dateMode === 'tomorrow') return event.dateKey === tomorrowKey(); if (state.dateMode === 'tonight') return isTonightEvent(event); if (state.dateMode === 'weekend') return isWeekendDate(event.start); return true; }
 function eventMatches(event) { if (!dateMatches(event)) return false; if (!state.categories[event.category.key]) return false; if (state.majorOnly && !(event.assignment_feed === 'major' || event.field_default || event.photoPick || isNypd(event))) return false; if (state.photoOnly && !event.photoPick) return false; if (state.nypdOnly && !isNypd(event)) return false; if (state.borough !== 'all' && event.borough !== state.borough) return false; if (state.search && !event.searchText.includes(state.search)) return false; return true; }
 function sortEvents(a, b) { if (state.sort === 'near') { const da = milesBetween(state.userLocation, a) ?? 999999; const db = milesBetween(state.userLocation, b) ?? 999999; return da - db || b.priority - a.priority; } if (state.sort === 'borough') return (a.borough || 'zz').localeCompare(b.borough || 'zz') || b.priority - a.priority; if (state.sort === 'type') return (a.type || 'zz').localeCompare(b.type || 'zz') || b.priority - a.priority; if (state.sort === 'time') return (a.start?.getTime() || 9999999999999) - (b.start?.getTime() || 9999999999999); return b.priority - a.priority || ((a.start?.getTime() || 9999999999999) - (b.start?.getTime() || 9999999999999)); }
 
 function savePrefs() { const prefs = { borough: state.borough, sort: state.sort === 'near' && !state.userLocation ? 'priority' : state.sort, dateMode: state.dateMode, categories: state.categories, majorOnly: state.majorOnly, photoOnly: state.photoOnly, nypdOnly: state.nypdOnly }; localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs)); }
-function loadPrefs() { try { const prefs = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); if (prefs.borough) state.borough = prefs.borough; if (prefs.sort) state.sort = prefs.sort; if (prefs.dateMode) state.dateMode = prefs.dateMode; if (prefs.categories) state.categories = { ...state.categories, ...prefs.categories }; state.majorOnly = !!prefs.majorOnly; state.photoOnly = !!prefs.photoOnly; state.nypdOnly = !!prefs.nypdOnly; } catch {} }
+function loadPrefs() { try { const prefs = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); if (prefs.borough) state.borough = prefs.borough; if (prefs.sort) state.sort = prefs.sort; if (prefs.dateMode === 'weekend') prefs.dateMode = 'tonight'; if (prefs.dateMode) state.dateMode = prefs.dateMode; if (prefs.categories) state.categories = { ...state.categories, ...prefs.categories }; state.majorOnly = !!prefs.majorOnly; state.photoOnly = !!prefs.photoOnly; state.nypdOnly = !!prefs.nypdOnly; } catch {} }
 function updateChrome(visible) { const nypdCount = visible.filter(isNypd).length; const photoCount = visible.filter(e => e.photoPick).length; const nearNote = state.userLocation && state.sort === 'near' ? ' · near me' : ''; if (els.brandCount) els.brandCount.textContent = `${visible.length} live${nypdCount ? ` · ${nypdCount} NYPD` : ''}${photoCount ? ` · ${photoCount} photo` : ''}`; status(`${visible.length} assignment${visible.length === 1 ? '' : 's'} · ${state.feed === 'major' ? 'Fast major feed' : 'Full feed'}${nearNote} · v${VERSION}`); }
 
 function render() {

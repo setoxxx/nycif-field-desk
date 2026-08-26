@@ -6,7 +6,10 @@
     const prefs = JSON.parse(raw);
     if (!prefs || typeof prefs !== 'object') return;
     if (prefs.nycifDefaultVersion === 'staged-live-v04') return;
-    if (prefs.dateMode === 'weekend' || prefs.dateMode === 'tomorrow') {
+    if (prefs.dateMode === 'weekend') {
+      prefs.dateMode = 'tonight';
+      localStorage.setItem(key, JSON.stringify(prefs));
+    } else if (prefs.dateMode === 'tomorrow') {
       prefs.dateMode = 'next7';
       localStorage.setItem(key, JSON.stringify(prefs));
     }
