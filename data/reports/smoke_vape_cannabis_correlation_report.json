@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2461,
-  "usable_complaints": 2461,
+  "source_complaints": 2503,
+  "usable_complaints": 2503,
   "source_dispensaries": 256,
   "source_retailers": 4688,
   "correlation_locations_before_dedupe": 4944,
   "correlation_locations": 3846,
   "semantic_duplicate_locations_collapsed": 1098,
-  "output_locations": 202,
+  "output_locations": 208,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3644,
+  "low_signal_excluded": 3638,
   "radius_feet": [
     100,
     250,
@@ -27,33 +27,45 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "legal_cannabis_dispensary": 34,
-    "licensed_smoke_vape_retailer": 168
+    "legal_cannabis_dispensary": 35,
+    "licensed_smoke_vape_retailer": 173
   },
   "borough_counts": {
-    "Manhattan": 60,
-    "Bronx": 35,
-    "Brooklyn": 46,
+    "Manhattan": 59,
+    "Bronx": 36,
+    "Brooklyn": 52,
     "Queens": 50,
     "Staten Island": 11
   },
   "signal_tier_counts": {
-    "very_high": 1,
-    "high": 34,
-    "moderate": 167
+    "very_high": 2,
+    "high": 32,
+    "moderate": 174
   },
   "top_locations_sample": [
     {
-      "title": "THE HOOTCH LLC",
+      "title": "BLAZINUP, LLC",
       "location_kind": "legal_cannabis_dispensary",
-      "address": "CONCEPCION RANOCCHIA 1662 1ST AVE, NEW YORK, 10028 4770",
+      "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
       "borough": "Manhattan",
       "source_record_count": 1,
       "signal_score": 52,
       "signal_tier": "very_high",
       "complaints_365d_100ft": 5,
       "complaints_365d_250ft": 5,
-      "last_complaint_date": "2026-08-10"
+      "last_complaint_date": "2026-08-26"
+    },
+    {
+      "title": "CHELSEA FINE FOODS",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "300 8TH AVE, NEW YORK, 10001",
+      "borough": "Manhattan",
+      "source_record_count": 1,
+      "signal_score": 51,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 5,
+      "last_complaint_date": "2026-08-26"
     },
     {
       "title": "FREEDOM NEWS I, INC.",
@@ -104,6 +116,18 @@
       "last_complaint_date": "2026-08-13"
     },
     {
+      "title": "THE HOOTCH LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "CONCEPCION RANOCCHIA 1662 1ST AVE, NEW YORK, 10028 4770",
+      "borough": "Manhattan",
+      "source_record_count": 1,
+      "signal_score": 32,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-08-10"
+    },
+    {
       "title": "D & G DELI GROCERY",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1421 GRAVESEND NECK ROAD, BROOKLYN, 11229",
@@ -150,6 +174,18 @@
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-08-14"
+    },
+    {
+      "title": "PERALTA-BUENO CORP.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "2578 PITKIN AVE, BROOKLYN, 11208",
+      "borough": "Brooklyn",
+      "source_record_count": 1,
+      "signal_score": 31,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-08-26"
     },
     {
       "title": "R & R NEWS INC.",
@@ -212,18 +248,6 @@
       "last_complaint_date": "2026-08-24"
     },
     {
-      "title": "BLAZINUP, LLC",
-      "location_kind": "legal_cannabis_dispensary",
-      "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
-      "borough": "Manhattan",
-      "source_record_count": 1,
-      "signal_score": 22,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-25"
-    },
-    {
       "title": "Hanuman01 Inc",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "2229 31ST ST, ASTORIA, 11105",
@@ -284,18 +308,6 @@
       "last_complaint_date": "2026-08-25"
     },
     {
-      "title": "CHELSEA FINE FOODS",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "300 8TH AVE, NEW YORK, 10001",
-      "borough": "Manhattan",
-      "source_record_count": 1,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-25"
-    },
-    {
       "title": "CROSS BAY GROCERY",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "913 CROSS BAY BLVD, BROAD CHANNEL, 11693",
@@ -330,20 +342,8 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-08-19"
-    },
-    {
-      "title": "JASANI, MUNIRA",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "6 AVENUE, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-25"
     }
   ],
-  "generated_at": "2026-08-27T20:37:22.252Z",
+  "generated_at": "2026-08-28T21:15:25.713Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
