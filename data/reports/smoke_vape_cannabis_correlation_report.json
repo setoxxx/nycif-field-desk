@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2503,
-  "usable_complaints": 2503,
+  "source_complaints": 2511,
+  "usable_complaints": 2511,
   "source_dispensaries": 256,
   "source_retailers": 4688,
   "correlation_locations_before_dedupe": 4944,
   "correlation_locations": 3846,
   "semantic_duplicate_locations_collapsed": 1098,
-  "output_locations": 208,
+  "output_locations": 206,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3638,
+  "low_signal_excluded": 3640,
   "radius_feet": [
     100,
     250,
@@ -28,19 +28,19 @@
   "min_signal_score": 3,
   "location_kind_counts": {
     "legal_cannabis_dispensary": 35,
-    "licensed_smoke_vape_retailer": 173
+    "licensed_smoke_vape_retailer": 171
   },
   "borough_counts": {
-    "Manhattan": 59,
-    "Bronx": 36,
-    "Brooklyn": 52,
-    "Queens": 50,
-    "Staten Island": 11
+    "Manhattan": 58,
+    "Bronx": 38,
+    "Brooklyn": 54,
+    "Queens": 46,
+    "Staten Island": 10
   },
   "signal_tier_counts": {
     "very_high": 2,
-    "high": 32,
-    "moderate": 174
+    "high": 33,
+    "moderate": 171
   },
   "top_locations_sample": [
     {
@@ -49,11 +49,11 @@
       "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
       "borough": "Manhattan",
       "source_record_count": 1,
-      "signal_score": 52,
+      "signal_score": 72,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 5,
-      "complaints_365d_250ft": 5,
-      "last_complaint_date": "2026-08-26"
+      "complaints_365d_100ft": 7,
+      "complaints_365d_250ft": 7,
+      "last_complaint_date": "2026-08-27"
     },
     {
       "title": "CHELSEA FINE FOODS",
@@ -61,11 +61,11 @@
       "address": "300 8TH AVE, NEW YORK, 10001",
       "borough": "Manhattan",
       "source_record_count": 1,
-      "signal_score": 51,
+      "signal_score": 71,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 5,
-      "complaints_365d_250ft": 5,
-      "last_complaint_date": "2026-08-26"
+      "complaints_365d_100ft": 7,
+      "complaints_365d_250ft": 7,
+      "last_complaint_date": "2026-08-27"
     },
     {
       "title": "FREEDOM NEWS I, INC.",
@@ -176,30 +176,6 @@
       "last_complaint_date": "2026-08-14"
     },
     {
-      "title": "PERALTA-BUENO CORP.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "2578 PITKIN AVE, BROOKLYN, 11208",
-      "borough": "Brooklyn",
-      "source_record_count": 1,
-      "signal_score": 31,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-08-26"
-    },
-    {
-      "title": "R & R NEWS INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "2244 31ST ST, ASTORIA, 11105",
-      "borough": "Queens",
-      "source_record_count": 1,
-      "signal_score": 31,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-08-12"
-    },
-    {
       "title": "RIVERSIDE MARKETPLACE NY INC.",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "5 BLUE SLIP, BROOKLYN, 11222",
@@ -236,6 +212,18 @@
       "last_complaint_date": "2026-08-23"
     },
     {
+      "title": "BLACK OLIVE GOURMET INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "1318 JEROME AVE, BRONX, 10452",
+      "borough": "Bronx",
+      "source_record_count": 1,
+      "signal_score": 23,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 4,
+      "last_complaint_date": "2026-08-27"
+    },
+    {
       "title": "BEACH CHANNEL DELI & GROCERY CORP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1165 BEACH CHANNEL DR, FAR ROCKAWAY, 11691",
@@ -246,18 +234,6 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-08-24"
-    },
-    {
-      "title": "Hanuman01 Inc",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "2229 31ST ST, ASTORIA, 11105",
-      "borough": "Queens",
-      "source_record_count": 1,
-      "signal_score": 22,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 3,
-      "last_complaint_date": "2026-08-12"
     },
     {
       "title": "TANGO HOTEL CHARLIE VENTURES LLC",
@@ -272,6 +248,18 @@
       "last_complaint_date": "2026-08-17"
     },
     {
+      "title": "THE BRIDGE A CANNABIS EXPERIENCE",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "URBAN CLOUDS 25-15A BROADWAY, ASTORIA, 11106 3413",
+      "borough": "Queens",
+      "source_record_count": 1,
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-08-27"
+    },
+    {
       "title": "THE CITY VAPER LTD.",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "2920 23RD AVE, ASTORIA, 11105",
@@ -282,6 +270,18 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 3,
       "last_complaint_date": "2026-08-13"
+    },
+    {
+      "title": "2502 BROADWAY GROCERY CORP.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "2502 BROADWAY, LONG IS CITY, 11106",
+      "borough": "Queens",
+      "source_record_count": 2,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-08-27"
     },
     {
       "title": "40TH AND 8TH NEWSSTAND",
@@ -344,6 +344,6 @@
       "last_complaint_date": "2026-08-19"
     }
   ],
-  "generated_at": "2026-08-28T21:15:25.713Z",
+  "generated_at": "2026-08-29T15:08:11.033Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
