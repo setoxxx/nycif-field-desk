@@ -6974,6 +6974,47 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
+    "lat": 40.75593,
+    "lng": -73.96776,
+    "id": "legal-dispensary-OCM-CAURD-24-000121",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "URBAN LEAF",
+    "address": "JOSEPH ABRAMOV 977 2ND AVE, NEW YORK, 10022 6303",
+    "borough": "Manhattan",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-24-000121",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "883885096",
+      "legal_name": "ORGANIC RELIEF LEAF, LLC",
+      "dba_name": "URBAN LEAF",
+      "ocm_license_number": "OCM-CAURD-24-000121",
+      "physical_county": "NEW YORK",
+      "physical_address": "JOSEPH ABRAMOV 977 2ND AVE",
+      "physical_city": "NEW YORK",
+      "physical_state": "NY",
+      "physical_zip": "10022 6303",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.96776,
+          40.75593
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "749",
+      ":@computed_region_wbg7_3whc": "749",
+      ":@computed_region_kjdx_g34t": "2095"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": []
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
     "lat": 40.61912,
     "lng": -74.03284,
     "id": "legal-dispensary-OCM-CAURD-26-000330",
@@ -7698,13 +7739,13 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.67388,
-    "lng": -73.72787,
+    "lat": 40.70116,
+    "lng": -73.80788,
     "id": "legal-dispensary-OCM-RETL-24-000003",
     "layer": "legal_cannabis_dispensaries",
     "category": "regulated_cannabis_location",
     "title": "ROSEDALE CANNABIS DISPENSARY LLC",
-    "address": "24502 MERRICK BLVD, ROSEDALE, 11422 1464",
+    "address": "ROSEDALE CANNABIS DISPENSARY L 9067 SUTPHIN BLVD UNIT A, JAMAICA, 11435 4333",
     "borough": "Queens",
     "license_type": "Registered adult-use cannabis retail dealer",
     "license_status": "Registered",
@@ -7717,19 +7758,19 @@
       "legal_name": "ROSEDALE CANNABIS DISPENSARY LLC",
       "ocm_license_number": "OCM-RETL-24-000003",
       "physical_county": "QUEENS",
-      "physical_address": "24502 MERRICK BLVD",
-      "physical_city": "ROSEDALE",
+      "physical_address": "ROSEDALE CANNABIS DISPENSARY L 9067 SUTPHIN BLVD UNIT A",
+      "physical_city": "JAMAICA",
       "physical_state": "NY",
-      "physical_zip": "11422 1464",
+      "physical_zip": "11435 4333",
       "georeference": {
         "type": "Point",
         "coordinates": [
-          -73.72787,
-          40.67388
+          -73.80788,
+          40.70116
         ]
       },
       ":@computed_region_yamh_8v7k": "196",
-      ":@computed_region_wbg7_3whc": "1169",
+      ":@computed_region_wbg7_3whc": "1262",
       ":@computed_region_kjdx_g34t": "2137"
     },
     "source_record_count": 2,

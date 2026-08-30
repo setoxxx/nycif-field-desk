@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2511,
-  "usable_complaints": 2511,
-  "source_dispensaries": 256,
+  "source_complaints": 2537,
+  "usable_complaints": 2537,
+  "source_dispensaries": 257,
   "source_retailers": 4688,
-  "correlation_locations_before_dedupe": 4944,
-  "correlation_locations": 3846,
+  "correlation_locations_before_dedupe": 4945,
+  "correlation_locations": 3847,
   "semantic_duplicate_locations_collapsed": 1098,
-  "output_locations": 206,
+  "output_locations": 210,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3640,
+  "low_signal_excluded": 3637,
   "radius_feet": [
     100,
     250,
@@ -27,20 +27,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "legal_cannabis_dispensary": 35,
-    "licensed_smoke_vape_retailer": 171
+    "legal_cannabis_dispensary": 36,
+    "licensed_smoke_vape_retailer": 174
   },
   "borough_counts": {
-    "Manhattan": 58,
+    "Manhattan": 61,
     "Bronx": 38,
-    "Brooklyn": 54,
-    "Queens": 46,
+    "Brooklyn": 56,
+    "Queens": 45,
     "Staten Island": 10
   },
   "signal_tier_counts": {
     "very_high": 2,
-    "high": 33,
-    "moderate": 171
+    "high": 35,
+    "moderate": 173
   },
   "top_locations_sample": [
     {
@@ -49,11 +49,11 @@
       "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
       "borough": "Manhattan",
       "source_record_count": 1,
-      "signal_score": 72,
+      "signal_score": 82,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 7,
-      "complaints_365d_250ft": 7,
-      "last_complaint_date": "2026-08-27"
+      "complaints_365d_100ft": 8,
+      "complaints_365d_250ft": 8,
+      "last_complaint_date": "2026-08-28"
     },
     {
       "title": "CHELSEA FINE FOODS",
@@ -61,11 +61,11 @@
       "address": "300 8TH AVE, NEW YORK, 10001",
       "borough": "Manhattan",
       "source_record_count": 1,
-      "signal_score": 71,
+      "signal_score": 81,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 7,
-      "complaints_365d_250ft": 7,
-      "last_complaint_date": "2026-08-27"
+      "complaints_365d_100ft": 8,
+      "complaints_365d_250ft": 8,
+      "last_complaint_date": "2026-08-28"
     },
     {
       "title": "FREEDOM NEWS I, INC.",
@@ -344,6 +344,6 @@
       "last_complaint_date": "2026-08-19"
     }
   ],
-  "generated_at": "2026-08-29T15:08:11.033Z",
+  "generated_at": "2026-08-30T14:55:42.296Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
