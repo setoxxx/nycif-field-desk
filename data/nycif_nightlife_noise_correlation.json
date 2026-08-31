@@ -28347,88 +28347,6 @@
   },
   {
     "status": "ok",
-    "id": "nightlife-1351089",
-    "title": "CROWN HILL THEATRE",
-    "address": "746-750 NOSTRAND AVE, 746-750 NOSTRAND AVE, BROOKLYN",
-    "borough": "Brooklyn",
-    "lat": 40.673074,
-    "lng": -73.950509,
-    "subtype": "bar_tavern",
-    "subtype_label": "Bars / taverns",
-    "group": 1,
-    "license": "OP · THEATER/TAVERN SERVING BEER, WINE, LIQUOR AND CIDER",
-    "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
-    "raw_source_id": "1351089",
-    "complaints_30d_100ft": 15,
-    "complaints_30d_250ft": 19,
-    "complaints_30d_500ft": 30,
-    "complaints_90d_100ft": 27,
-    "complaints_90d_250ft": 37,
-    "complaints_90d_500ft": 67,
-    "complaints_180d_100ft": 31,
-    "complaints_180d_250ft": 42,
-    "complaints_180d_500ft": 86,
-    "complaints_365d_100ft": 31,
-    "complaints_365d_250ft": 42,
-    "complaints_365d_500ft": 86,
-    "late_night_complaints_365d": 12,
-    "weekend_complaints_365d": 20,
-    "top_noise_descriptors": [
-      {
-        "value": "Car/Truck Music",
-        "count": 26
-      },
-      {
-        "value": "Loud Music/Party",
-        "count": 10
-      },
-      {
-        "value": "Banging/Pounding",
-        "count": 3
-      },
-      {
-        "value": "Loud Talking",
-        "count": 3
-      }
-    ],
-    "top_complaint_types": [
-      {
-        "value": "Noise - Vehicle",
-        "count": 26
-      },
-      {
-        "value": "Noise - Residential",
-        "count": 10
-      },
-      {
-        "value": "Noise - Commercial",
-        "count": 5
-      },
-      {
-        "value": "Noise - Street/Sidewalk",
-        "count": 1
-      }
-    ],
-    "last_complaint_date": "2026-08-27",
-    "nearby_complaint_ids_sample": [
-      "70217241",
-      "70211854",
-      "70193514",
-      "70186142",
-      "70189101",
-      "70163150",
-      "70115515",
-      "70116947",
-      "70064370",
-      "70065815"
-    ],
-    "trend_score": 227,
-    "trend_tier": "very_high",
-    "include": true,
-    "include_reason": "meets_trending_threshold"
-  },
-  {
-    "status": "ok",
     "id": "nightlife-1324570",
     "title": "ANANDA",
     "address": "210 THOMPSON ST, 210 THOMPSON ST, NEW YORK",
@@ -29295,6 +29213,88 @@
       "70148875",
       "70126249",
       "70099582"
+    ],
+    "trend_score": 222,
+    "trend_tier": "very_high",
+    "include": true,
+    "include_reason": "meets_trending_threshold"
+  },
+  {
+    "status": "ok",
+    "id": "nightlife-1351089",
+    "title": "CROWN HILL THEATRE",
+    "address": "746-750 NOSTRAND AVE, 746-750 NOSTRAND AVE, BROOKLYN",
+    "borough": "Brooklyn",
+    "lat": 40.673074,
+    "lng": -73.950509,
+    "subtype": "bar_tavern",
+    "subtype_label": "Bars / taverns",
+    "group": 1,
+    "license": "OP · THEATER/TAVERN SERVING BEER, WINE, LIQUOR AND CIDER",
+    "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
+    "raw_source_id": "1351089",
+    "complaints_30d_100ft": 14,
+    "complaints_30d_250ft": 18,
+    "complaints_30d_500ft": 29,
+    "complaints_90d_100ft": 27,
+    "complaints_90d_250ft": 37,
+    "complaints_90d_500ft": 67,
+    "complaints_180d_100ft": 31,
+    "complaints_180d_250ft": 42,
+    "complaints_180d_500ft": 86,
+    "complaints_365d_100ft": 31,
+    "complaints_365d_250ft": 42,
+    "complaints_365d_500ft": 86,
+    "late_night_complaints_365d": 12,
+    "weekend_complaints_365d": 20,
+    "top_noise_descriptors": [
+      {
+        "value": "Car/Truck Music",
+        "count": 26
+      },
+      {
+        "value": "Loud Music/Party",
+        "count": 10
+      },
+      {
+        "value": "Banging/Pounding",
+        "count": 3
+      },
+      {
+        "value": "Loud Talking",
+        "count": 3
+      }
+    ],
+    "top_complaint_types": [
+      {
+        "value": "Noise - Vehicle",
+        "count": 26
+      },
+      {
+        "value": "Noise - Residential",
+        "count": 10
+      },
+      {
+        "value": "Noise - Commercial",
+        "count": 5
+      },
+      {
+        "value": "Noise - Street/Sidewalk",
+        "count": 1
+      }
+    ],
+    "last_complaint_date": "2026-08-27",
+    "nearby_complaint_ids_sample": [
+      "70217241",
+      "70211854",
+      "70193514",
+      "70186142",
+      "70189101",
+      "70163150",
+      "70115515",
+      "70116947",
+      "70064370",
+      "70065815"
     ],
     "trend_score": 222,
     "trend_tier": "very_high",
@@ -62485,7 +62485,7 @@
     "raw_source_id": "1251709",
     "complaints_30d_100ft": 4,
     "complaints_30d_250ft": 17,
-    "complaints_30d_500ft": 25,
+    "complaints_30d_500ft": 24,
     "complaints_90d_100ft": 9,
     "complaints_90d_250ft": 35,
     "complaints_90d_500ft": 72,
@@ -63249,7 +63249,7 @@
     "raw_source_id": "1207765",
     "complaints_30d_100ft": 3,
     "complaints_30d_250ft": 17,
-    "complaints_30d_500ft": 27,
+    "complaints_30d_500ft": 26,
     "complaints_90d_100ft": 8,
     "complaints_90d_250ft": 35,
     "complaints_90d_500ft": 74,
@@ -68516,8 +68516,8 @@
     "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
     "raw_source_id": "1166320",
     "complaints_30d_100ft": 4,
-    "complaints_30d_250ft": 16,
-    "complaints_30d_500ft": 25,
+    "complaints_30d_250ft": 15,
+    "complaints_30d_500ft": 24,
     "complaints_90d_100ft": 7,
     "complaints_90d_250ft": 33,
     "complaints_90d_500ft": 72,
@@ -68590,8 +68590,8 @@
     "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
     "raw_source_id": "1291243",
     "complaints_30d_100ft": 4,
-    "complaints_30d_250ft": 16,
-    "complaints_30d_500ft": 25,
+    "complaints_30d_250ft": 15,
+    "complaints_30d_500ft": 24,
     "complaints_90d_100ft": 7,
     "complaints_90d_250ft": 33,
     "complaints_90d_500ft": 72,
@@ -71601,7 +71601,7 @@
     "raw_source_id": "1338902",
     "complaints_30d_100ft": 5,
     "complaints_30d_250ft": 19,
-    "complaints_30d_500ft": 26,
+    "complaints_30d_500ft": 25,
     "complaints_90d_100ft": 8,
     "complaints_90d_250ft": 33,
     "complaints_90d_500ft": 70,
@@ -100779,7 +100779,7 @@
     "raw_source_id": "1286150",
     "complaints_30d_100ft": 1,
     "complaints_30d_250ft": 6,
-    "complaints_30d_500ft": 59,
+    "complaints_30d_500ft": 58,
     "complaints_90d_100ft": 2,
     "complaints_90d_250ft": 25,
     "complaints_90d_500ft": 167,
@@ -119753,7 +119753,7 @@
     "raw_source_id": "1345228",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 12,
-    "complaints_30d_500ft": 28,
+    "complaints_30d_500ft": 27,
     "complaints_90d_100ft": 3,
     "complaints_90d_250ft": 31,
     "complaints_90d_500ft": 77,
@@ -145614,7 +145614,7 @@
     "raw_source_id": "1334440",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 14,
-    "complaints_30d_500ft": 28,
+    "complaints_30d_500ft": 27,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 30,
     "complaints_90d_500ft": 73,
@@ -148308,7 +148308,7 @@
     "raw_source_id": "1319767",
     "complaints_30d_100ft": 1,
     "complaints_30d_250ft": 7,
-    "complaints_30d_500ft": 27,
+    "complaints_30d_500ft": 26,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 17,
     "complaints_90d_500ft": 69,
@@ -192498,7 +192498,7 @@
     "raw_source_id": "1339441",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 10,
-    "complaints_30d_500ft": 27,
+    "complaints_30d_500ft": 26,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 20,
     "complaints_90d_500ft": 72,
@@ -207986,8 +207986,8 @@
       "69505908",
       "69253884",
       "69245821",
-      "69252236",
       "69249080",
+      "69252236",
       "69255496",
       "68879307"
     ],
@@ -231480,7 +231480,7 @@
     "raw_source_id": "1153221",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 25,
+    "complaints_30d_500ft": 24,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 10,
     "complaints_90d_500ft": 69,
@@ -231982,7 +231982,7 @@
     "raw_source_id": "1290230",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 25,
+    "complaints_30d_500ft": 24,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 10,
     "complaints_90d_500ft": 69,
@@ -252456,8 +252456,8 @@
     "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
     "raw_source_id": "1028424",
     "complaints_30d_100ft": 0,
-    "complaints_30d_250ft": 2,
-    "complaints_30d_500ft": 36,
+    "complaints_30d_250ft": 1,
+    "complaints_30d_500ft": 35,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 14,
     "complaints_90d_500ft": 92,
@@ -255600,7 +255600,7 @@
     "raw_source_id": "1149114",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 0,
-    "complaints_30d_500ft": 26,
+    "complaints_30d_500ft": 25,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 6,
     "complaints_90d_500ft": 79,
@@ -256164,7 +256164,7 @@
     "raw_source_id": "1140622",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 0,
-    "complaints_30d_500ft": 26,
+    "complaints_30d_500ft": 25,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 6,
     "complaints_90d_500ft": 79,
@@ -261255,8 +261255,8 @@
       "69505908",
       "69253884",
       "69245821",
-      "69252236",
       "69249080",
+      "69252236",
       "69255496"
     ],
     "trend_score": 31,
@@ -262760,7 +262760,7 @@
     "raw_source_id": "1267425",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 7,
-    "complaints_30d_500ft": 59,
+    "complaints_30d_500ft": 58,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 16,
     "complaints_90d_500ft": 168,
@@ -270943,7 +270943,7 @@
     "raw_source_id": "1334701",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 25,
+    "complaints_30d_500ft": 24,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 10,
     "complaints_90d_500ft": 69,
@@ -285701,7 +285701,7 @@
     "raw_source_id": "1340156",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 2,
-    "complaints_30d_500ft": 31,
+    "complaints_30d_500ft": 30,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 12,
     "complaints_90d_500ft": 79,
@@ -286766,8 +286766,8 @@
       "69505908",
       "69253884",
       "69245821",
-      "69252236",
       "69249080",
+      "69252236",
       "69255496"
     ],
     "trend_score": 27,
@@ -391932,7 +391932,7 @@
     "raw_source_id": "1290583",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 2,
-    "complaints_30d_500ft": 23,
+    "complaints_30d_500ft": 22,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 10,
     "complaints_90d_500ft": 60,
