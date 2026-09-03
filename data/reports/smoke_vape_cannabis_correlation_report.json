@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2587,
-  "usable_complaints": 2587,
+  "source_complaints": 2572,
+  "usable_complaints": 2572,
   "source_dispensaries": 257,
   "source_retailers": 4688,
   "correlation_locations_before_dedupe": 4945,
   "correlation_locations": 3847,
   "semantic_duplicate_locations_collapsed": 1098,
-  "output_locations": 217,
+  "output_locations": 219,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3630,
+  "low_signal_excluded": 3628,
   "radius_feet": [
     100,
     250,
@@ -28,18 +28,18 @@
   "min_signal_score": 3,
   "location_kind_counts": {
     "legal_cannabis_dispensary": 39,
-    "licensed_smoke_vape_retailer": 178
+    "licensed_smoke_vape_retailer": 180
   },
   "borough_counts": {
-    "Manhattan": 63,
-    "Bronx": 36,
-    "Brooklyn": 63,
-    "Queens": 44,
-    "Staten Island": 11
+    "Manhattan": 61,
+    "Bronx": 38,
+    "Brooklyn": 61,
+    "Queens": 49,
+    "Staten Island": 10
   },
   "signal_tier_counts": {
-    "very_high": 2,
-    "high": 32,
+    "very_high": 3,
+    "high": 33,
     "moderate": 183
   },
   "top_locations_sample": [
@@ -49,11 +49,11 @@
       "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
       "borough": "Manhattan",
       "source_record_count": 1,
-      "signal_score": 82,
+      "signal_score": 92,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 8,
-      "complaints_365d_250ft": 8,
-      "last_complaint_date": "2026-08-28"
+      "complaints_365d_100ft": 9,
+      "complaints_365d_250ft": 9,
+      "last_complaint_date": "2026-09-01"
     },
     {
       "title": "CHELSEA FINE FOODS",
@@ -61,11 +61,23 @@
       "address": "300 8TH AVE, NEW YORK, 10001",
       "borough": "Manhattan",
       "source_record_count": 1,
-      "signal_score": 81,
+      "signal_score": 91,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 8,
-      "complaints_365d_250ft": 8,
-      "last_complaint_date": "2026-08-28"
+      "complaints_365d_100ft": 9,
+      "complaints_365d_250ft": 9,
+      "last_complaint_date": "2026-09-01"
+    },
+    {
+      "title": "UPTOWN SERVICE STATION CORP.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "2326 1ST AVE, NEW YORK, 10035",
+      "borough": "Manhattan",
+      "source_record_count": 1,
+      "signal_score": 51,
+      "signal_tier": "very_high",
+      "complaints_365d_100ft": 5,
+      "complaints_365d_250ft": 5,
+      "last_complaint_date": "2026-09-01"
     },
     {
       "title": "GARDENIA DELI",
@@ -92,18 +104,6 @@
       "last_complaint_date": "2026-08-13"
     },
     {
-      "title": "UPTOWN SERVICE STATION CORP.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "2326 1ST AVE, NEW YORK, 10035",
-      "borough": "Manhattan",
-      "source_record_count": 1,
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-08-31"
-    },
-    {
       "title": "FREEDOM NEWS I, INC.",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "600 WEST 42 STREET, NEW YORK, 10036",
@@ -126,6 +126,18 @@
       "complaints_365d_100ft": 3,
       "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-08-20"
+    },
+    {
+      "title": "THE HOOTCH LLC",
+      "location_kind": "legal_cannabis_dispensary",
+      "address": "CONCEPCION RANOCCHIA 1662 1ST AVE, NEW YORK, 10028 4770",
+      "borough": "Manhattan",
+      "source_record_count": 1,
+      "signal_score": 32,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 3,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-09-01"
     },
     {
       "title": "D & G DELI GROCERY",
@@ -248,18 +260,6 @@
       "last_complaint_date": "2026-08-13"
     },
     {
-      "title": "THE HOOTCH LLC",
-      "location_kind": "legal_cannabis_dispensary",
-      "address": "CONCEPCION RANOCCHIA 1662 1ST AVE, NEW YORK, 10028 4770",
-      "borough": "Manhattan",
-      "source_record_count": 1,
-      "signal_score": 22,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-10"
-    },
-    {
       "title": "2502 BROADWAY GROCERY CORP.",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "2502 BROADWAY, LONG IS CITY, 11106",
@@ -296,6 +296,18 @@
       "last_complaint_date": "2026-08-25"
     },
     {
+      "title": "B & R CANDY GROCERY CORP",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "4700B WHITE PLAINS ROAD, BRONX, 10470-1103",
+      "borough": "Bronx",
+      "source_record_count": 1,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-09-01"
+    },
+    {
       "title": "CROSS BAY GROCERY",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "913 CROSS BAY BLVD, BROAD CHANNEL, 11693",
@@ -330,20 +342,8 @@
       "complaints_365d_100ft": 2,
       "complaints_365d_250ft": 2,
       "last_complaint_date": "2026-08-19"
-    },
-    {
-      "title": "JASANI, MUNIRA",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "6 AVENUE, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 21,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 2,
-      "complaints_365d_250ft": 2,
-      "last_complaint_date": "2026-08-25"
     }
   ],
-  "generated_at": "2026-09-02T14:40:26.216Z",
+  "generated_at": "2026-09-03T14:41:41.892Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }
