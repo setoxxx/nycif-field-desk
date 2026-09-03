@@ -50,6 +50,51 @@ function payloadFor(url) {
   return { generated_at_utc: new Date().toISOString(), total: 0, events: [] };
 }
 
+function supabaseReaderPayload() {
+  return {
+    type: 'FeatureCollection',
+    features: [{
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [event.longitude, event.latitude] },
+      properties: {
+        occurrence_id: event.id,
+        title: event.title,
+        category: event.category,
+        public_subtype: event.nycif.event_type,
+        start_date_time: event.start_date_time,
+        end_date_time: event.end_date_time,
+        timezone: event.timezone,
+        borough: event.borough,
+        location: event.location,
+        significance: event.significance,
+        event_role: 'public_event',
+        public_url: 'https://example.com/live-location-single-control',
+        source_dataset: event.source.dataset,
+        source_event_id: event.source.source_event_id,
+        event_date: day,
+        is_major: true,
+        photo_pick: false,
+        map_eligibility_state: 'MAP_READY',
+        certified_pin: true,
+        display_disposition: 'standalone_public_event'
+      }
+    }],
+    metadata: {
+      authority: 'supabase_event_authority',
+      event_data_origin: 'supabase_only',
+      schema_version: 'nycif-supabase-reader-v1',
+      generated_at_utc: new Date().toISOString(),
+      reader_window_start: day,
+      reader_window_end: day,
+      reader_safe_event_count: 1,
+      exact_marker_count: 1,
+      reader_metadata_complete_count: 1,
+      reader_metadata_fallback_count: 0,
+      resource_warning: false
+    }
+  };
+}
+
 const transparentPng = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2n1cAAAAASUVORK5CYII=',
   'base64'
@@ -98,6 +143,9 @@ async function openTestPage(browser, viewport) {
   const pageErrors = [];
   page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
   page.on('pageerror', error => pageErrors.push(String(error)));
+  await page.route('https://oggwpvdirkrnzoolparx.supabase.co/rest/v1/rpc/nycif_events_reader_v1', route => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(supabaseReaderPayload())
+  }));
   await page.route(/raw\.githubusercontent\.com|127\.0\.0\.1:4173\/data\//, route => route.fulfill({
     status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(payloadFor(route.request().url()))
   }));
