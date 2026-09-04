@@ -51,8 +51,7 @@
     approvedManifest: FEED_HOST + `/data/${FEED_ROOT}/approved/manifest.json`,
     approvedPage: cursor => pageUrl('approved', cursor),
     reviewManifest: FEED_HOST + `/data/${FEED_ROOT}/review/manifest.json`,
-    reviewPage: cursor => pageUrl('review', cursor),
-    approximate: FEED_HOST + `/data/${FEED_ROOT}/approximate/approximate-stacks.json`
+    reviewPage: cursor => pageUrl('review', cursor)
   };
   // News Desk operator lanes (money shots + viral magnets), same feed ref.
   const NEWS_DESK_DATA = {
@@ -179,7 +178,6 @@
     timings: {},
     errors: [],
     markerObjects: 0,
-    markerEvents: 0,
     peakMarkerObjects: 0,
     indexComplete: false,
     pagesLoaded: { approved: 0, review: 0 },
@@ -205,7 +203,6 @@
     sortSelect: document.getElementById('sortSelect'),
     dateChips: document.getElementById('dateChips'),
     boroughs: document.getElementById('boroughs'),
-    dailyGuideSummary: document.getElementById('dailyGuideSummary'),
     listMeta: document.getElementById('listMeta'),
     eventList: document.getElementById('eventList'),
     loadMoreBtn: document.getElementById('loadMoreBtn'),
@@ -276,12 +273,9 @@
 
   const clusterEnabled = (() => {
     try {
-      // Clustering is the production default so every map-eligible event can be
-      // represented without dropping lower-priority neighborhood events. The
-      // explicit ?clusters=0 escape hatch remains available for diagnostics.
-      return new URL(location.href).searchParams.get('clusters') !== '0';
+      return new URL(location.href).searchParams.get('clusters') === '1';
     } catch {
-      return true;
+      return false;
     }
   })();
   const useCluster = clusterEnabled && typeof L.markerClusterGroup === 'function';
@@ -289,52 +283,6 @@
     ? L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 55, spiderfyOnMaxZoom: true, disableClusteringAtZoom: 16 })
     : L.layerGroup();
   markers.addTo(map);
-
-  // ADR-0013 approximate sources are intentionally separate from exact pins.
-  // Leaflet panes preserve the same z-order contract as separate MapLibre sources:
-  // exact pins remain in markerPane (z-index 600), above all approximation layers.
-  const APPROXIMATE_CLUSTERED_SOURCE = 'approximate-clustered-events';
-  const APPROXIMATE_FACILITY_SOURCE = 'approximate-facility-events';
-  const approximatePanes = [
-    ['approximateMunicipalityPane', 420],
-    ['approximateParkPane', 430],
-    ['approximateFacilityPane', 440]
-  ];
-  approximatePanes.forEach(([name, zIndex]) => {
-    const pane = map.getPane(name) || map.createPane(name);
-    pane.style.zIndex = String(zIndex);
-  });
-  const approximateMunicipalityMarkers = useCluster
-    ? L.markerClusterGroup({
-      showCoverageOnHover: false,
-      maxClusterRadius: 65,
-      spiderfyOnMaxZoom: true,
-      disableClusteringAtZoom: 15,
-      zoomToBoundsOnClick: false,
-      iconCreateFunction: cluster => approximateClusterIcon(cluster, 'municipality')
-    })
-    : L.layerGroup();
-  const approximateParkMarkers = useCluster
-    ? L.markerClusterGroup({
-      showCoverageOnHover: false,
-      maxClusterRadius: 55,
-      spiderfyOnMaxZoom: true,
-      disableClusteringAtZoom: 16,
-      zoomToBoundsOnClick: false,
-      iconCreateFunction: cluster => approximateClusterIcon(cluster, 'park')
-    })
-    : L.layerGroup();
-  const approximateFacilityMarkers = L.layerGroup();
-  approximateMunicipalityMarkers.options.nycifSourceId = APPROXIMATE_CLUSTERED_SOURCE;
-  approximateParkMarkers.options.nycifSourceId = APPROXIMATE_CLUSTERED_SOURCE;
-  approximateFacilityMarkers.options.nycifSourceId = APPROXIMATE_FACILITY_SOURCE;
-  approximateMunicipalityMarkers.addTo(map);
-  approximateParkMarkers.addTo(map);
-  approximateFacilityMarkers.addTo(map);
-  let approximateFeatures = [];
-  let approximateLoadState = 'idle';
-  let approximateVisibleCount = 0;
-
   let userMarker = null;
   let userAccuracy = null;
   let searchTimer = null;
@@ -411,39 +359,6 @@
     return endDay > cap ? cap : endDay;
   }
 
-  function sourceDisplayLabel(value) {
-    const dataset = String(value || '').trim();
-    const known = {
-      'nyc-citywide-events-calendar-api': 'NYC Citywide Events Calendar',
-      'nyc-parks-bigapps-events': 'NYC Parks',
-      'tvpp-9vvx': 'NYC Permitted Events',
-      'nyc-permitted-events': 'NYC Permitted Events'
-    };
-    if (known[dataset]) return known[dataset];
-    return dataset
-      .replace(/[-_]+/g, ' ')
-      .replace(/\b\w/g, letter => letter.toUpperCase())
-      .trim();
-  }
-
-  function publicCostLabel(schemaEvent, nycif) {
-    const free = schemaEvent.is_free ?? nycif.is_free;
-    if (free === true || norm(free) === 'true' || norm(free) === 'yes' || norm(free) === 'free') {
-      return 'Free';
-    }
-    const raw = schemaEvent.cost ?? schemaEvent.price ?? schemaEvent.admission ?? nycif.cost;
-    return raw == null || String(raw).trim() === '' ? '' : String(raw).trim();
-  }
-
-  function publicVerificationLabel(value) {
-    const key = norm(value);
-    if (!key) return '';
-    if (key === 'verified') return 'Verified';
-    if (key === 'official source') return 'Official source';
-    if (key === 'pending' || key === 'needs review') return 'Pending verification';
-    return String(value).replace(/[_-]+/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
-  }
-
   function toUiEvent(schemaEvent) {
     const nycif = schemaEvent.nycif || {};
     const catKey = CATEGORY_META[schemaEvent.category] ? schemaEvent.category : 'general';
@@ -493,11 +408,6 @@
       isMajor: schemaEvent.significance === 'major' || !!nycif.is_major,
       photoPick: !!nycif.photo_pick,
       verification_status: nycif.verification_status,
-      verificationLabel: publicVerificationLabel(nycif.verification_status),
-      eventTypeLabel: String(nycif.event_type || schemaEvent.event_type || '').trim(),
-      costLabel: publicCostLabel(schemaEvent, nycif),
-      sourceLabel: sourceDisplayLabel(schemaEvent.source?.dataset),
-      officialUrl: SCHEMA.safeExternalUrl(schemaEvent.official_url || schemaEvent.source?.url),
       major_reason: nycif.major_reason,
       major_score: nycif.major_score || 0,
       searchText: norm([
@@ -738,153 +648,13 @@
     return false;
   }
 
-  // NYCIF_DAILY_GUIDE_V01: map scope and editorial-list scope are deliberately separate.
-  // Editorial tiers change list presentation only; they never make an otherwise valid map pin disappear.
-  function baseEventMatches(e) {
+  function eventMatches(e) {
     return sourceMatches(e)
       && dateMatches(e)
       && categoryFilterMatch(e)
+      && medalMatch(e)
       && (state.borough === 'all' || e.borough === state.borough)
       && (!state.search || e.searchText.includes(state.search));
-  }
-
-  function listEventMatches(e) {
-    return baseEventMatches(e) && medalMatch(e);
-  }
-
-  function approximateClusterIcon(cluster, kind) {
-    const count = cluster.getChildCount();
-    const className = kind === 'park'
-      ? 'approximate-cluster approximate-cluster--park'
-      : 'approximate-cluster approximate-cluster--municipality';
-    return L.divIcon({
-      className: 'approximate-cluster-shell',
-      html: `<span class="${className}" aria-label="${count} approximate events">${count}</span>`,
-      iconSize: [42, 42],
-      iconAnchor: [21, 21]
-    });
-  }
-
-  function approximatePopup(feature, eventCount) {
-    const props = feature.properties || {};
-    const root = document.createElement('article');
-    root.className = 'popup-card popup-card--approximate';
-    appendText(root, 'p', 'Approximate location', 'approximate-disclaimer');
-    appendText(root, 'h2', eventCount > 1 ? `${eventCount.toLocaleString()} events` : (props.title || 'Event'));
-    appendText(root, 'p', props.anchor_name || props.borough || 'NYC area', 'approximate-anchor-name');
-    if (eventCount === 1 && props.original_location) {
-      appendText(root, 'p', `Listed location: ${props.original_location}`, 'approximate-original-location');
-    }
-    appendText(
-      root,
-      'p',
-      props.approximation_class === 'park_level_anchor'
-        ? 'The marker represents the named park, not an exact entrance or facility.'
-        : 'The source identifies the borough but does not provide an exact event location.',
-      'approximate-explanation'
-    );
-    const link = document.createElement('a');
-    link.href = props.list_view_href || '#eventList';
-    link.className = 'approximate-list-link';
-    link.textContent = 'Open event list';
-    link.addEventListener('click', () => setDesk(true));
-    root.appendChild(link);
-    return root;
-  }
-
-  function bindApproximateClusterPopup(group) {
-    if (!group || typeof group.on !== 'function') return;
-    group.on('clusterclick', event => {
-      const children = event.layer.getAllChildMarkers();
-      const feature = children[0]?.__nycifApproximateFeature || { properties: {} };
-      L.popup({ className: 'nycif-event-popup nycif-approximate-popup', maxWidth: 340 })
-        .setLatLng(event.layer.getLatLng())
-        .setContent(approximatePopup(feature, children.length))
-        .openOn(map);
-    });
-  }
-  bindApproximateClusterPopup(approximateMunicipalityMarkers);
-  bindApproximateClusterPopup(approximateParkMarkers);
-
-  function approximateFeatureMatches(feature) {
-    const props = feature.properties || {};
-    if (props.coordinate_status !== 'approximate') return false;
-    if (props.event_date && props.event_date !== selectedDateKey()) return false;
-    if (state.borough !== 'all' && props.borough !== state.borough) return false;
-    if (props.category && state.categories[props.category] === false) return false;
-    if (state.search) {
-      const haystack = norm([props.title, props.original_location, props.anchor_name, props.borough].filter(Boolean).join(' '));
-      if (!haystack.includes(state.search)) return false;
-    }
-    return true;
-  }
-
-  function approximateMarker(feature) {
-    const coordinates = feature.geometry?.coordinates;
-    if (!Array.isArray(coordinates) || coordinates.length < 2) return null;
-    const lng = Number(coordinates[0]);
-    const lat = Number(coordinates[1]);
-    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
-    const props = feature.properties || {};
-    const park = props.approximation_class === 'park_level_anchor';
-    const marker = L.circleMarker([lat, lng], {
-      pane: park ? 'approximateParkPane' : 'approximateMunicipalityPane',
-      radius: park ? 9 : 10,
-      color: park ? '#c65f11' : '#1967c9',
-      fillColor: park ? '#f28a2e' : '#4b9cff',
-      fillOpacity: 0.52,
-      opacity: 0.82,
-      weight: 2
-    });
-    marker.__nycifApproximateFeature = feature;
-    marker.bindPopup(approximatePopup(feature, 1), {
-      className: 'nycif-event-popup nycif-approximate-popup',
-      maxWidth: 340
-    });
-    return marker;
-  }
-
-  function renderApproximateMarkers() {
-    approximateMunicipalityMarkers.clearLayers();
-    approximateParkMarkers.clearLayers();
-    approximateFacilityMarkers.clearLayers();
-    approximateVisibleCount = 0;
-    for (const feature of approximateFeatures) {
-      if (!approximateFeatureMatches(feature)) continue;
-      const marker = approximateMarker(feature);
-      if (!marker) continue;
-      const props = feature.properties || {};
-      if (props.source_group === APPROXIMATE_FACILITY_SOURCE) {
-        marker.options.pane = 'approximateFacilityPane';
-        approximateFacilityMarkers.addLayer(marker);
-      } else if (props.approximation_class === 'park_level_anchor') {
-        approximateParkMarkers.addLayer(marker);
-      } else {
-        approximateMunicipalityMarkers.addLayer(marker);
-      }
-      approximateVisibleCount += 1;
-    }
-  }
-
-  async function loadApproximateMarkers() {
-    approximateLoadState = 'loading';
-    try {
-      const payload = await fetchJson(FEEDS.approximate, 'approximate-markers');
-      approximateFeatures = Array.isArray(payload?.features)
-        ? payload.features.filter(feature => feature?.type === 'Feature'
-          && feature?.geometry?.type === 'Point'
-          && feature?.properties?.coordinate_status === 'approximate'
-          && feature?.properties?.source_group !== undefined)
-        : [];
-      approximateLoadState = 'ok';
-      renderApproximateMarkers();
-      console.info(`[NYCIF] ADR-0013 approximate features loaded: ${approximateFeatures.length}`);
-    } catch (err) {
-      approximateFeatures = [];
-      approximateLoadState = 'error';
-      state.errors.push(String(err.message || err));
-      console.error('[NYCIF] approximate marker feed failed (fail-soft):', err);
-    }
   }
 
   function milesBetween(a, b) {
@@ -899,6 +669,24 @@
     const lat2 = toRad(b.lat);
     const x = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
     return 2 * R * Math.asin(Math.sqrt(x));
+  }
+
+  function sortEvents(a, b) {
+    if (state.sort === 'near') {
+      const da = milesBetween(state.userLocation, a) ?? 999999;
+      const db = milesBetween(state.userLocation, b) ?? 999999;
+      return da - db || b.priority - a.priority;
+    }
+    if (state.sort === 'borough') {
+      return (a.borough || 'zz').localeCompare(b.borough || 'zz') || b.priority - a.priority;
+    }
+    if (state.sort === 'type') {
+      return String(a.nycif?.event_type || 'zz').localeCompare(String(b.nycif?.event_type || 'zz')) || b.priority - a.priority;
+    }
+    if (state.sort === 'time') {
+      return (a.dateKey || '9999').localeCompare(b.dateKey || '9999') || b.priority - a.priority;
+    }
+    return b.priority - a.priority || (a.dateKey || '').localeCompare(b.dateKey || '');
   }
 
   function mapsUrl(kind, e) {
@@ -1064,8 +852,7 @@
       groups.get(key).push(e);
     }
     for (const group of groups.values()) {
-      group.sort((a, b) => Number(b.editorialScore || 0) - Number(a.editorialScore || 0)
-        || b.priority - a.priority || String(a.title).localeCompare(String(b.title)));
+      group.sort((a, b) => b.priority - a.priority || String(a.title).localeCompare(String(b.title)));
     }
     return groups;
   }
@@ -1243,23 +1030,8 @@
     };
     addRow('Date', formatDateSpan(e));
     addRow('Time', formatTimeRange(e));
-    addRow('Type', e.eventTypeLabel);
     addRow('Borough', e.borough);
     addRow('Location', e.location);
-    addRow('Cost', e.costLabel);
-    addRow('Verification', e.verificationLabel);
-    const addSourceRow = () => {
-      if (!e.sourceLabel) return;
-      const wrap = document.createElement('div');
-      appendText(wrap, 'dt', 'Source');
-      const dd = document.createElement('dd');
-      if (!appendSafeLink(dd, e.officialUrl, e.sourceLabel)) {
-        dd.textContent = e.sourceLabel;
-      }
-      wrap.appendChild(dd);
-      dl.appendChild(wrap);
-    };
-    addSourceRow();
     root.appendChild(dl);
     if (e.mapReady) {
       const actions = document.createElement('div');
@@ -1271,33 +1043,6 @@
       appendText(root, 'div', 'Location being confirmed.', 'popup-pending');
     }
     return root;
-  }
-
-  const displayAuditEnabled = (() => {
-    try {
-      return new URL(location.href).searchParams.get('auditDisplay') === '1';
-    } catch {
-      return false;
-    }
-  })();
-
-  if (displayAuditEnabled) {
-    window.NYCIF_DISPLAY_AUDIT = {
-      renderDetail(id) {
-        const event = state.byId.get(String(id || ''));
-        if (!event) return false;
-        let host = document.getElementById('nycif-display-audit-host');
-        if (!host) {
-          host = document.createElement('section');
-          host.id = 'nycif-display-audit-host';
-          host.setAttribute('aria-label', 'Display audit detail');
-          document.body.appendChild(host);
-        }
-        clearChildren(host);
-        host.appendChild(popupRoot(event));
-        return true;
-      }
-    };
   }
 
   function makeStackMarker(events) {
@@ -1388,7 +1133,7 @@
     }
     const key = coordKeyFor(e.lat, e.lng);
     const stack = state.events.filter(ev => markerEligible(ev)
-      && baseEventMatches(ev)
+      && eventMatches(ev)
       && coordKeyFor(ev.lat, ev.lng) === key);
     stack.sort((a, b) => b.priority - a.priority || String(a.title).localeCompare(String(b.title)));
     return ensureStackMarker(stack.length ? stack : [e]);
@@ -1416,14 +1161,7 @@
     const mapReady = visible.filter(e => markerEligible(e));
     const bounds = expandedBounds();
     const inView = bounds ? mapReady.filter(e => bounds.contains([e.lat, e.lng])) : mapReady;
-    // With clustering available, represent EVERY map-eligible event in the selected
-    // date/filter scope. Viewport limiting survives only in explicit no-cluster
-    // diagnostic mode, where thousands of independent DOM markers are unsafe.
-    const nonClusterScope = inView.length ? inView : mapReady;
-    const eligibleInScope = useCluster ? mapReady : nonClusterScope;
-    const candidates = useCluster
-      ? eligibleInScope
-      : eligibleInScope.slice(0, MARKER_SOFT_CAP);
+    const candidates = (inView.length ? inView : mapReady).slice(0, MARKER_SOFT_CAP);
     candidates.forEach(e => {
       e.marker = null;
     });
@@ -1440,142 +1178,9 @@
     }
     else batch.forEach(marker => markers.addLayer(marker));
     state.markerObjects = batch.length;
-    state.markerEvents = candidates.length;
     state.peakMarkerObjects = Math.max(state.peakMarkerObjects, batch.length);
     state.timings.markerUpdateMs = Math.round(performance.now() - t0);
     return batch;
-  }
-
-  const DAILY_GUIDE_BOROUGHS = [
-    ['Manhattan', 'MANHATTAN'],
-    ['Brooklyn', 'BROOKLYN'],
-    ['Queens', 'QUEENS'],
-    ['Bronx', 'THE BRONX'],
-    ['Staten Island', 'STATEN ISLAND']
-  ];
-  const DAILY_GUIDE_TIERS = [
-    ['gold', '🔴 PHOTO FIRST', 'Highest-priority newsworthy and photo assignments.'],
-    ['silver', '🟠 STRONG ASSIGNMENTS', 'Strong community, cultural, civic, visual, or local-news assignments.'],
-    ['bronze', '🟡 FEATURE OPTIONS', 'Good visual feature opportunities.'],
-    ['', 'WHAT ELSE IS HAPPENING', 'Every remaining valid public event for this date.']
-  ];
-
-  function fullDateLabel(key) {
-    if (!SCHEMA.validCalendarDate(key)) return key;
-    const d = new Date(`${key}T12:00:00Z`);
-    return new Intl.DateTimeFormat('en-US', {
-      weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York'
-    }).format(d);
-  }
-
-  function exactEventMoment(value) {
-    const raw = String(value || '').trim();
-    if (!raw || !meaningfulTime(raw)) return null;
-    const ms = Date.parse(raw);
-    return Number.isFinite(ms) ? ms : null;
-  }
-
-  function eventTemporalStatus(e) {
-    if (selectedDateKey() !== todayKey()) return '';
-    const now = Date.now();
-    const start = exactEventMoment(e.start_date_time);
-    const end = exactEventMoment(e.end_date_time);
-    if (end != null && end < now) return 'ENDED';
-    if (start != null && end != null && start <= now && now <= end) return 'HAPPENING NOW';
-    if (start != null && start > now) {
-      return ((start - now) / 60000) <= 90 ? 'STARTING SOON' : 'LATER TODAY';
-    }
-    return '';
-  }
-
-  function temporalRank(e) {
-    const status = eventTemporalStatus(e);
-    if (status === 'HAPPENING NOW') return 0;
-    if (status === 'ENDED') return 2;
-    return 1;
-  }
-
-  function dailyGuideSort(a, b) {
-    if (state.sort === 'near') {
-      const da = milesBetween(state.userLocation, a) ?? 999999;
-      const db = milesBetween(state.userLocation, b) ?? 999999;
-      return da - db || eventSortTime(a) - eventSortTime(b) || String(a.title).localeCompare(String(b.title));
-    }
-    if (state.sort === 'time') {
-      return eventSortTime(a) - eventSortTime(b) || String(a.title).localeCompare(String(b.title));
-    }
-    if (state.sort === 'type') {
-      return String(a.nycif?.event_type || 'zz').localeCompare(String(b.nycif?.event_type || 'zz'))
-        || eventSortTime(a) - eventSortTime(b) || String(a.title).localeCompare(String(b.title));
-    }
-    return temporalRank(a) - temporalRank(b)
-      || Number(b.editorialScore || 0) - Number(a.editorialScore || 0)
-      || eventSortTime(a) - eventSortTime(b)
-      || String(a.title).localeCompare(String(b.title));
-  }
-
-  function topPickCounts(events) {
-    return {
-      gold: events.filter(e => e.medal === 'gold').length,
-      silver: events.filter(e => e.medal === 'silver').length,
-      bronze: events.filter(e => e.medal === 'bronze').length
-    };
-  }
-
-  function renderDailyGuideSummary(events) {
-    if (!els.dailyGuideSummary) return;
-    clearChildren(els.dailyGuideSummary);
-    const key = selectedDateKey();
-    const title = key === todayKey() ? `TODAY — ${fullDateLabel(key).toUpperCase()}` : fullDateLabel(key).toUpperCase();
-    appendText(els.dailyGuideSummary, 'h2', title, 'daily-guide-date');
-    const scope = state.borough === 'all' ? 'around NYC' : `in ${state.borough}`;
-    appendText(els.dailyGuideSummary, 'p', `${events.length.toLocaleString()} event${events.length === 1 ? '' : 's'} happening ${scope}`, 'daily-guide-total');
-    appendText(els.dailyGuideSummary, 'h3', 'NYCIF TOP PICKS', 'daily-guide-picks-title');
-    const counts = topPickCounts(events);
-    const grid = document.createElement('div');
-    grid.className = 'daily-guide-picks';
-    appendText(grid, 'span', `🔴 ${counts.gold.toLocaleString()} Photo First`, 'daily-guide-pick daily-guide-pick--gold');
-    appendText(grid, 'span', `🟠 ${counts.silver.toLocaleString()} Strong Assignments`, 'daily-guide-pick daily-guide-pick--silver');
-    appendText(grid, 'span', `🟡 ${counts.bronze.toLocaleString()} Feature Options`, 'daily-guide-pick daily-guide-pick--bronze');
-    els.dailyGuideSummary.appendChild(grid);
-    if (!state.indexComplete) {
-      appendText(els.dailyGuideSummary, 'p', 'Finding more events — counts update as the complete day index loads.', 'daily-guide-loading');
-    }
-  }
-
-  function boroughGuideKey(e) {
-    const exact = DAILY_GUIDE_BOROUGHS.find(([key]) => key === e.borough);
-    return exact ? exact[0] : '__other__';
-  }
-
-  function renderDailyGuide(events, shownLimit) {
-    let remaining = shownLimit;
-    const boroughRows = [...DAILY_GUIDE_BOROUGHS];
-    if (events.some(e => boroughGuideKey(e) === '__other__')) {
-      boroughRows.push(['__other__', 'CITYWIDE / BOROUGH NOT LISTED']);
-    }
-    for (const [boroughKey, boroughLabel] of boroughRows) {
-      const boroughEvents = events.filter(e => boroughGuideKey(e) === boroughKey);
-      if (!boroughEvents.length || remaining <= 0) continue;
-      const section = document.createElement('section');
-      section.className = 'daily-guide-borough';
-      appendText(section, 'h2', boroughLabel, 'daily-guide-borough-title');
-      let sectionCards = 0;
-      for (const [tier, heading, description] of DAILY_GUIDE_TIERS) {
-        const tierEvents = boroughEvents.filter(e => (e.medal || '') === tier).sort(dailyGuideSort);
-        if (!tierEvents.length || remaining <= 0) continue;
-        const tierSection = document.createElement('section');
-        tierSection.className = `daily-guide-tier daily-guide-tier--${tier || 'else'}`;
-        appendText(tierSection, 'h3', heading, 'daily-guide-tier-title');
-        appendText(tierSection, 'p', description, 'daily-guide-tier-dek');
-        const take = tierEvents.slice(0, remaining);
-        take.forEach(e => tierSection.appendChild(buildListCard(e)));
-        remaining -= take.length;
-        sectionCards += take.length;
-        section.appendChild(tierSection);
-      }
-      if (sectionCards) els.eventList.appendChild(section);
-    }
   }
 
   function buildListCard(e) {
@@ -1589,10 +1194,8 @@
     appendText(top, 'span', `${e.displayEmoji} ${e.categoryMeta.label}`, 'item-source');
     const tags = document.createElement('span');
     tags.className = 'item-tags';
-    const temporalStatus = eventTemporalStatus(e);
-    if (temporalStatus) {
-      const statusClass = temporalStatus.toLowerCase().replace(/\s+/g, '-');
-      appendText(tags, 'span', temporalStatus, `item-tag temporal temporal-${statusClass}`);
+    if (e.isPast) {
+      appendText(tags, 'span', '✓ Ended', 'item-tag ended');
     }
     if (e.medal && ED.MEDAL_META[e.medal]) {
       appendText(tags, 'span', `${ED.MEDAL_META[e.medal].emoji} ${ED.MEDAL_META[e.medal].label}`, `item-tag medal medal-${e.medal}`);
@@ -1606,12 +1209,6 @@
     if (e.isMajor && !e.medal) {
       appendText(tags, 'span', '⭐ Featured', 'item-tag featured');
     }
-    if (e.verificationLabel === 'Verified' || e.verificationLabel === 'Official source') {
-      appendText(tags, 'span', '✓ Verified', 'item-tag verified');
-    }
-    if (e.costLabel === 'Free') {
-      appendText(tags, 'span', 'Free', 'item-tag free');
-    }
     if (!e.mapReady) {
       appendText(tags, 'span', 'Location being confirmed', 'item-tag pending');
     }
@@ -1622,7 +1219,7 @@
     top.appendChild(tags);
     button.appendChild(top);
     appendText(button, 'strong', e.title);
-    appendText(button, 'span', `${formatDateSpan(e)} · ${formatTimeRange(e)}`, 'item-when');
+    appendText(button, 'span', formatDateSpan(e));
     appendText(button, 'small', [e.borough, e.location].filter(Boolean).join(' • '));
     if (e.mapReady) {
       const actions = document.createElement('span');
@@ -1765,41 +1362,35 @@
     const t0 = performance.now();
     updateIndexLabel();
     updateCategoryAvailability();
-    const mapScope = state.events.filter(baseEventMatches);
-    const listScope = mapScope.filter(medalMatch);
-    const drawn = renderMarkers(mapScope);
-    renderApproximateMarkers();
-    const shown = Math.min(state.listShown, listScope.length);
-    const mapEligibleCount = mapScope.filter(e => markerEligible(e)).length;
+    const visible = state.events.filter(eventMatches).sort(sortEvents);
+    const drawn = renderMarkers(visible);
+    const shown = Math.min(state.listShown, visible.length);
+    const mapEligibleCount = visible.filter(e => markerEligible(e)).length;
     const dateLabel = friendlyDateLabel(selectedDateKey());
-    renderDailyGuideSummary(mapScope);
-    let meta = `${listScope.length.toLocaleString()} shown in the editorial guide`;
-    if (listScope.length !== mapScope.length) {
-      meta += ` · ${mapScope.length.toLocaleString()} total events remain on the map`;
-    }
-    if (!useCluster && state.markerEvents < mapEligibleCount) {
+    let meta = `${visible.length.toLocaleString()} event${visible.length === 1 ? '' : 's'} ${dateLabel === 'today' || dateLabel === 'tomorrow' ? dateLabel : `on ${dateLabel}`}`;
+    if (drawn.length < mapEligibleCount) {
       meta += ' · move or zoom the map to see more pins';
     }
     els.listMeta.textContent = meta;
     clearChildren(els.eventList);
-    if (!listScope.length) {
+    if (!visible.length) {
       appendText(els.eventList, 'div', emptyStateMessage(), 'empty');
     } else {
-      renderDailyGuide(listScope, shown);
+      visible.slice(0, shown).forEach(e => els.eventList.appendChild(buildListCard(e)));
     }
     if (els.loadMoreBtn) {
-      els.loadMoreBtn.hidden = shown >= listScope.length;
-      els.loadMoreBtn.textContent = `Show 100 more (${Math.max(0, listScope.length - shown).toLocaleString()} remaining)`;
+      els.loadMoreBtn.hidden = shown >= visible.length;
+      els.loadMoreBtn.textContent = `Show 100 more (${Math.max(0, visible.length - shown).toLocaleString()} remaining)`;
     }
     if (els.brandCount) {
-      els.brandCount.textContent = `${mapScope.length.toLocaleString()} event${mapScope.length === 1 ? '' : 's'} · ${dateLabel}`;
+      els.brandCount.textContent = `${visible.length.toLocaleString()} event${visible.length === 1 ? '' : 's'} · ${dateLabel}`;
     }
     if (state.feedPhase === 'error' && !state.events.length) {
       status('Events are temporarily unavailable. Open Filters and choose Retry Events.');
     } else if (state.feedPhase === 'error') {
       status('Events could not be refreshed. Showing the most recent available information.');
     } else {
-      status(`${mapScope.length.toLocaleString()} event${mapScope.length === 1 ? '' : 's'} · ${dateLabel}`);
+      status(`${visible.length.toLocaleString()} event${visible.length === 1 ? '' : 's'} · ${dateLabel}`);
     }
     state.timings.listRenderMs = Math.round(performance.now() - t0);
     if (debug && els.debugPanel) {
@@ -1807,13 +1398,8 @@
       els.debugPanel.textContent = JSON.stringify({
         version: VERSION,
         total: state.events.length,
-        mapScope: mapScope.length,
-        listScope: listScope.length,
-        topPicks: topPickCounts(mapScope),
+        filtered: visible.length,
         markers: drawn.length,
-        markerEvents: state.markerEvents,
-        mapEligibleVisible: mapEligibleCount,
-        markerParityComplete: useCluster ? state.markerEvents === mapEligibleCount : state.markerEvents >= Math.min(mapEligibleCount, MARKER_SOFT_CAP),
         peakMarkerObjects: state.peakMarkerObjects,
         indexComplete: state.indexComplete,
         pagesLoaded: state.pagesLoaded,
@@ -1825,7 +1411,7 @@
         errors: state.errors.slice(-8)
       }, null, 2);
     }
-    return mapScope;
+    return visible;
   }
 
   function scheduleRender() {
@@ -1891,7 +1477,6 @@
 
   function onBoroughSelected(value, button) {
     state.borough = value;
-    state.listShown = LIST_PAGE;
     setActiveBoroughButton(button);
     savePrefs();
     scheduleRender();
@@ -2385,16 +1970,8 @@
     buildBoroughs();
     buildDateChips();
     await bootFeeds();
-    await loadApproximateMarkers();
     // News Desk + Editor's Picks signals load after the core feed (non-blocking).
     loadNewsDeskSignals();
-    const parityAuditEnabled = (() => {
-      try {
-        return new URL(location.href).searchParams.get('auditParity') === '1';
-      } catch {
-        return false;
-      }
-    })();
     window.NYCIF_UNIFIED_VIEWER = {
       version: VERSION,
       getSummary: () => ({
@@ -2405,21 +1982,7 @@
         operatorDesk: isOperatorDesk(),
         mapReady: state.events.filter(e => e.mapReady).length,
         listOnly: state.events.filter(e => !e.mapReady).length,
-        approximateTotal: approximateFeatures.length,
-        approximateVisible: approximateVisibleCount,
-        approximateLoadState,
-        approximateClusteredSource: APPROXIMATE_CLUSTERED_SOURCE,
-        approximateFacilitySource: APPROXIMATE_FACILITY_SOURCE,
         markerObjects: state.markerObjects,
-        markerEvents: state.markerEvents,
-        visible: state.events.filter(listEventMatches).length,
-        mapScopeVisible: state.events.filter(baseEventMatches).length,
-        mapEligibleVisible: state.events.filter(e => baseEventMatches(e) && markerEligible(e)).length,
-        ...(parityAuditEnabled ? {
-          visibleIds: state.events.filter(listEventMatches).map(e => e.id).sort((a, b) => String(a).localeCompare(String(b))),
-          mapEligibleVisibleIds: state.events.filter(e => baseEventMatches(e) && markerEligible(e)).map(e => e.id).sort((a, b) => String(a).localeCompare(String(b)))
-        } : {}),
-        markerParityComplete: useCluster && state.markerEvents === state.events.filter(e => baseEventMatches(e) && markerEligible(e)).length,
         peakMarkerObjects: state.peakMarkerObjects,
         cluster: useCluster,
         indexComplete: state.indexComplete,

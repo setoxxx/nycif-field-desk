@@ -14,10 +14,10 @@
     legalCannabis: {
       id: 'legalCannabis',
       checkboxId: 'approvedOverlayLegalCannabis',
-      label: '🌿 Legal Cannabis Dispensaries',
+      label: '✅ Legal Cannabis Dispensaries',
       shortLabel: 'Legal Cannabis Dispensaries',
       url: './data/nycif_legal_cannabis_dispensaries.json',
-      icon: '🌿',
+      icon: '✅',
       className: 'nycif-approved-marker-cannabis',
       zIndexOffset: 920,
       note: 'Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.'
@@ -176,8 +176,15 @@
 
   function popupHtml(pin, key) {
     const config = OVERLAYS[key];
-    const place = [pin.address, pin.borough].filter(Boolean).map(esc).join('<br>');
-    return `<article class="nycif-approved-popup"><div class="tag">${esc(config.shortLabel)}</div><h2>${esc(pin.title)}</h2>${place ? `<p>${place}</p>` : ''}<p class="note">${esc(config.note)}</p></article>`;
+    if (key === 'active5pm') {
+      return `<article class="nycif-approved-popup"><div class="tag">${esc(config.shortLabel)}</div><h2>${esc(pin.title)}</h2>${pin.label ? `<p><strong>${esc(pin.label)}</strong></p>` : ''}${pin.address ? `<p>${esc(pin.address)}</p>` : ''}${pin.borough ? `<p>${esc(pin.borough)}</p>` : ''}${pin.feedBucket ? `<p><strong>Signal bucket:</strong> ${esc(pin.feedBucket)}</p>` : ''}${pin.trendTier ? `<p><strong>Signal tier:</strong> ${esc(pin.trendTier)}</p>` : ''}${pin.trendScore !== '' ? `<p><strong>Signal score:</strong> ${esc(fmt(pin.trendScore))}</p>` : ''}${pin.lastComplaintDate ? `<p><strong>Last complaint date:</strong> ${esc(pin.lastComplaintDate)}</p>` : ''}<p><strong>Nearby complaints:</strong> 30d ${esc(fmt(pin.complaints30d100ft))} / 90d ${esc(fmt(pin.complaints90d100ft))} / 365d ${esc(fmt(pin.complaints365d100ft))}</p><p class="note">${esc(config.note)}</p></article>`;
+    }
+
+    if (key === 'legalCannabis') {
+      return `<article class="nycif-approved-popup"><div class="tag">${esc(config.shortLabel)}</div><h2>${esc(pin.title)}</h2>${pin.label ? `<p><strong>${esc(pin.label)}</strong></p>` : ''}${pin.licenseStatus ? `<p><strong>Status:</strong> ${esc(pin.licenseStatus)}</p>` : ''}${pin.licenseNumber ? `<p><strong>License/record:</strong> ${esc(pin.licenseNumber)}</p>` : ''}${pin.address ? `<p>${esc(pin.address)}</p>` : ''}${pin.borough ? `<p>${esc(pin.borough)}</p>` : ''}<p class="note">${esc(pin.dataNote || config.note)}</p></article>`;
+    }
+
+    return `<article class="nycif-approved-popup"><div class="tag">${esc(config.shortLabel)}</div><h2>${esc(pin.title)}</h2>${pin.label ? `<p><strong>${esc(pin.label)}</strong></p>` : ''}${pin.locationKind ? `<p><strong>Location kind:</strong> ${esc(pin.locationKind)}</p>` : ''}${pin.address ? `<p>${esc(pin.address)}</p>` : ''}${pin.borough ? `<p>${esc(pin.borough)}</p>` : ''}${pin.signalScore !== '' ? `<p><strong>Signal score:</strong> ${esc(fmt(pin.signalScore))}</p>` : ''}${pin.signalTier ? `<p><strong>Signal tier:</strong> ${esc(pin.signalTier)}</p>` : ''}${pin.lastComplaintDate ? `<p><strong>Last complaint date:</strong> ${esc(pin.lastComplaintDate)}</p>` : ''}<p><strong>Complaints 365d:</strong> 100ft ${esc(fmt(pin.complaints365d100ft))} / 250ft ${esc(fmt(pin.complaints365d250ft))} / 500ft ${esc(fmt(pin.complaints365d500ft))}</p>${pin.topComplaintSubtypes ? `<p><strong>Top subtypes:</strong> ${esc(pin.topComplaintSubtypes)}</p>` : ''}${pin.topComplaintDescriptors ? `<p><strong>Top descriptors:</strong> ${esc(pin.topComplaintDescriptors)}</p>` : ''}<p class="note">${esc(config.note)}</p></article>`;
   }
 
   function markerFor(pin, key) {
