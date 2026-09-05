@@ -4,27 +4,27 @@
   "fetch_limit": 50000,
   "max_rows": 300000,
   "lookback_days": 365,
-  "since_date": "2025-09-04",
-  "matched_rows": 2601,
-  "mapped_total": 2573,
-  "needs_review": 28,
-  "rejected": 297399,
+  "since_date": "2025-09-05",
+  "matched_rows": 2607,
+  "mapped_total": 2575,
+  "needs_review": 32,
+  "rejected": 297393,
   "duplicate_count": 0,
   "subtype_counts": {
-    "cannabis_related_complaint": 2012,
-    "vape_complaint": 557,
+    "cannabis_related_complaint": 2022,
+    "vape_complaint": 549,
     "public_smoking_complaint": 4
   },
   "match_bucket_counts": {
-    "cannabis_marijuana_weed": 2012,
-    "vape_electronic_cigarette": 557,
+    "cannabis_marijuana_weed": 2022,
+    "vape_electronic_cigarette": 549,
     "public_secondhand_smoking": 4
   },
   "complaint_type_counts": {
-    "Obstruction": 1100,
-    "Cannabis Retailer": 386,
-    "Smoking or Vaping": 507,
-    "Maintenance or Facility": 513,
+    "Cannabis Retailer": 388,
+    "Obstruction": 1098,
+    "Smoking or Vaping": 499,
+    "Maintenance or Facility": 523,
     "Consumer Complaint": 50,
     "Noise": 1,
     "Noise - Street/Sidewalk": 3,
@@ -35,17 +35,17 @@
     "Animal-Abuse": 1
   },
   "descriptor_counts": {
-    "Weeds or Grass": 1100,
-    "Suspicious Activity": 41,
-    "Too Close to a School": 25,
-    "Allowed in Smoke Free Area": 496,
-    "Unlicensed": 134,
-    "Product Concerns": 19,
     "Sales to Minors Under 21": 158,
-    "Grass/Weeds": 513,
+    "Weeds or Grass": 1098,
+    "Allowed in Smoke Free Area": 487,
+    "Unlicensed": 137,
+    "Grass/Weeds": 523,
+    "Sign Inadequate": 8,
     "E-Cigarette Sales": 43,
+    "Suspicious Activity": 40,
+    "Too Close to a School": 26,
+    "Product Concerns": 18,
     "Too Close to a House of Worship": 9,
-    "Sign Inadequate": 7,
     "Workplace Policy Not Provided or Inadequate": 2,
     "Jackhammer": 1,
     "Loud Music/Party": 3,
@@ -62,15 +62,15 @@
   "top_review_reasons": [
     {
       "reason": "needs_geocode",
-      "count": 28
+      "count": 32
     }
   ],
   "top_rejection_reasons": [
     {
       "reason": "no_smoke_vape_cannabis_match",
-      "count": 297399
+      "count": 297393
     }
   ],
-  "generated_at": "2026-09-04T14:33:48.841Z",
+  "generated_at": "2026-09-05T13:30:21.784Z",
   "data_note": "311 complaint records are public complaint intel, not proof of illegal activity, causation, or wrongdoing."
 }

@@ -3,17 +3,17 @@
   "complaint_file": "data/nycif_smoke_cannabis_vape_intel.json",
   "dispensary_file": "data/nycif_legal_cannabis_dispensaries.json",
   "retailer_file": "data/nycif_licensed_smoke_vape_retailers_slim.json",
-  "source_complaints": 2573,
-  "usable_complaints": 2573,
-  "source_dispensaries": 257,
+  "source_complaints": 2575,
+  "usable_complaints": 2575,
+  "source_dispensaries": 243,
   "source_retailers": 4688,
-  "correlation_locations_before_dedupe": 4945,
-  "correlation_locations": 3847,
+  "correlation_locations_before_dedupe": 4931,
+  "correlation_locations": 3833,
   "semantic_duplicate_locations_collapsed": 1098,
-  "output_locations": 221,
+  "output_locations": 224,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "low_signal_excluded": 3626,
+  "low_signal_excluded": 3609,
   "radius_feet": [
     100,
     250,
@@ -27,20 +27,20 @@
   ],
   "min_signal_score": 3,
   "location_kind_counts": {
-    "legal_cannabis_dispensary": 40,
-    "licensed_smoke_vape_retailer": 181
+    "legal_cannabis_dispensary": 37,
+    "licensed_smoke_vape_retailer": 187
   },
   "borough_counts": {
-    "Manhattan": 61,
-    "Bronx": 38,
+    "Manhattan": 58,
+    "Bronx": 37,
     "Brooklyn": 64,
-    "Queens": 48,
-    "Staten Island": 10
+    "Queens": 54,
+    "Staten Island": 11
   },
   "signal_tier_counts": {
     "very_high": 3,
-    "high": 37,
-    "moderate": 181
+    "high": 39,
+    "moderate": 182
   },
   "top_locations_sample": [
     {
@@ -49,11 +49,11 @@
       "address": "MIGUEL BERNARD 302 8TH AVE, NEW YORK, 10001 4813",
       "borough": "Manhattan",
       "source_record_count": 1,
-      "signal_score": 92,
+      "signal_score": 102,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 9,
-      "complaints_365d_250ft": 9,
-      "last_complaint_date": "2026-09-01"
+      "complaints_365d_100ft": 10,
+      "complaints_365d_250ft": 10,
+      "last_complaint_date": "2026-09-03"
     },
     {
       "title": "CHELSEA FINE FOODS",
@@ -61,11 +61,11 @@
       "address": "300 8TH AVE, NEW YORK, 10001",
       "borough": "Manhattan",
       "source_record_count": 1,
-      "signal_score": 91,
+      "signal_score": 101,
       "signal_tier": "very_high",
-      "complaints_365d_100ft": 9,
-      "complaints_365d_250ft": 9,
-      "last_complaint_date": "2026-09-01"
+      "complaints_365d_100ft": 10,
+      "complaints_365d_250ft": 10,
+      "last_complaint_date": "2026-09-03"
     },
     {
       "title": "UPTOWN SERVICE STATION CORP.",
@@ -80,18 +80,6 @@
       "last_complaint_date": "2026-09-01"
     },
     {
-      "title": "GARDENIA DELI",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "404 8 AVENUE, NEW YORK, 10001",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 41,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 4,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-08-25"
-    },
-    {
       "title": "LUCKY LELAND CORP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1859 ARCHER ST, BRONX, 10460",
@@ -102,30 +90,6 @@
       "complaints_365d_100ft": 4,
       "complaints_365d_250ft": 4,
       "last_complaint_date": "2026-08-13"
-    },
-    {
-      "title": "FREEDOM NEWS I, INC.",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 32,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-08-20"
-    },
-    {
-      "title": "SUNAC NATURAL",
-      "location_kind": "licensed_smoke_vape_retailer",
-      "address": "600 WEST 42 STREET, NEW YORK, 10036",
-      "borough": "Manhattan",
-      "source_record_count": 2,
-      "signal_score": 32,
-      "signal_tier": "high",
-      "complaints_365d_100ft": 3,
-      "complaints_365d_250ft": 4,
-      "last_complaint_date": "2026-08-20"
     },
     {
       "title": "THE HOOTCH LLC",
@@ -248,6 +212,30 @@
       "last_complaint_date": "2026-09-02"
     },
     {
+      "title": "FREEDOM NEWS I, INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
+      "source_record_count": 2,
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-08-20"
+    },
+    {
+      "title": "SUNAC NATURAL",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "600 WEST 42 STREET, NEW YORK, 10036",
+      "borough": "Manhattan",
+      "source_record_count": 2,
+      "signal_score": 22,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 3,
+      "last_complaint_date": "2026-08-20"
+    },
+    {
       "title": "TANGO HOTEL CHARLIE VENTURES LLC",
       "location_kind": "legal_cannabis_dispensary",
       "address": "CARMINE FIORE 598 BROADWAY, NEW YORK, 10012 3351",
@@ -332,6 +320,18 @@
       "last_complaint_date": "2026-09-01"
     },
     {
+      "title": "BRIARWOOD NEWS, INC.",
+      "location_kind": "licensed_smoke_vape_retailer",
+      "address": "13763 QUEENS BOULEVARD, JAMAICA, 11435",
+      "borough": "Queens",
+      "source_record_count": 2,
+      "signal_score": 21,
+      "signal_tier": "high",
+      "complaints_365d_100ft": 2,
+      "complaints_365d_250ft": 2,
+      "last_complaint_date": "2026-09-03"
+    },
+    {
       "title": "CARIBBEAN CONVENIENCE CORP",
       "location_kind": "licensed_smoke_vape_retailer",
       "address": "1310 FLATBUSH AVE, BROOKLYN, 11210",
@@ -344,6 +344,6 @@
       "last_complaint_date": "2026-09-02"
     }
   ],
-  "generated_at": "2026-09-04T14:33:49.172Z",
+  "generated_at": "2026-09-05T13:30:27.224Z",
   "data_note": "Complaint activity near regulated location; not proof of causation, illegal activity, or wrongdoing."
 }

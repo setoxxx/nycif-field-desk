@@ -769,47 +769,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.74712,
-    "lng": -73.9742,
-    "id": "legal-dispensary-OCM-CAURD-24-000156",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "JUST A LITTLE HIGHER MURRAY HILL",
-    "address": "GREGORY KORNEGAY 698 2ND AVE, NEW YORK, 10016 3205",
-    "borough": "Manhattan",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-CAURD-24-000156",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "883869177",
-      "legal_name": "A LITTLE PLACE TO RELAX LLC",
-      "dba_name": "JUST A LITTLE HIGHER MURRAY HILL",
-      "ocm_license_number": "OCM-CAURD-24-000156",
-      "physical_county": "NEW YORK",
-      "physical_address": "GREGORY KORNEGAY 698 2ND AVE",
-      "physical_city": "NEW YORK",
-      "physical_state": "NY",
-      "physical_zip": "10016 3205",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.9742,
-          40.74712
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "749",
-      ":@computed_region_wbg7_3whc": "739",
-      ":@computed_region_kjdx_g34t": "2095"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.728,
     "lng": -73.95321,
     "id": "legal-dispensary-OCM-RETL-24-000121",
@@ -1131,46 +1090,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.73603,
-    "lng": -73.7462,
-    "id": "legal-dispensary-OCM-RETL-24-000026",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "BAYSIDE SUPPLY, INC.",
-    "address": "22415 UNION TPKE, OAKLAND GARDENS, 11364 3631",
-    "borough": "Queens",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-RETL-24-000026",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "900742852",
-      "legal_name": "BAYSIDE SUPPLY, INC.",
-      "ocm_license_number": "OCM-RETL-24-000026",
-      "physical_county": "QUEENS",
-      "physical_address": "22415 UNION TPKE",
-      "physical_city": "OAKLAND GARDENS",
-      "physical_state": "NY",
-      "physical_zip": "11364 3631",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.7462,
-          40.73603
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "196",
-      ":@computed_region_wbg7_3whc": "834",
-      ":@computed_region_kjdx_g34t": "2137"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.73027,
     "lng": -73.86331,
     "id": "legal-dispensary-OCM-CAURD-24-000174",
@@ -1367,6 +1286,47 @@
       ":@computed_region_yamh_8v7k": "196",
       ":@computed_region_wbg7_3whc": "1166",
       ":@computed_region_kjdx_g34t": "2137"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": []
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
+    "lat": 40.58814,
+    "lng": -74.16579,
+    "id": "legal-dispensary-OCM-CAURD-26-000362",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "THE ISH",
+    "address": "51 RICHMOND HILL RD # C, STATEN ISLAND, 10314 5950",
+    "borough": "Staten Island",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-CAURD-26-000362",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "920273316",
+      "legal_name": "BIG DIPPER NY LLC",
+      "dba_name": "THE ISH",
+      "ocm_license_number": "OCM-CAURD-26-000362",
+      "physical_county": "RICHMOND",
+      "physical_address": "51 RICHMOND HILL RD # C",
+      "physical_city": "STATEN ISLAND",
+      "physical_state": "NY",
+      "physical_zip": "10314 5950",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -74.16579,
+          40.58814
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "585",
+      ":@computed_region_wbg7_3whc": "616",
+      ":@computed_region_kjdx_g34t": "2139"
     },
     "source_record_count": 1,
     "duplicate_source_ids": []
@@ -1695,46 +1655,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.6796,
-    "lng": -73.96915,
-    "id": "legal-dispensary-OCM-CAURD-24-000130",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "BROOKLYN ORGANIC BUDS LLC",
-    "address": "BROOKLYN ORGANIC BUDS 623 BERGEN ST, BROOKLYN, 11238 3405",
-    "borough": "Brooklyn",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-CAURD-24-000130",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "883219947",
-      "legal_name": "BROOKLYN ORGANIC BUDS LLC",
-      "ocm_license_number": "OCM-CAURD-24-000130",
-      "physical_county": "KINGS",
-      "physical_address": "BROOKLYN ORGANIC BUDS 623 BERGEN ST",
-      "physical_city": "BROOKLYN",
-      "physical_state": "NY",
-      "physical_zip": "11238 3405",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.96915,
-          40.6796
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "894",
-      ":@computed_region_wbg7_3whc": "821",
-      ":@computed_region_kjdx_g34t": "2090"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.74927,
     "lng": -73.95221,
     "id": "legal-dispensary-OCM-CAURD-24-000060",
@@ -1896,46 +1816,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.6971,
-    "lng": -73.90675,
-    "id": "legal-dispensary-OCM-RETL-24-000083",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "CAFFIEND LLC",
-    "address": "892 WYCKOFF AVE, BROOKLYN, 11237 6116",
-    "borough": "Brooklyn",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-RETL-24-000083",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "871070385",
-      "legal_name": "CAFFIEND LLC",
-      "ocm_license_number": "OCM-RETL-24-000083",
-      "physical_county": "KINGS",
-      "physical_address": "892 WYCKOFF AVE",
-      "physical_city": "BROOKLYN",
-      "physical_state": "NY",
-      "physical_zip": "11237 6116",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.90675,
-          40.6971
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "196",
-      ":@computed_region_wbg7_3whc": "849",
-      ":@computed_region_kjdx_g34t": "2090"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.86231,
     "lng": -73.85772,
     "id": "legal-dispensary-OCM-CAURD-23-000026",
@@ -1969,46 +1849,6 @@
       ":@computed_region_yamh_8v7k": "307",
       ":@computed_region_wbg7_3whc": "706",
       ":@computed_region_kjdx_g34t": "2032"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
-    "lat": 40.78698,
-    "lng": -73.82174,
-    "id": "legal-dispensary-OCM-RETL-24-000077",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "CANNABIS GROUP NY, LLC",
-    "address": "JOSE VERDAGUER 14518 14TH AVE FRNT FRONT, WHITESTONE, 11357 2423",
-    "borough": "Queens",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-RETL-24-000077",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "882485434",
-      "legal_name": "CANNABIS GROUP NY, LLC",
-      "ocm_license_number": "OCM-RETL-24-000077",
-      "physical_county": "QUEENS",
-      "physical_address": "JOSE VERDAGUER 14518 14TH AVE FRNT FRONT",
-      "physical_city": "WHITESTONE",
-      "physical_state": "NY",
-      "physical_zip": "11357 2423",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.82174,
-          40.78698
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "196",
-      ":@computed_region_wbg7_3whc": "827",
-      ":@computed_region_kjdx_g34t": "2137"
     },
     "source_record_count": 1,
     "duplicate_source_ids": []
@@ -3631,46 +3471,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.88458,
-    "lng": -73.90172,
-    "id": "legal-dispensary-OCM-CAURD-24-000165",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "FRASS BOX CANNABIS LLC",
-    "address": "DAPHNE BOROWSKI 3633 KINGSBRIDGE AVE, BRONX, 10463 2944",
-    "borough": "Bronx",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-CAURD-24-000165",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "932494490",
-      "legal_name": "FRASS BOX CANNABIS LLC",
-      "ocm_license_number": "OCM-CAURD-24-000165",
-      "physical_county": "BRONX",
-      "physical_address": "DAPHNE BOROWSKI 3633 KINGSBRIDGE AVE",
-      "physical_city": "BRONX",
-      "physical_state": "NY",
-      "physical_zip": "10463 2944",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.90172,
-          40.88458
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "307",
-      ":@computed_region_wbg7_3whc": "676",
-      ":@computed_region_kjdx_g34t": "2032"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.71486,
     "lng": -73.74107,
     "id": "legal-dispensary-OCM-RETL-24-000047",
@@ -4392,6 +4192,46 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
+    "lat": 40.58374,
+    "lng": -73.94469,
+    "id": "legal-dispensary-OCM-RETL-26-000484",
+    "layer": "legal_cannabis_dispensaries",
+    "category": "regulated_cannabis_location",
+    "title": "GREEN ROOM DISPENSARY LLC",
+    "address": "RICHARD LONGO 2253 EMMONS AVE, BROOKLYN, 11235 2709",
+    "borough": "Brooklyn",
+    "license_type": "Registered adult-use cannabis retail dealer",
+    "license_status": "Registered",
+    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
+    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+    "raw_source_id": "OCM-RETL-26-000484",
+    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
+    "raw": {
+      "external_tpid": "933791264",
+      "legal_name": "GREEN ROOM DISPENSARY LLC",
+      "ocm_license_number": "OCM-RETL-26-000484",
+      "physical_county": "KINGS",
+      "physical_address": "RICHARD LONGO 2253 EMMONS AVE",
+      "physical_city": "BROOKLYN",
+      "physical_state": "NY",
+      "physical_zip": "11235 2709",
+      "georeference": {
+        "type": "Point",
+        "coordinates": [
+          -73.94469,
+          40.58374
+        ]
+      },
+      ":@computed_region_yamh_8v7k": "894",
+      ":@computed_region_wbg7_3whc": "818",
+      ":@computed_region_kjdx_g34t": "2090"
+    },
+    "source_record_count": 1,
+    "duplicate_source_ids": []
+  },
+  {
+    "status": "mapped",
+    "location_quality": "source_georeference",
     "lat": 40.85799,
     "lng": -73.8855,
     "id": "legal-dispensary-OCM-RETL-24-000171",
@@ -4465,47 +4305,6 @@
       ":@computed_region_yamh_8v7k": "894",
       ":@computed_region_wbg7_3whc": "900",
       ":@computed_region_kjdx_g34t": "2090"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
-    "lat": 40.73073,
-    "lng": -73.98908,
-    "id": "legal-dispensary-OCM-CAURD-25-000287",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "THE FLOWERY",
-    "address": "GROUND FL 101 E 10TH ST, NEW YORK, 10003 7515",
-    "borough": "Manhattan",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-CAURD-25-000287",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "920440956",
-      "legal_name": "HAPPY123NYC, LLC",
-      "dba_name": "THE FLOWERY",
-      "ocm_license_number": "OCM-CAURD-25-000287",
-      "physical_county": "NEW YORK",
-      "physical_address": "GROUND FL 101 E 10TH ST",
-      "physical_city": "NEW YORK",
-      "physical_state": "NY",
-      "physical_zip": "10003 7515",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.98908,
-          40.73073
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "749",
-      ":@computed_region_wbg7_3whc": "719",
-      ":@computed_region_kjdx_g34t": "2095"
     },
     "source_record_count": 1,
     "duplicate_source_ids": []
@@ -5355,46 +5154,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.67934,
-    "lng": -73.95564,
-    "id": "legal-dispensary-OCM-RETL-24-000037",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "KBAT ENTERPRISES INC.",
-    "address": "1077 ATLANTIC AVE, BROOKLYN, 11238 2902",
-    "borough": "Brooklyn",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-RETL-24-000037",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "933693433",
-      "legal_name": "KBAT ENTERPRISES INC.",
-      "ocm_license_number": "OCM-RETL-24-000037",
-      "physical_county": "KINGS",
-      "physical_address": "1077 ATLANTIC AVE",
-      "physical_city": "BROOKLYN",
-      "physical_state": "NY",
-      "physical_zip": "11238 2902",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.95564,
-          40.67934
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "894",
-      ":@computed_region_wbg7_3whc": "821",
-      ":@computed_region_kjdx_g34t": "2090"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.73626,
     "lng": -73.8923,
     "id": "legal-dispensary-OCM-RETL-24-000046",
@@ -5469,46 +5228,6 @@
       ":@computed_region_yamh_8v7k": "196",
       ":@computed_region_wbg7_3whc": "877",
       ":@computed_region_kjdx_g34t": "2137"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
-    "lat": 40.72201,
-    "lng": -73.98824,
-    "id": "legal-dispensary-OCM-RETL-24-000061",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "KUSHKLUB NY LLC",
-    "address": "HENOK ABRAHA 186 ORCHARD ST, NEW YORK, 10002 1426",
-    "borough": "Manhattan",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-RETL-24-000061",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "931607988",
-      "legal_name": "KUSHKLUB NY LLC",
-      "ocm_license_number": "OCM-RETL-24-000061",
-      "physical_county": "NEW YORK",
-      "physical_address": "HENOK ABRAHA 186 ORCHARD ST",
-      "physical_city": "NEW YORK",
-      "physical_state": "NY",
-      "physical_zip": "10002 1426",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.98824,
-          40.72201
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "749",
-      ":@computed_region_wbg7_3whc": "718",
-      ":@computed_region_kjdx_g34t": "2095"
     },
     "source_record_count": 1,
     "duplicate_source_ids": []
@@ -6167,46 +5886,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.75864,
-    "lng": -73.90704,
-    "id": "legal-dispensary-OCM-RETL-24-000048",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "MIDNIGHT MOON CORP.",
-    "address": "LEONEL ARIAS 3045 HOBART ST AP, WOODSIDE, 11377 1430",
-    "borough": "Queens",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-RETL-24-000048",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "934053562",
-      "legal_name": "MIDNIGHT MOON CORP.",
-      "ocm_license_number": "OCM-RETL-24-000048",
-      "physical_county": "QUEENS",
-      "physical_address": "LEONEL ARIAS 3045 HOBART ST AP",
-      "physical_city": "WOODSIDE",
-      "physical_state": "NY",
-      "physical_zip": "11377 1430",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.90704,
-          40.75864
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "196",
-      ":@computed_region_wbg7_3whc": "846",
-      ":@computed_region_kjdx_g34t": "2137"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.76666,
     "lng": -73.99405,
     "id": "legal-dispensary-OCM-CAURD-25-000303",
@@ -6690,47 +6369,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.7624,
-    "lng": -73.77039,
-    "id": "legal-dispensary-OCM-CAURD-24-000153",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "NY ELITE CANNABIS",
-    "address": "4215 BELL BLVD, BAYSIDE, 11361 2863",
-    "borough": "Queens",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-CAURD-24-000153",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "932757979",
-      "legal_name": "NY ELITE ENTERPRISES 2 INC.",
-      "dba_name": "NY ELITE CANNABIS",
-      "ocm_license_number": "OCM-CAURD-24-000153",
-      "physical_county": "QUEENS",
-      "physical_address": "4215 BELL BLVD",
-      "physical_city": "BAYSIDE",
-      "physical_state": "NY",
-      "physical_zip": "11361 2863",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.77039,
-          40.7624
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "196",
-      ":@computed_region_wbg7_3whc": "831",
-      ":@computed_region_kjdx_g34t": "2137"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.67505,
     "lng": -73.99941,
     "id": "legal-dispensary-OCM-CAURD-26-000336",
@@ -7129,47 +6767,6 @@
       ":@computed_region_yamh_8v7k": "894",
       ":@computed_region_wbg7_3whc": "891",
       ":@computed_region_kjdx_g34t": "2090"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
-    "lat": 40.76123,
-    "lng": -73.98682,
-    "id": "legal-dispensary-OCM-CAURD-24-000151",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "NICKLZ",
-    "address": "PLANET 51 LLC 797 8TH AVE, NEW YORK, 10019 7514",
-    "borough": "Manhattan",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-CAURD-24-000151",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "883974666",
-      "legal_name": "PLANET 51 LLC",
-      "dba_name": "NICKLZ",
-      "ocm_license_number": "OCM-CAURD-24-000151",
-      "physical_county": "NEW YORK",
-      "physical_address": "PLANET 51 LLC 797 8TH AVE",
-      "physical_city": "NEW YORK",
-      "physical_state": "NY",
-      "physical_zip": "10019 7514",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.98682,
-          40.76123
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "749",
-      ":@computed_region_wbg7_3whc": "742",
-      ":@computed_region_kjdx_g34t": "2095"
     },
     "source_record_count": 1,
     "duplicate_source_ids": []
@@ -8343,46 +7940,6 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.88397,
-    "lng": -73.85622,
-    "id": "legal-dispensary-OCM-CAURD-24-000200",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "SMOKING SCHOLARS LLC",
-    "address": "ZAHIR BROOKS 865 E 222ND ST FL, BRONX, 10467 5107",
-    "borough": "Bronx",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-CAURD-24-000200",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "920316723",
-      "legal_name": "SMOKING SCHOLARS LLC",
-      "ocm_license_number": "OCM-CAURD-24-000200",
-      "physical_county": "BRONX",
-      "physical_address": "ZAHIR BROOKS 865 E 222ND ST FL",
-      "physical_city": "BRONX",
-      "physical_state": "NY",
-      "physical_zip": "10467 5107",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.85622,
-          40.88397
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "307",
-      ":@computed_region_wbg7_3whc": "704",
-      ":@computed_region_kjdx_g34t": "2032"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.71286,
     "lng": -73.8781,
     "id": "legal-dispensary-OCM-CAURD-24-000080",
@@ -8417,47 +7974,6 @@
       ":@computed_region_yamh_8v7k": "196",
       ":@computed_region_wbg7_3whc": "848",
       ":@computed_region_kjdx_g34t": "2137"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
-    "lat": 40.71483,
-    "lng": -73.98298,
-    "id": "legal-dispensary-OCM-RETL-24-000101",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "SILVER CANNABIS COMPANY",
-    "address": "500B GRAND ST APT 4C, NEW YORK, 10002 4117",
-    "borough": "Manhattan",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-RETL-24-000101",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "934362392",
-      "legal_name": "SPA CITY CANNABIS LLC",
-      "dba_name": "SILVER CANNABIS COMPANY",
-      "ocm_license_number": "OCM-RETL-24-000101",
-      "physical_county": "NEW YORK",
-      "physical_address": "500B GRAND ST APT 4C",
-      "physical_city": "NEW YORK",
-      "physical_state": "NY",
-      "physical_zip": "10002 4117",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.98298,
-          40.71483
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "749",
-      ":@computed_region_wbg7_3whc": "718",
-      ":@computed_region_kjdx_g34t": "2095"
     },
     "source_record_count": 1,
     "duplicate_source_ids": []
@@ -8867,49 +8383,8 @@
   {
     "status": "mapped",
     "location_quality": "source_georeference",
-    "lat": 40.74123,
-    "lng": -73.98981,
-    "id": "legal-dispensary-OCM-CAURD-24-000082",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "STOOPS NYC",
-    "address": "CHRISTOPHER KUILAN 182 5TH AVE, NEW YORK, 10010 5915",
-    "borough": "Manhattan",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-CAURD-24-000082",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "920354197",
-      "legal_name": "T & C DISTRIBUTION LLC",
-      "dba_name": "STOOPS NYC",
-      "ocm_license_number": "OCM-CAURD-24-000082",
-      "physical_county": "NEW YORK",
-      "physical_address": "CHRISTOPHER KUILAN 182 5TH AVE",
-      "physical_city": "NEW YORK",
-      "physical_state": "NY",
-      "physical_zip": "10010 5915",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.98981,
-          40.74123
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "749",
-      ":@computed_region_wbg7_3whc": "734",
-      ":@computed_region_kjdx_g34t": "2095"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
     "lat": 40.76047,
-    "lng": -73.97014,
+    "lng": -73.97013,
     "id": "legal-dispensary-OCM-CAURD-25-000316",
     "layer": "legal_cannabis_dispensaries",
     "category": "regulated_cannabis_location",
@@ -8935,7 +8410,7 @@
       "georeference": {
         "type": "Point",
         "coordinates": [
-          -73.97014,
+          -73.97013,
           40.76047
         ]
       },
@@ -9870,47 +9345,6 @@
       ":@computed_region_yamh_8v7k": "307",
       ":@computed_region_wbg7_3whc": "678",
       ":@computed_region_kjdx_g34t": "2032"
-    },
-    "source_record_count": 1,
-    "duplicate_source_ids": []
-  },
-  {
-    "status": "mapped",
-    "location_quality": "source_georeference",
-    "lat": 40.74443,
-    "lng": -73.99437,
-    "id": "legal-dispensary-OCM-CAURD-24-000176",
-    "layer": "legal_cannabis_dispensaries",
-    "category": "regulated_cannabis_location",
-    "title": "HAPPY MUNKEY",
-    "address": "VLADIMIR BAUTISTA 148 W 24TH ST FL 4, NEW YORK, 10011 1916",
-    "borough": "Manhattan",
-    "license_type": "Registered adult-use cannabis retail dealer",
-    "license_status": "Registered",
-    "source": "NYS Registered Retail Dealers of Adult-use Cannabis Products",
-    "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-    "raw_source_id": "OCM-CAURD-24-000176",
-    "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication.",
-    "raw": {
-      "external_tpid": "883835601",
-      "legal_name": "VLADIMIR BAUTISTA, LLC",
-      "dba_name": "HAPPY MUNKEY",
-      "ocm_license_number": "OCM-CAURD-24-000176",
-      "physical_county": "NEW YORK",
-      "physical_address": "VLADIMIR BAUTISTA 148 W 24TH ST FL 4",
-      "physical_city": "NEW YORK",
-      "physical_state": "NY",
-      "physical_zip": "10011 1916",
-      "georeference": {
-        "type": "Point",
-        "coordinates": [
-          -73.99437,
-          40.74443
-        ]
-      },
-      ":@computed_region_yamh_8v7k": "749",
-      ":@computed_region_wbg7_3whc": "735",
-      ":@computed_region_kjdx_g34t": "2095"
     },
     "source_record_count": 1,
     "duplicate_source_ids": []

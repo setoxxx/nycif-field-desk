@@ -1,9 +1,9 @@
 {
   "qa_pass": true,
   "source_url": "https://data.ny.gov/resource/gttd-5u6y.json",
-  "queried_url": "https://data.ny.gov/resource/gttd-5u6y.json",
+  "queried_url": "https://data.ny.gov/resource/gttd-5u6y.json?$limit=5000",
   "source_note": "Official NYS registered adult-use cannabis retail dealer records from data.ny.gov dataset gttd-5u6y.",
-  "source_rows": 652,
+  "source_rows": 627,
   "nyc_county_filter": [
     "BRONX",
     "KINGS",
@@ -11,32 +11,37 @@
     "QUEENS",
     "RICHMOND"
   ],
-  "mapped_before_dedupe": 258,
-  "mapped_total": 257,
+  "mapped_before_dedupe": 244,
+  "mapped_total": 243,
   "duplicate_id_rows_collapsed": 1,
   "duplicate_semantic_locations_collapsed": 0,
   "duplicate_output_ids": 0,
   "duplicate_output_semantic_locations": 0,
-  "needs_review": 0,
-  "rejected": 394,
+  "needs_review": 1,
+  "rejected": 382,
   "borough_counts": {
-    "Brooklyn": 74,
-    "Queens": 67,
-    "Manhattan": 84,
-    "Staten Island": 12,
-    "Bronx": 20
+    "Brooklyn": 72,
+    "Queens": 63,
+    "Manhattan": 77,
+    "Staten Island": 13,
+    "Bronx": 18
   },
   "license_status_counts": {
-    "Registered": 257
+    "Registered": 243
   },
   "top_rejection_reasons": [
     {
       "reason": "outside_nyc_county",
-      "count": 394
+      "count": 382
     }
   ],
-  "top_review_reasons": [],
+  "top_review_reasons": [
+    {
+      "reason": "needs_geocode",
+      "count": 1
+    }
+  ],
   "limitation": null,
-  "generated_at": "2026-09-04T14:30:58.219Z",
+  "generated_at": "2026-09-05T13:30:26.987Z",
   "data_note": "Official NYS registered adult-use cannabis retail dealer record; confirm current OCM/license/open status before publication."
 }
