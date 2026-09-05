@@ -5632,7 +5632,7 @@
     "complaints_30d_500ft": 211,
     "complaints_90d_100ft": 5,
     "complaints_90d_250ft": 241,
-    "complaints_90d_500ft": 495,
+    "complaints_90d_500ft": 494,
     "complaints_180d_100ft": 9,
     "complaints_180d_250ft": 295,
     "complaints_180d_500ft": 652,
@@ -41429,88 +41429,6 @@
   },
   {
     "status": "ok",
-    "id": "nightlife-1027686",
-    "title": "J A E L A R RESTAURANT CORP",
-    "address": "3533 BROADWAY, 3533 BROADWAY, NEW YORK",
-    "borough": "Manhattan",
-    "lat": 40.826373,
-    "lng": -73.951042,
-    "subtype": "restaurant_nightlife",
-    "subtype_label": "Restaurants with nightlife potential",
-    "group": 2,
-    "license": "OP · RESTAURANT SERVING BEER CIDER WINE AND LIQUOR",
-    "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
-    "raw_source_id": "1027686",
-    "complaints_30d_100ft": 0,
-    "complaints_30d_250ft": 28,
-    "complaints_30d_500ft": 111,
-    "complaints_90d_100ft": 2,
-    "complaints_90d_250ft": 85,
-    "complaints_90d_500ft": 229,
-    "complaints_180d_100ft": 4,
-    "complaints_180d_250ft": 112,
-    "complaints_180d_500ft": 281,
-    "complaints_365d_100ft": 4,
-    "complaints_365d_250ft": 112,
-    "complaints_365d_500ft": 281,
-    "late_night_complaints_365d": 73,
-    "weekend_complaints_365d": 92,
-    "top_noise_descriptors": [
-      {
-        "value": "Loud Music/Party",
-        "count": 100
-      },
-      {
-        "value": "Car/Truck Music",
-        "count": 7
-      },
-      {
-        "value": "Loud Talking",
-        "count": 4
-      },
-      {
-        "value": "Banging/Pounding",
-        "count": 1
-      }
-    ],
-    "top_complaint_types": [
-      {
-        "value": "Noise - Street/Sidewalk",
-        "count": 91
-      },
-      {
-        "value": "Noise - Residential",
-        "count": 12
-      },
-      {
-        "value": "Noise - Vehicle",
-        "count": 7
-      },
-      {
-        "value": "Noise - Commercial",
-        "count": 2
-      }
-    ],
-    "last_complaint_date": "2026-08-30",
-    "nearby_complaint_ids_sample": [
-      "70245976",
-      "70234466",
-      "70230871",
-      "70234471",
-      "70225243",
-      "70225244",
-      "70223805",
-      "70228145",
-      "70153205",
-      "70105699"
-    ],
-    "trend_score": 175,
-    "trend_tier": "very_high",
-    "include": true,
-    "include_reason": "meets_trending_threshold"
-  },
-  {
-    "status": "ok",
     "id": "nightlife-1293128",
     "title": "BRUJOS BROOKLYN TACO COMPANY",
     "address": "333 GRAHAM AVE, 333 GRAHAM AVE, BROOKLYN",
@@ -42511,6 +42429,88 @@
       "69992024"
     ],
     "trend_score": 173,
+    "trend_tier": "very_high",
+    "include": true,
+    "include_reason": "meets_trending_threshold"
+  },
+  {
+    "status": "ok",
+    "id": "nightlife-1027686",
+    "title": "J A E L A R RESTAURANT CORP",
+    "address": "3533 BROADWAY, 3533 BROADWAY, NEW YORK",
+    "borough": "Manhattan",
+    "lat": 40.826373,
+    "lng": -73.951042,
+    "subtype": "restaurant_nightlife",
+    "subtype_label": "Restaurants with nightlife potential",
+    "group": 2,
+    "license": "OP · RESTAURANT SERVING BEER CIDER WINE AND LIQUOR",
+    "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
+    "raw_source_id": "1027686",
+    "complaints_30d_100ft": 0,
+    "complaints_30d_250ft": 28,
+    "complaints_30d_500ft": 111,
+    "complaints_90d_100ft": 1,
+    "complaints_90d_250ft": 84,
+    "complaints_90d_500ft": 228,
+    "complaints_180d_100ft": 4,
+    "complaints_180d_250ft": 112,
+    "complaints_180d_500ft": 281,
+    "complaints_365d_100ft": 4,
+    "complaints_365d_250ft": 112,
+    "complaints_365d_500ft": 281,
+    "late_night_complaints_365d": 73,
+    "weekend_complaints_365d": 92,
+    "top_noise_descriptors": [
+      {
+        "value": "Loud Music/Party",
+        "count": 100
+      },
+      {
+        "value": "Car/Truck Music",
+        "count": 7
+      },
+      {
+        "value": "Loud Talking",
+        "count": 4
+      },
+      {
+        "value": "Banging/Pounding",
+        "count": 1
+      }
+    ],
+    "top_complaint_types": [
+      {
+        "value": "Noise - Street/Sidewalk",
+        "count": 91
+      },
+      {
+        "value": "Noise - Residential",
+        "count": 12
+      },
+      {
+        "value": "Noise - Vehicle",
+        "count": 7
+      },
+      {
+        "value": "Noise - Commercial",
+        "count": 2
+      }
+    ],
+    "last_complaint_date": "2026-08-30",
+    "nearby_complaint_ids_sample": [
+      "70245976",
+      "70234466",
+      "70230871",
+      "70234471",
+      "70225243",
+      "70225244",
+      "70223805",
+      "70228145",
+      "70153205",
+      "70105699"
+    ],
+    "trend_score": 172,
     "trend_tier": "very_high",
     "include": true,
     "include_reason": "meets_trending_threshold"
@@ -139208,8 +139208,8 @@
     "complaints_30d_250ft": 10,
     "complaints_30d_500ft": 10,
     "complaints_90d_100ft": 0,
-    "complaints_90d_250ft": 28,
-    "complaints_90d_500ft": 32,
+    "complaints_90d_250ft": 27,
+    "complaints_90d_500ft": 31,
     "complaints_180d_100ft": 0,
     "complaints_180d_250ft": 45,
     "complaints_180d_500ft": 51,
@@ -158492,7 +158492,7 @@
     "raw_source_id": "1290864",
     "complaints_30d_100ft": 4,
     "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 12,
+    "complaints_30d_500ft": 11,
     "complaints_90d_100ft": 4,
     "complaints_90d_250ft": 7,
     "complaints_90d_500ft": 19,
@@ -159157,8 +159157,8 @@
     "complaints_30d_250ft": 9,
     "complaints_30d_500ft": 12,
     "complaints_90d_100ft": 1,
-    "complaints_90d_250ft": 43,
-    "complaints_90d_500ft": 49,
+    "complaints_90d_250ft": 42,
+    "complaints_90d_500ft": 48,
     "complaints_180d_100ft": 1,
     "complaints_180d_250ft": 60,
     "complaints_180d_500ft": 78,
@@ -164542,8 +164542,8 @@
     "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
     "raw_source_id": "1294422",
     "complaints_30d_100ft": 5,
-    "complaints_30d_250ft": 6,
-    "complaints_30d_500ft": 14,
+    "complaints_30d_250ft": 5,
+    "complaints_30d_500ft": 13,
     "complaints_90d_100ft": 5,
     "complaints_90d_250ft": 7,
     "complaints_90d_500ft": 20,
@@ -183468,7 +183468,7 @@
     "raw_source_id": "1320842",
     "complaints_30d_100ft": 4,
     "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 12,
+    "complaints_30d_500ft": 11,
     "complaints_90d_100ft": 4,
     "complaints_90d_250ft": 7,
     "complaints_90d_500ft": 19,
@@ -221392,8 +221392,8 @@
     "complaints_30d_250ft": 4,
     "complaints_30d_500ft": 15,
     "complaints_90d_100ft": 0,
-    "complaints_90d_250ft": 21,
-    "complaints_90d_500ft": 64,
+    "complaints_90d_250ft": 20,
+    "complaints_90d_500ft": 63,
     "complaints_180d_100ft": 0,
     "complaints_180d_250ft": 30,
     "complaints_180d_500ft": 91,
@@ -228534,8 +228534,8 @@
     "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
     "raw_source_id": "1278649",
     "complaints_30d_100ft": 0,
-    "complaints_30d_250ft": 8,
-    "complaints_30d_500ft": 14,
+    "complaints_30d_250ft": 7,
+    "complaints_30d_500ft": 13,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 10,
     "complaints_90d_500ft": 21,
@@ -232243,7 +232243,7 @@
     "complaints_30d_500ft": 17,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 17,
-    "complaints_90d_500ft": 56,
+    "complaints_90d_500ft": 55,
     "complaints_180d_100ft": 4,
     "complaints_180d_250ft": 22,
     "complaints_180d_500ft": 68,
@@ -258695,8 +258695,8 @@
       "69505908",
       "69253884",
       "69245821",
-      "69249080",
       "69252236",
+      "69249080",
       "69255496"
     ],
     "trend_score": 31,
@@ -274744,8 +274744,8 @@
     "source_url": "https://data.ny.gov/resource/knqy-j52b.json",
     "raw_source_id": "1295974",
     "complaints_30d_100ft": 0,
-    "complaints_30d_250ft": 8,
-    "complaints_30d_500ft": 13,
+    "complaints_30d_250ft": 7,
+    "complaints_30d_500ft": 12,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 9,
     "complaints_90d_500ft": 19,
@@ -282459,8 +282459,8 @@
       "69505908",
       "69253884",
       "69245821",
-      "69249080",
       "69252236",
+      "69249080",
       "69255496"
     ],
     "trend_score": 27,
@@ -283246,8 +283246,8 @@
       "69505908",
       "69253884",
       "69245821",
-      "69249080",
       "69252236",
+      "69249080",
       "69255496"
     ],
     "trend_score": 26,
@@ -286738,7 +286738,7 @@
     "complaints_30d_500ft": 29,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 11,
-    "complaints_90d_500ft": 109,
+    "complaints_90d_500ft": 108,
     "complaints_180d_100ft": 1,
     "complaints_180d_250ft": 16,
     "complaints_180d_500ft": 147,
@@ -321554,7 +321554,7 @@
     "raw_source_id": "1289507",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 6,
-    "complaints_30d_500ft": 14,
+    "complaints_30d_500ft": 13,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 7,
     "complaints_90d_500ft": 21,
@@ -331711,7 +331711,7 @@
     "complaints_30d_500ft": 52,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 7,
-    "complaints_90d_500ft": 171,
+    "complaints_90d_500ft": 170,
     "complaints_180d_100ft": 0,
     "complaints_180d_250ft": 13,
     "complaints_180d_500ft": 230,
@@ -370195,7 +370195,7 @@
     "raw_source_id": "1347073",
     "complaints_30d_100ft": 0,
     "complaints_30d_250ft": 4,
-    "complaints_30d_500ft": 13,
+    "complaints_30d_500ft": 12,
     "complaints_90d_100ft": 1,
     "complaints_90d_250ft": 7,
     "complaints_90d_500ft": 20,
@@ -423198,7 +423198,7 @@
     "complaints_30d_500ft": 28,
     "complaints_90d_100ft": 0,
     "complaints_90d_250ft": 1,
-    "complaints_90d_500ft": 104,
+    "complaints_90d_500ft": 103,
     "complaints_180d_100ft": 0,
     "complaints_180d_250ft": 3,
     "complaints_180d_500ft": 141,
