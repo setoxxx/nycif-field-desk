@@ -10,3 +10,37 @@
   border-color: rgba(251, 191, 36, .75);
   box-shadow: 0 0 0 4px rgba(251, 191, 36, .18), 0 8px 24px rgba(0, 0, 0, .22);
 }
+
+/* Mission Control placement contract: support control always remains above
+   the date strip and map controls, including on narrow mobile viewports. */
+body.public-map-page .nycif-tip-jar {
+  position: fixed !important;
+  z-index: 3200 !important;
+  top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+  right: calc(env(safe-area-inset-right, 0px) + 8px) !important;
+  left: auto !important;
+  margin: 0 !important;
+}
+
+body.public-map-page .nycif-tip-jar-panel {
+  right: 0 !important;
+  left: auto !important;
+  transform: none !important;
+  transform-origin: top right !important;
+  max-width: min(280px, calc(100vw - 16px));
+}
+
+body.public-map-page .map-controls {
+  top: calc(env(safe-area-inset-top, 0px) + 58px) !important;
+}
+
+@media (max-width: 720px) {
+  body.public-map-page .nycif-tip-jar-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  body.public-map-page .nycif-tip-jar-panel {
+    max-width: calc(100vw - 16px);
+  }
+}

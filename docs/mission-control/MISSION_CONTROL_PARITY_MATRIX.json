@@ -1,0 +1,49 @@
+{
+  "schema_version": "nycif-mission-control-parity-v2",
+  "generated_at": "2026-08-07T12:22:00-04:00",
+  "repository": "setoxxx/nycif-field-desk",
+  "pull_request": 180,
+  "branch": "feat/mission-control-monetization",
+  "status": "NOT_PASS",
+  "production_parity_proven": false,
+  "normal_operator_can_retire_god_view": false,
+  "runtime_surface": "admin/mission-control.html",
+  "required_launch_capabilities": [
+    {"capability":"system_data_health","status":"PARTIAL","evidence":"Mission Control shows projector/release/cleanup state; live reader-safe source aggregates are not yet available."},
+    {"capability":"daily_events","status":"MISSING","evidence":"Fails honestly as UNAVAILABLE_PENDING_READER_SAFE_AGGREGATE."},
+    {"capability":"new_events","status":"MISSING","evidence":"Fails honestly as UNAVAILABLE_PENDING_READER_SAFE_AGGREGATE."},
+    {"capability":"assignment_desk","status":"PARTIAL","evidence":"Existing operator route linked and status represented; reader-safe data freshness migration remains pending."},
+    {"capability":"news_desk","status":"PARTIAL","evidence":"Legacy component status represented only; no Mission Control runtime integration or ranking logic exposed."},
+    {"capability":"source_freshness","status":"PARTIAL","evidence":"Public source labels and pending state are represented; live age/count requires reader-safe aggregate."},
+    {"capability":"source_lineage_summary","status":"PARTIAL","evidence":"Operator-safe source labels are represented without private source-gathering paths; full reader-safe health aggregate pending."},
+    {"capability":"ci_release_state","status":"PASS","evidence":"Projector authority, schema/discovery QA, Sonar, producer certification, prehost runtime, hosted and anonymous-audit states represented."},
+    {"capability":"security_state","status":"PASS","evidence":"Sonar pass/new-issue/hotspot state represented; dashboard safety tests prohibit raw GitHub, credentials, private repository URLs and service-worker registration."},
+    {"capability":"active_blockers","status":"PASS","evidence":"Projector edit, hosted endpoint, fresh release candidate, parity and legacy-runtime blockers represented explicitly."},
+    {"capability":"rollback_pointer","status":"PARTIAL","evidence":"God View baseline and preservation state represented; reader-safe release rollback pointer unavailable until host exists."},
+    {"capability":"recovery_state","status":"PASS","evidence":"God View recovery state and immutable pre-baseline SHA represented."},
+    {"capability":"launch_status","status":"PASS","evidence":"Canonical map, phase, MapLibre engine, gates, cleanup counts and summary represented read-only."},
+    {"capability":"users_audience_summary","status":"MISSING","evidence":"UNAVAILABLE_UNTIL_APPROVED_ANALYTICS; not fabricated."}
+  ],
+  "god_view_assets_disposition": {
+    "admin_index_runtime": "KEEP_UNTIL_PARITY_THEN_ARCHIVE_OR_DISCONNECT",
+    "project_state": "MIGRATE_REQUIRED_LAUNCH_STATE_THEN_ARCHIVE_HISTORY",
+    "recovery_manifest": "KEEP_AS_ROLLBACK_EVIDENCE",
+    "source_lineage": "MIGRATE_REQUIRED_SUMMARY",
+    "candidate_source_evaluation": "ARCHIVE_OR_RETAIN_AS_ENGINEERING_EVIDENCE_NOT_NORMAL_OPERATOR_UI",
+    "roadmap_panels": "ARCHIVE_NOT_REQUIRED_FOR_MISSION_CONTROL_PARITY",
+    "decision_log": "MIGRATE_ONLY_ACTIVE_BOUNDARIES_OR_LINK_TO_SYSTEM_OF_RECORD",
+    "risk_controls": "MIGRATE_ACTIVE_BLOCKERS",
+    "deployment_bookmarks": "MIGRATE_CURRENT_RELEASE_AND_ROLLBACK_LINKS"
+  },
+  "exit_gate": {
+    "mission_control_parity_matrix_pass": false,
+    "all_required_capabilities_pass": false,
+    "all_retained_god_view_capabilities_dispositioned": true,
+    "no_normal_operator_dependency_on_god_view": false
+  },
+  "production_mutation": false,
+  "god_view_retirement_authorized": false,
+  "merge_authorized": false,
+  "DoD_met": false,
+  "risk": "Mission Control now has a tested read-only launch runtime, but event/audience metrics, reader-safe source freshness, Assignment Desk data migration, News Desk runtime integration, and the hosted release rollback pointer remain incomplete. God View retirement would be premature."
+}

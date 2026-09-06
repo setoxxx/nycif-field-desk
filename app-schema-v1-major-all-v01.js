@@ -53,10 +53,12 @@
     reviewManifest: FEED_HOST + `/data/${FEED_ROOT}/review/manifest.json`,
     reviewPage: cursor => pageUrl('review', cursor)
   };
-  // News Desk operator lanes (money shots + viral magnets), same feed ref.
+  // News Desk consumes same-origin reader-safe artifacts projected from the
+  // canonical semantic authority. Browser code never fetches operator/source
+  // repository datasets directly.
   const NEWS_DESK_DATA = {
-    money: FEED_HOST + '/data/photographer_assignment_calendar_2mo.json',
-    viral: FEED_HOST + '/data/photographer_viral_recurrence_matches.json'
+    money: './data/reader-safe/news-desk-money-v02.json',
+    viral: './data/reader-safe/news-desk-viral-v02.json'
   };
   // Editor's Picks / medal engine (pure module). Falls back to inert stubs if
   // the script is missing, so the map never breaks over the ranking layer.
