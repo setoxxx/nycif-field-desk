@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:v2/summary",
+  "title": "V2 summary fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "architecture_status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "IN_PROGRESS",
+        "PLANNED",
+        "LOCKED",
+        "COMPLETE",
+        "NOT_STARTED",
+        "NOT_AUTHORIZED",
+        "PROPOSED",
+        "BLOCKED",
+        "PENDING",
+        "DEGRADED",
+        "RETIRED"
+      ]
+    },
+    "architecture_completion_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "implementation_completion_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "production_authority": {
+      "const": "NONE"
+    },
+    "summary": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "architecture_status",
+    "architecture_completion_percent",
+    "implementation_completion_percent",
+    "production_authority",
+    "summary"
+  ]
+}

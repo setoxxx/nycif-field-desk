@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_kind": "SCHEMA_FIXTURE_MAP",
+  "fixture": false,
+  "operational": false,
+  "mappings": [
+    {
+      "fixture": "fixtures/manifest.json",
+      "schema": "schemas/manifest.schema.json"
+    },
+    {
+      "fixture": "fixtures/global.json",
+      "schema": "schemas/global.schema.json"
+    },
+    {
+      "fixture": "fixtures/v1/summary.json",
+      "schema": "schemas/v1/summary.schema.json"
+    },
+    {
+      "fixture": "fixtures/v1/events.json",
+      "schema": "schemas/v1/events.schema.json"
+    },
+    {
+      "fixture": "fixtures/v1/map.json",
+      "schema": "schemas/v1/map.schema.json"
+    },
+    {
+      "fixture": "fixtures/v1/feeds.json",
+      "schema": "schemas/v1/feeds.schema.json"
+    },
+    {
+      "fixture": "fixtures/v1/repositories.json",
+      "schema": "schemas/v1/repositories.schema.json"
+    },
+    {
+      "fixture": "fixtures/v1/timeline.json",
+      "schema": "schemas/v1/timeline.schema.json"
+    },
+    {
+      "fixture": "fixtures/v1/alerts.json",
+      "schema": "schemas/v1/alerts.schema.json"
+    },
+    {
+      "fixture": "fixtures/v2/summary.json",
+      "schema": "schemas/v2/summary.schema.json"
+    },
+    {
+      "fixture": "fixtures/v2/enigma-core.json",
+      "schema": "schemas/v2/enigma-core.schema.json"
+    },
+    {
+      "fixture": "fixtures/v2/cultural.json",
+      "schema": "schemas/v2/cultural.schema.json"
+    },
+    {
+      "fixture": "fixtures/v2/events.json",
+      "schema": "schemas/v2/events.schema.json"
+    },
+    {
+      "fixture": "fixtures/v2/migration.json",
+      "schema": "schemas/v2/migration.schema.json"
+    },
+    {
+      "fixture": "fixtures/v2/repositories.json",
+      "schema": "schemas/v2/repositories.schema.json"
+    },
+    {
+      "fixture": "fixtures/v2/timeline.json",
+      "schema": "schemas/v2/timeline.schema.json"
+    },
+    {
+      "fixture": "fixtures/v2/alerts.json",
+      "schema": "schemas/v2/alerts.schema.json"
+    }
+  ]
+}

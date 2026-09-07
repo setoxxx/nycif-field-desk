@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:v1/alerts",
+  "title": "V1 alerts fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "alerts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": [
+              "INFO",
+              "WARN",
+              "BLOCKED",
+              "CRITICAL"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          },
+          "detail": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          }
+        },
+        "required": [
+          "severity",
+          "title",
+          "detail"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "alerts"
+  ]
+}

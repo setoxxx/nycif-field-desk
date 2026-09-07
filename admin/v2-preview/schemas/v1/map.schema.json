@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:v1/map",
+  "title": "V1 map fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "label": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "preview_mode": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "embed_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://[^<>\\s]*$"
+    },
+    "full_map_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://[^<>\\s]*$"
+    },
+    "wordpress_map_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://[^<>\\s]*$"
+    },
+    "feed_branch": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "qa_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN"
+      ]
+    },
+    "map_replacement_authorized": {
+      "const": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "label",
+    "preview_mode",
+    "embed_url",
+    "full_map_url",
+    "wordpress_map_url",
+    "feed_branch",
+    "qa_status",
+    "map_replacement_authorized"
+  ]
+}

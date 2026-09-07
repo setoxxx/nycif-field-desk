@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:global",
+  "title": "GodView global fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "overall_health": {
+      "type": "string",
+      "enum": [
+        "GREEN",
+        "YELLOW",
+        "RED"
+      ]
+    },
+    "authoritative_production_version": {
+      "const": "V1"
+    },
+    "generated_at_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    },
+    "freshness_threshold_hours": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "current_global_objective": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "current_gate": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "next_gate": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "unresolved_blocker_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "verified_reconstruction_tests": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "write_controls_allowed": {
+      "const": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "overall_health",
+    "authoritative_production_version",
+    "generated_at_utc",
+    "freshness_threshold_hours",
+    "current_global_objective",
+    "current_gate",
+    "next_gate",
+    "unresolved_blocker_count",
+    "verified_reconstruction_tests",
+    "write_controls_allowed"
+  ]
+}

@@ -1,0 +1,539 @@
+{
+  "repository": "setoxxx/nycif-field-desk",
+  "branch": "feature/godview-v2-preview",
+  "head_before": "2e274c4ced514a21f894ce3222f650989667f25c",
+  "head_after": null,
+  "pr_number": 129,
+  "tested_routes": [
+    "/",
+    "/v1/",
+    "/v2/"
+  ],
+  "tested_viewports": [
+    {
+      "name": "Desktop wide",
+      "w": 1440,
+      "h": 900,
+      "method": "runtime"
+    },
+    {
+      "name": "Laptop",
+      "w": 1280,
+      "h": 800,
+      "method": "runtime"
+    },
+    {
+      "name": "Tablet landscape",
+      "w": 1024,
+      "h": 768,
+      "method": "breakpoint-equivalent (single-col CSS path verified at 768)"
+    },
+    {
+      "name": "Tablet portrait",
+      "w": 768,
+      "h": 1024,
+      "method": "runtime"
+    },
+    {
+      "name": "Large phone",
+      "w": 430,
+      "h": 932,
+      "method": "breakpoint-equivalent (single-col CSS path verified at 390)"
+    },
+    {
+      "name": "Standard phone",
+      "w": 390,
+      "h": 844,
+      "method": "runtime"
+    },
+    {
+      "name": "Small phone",
+      "w": 320,
+      "h": 568,
+      "method": "runtime (all 3 routes)"
+    }
+  ],
+  "browser_engine": "Chromium (Electron in-app browser pane)",
+  "browser_version": "Chrome/148.0.7778.271 (Electron 42.5.1)",
+  "operating_system": "macOS (Darwin 25.5.0, arm64)",
+  "contract_test_count": 25,
+  "contract_tests_passed": 25,
+  "contract_tests_failed": 0,
+  "contract_test_errors": 0,
+  "contract_test_skips": 0,
+  "responsive_cases_total": 21,
+  "responsive_cases_passed": 21,
+  "keyboard_cases_total": 8,
+  "keyboard_cases_passed": 8,
+  "semantic_cases_total": 12,
+  "semantic_cases_passed": 12,
+  "contrast_method": "manual browser inspection (no automated contrast package installed); exact ratios flagged for manual review",
+  "reduced_motion_status": "PASS — @media (prefers-reduced-motion: reduce) minimizes animation/transition and disables smooth scroll; no information hidden",
+  "screen_reader_runtime_status": "NOT_TESTED_SCREEN_READER_RUNTIME",
+  "failure_cases_total": 20,
+  "failure_cases_passed": 20,
+  "failure_cases_failed": 0,
+  "failure_cases_not_tested": 0,
+  "failure_matrix": [
+    {
+      "id": 1,
+      "scenario": "Missing manifest.json",
+      "result": "PASS",
+      "evidence": "runtime: all-fixtures-missing copy — page usable, no blank, failure panels shown",
+      "method": "runtime"
+    },
+    {
+      "id": 2,
+      "scenario": "Manifest HTTP 404",
+      "result": "PASS",
+      "evidence": "runtime: 404 in all-fail copy handled via fetch !ok path",
+      "method": "runtime"
+    },
+    {
+      "id": 3,
+      "scenario": "Malformed manifest JSON",
+      "result": "PASS",
+      "method": "code_review+analogous_runtime",
+      "evidence": "malformed-JSON handling demonstrated on subordinate (enigma-core); manifest is non-critical to render"
+    },
+    {
+      "id": 4,
+      "scenario": "Manifest missing subordinate",
+      "result": "PASS",
+      "evidence": "runtime: partial copy manifest lists v2/summary.json which returns 404 → degraded banner counts it",
+      "method": "runtime"
+    },
+    {
+      "id": 5,
+      "scenario": "Missing global.json",
+      "result": "PASS",
+      "evidence": "runtime: all-fail copy → header UNKNOWN/Unavailable, not zero",
+      "method": "runtime"
+    },
+    {
+      "id": 6,
+      "scenario": "Missing V1 summary",
+      "result": "PASS",
+      "evidence": "runtime: all-fail copy → V1 panels degrade gracefully",
+      "method": "runtime"
+    },
+    {
+      "id": 7,
+      "scenario": "Missing V2 summary",
+      "result": "PASS",
+      "evidence": "runtime: partial copy → V2 card UNKNOWN/—%, PRODUCTION AUTHORITY NONE",
+      "method": "runtime"
+    },
+    {
+      "id": 8,
+      "scenario": "Malformed subordinate JSON",
+      "result": "PASS",
+      "evidence": "runtime: partial copy enigma-core malformed → its panel shows fail(), others render",
+      "method": "runtime"
+    },
+    {
+      "id": 9,
+      "scenario": "Valid JSON unexpected structure",
+      "result": "PASS",
+      "method": "runtime",
+      "evidence": "runtime (GV2-3.1): valid JSON with components not an array -> core renderer threw -> controlled panel failure in [data-core-strip] only (totalErrors=1), all other panels rendered"
+    },
+    {
+      "id": 10,
+      "scenario": "Request timeout / network failure",
+      "result": "PASS",
+      "method": "analogous_runtime",
+      "evidence": "fetch rejection path identical to demonstrated 404 path (allSettled → fail panel); no crash"
+    },
+    {
+      "id": 11,
+      "scenario": "All fixture requests failing",
+      "result": "PASS",
+      "evidence": "runtime: all-fail copy → not blank, 6 failure panels, degraded banner, no zeros",
+      "method": "runtime"
+    },
+    {
+      "id": 12,
+      "scenario": "One optional panel failing while others load",
+      "result": "PASS",
+      "evidence": "runtime: partial copy → enigma panel fails, version/lanes/repos/alerts still render; GV2-3.1 target-aware registration re-verified (badstruct: only core panel failed)",
+      "method": "runtime"
+    },
+    {
+      "id": 13,
+      "scenario": "Stale generated_at_utc",
+      "result": "PASS",
+      "evidence": "runtime: stale copy (2026-06-01) → stale-warning shown (aria-live polite); correction added",
+      "method": "runtime"
+    },
+    {
+      "id": 14,
+      "scenario": "Unknown/unavailable status values",
+      "result": "PASS",
+      "evidence": "runtime: UNKNOWN/Unavailable rendered, never blank-crashed",
+      "method": "runtime"
+    },
+    {
+      "id": 15,
+      "scenario": "Numeric zero substituted for unknown",
+      "result": "PASS",
+      "evidence": "runtime: unknown shows '—'/'UNKNOWN'/'Unavailable', never 0",
+      "method": "runtime"
+    },
+    {
+      "id": 16,
+      "scenario": "Map iframe unavailable",
+      "result": "PASS",
+      "evidence": "map-overlay (label/branch/QA) + 'Open full production map' fallback link always present; readable fallback, not broken empty region",
+      "method": "runtime"
+    },
+    {
+      "id": 17,
+      "scenario": "Map iframe blocked by browser/response headers",
+      "result": "PASS",
+      "method": "observed_frame_bust+correction",
+      "evidence": "observed external map frame-bust hijacking top navigation; corrected via iframe sandbox (no allow-top-navigation); blocked frame shows overlay+fallback. Exact external X-Frame-Options behavior flagged for manual review"
+    },
+    {
+      "id": 18,
+      "scenario": "Empty arrays for alerts/timeline/repositories",
+      "result": "PASS",
+      "method": "code_review",
+      "evidence": "alerts() renders 'No alerts in fixture data.'; repos() empty→fail panel; timeline empty→empty rail; no crash"
+    },
+    {
+      "id": 19,
+      "scenario": "Long error text",
+      "result": "PASS",
+      "evidence": "runtime: malformed-JSON error message rendered inside subsystem-error block, wraps, no horizontal overflow",
+      "method": "runtime"
+    },
+    {
+      "id": 20,
+      "scenario": "Repeated reload after failure",
+      "result": "PASS",
+      "method": "code_review+runtime",
+      "evidence": "single Promise.allSettled per load, no auto-retry loop; repeated navigations re-fetch once each (no infinite request loop)"
+    }
+  ],
+  "console_error_count": 0,
+  "unhandled_rejection_count": 0,
+  "accessibility_defects": [
+    {
+      "severity": "MEDIUM",
+      "issue": "Map iframe had no static title (relied on JS)",
+      "status": "CORRECTED"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue": "Dynamic degraded/stale notices had no aria-live region",
+      "status": "CORRECTED"
+    },
+    {
+      "severity": "LOW",
+      "issue": "Repeated generic 'Open repository' links lacked unique accessible names",
+      "status": "CORRECTED"
+    },
+    {
+      "severity": "LOW",
+      "issue": "No explicit :focus-visible indicator",
+      "status": "CORRECTED"
+    }
+  ],
+  "responsive_defects": [
+    {
+      "severity": "MEDIUM",
+      "issue": "Horizontal overflow at small viewports (~<=360px) from long unbreakable tokens (GAP_… identifiers, SHA-256) blowing out grid tracks",
+      "status": "CORRECTED",
+      "evidence": "docScrollW 514>320 before; 320=320 after"
+    }
+  ],
+  "failure_mode_defects": [
+    {
+      "severity": "HIGH",
+      "issue": "V1 and V2 pages fully broken: shared render called overview-only renderers (versions/core/lanes/repos) whose target elements are absent, throwing a TypeError that aborted all panels into a generic failure",
+      "status": "CORRECTED",
+      "evidence": "before: 5 subsystem-errors + 5 stuck loaders on /v2/ despite all fetches 200; after: 6 core nodes, 2 lanes, 6 alerts render, 0 errors"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue": "Stale/missing generated_at_utc not flagged (freshness_threshold_hours and data-stale-warning unused) — stale data could display as current",
+      "status": "CORRECTED"
+    }
+  ],
+  "security_rendering_defects": [
+    {
+      "severity": "MEDIUM",
+      "issue": "Map iframe lacked sandbox; external map frame-busted and navigated the top window (top-frame hijack)",
+      "status": "CORRECTED",
+      "evidence": "observed top navigation to setoxxx.github.io; sandbox without allow-top-navigation added"
+    }
+  ],
+  "corrections_applied": [
+    "godview-v2.js: render each panel in isolation (try/catch per renderer) so a missing/failed panel cannot destroy others (fixes broken V1/V2 pages)",
+    "godview-v2.js: stale/missing generated_at_utc labeling via data-stale-warning + freshness_threshold_hours",
+    "godview-v2.js: unique aria-label on repeated 'Open repository' links",
+    "godview-v2.css: min-width:0 on grid items + overflow-wrap:anywhere on text to prevent horizontal overflow from long tokens",
+    "godview-v2.css: :focus-visible outline for keyboard focus",
+    "index.html,v1/index.html,v2/index.html: static iframe title",
+    "index.html,v1/index.html,v2/index.html: aria-live/role on dynamic degraded/stale notices",
+    "index.html,v1/index.html,v2/index.html: iframe sandbox (no allow-top-navigation) to prevent frame-bust"
+  ],
+  "changed_paths": [
+    "admin/v2-preview/GV2_3_QA.json",
+    "admin/v2-preview/godview-v2.css",
+    "admin/v2-preview/godview-v2.js",
+    "admin/v2-preview/index.html",
+    "admin/v2-preview/v1/index.html",
+    "admin/v2-preview/v2/index.html"
+  ],
+  "unexpected_changed_paths": [],
+  "fixture_files_modified": 0,
+  "schema_files_modified": 0,
+  "map_files_modified": 0,
+  "calendar_files_modified": 0,
+  "feed_files_modified": 0,
+  "current_admin_files_modified": 0,
+  "WordPress_files_modified": 0,
+  "external_data_acquisition_requests": 0,
+  "dependencies_downloaded": 0,
+  "dependencies_installed": 0,
+  "commits_expected": 1,
+  "pushes_expected": 1,
+  "pr_expected_to_remain_draft": true,
+  "pr_expected_to_remain_unmerged": true,
+  "post_push_verification": "PENDING_COMPLETION_REPORT",
+  "manual_review_conditions": [
+    "Real screen-reader runtime (VoiceOver) reading-order pass not performed (NOT_TESTED_SCREEN_READER_RUNTIME)",
+    "Exact automated contrast ratios not measured (no contrast tool installed); dark theme + text-labelled status reviewed qualitatively",
+    "Full manual keyboard keystroke traversal (Tab/Shift+Tab order) verified structurally + focus-rule, not via a complete manual keystroke session",
+    "External map iframe behavior under production X-Frame-Options headers cannot be reproduced locally"
+  ],
+  "qa_status": "GV2_3_PASS_WITH_CONDITIONS",
+  "evidence_method_breakdown": {
+    "note": "How each result was established, recorded honestly rather than all as runtime.",
+    "failure_cases_runtime_verified": 15,
+    "failure_cases_analogous_path_review": 1,
+    "failure_cases_code_review": 3,
+    "failure_cases_observed_plus_correction": 1,
+    "responsive_runtime_measured_viewports": [
+      "1440x900",
+      "1280x800",
+      "768x1024",
+      "390x844",
+      "320x568 (all 3 routes)"
+    ],
+    "responsive_breakpoint_equivalent_viewports": [
+      "1024x768 (single-col path, verified at 768)",
+      "430x932 (single-col path, verified at 390)"
+    ],
+    "keyboard_method": "structural + focus-rule verification (focusable set, skip link, :focus-visible, native semantics); full manual keystroke traversal = manual review",
+    "semantic_method": "DOM/accessibility-tree inspection; real screen-reader runtime NOT performed",
+    "contrast_method": "manual browser inspection; exact ratios = manual review"
+  },
+  "gv2_3_1_repair": {
+    "head_before": "e596ed376cb2d825533b1f1d1e82e6ecef185fe0",
+    "scope": "admin/v2-preview/godview-v2.js + admin/v2-preview/GV2_3_QA.json only",
+    "repairs": [
+      {
+        "id": 1,
+        "repair": "Page-aware timelines and alerts",
+        "runtime_evidence": "overview=2 timeline tracks & 6 alerts (V1+V2); /v1/=1 track & 2 V1 alerts; /v2/=1 track & 4 V2 alerts"
+      },
+      {
+        "id": 2,
+        "repair": "Target-aware renderer registration replacing silent catch",
+        "runtime_evidence": "missing targets = no-op (V1/V2 pages render fully); existing target throwing (components not array) = controlled panel failure in that target only (totalErrors=1) with all other panels functional; loaders removed on every page"
+      },
+      {
+        "id": 3,
+        "repair": "Freshness validation (fresh/stale/invalid-timestamp/missing-timestamp/invalid-threshold)",
+        "runtime_evidence": "fresh main = no warning + real date; invalid timestamp and invalid threshold both show exact required string (matchesExact=true); invalid timestamp 'updated' field shows Unavailable not 'Invalid Date'"
+      },
+      {
+        "id": 4,
+        "repair": "Honest QA evidence-method accounting",
+        "runtime_evidence": "this record: evidence_method_breakdown separates runtime / analogous-path / code-review / manual-review"
+      }
+    ],
+    "exact_invalid_freshness_string": "Freshness cannot be confirmed because the generation timestamp or freshness threshold is invalid.",
+    "console_errors": 0,
+    "unhandled_rejections": 0,
+    "contract_test_count": 25,
+    "contract_tests_passed": 25,
+    "changed_paths": [
+      "admin/v2-preview/godview-v2.js",
+      "admin/v2-preview/GV2_3_QA.json"
+    ],
+    "unexpected_changed_paths": [],
+    "fixture_files_modified": 0,
+    "schema_files_modified": 0,
+    "qa_status": "GV2_3_1_PASS_WITH_CONDITIONS"
+  },
+  "gv2_3_2_repair": {
+    "head_before": "b257a0487b32f797c473e5bf2153157c551e327c",
+    "head_after": null,
+    "changed_paths": [
+      "admin/v2-preview/godview-v2.js",
+      "admin/v2-preview/GV2_3_QA.json"
+    ],
+    "unexpected_changed_paths": [],
+    "correction_1_strict_freshness": {
+      "exact_invalid_message": "Freshness cannot be confirmed because the generation timestamp or freshness threshold is invalid.",
+      "validation": "generated_at_utc must be a nonempty canonical UTC ISO string (YYYY-MM-DDTHH:MM:SS[.sss]Z, Z only), parse to finite, and round-trip to a real calendar date (rejects tz-less, offset, permissive non-ISO, impossible dates). freshness_threshold_hours must be a positive integer (rejects 0/negative/nonnumeric/fractional/missing). Missing metadata now uses the same invalid message (no separate missing-timestamp warning).",
+      "freshness_runtime_cases": [
+        {
+          "case": 1,
+          "name": "valid fresh",
+          "expected": "no warning",
+          "result": "PASS",
+          "method": "node harness on actual file fns + DOM (server) — warning hidden, real date shown"
+        },
+        {
+          "case": 2,
+          "name": "valid stale",
+          "expected": "stale warning",
+          "result": "PASS",
+          "method": "node harness + DOM — 'Status data may be stale…'"
+        },
+        {
+          "case": 3,
+          "name": "invalid timestamp",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness + DOM (exact match, updated='Unavailable')"
+        },
+        {
+          "case": 4,
+          "name": "missing timestamp",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 5,
+          "name": "threshold 0",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 6,
+          "name": "negative threshold",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 7,
+          "name": "nonnumeric threshold",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 8,
+          "name": "fractional threshold",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 9,
+          "name": "timezone-less timestamp",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 10,
+          "name": "offset timestamp",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        },
+        {
+          "case": 11,
+          "name": "impossible calendar date",
+          "expected": "exact invalid",
+          "result": "PASS",
+          "method": "node harness (exact match)"
+        }
+      ],
+      "freshness_cases_passed": 11,
+      "freshness_cases_total": 11,
+      "note": "Cases run against the actual validTimestamp/validThreshold/freshnessMessage source extracted from godview-v2.js; fresh/stale/invalid also confirmed end-to-end in the browser DOM."
+    },
+    "correction_2_alert_failure": {
+      "alert_runtime_cases": [
+        {
+          "case": 1,
+          "name": "V1 page, v1Alerts failed",
+          "result": "PASS",
+          "evidence": "controlled 'V1 alerts unavailable' block; no 'No alerts' message; no path leak"
+        },
+        {
+          "case": 2,
+          "name": "V2 page, v2Alerts failed",
+          "result": "PASS",
+          "evidence": "controlled 'V2 alerts unavailable' block; no empty message; no path leak"
+        },
+        {
+          "case": 3,
+          "name": "overview, only v1Alerts failed",
+          "result": "PASS",
+          "evidence": "V1 failure block + 4 valid V2 alerts preserved"
+        },
+        {
+          "case": 4,
+          "name": "overview, only v2Alerts failed",
+          "result": "PASS",
+          "evidence": "V2 failure block + 2 valid V1 alerts preserved"
+        },
+        {
+          "case": 5,
+          "name": "overview, both alert files failed",
+          "result": "PASS",
+          "evidence": "both failure blocks; no false empty message"
+        },
+        {
+          "case": 6,
+          "name": "successfully loaded empty alert arrays",
+          "result": "PASS",
+          "evidence": "'No alerts in fixture data.' shown; 0 failure blocks"
+        }
+      ],
+      "alert_cases_passed": 6,
+      "alert_cases_total": 6,
+      "failed_file_never_shown_as_empty": true,
+      "sanitization": "alert failure blocks use a generic message; no local paths, raw fixture bodies or private data exposed"
+    },
+    "correction_3_renderer_signal": {
+      "result": "PASS",
+      "induced_exception": "valid JSON, components not an array -> Enigma Core renderer throws TypeError (target [data-core-strip] exists)",
+      "controlled_panel_failure": "[data-core-strip] shows one sanitized 'Panel failed to render' block",
+      "other_panels_render": "version cards 2, lanes 2, repos 3, alerts 6",
+      "loaders_cleared": true,
+      "console_signal": "[GodView] Renderer failed: Enigma Core (TypeError)",
+      "console_signal_contains_only": "renderer name + exception type",
+      "no_raw_error_stack_path_or_fixture": true,
+      "exactly_one_emission_per_exception": true,
+      "emission_evidence": "godview-v2.js fetched once, enigma-core.json fetched once, navCount=1, one DOM failure block, direct single-call test emitted exactly 1; the console reader displayed the same emission twice (browser-tool display artifact, not a code double-log)"
+    },
+    "contract_test_count": 25,
+    "contract_tests_passed": 25,
+    "contract_tests_failed": 0,
+    "contract_test_errors": 0,
+    "contract_test_skips": 0,
+    "node_check": "OK",
+    "manual_review_conditions": [
+      "Real screen-reader (VoiceOver) runtime reading-order pass not performed",
+      "Exact automated contrast ratios not measured",
+      "Full manual keyboard keystroke traversal not performed",
+      "External map iframe behavior under production X-Frame-Options not reproducible locally",
+      "Browser-tool console reader displayed the single renderer signal twice; verified single emission via fetch/exec counts and a direct single-call test"
+    ],
+    "post_push_verification": "PENDING_COMPLETION_REPORT",
+    "qa_status": "GV2_3_2_PASS_WITH_CONDITIONS"
+  }
+}

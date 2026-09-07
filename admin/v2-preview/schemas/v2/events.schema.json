@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nycif:gv2:v2/events",
+  "title": "V2 events fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-fixture"
+    },
+    "fixture": {
+      "const": true
+    },
+    "operational": {
+      "const": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "IN_PROGRESS",
+        "PLANNED",
+        "LOCKED",
+        "COMPLETE",
+        "NOT_STARTED",
+        "NOT_AUTHORIZED",
+        "PROPOSED",
+        "BLOCKED",
+        "PENDING",
+        "DEGRADED",
+        "RETIRED"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "current_phase": {
+      "type": "string",
+      "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+      "maxLength": 4000
+    },
+    "architecture_completion_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "implementation_completion_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "open_blocker_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "IN_PROGRESS",
+              "PLANNED",
+              "LOCKED",
+              "COMPLETE",
+              "NOT_STARTED",
+              "NOT_AUTHORIZED",
+              "PROPOSED",
+              "BLOCKED",
+              "PENDING",
+              "DEGRADED",
+              "RETIRED"
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\$\\(|\\$\\{|`|<script|javascript:))[^<>]*$",
+            "maxLength": 4000
+          }
+        },
+        "required": [
+          "title",
+          "status",
+          "detail"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture",
+    "operational",
+    "status",
+    "summary",
+    "current_phase",
+    "architecture_completion_percent",
+    "implementation_completion_percent",
+    "open_blocker_count",
+    "tasks"
+  ]
+}
